@@ -45,3 +45,6 @@ https://auth.easybell.de/jwks -> HTTP 404
 https://auth.easybell.de/ -> HTTP 404
 https://voip-management.easybell.de/api/v2/account/ -> HTTP 404
 https://voip-management.easybell.de/api/ -> HTTP 404
+
+## 2026-09-03 23:45:57 UTC
+https://voip-management.easybell.de/api/customer -> HTTP 404

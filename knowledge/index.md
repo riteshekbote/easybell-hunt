@@ -7,3 +7,5 @@
 - 2026-09-03 REJECTED brute-force/lockout @ mail.easybell.de: do not test Roundcube login/auth attempts.
 - 2026-09-03 ACCEPTED IDOR @ voip-management.easybell.de/api: nginx→Spring v2 rewrite map leaked via JSON 404 message (`/api/<res>` → `/api/v2/<res>`); live backend confirmed responsive.
 - 2026-09-03 ACCEPTED MISCONFIG @ voip-management.easybell.de: WAF/rate-limit aggressive — bursts of >~8 probes yield empty/timeouts; mandates >=6s spacing and 60-120s backoff.
+- 2026-09-03 ACCEPTED IDOR @ my.easybell.com: Real customer portal (Laravel/Vue Inertia) confirmed live; `customerId` leaked in Matomo; top IDOR candidate pending auth.
+- 2026-09-03 REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.

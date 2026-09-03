@@ -43,3 +43,10 @@ www.easybell.de
 - NEW voip-management.easybell.de routing map resolved: `/api/<res>` → proxied to Spring backend (returns Spring JSON 404 `{"code":404,"message":"/api/v2/<res>"}` revealing internal v2 rewrite); `/api/` and
 - CHANGED voip-management WAF: aggressive rate-limit confirmed. Bursts of >~8-10 rapid probes → empty/timed-out responses. Must space probes >=5-6s, back off 60s after block.
 - CHANGED voip-api-v2-bola: no live (non-404) Spring resource discovered yet across customer/account/number/user/subscriber probes — all nginx-HTML or rate-limited. Backend is reachable and versioned but actual
+
+## 2026-09-03 23:45:55 UTC
+- NEW my.easybell.com: Confirmed live customer portal (Laravel 10 + Vue 3 Inertia SPA), 200 at /login, sets `ekp_session` + encrypted `XSRF-TOKEN`, `X-Inertia` header; `customerId` leaked in Matomo tracker 
+- NEW voip-management.easybell.de: Live nginx→Spring JSON API at `/api/<res>` (rewrites to internal `/api/v2/<res>`, leaked via 404 body `{"code":404,"message":"/api/v2/<res>"}`). `/api/` and `/api/v2/` dir
+- CHANGED dev.easybell.de / portal.easybell.de: No DNS/route — effectively dead (probe timeouts confirmed). Top targets shift to my.easybell.com + voip-management.
+- CHANGED voip-management WAF: Aggressive rate-limit confirmed. Bursts >~8-10 probes → empty/timeouts. Mandates >=6s spacing, 60-120s backoff after block.
+- CHANGED voip-api-v2-bola: No live (non-404) Spring resource discovered yet across customer/account/number/user/subscriber/trunk/line/contract/invoice/sip/device/tariff probes — all nginx-HTML 404 or rate-limi

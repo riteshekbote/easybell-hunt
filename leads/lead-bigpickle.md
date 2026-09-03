@@ -232,3 +232,4 @@ testability: AUTH_HELPED
 [NEXT] PROBE: after >=60s cooldown, single GET https://voip-management.easybell.de/api/customer (spaced >=6s, <=1rps), watch for non-404 JSON (data or 401/403). If blocked, back off 120s. Continue one resource name per probe.
 [RISK] easybell: 60
 reasoning: Live reachable high-value VoIP JSON API surface confirmed; upside solid. Elevated by aggressive WAF rate-limiting tightening enumeration throughput, no creds for authenticated portal testing, and program's auth/lockout exclusion. Mitigated by read-only GET discipline, spaced probing, clear scope.
+## 2026-09-03 23:44:15 UTC [target] (model bigpickle)

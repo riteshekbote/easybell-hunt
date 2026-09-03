@@ -756,3 +756,150 @@ Wrote file successfully.
 [0m
 [0m→ [0mRead leads/lead-nemotron3.md
 Done. Output written to `leads/lead-nemotron3.md` with all 7 structured steps.
+===== ANALYST nemotron3 2026-09-03 23:45:55 UTC =====
+[0m
+> build · nemotron-3-ultra-free
+[0m
+[0m$ [0mls -la /home/runner/work/easybell-hunt/easybell-hunt/
+total 108
+drwxr-xr-x 12 runner runner  4096 Sep  3 23:44 .
+drwxr-xr-x  3 runner runner  4096 Sep  3 23:43 ..
+drwxr-xr-x  7 runner runner  4096 Sep  3 23:44 .git
+drwxr-xr-x  3 runner runner  4096 Sep  3 23:43 .github
+-rw-r--r--  1 runner runner  1756 Sep  3 23:43 README.md
+-rw-r--r--  1 runner runner    43 Sep  3 23:44 analyst-out.txt
+-rw-r--r--  1 runner runner 11652 Sep  3 23:44 analyst-prompt.txt
+-rw-r--r--  1 runner runner  7845 Sep  3 23:44 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep  3 23:43 inventory
+drwxr-xr-x  2 runner runner  4096 Sep  3 23:43 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep  3 23:43 leads
+-rw-r--r--  1 runner runner  1786 Sep  3 23:43 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep  3 23:43 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep  3 23:43 reports
+drwxr-xr-x  2 runner runner  4096 Sep  3 23:43 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep  3 23:43 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep  3 23:43 scripts
+-rw-r--r--  1 runner runner    33 Sep  3 23:43 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep  3 23:43 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep  3 23:43 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep  3 23:43 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep  3 23:43 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep  3 23:43 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep  3 23:43 triage
+[0m
+[0m→ [0mRead inventory/easybell.md
+[0m→ [0mRead scope.yml
+[0m→ [0mRead analyst-out.txt
+[0m
+[0m$ [0mls -la /home/runner/work/easybell-hunt/easybell-hunt/knowledge/ && ls -la /home/runner/work/easybell-hunt/easybell-hunt/leads/
+total 12
+drwxr-xr-x  2 runner runner 4096 Sep  3 23:43 .
+drwxr-xr-x 12 runner runner 4096 Sep  3 23:44 ..
+-rw-r--r--  1 runner runner 1264 Sep  3 23:43 index.md
+total 60
+drwxr-xr-x  2 runner runner  4096 Sep  3 23:43 .
+drwxr-xr-x 12 runner runner  4096 Sep  3 23:44 ..
+-rw-r--r--  1 runner runner 26258 Sep  3 23:43 lead-bigpickle.md
+-rw-r--r--  1 runner runner   153 Sep  3 23:43 lead-laguna.md
+-rw-r--r--  1 runner runner   150 Sep  3 23:43 lead-ling3.md
+-rw-r--r--  1 runner runner   156 Sep  3 23:43 lead-longcat.md
+-rw-r--r--  1 runner runner    18 Sep  3 23:43 lead-mimo.md
+-rw-r--r--  1 runner runner   162 Sep  3 23:43 lead-nemotron3.md
+-rw-r--r--  1 runner runner   704 Sep  3 23:43 reposcan-easybell.md
+[0m
+[0m→ [0mRead knowledge/index.md
+[0m→ [0mRead leads/lead-bigpickle.md
+[0m→ [0mRead probe-results.md
+[0m→ [0mRead ctx.txt
+Now I have full context. Let me produce the 8-step analysis.
+
+---
+
+**STEP 1 — DELTA**
+
+[NEW] my.easybell.com: Confirmed live customer portal (Laravel 10 + Vue 3 Inertia SPA), 200 at /login, sets `ekp_session` + encrypted `XSRF-TOKEN`, `X-Inertia` header; `customerId` leaked in Matomo tracker on every page. Supersedes dead `portal.easybell.de`.
+
+[NEW] voip-management.easybell.de: Live nginx→Spring JSON API at `/api/<res>` (rewrites to internal `/api/v2/<res>`, leaked via 404 body `{"code":404,"message":"/api/v2/<res>"}`). `/api/` and `/api/v2/` direct return nginx HTML 404. Referenced as `VITE_VOIP_MANAGEMENT_URL` in portal SPA.
+
+[CHANGED] dev.easybell.de / portal.easybell.de: No DNS/route — effectively dead (probe timeouts confirmed). Top targets shift to my.easybell.com + voip-management.
+
+[CHANGED] voip-management WAF: Aggressive rate-limit confirmed. Bursts >~8-10 probes → empty/timeouts. Mandates >=6s spacing, 60-120s backoff after block.
+
+[CHANGED] voip-api-v2-bola: No live (non-404) Spring resource discovered yet across customer/account/number/user/subscriber/trunk/line/contract/invoice/sip/device/tariff probes — all nginx-HTML 404 or rate-limited. Backend reachable and versioned but actual resource names unknown.
+
+---
+
+**STEP 2 — PRIORITIZE**
+
+[PRIO] voip-management.easybell.de,7.8,attack_surface:8+business_value:9+tech_exposure:8+gate_ease:6+cloud_surface:6+freshness:5
+[PRIO] my.easybell.com,7.3,attack_surface:8+business_value:9+tech_exposure:7+gate_ease:4+cloud_surface:5+freshness:5
+[PRIO] mail.easybell.de,5.6,attack_surface:7+business_value:5+tech_exposure:6+gate_ease:5+cloud_surface:4+freshness:5
+[PRIO] www.easybell.de,4.8,attack_surface:4+business_value:6+tech_exposure:5+gate_ease:7+cloud_surface:3+freshness:5
+[PRIO] auth.easybell.de,4.5,attack_surface:6+business_value:7+tech_exposure:6+gate_ease:3+cloud_surface:4+freshness:4
+
+---
+
+**STEP 3 — HYPOTHESES**
+
+[HYP] voip-api-v2-bola
+class: IDOR
+asset: voip-management.easybell.de/api/
+confidence: 62
+reasoning: Live Spring-style JSON API confirmed reachable via `/api/<res>` rewrite to internal `/api/v2/<res>` (error body leaks v2 rewrite map). Versioned REST + customer VoIP/account resources = classic BOLA if object-scoped authz missing. Backend actively responds to unmatched paths with structured JSON — active app, not static host.
+evidence_needed: At least one real v2 resource returning non-404 JSON (data or 401/403 challenge) unauthenticated; numeric id param pattern.
+verify_steps: After 60s+ cooldown, single spaced probes (>=6s apart, <=1rps) of `/api/<resource>` for likely names: customer, account, user, number, extension, subscriber, trunk, line, contract, invoice, sip, device, tariff. Watch for non-404 JSON (data or 401/403). No auth bypass/mutation.
+impact: Cross-customer VoIP/account/PII exposure or unauthorized config access → High/Critical
+testability: AUTH_HELPED
+
+[HYP] my-portal-inertia-bola
+class: IDOR
+asset: my.easybell.com
+confidence: 58
+reasoning: Customer portal (Laravel 10 + Vue 3 Inertia SPA) manages billing, SIP, service config. `customerId` visible in Matomo tracker on every page. SPA proxies to voip-management for backend. Auth-scoped object endpoints are prime BOLA surface. Inertia pattern exposes partial route table in public JS bundles.
+evidence_needed: Public/unauth Inertia route table from SPA bundles; any API proxy endpoints the SPA calls unauthenticated; object-id param patterns in routes.
+verify_steps: GET https://my.easybell.com/ (200), fetch and parse all linked JS bundles for Inertia page components and route definitions; catalog public endpoints and any API paths proxied via Laravel. No mutating/auth tests without creds.
+impact: Cross-tenant PII dump, billing tamper, SIP config hijack → High/Critical
+testability: AUTH_HELPED
+
+[HYP] voip-api-ssrf-to-metadata
+class: SSRF
+asset: voip-management.easybell.de/api/
+confidence: 45
+reasoning: Spring backend behind nginx proxy may process user-supplied URLs in VoIP provisioning/webhook/callback endpoints (e.g., SIP trunk registration URLs, webhook callbacks, recording callbacks). Cloud metadata endpoint 169.254.169.254 reachable from typical VPC. No auth on JSON error path suggests some endpoints may be accessible.
+evidence_needed: Discovery of any endpoint accepting URL parameters (webhook, callback, provisioning, recording, fetch); confirmation SSRF works to internal metadata.
+verify_steps: After live resource found, test URL params with http://169.254.169.254/latest/meta-data/ (read-only HEAD/GET). Only if a URL-accepting endpoint is discovered passively first.
+impact: Cloud metadata access → IAM keys, instance profile → Critical
+testability: AUTH_HELPED
+
+---
+
+**STEP 4 — SELF-CRITIQUE**
+
+[PARKED] voip-api-ssrf-to-metadata: Confidence 45 < 60. No URL-accepting endpoint discovered yet; purely speculative without a live resource to test against. Requires voip-api-v2-bola to succeed first.
+
+[FINAL] voip-api-v2-bola: 62 — Live reachable Spring backend confirmed, rewrite map leaked, highest-value in-scope surface. Justifies continued spaced enumeration.
+
+[FINAL] my-portal-inertia-bola: 58 — Genuine high-value target but requires auth creds for full exploitation; passive route mapping justified now, AUTH_HELPED for depth.
+
+---
+
+**STEP 5 — NEXT ACTION**
+
+[NEXT] PROBE: After >=60s cooldown from last probe, single GET https://voip-management.easybell.de/api/customer (spaced >=6s, <=1rps), watch for non-404 JSON (data or 401/403). If blocked/empty, back off 120s. Continue one resource name per probe: account, user, number, extension, subscriber, trunk, line, contract, invoice, sip, device, tariff.
+
+---
+
+**STEP 6 — LEARNING**
+
+[LEARN] ACCEPTED IDOR @ voip-management.easybell.de/api: nginx→Spring v2 rewrite map leaked via JSON 404 message (`/api/<res>` → `/api/v2/<res>`); live backend confirmed responsive.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de: WAF/rate-limit aggressive — bursts of >~8 probes yield empty/timeouts; mandates >=6s spacing and 60-120s backoff.
+[LEARN] ACCEPTED IDOR @ my.easybell.com: Real customer portal (Laravel/Vue Inertia) confirmed live; `customerId` leaked in Matomo; top IDOR candidate pending auth.
+[LEARN] REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
+[LEARN] REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+
+---
+
+**STEP 7 — RISK**
+
+[RISK] easybell: 60
+reasoning: Live high-value VoIP JSON API surface confirmed reachable; upside solid. Elevated by: aggressive WAF rate-limiting tightening enumeration throughput, no creds for authenticated portal testing, program's auth/lockout exclusion limiting attack classes. Mitigated by read-only GET discipline, spaced probing, clear scope boundaries.
