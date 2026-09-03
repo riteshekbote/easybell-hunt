@@ -1,0 +1,432 @@
+===== ANALYST nemotron3 2026-09-03 16:49:23 UTC =====
+[0m
+> build · nemotron-3-ultra-free
+[0m
+[0m$ [0mls -la /home/runner/work/easybell-hunt/easybell-hunt
+total 96
+drwxr-xr-x 11 runner runner 4096 Sep  3 16:29 .
+drwxr-xr-x  3 runner runner 4096 Sep  3 16:29 ..
+drwxr-xr-x  7 runner runner 4096 Sep  3 16:29 .git
+drwxr-xr-x  3 runner runner 4096 Sep  3 16:29 .github
+-rw-r--r--  1 runner runner 1756 Sep  3 16:29 README.md
+-rw-r--r--  1 runner runner   43 Sep  3 16:29 analyst-out.txt
+-rw-r--r--  1 runner runner 5076 Sep  3 16:29 analyst-prompt.txt
+-rw-r--r--  1 runner runner 1269 Sep  3 16:29 ctx.txt
+drwxr-xr-x  2 runner runner 4096 Sep  3 16:29 inventory
+drwxr-xr-x  2 runner runner 4096 Sep  3 16:29 knowledge
+drwxr-xr-x  2 runner runner 4096 Sep  3 16:29 leads
+-rw-r--r--  1 runner runner  145 Sep  3 16:29 probe-results.md
+drwxr-xr-x  2 runner runner 4096 Sep  3 16:29 recon-notes
+drwxr-xr-x  2 runner runner 4096 Sep  3 16:29 reports
+-rw-r--r--  1 runner runner 3220 Sep  3 16:29 scope.yml
+drwxr-xr-x  2 runner runner 4096 Sep  3 16:29 scripts
+-rw-r--r--  1 runner runner   32 Sep  3 16:29 state_bigpickle.json
+-rw-r--r--  1 runner runner   32 Sep  3 16:29 state_laguna.json
+-rw-r--r--  1 runner runner   32 Sep  3 16:29 state_ling3.json
+-rw-r--r--  1 runner runner   32 Sep  3 16:29 state_longcat.json
+-rw-r--r--  1 runner runner   33 Sep  3 16:29 state_mimo.json
+-rw-r--r--  1 runner runner   32 Sep  3 16:29 state_nemotron3.json
+drwxr-xr-x  2 runner runner 4096 Sep  3 16:29 triage
+[0m
+[0m→ [0mRead scope.yml
+[0m→ [0mRead inventory/easybell.md
+[0m→ [0mRead analyst-out.txt
+[0m
+[0m$ [0mls -la /home/runner/work/easybell-hunt/easybell-hunt/leads/ /home/runner/work/easybell-hunt/easybell-hunt/recon-notes/ /home/runner/work/easybell-hunt/easybell-hunt/knowledge/
+/home/runner/work/easybell-hunt/easybell-hunt/knowledge/:
+total 12
+drwxr-xr-x  2 runner runner 4096 Sep  3 16:29 .
+drwxr-xr-x 11 runner runner 4096 Sep  3 16:29 ..
+-rw-r--r--  1 runner runner   24 Sep  3 16:29 index.md
+
+/home/runner/work/easybell-hunt/easybell-hunt/leads/:
+total 12
+drwxr-xr-x  2 runner runner 4096 Sep  3 16:29 .
+drwxr-xr-x 11 runner runner 4096 Sep  3 16:29 ..
+-rw-r--r--  1 runner runner   18 Sep  3 16:29 lead-mimo.md
+
+/home/runner/work/easybell-hunt/easybell-hunt/recon-notes/:
+total 12
+drwxr-xr-x  2 runner runner 4096 Sep  3 16:29 .
+drwxr-xr-x 11 runner runner 4096 Sep  3 16:29 ..
+-rw-r--r--  1 runner runner  818 Sep  3 16:29 DEDICATED-DEEP.md
+[0m
+[0m→ [0mRead knowledge/index.md
+[0m→ [0mRead leads/lead-mimo.md
+[0m→ [0mRead recon-notes/DEDICATED-DEEP.md
+[0m→ [0mRead probe-results.md
+[0m
+[0m$ [0mls -la /home/runner/work/easybell-hunt/easybell-hunt/scripts/
+total 28
+drwxr-xr-x  2 runner runner  4096 Sep  3 16:29 .
+drwxr-xr-x 11 runner runner  4096 Sep  3 16:29 ..
+-rw-r--r--  1 runner runner 16987 Sep  3 16:29 sync-issues.py
+[0m
+[0m$ [0mfor host in auth.easybell.de dev.easybell.de easybell.de login.easybell.de mail.easybell.de portal.easybell.de www.easybell.de; do echo "=== $host ==="; dig +short $host A; done
+=== auth.easybell.de ===
+62.27.117.123
+=== dev.easybell.de ===
+62.27.68.24
+=== easybell.de ===
+62.27.117.125
+=== login.easybell.de ===
+62.27.117.123
+=== mail.easybell.de ===
+62.27.68.22
+=== portal.easybell.de ===
+62.27.68.25
+=== www.easybell.de ===
+62.27.117.97
+[0m
+[0m$ [0mfor host in auth.easybell.de dev.easybell.de easybell.de login.easybell.de mail.easybell.de portal.easybell.de www.easybell.de; do echo "=== $host ==="; curl -s -I --max-time 5 "https://$host" 2>/dev/null | head -5; done
+=== auth.easybell.de ===
+HTTP/2 404 
+date: Thu, 03 Sep 2026 16:36:40 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+=== dev.easybell.de ===
+=== easybell.de ===
+HTTP/2 301 
+date: Thu, 03 Sep 2026 16:36:46 GMT
+content-type: text/html; charset=iso-8859-1
+location: https://www.easybell.de/
+strict-transport-security: max-age=31536000; includeSubDomains
+=== login.easybell.de ===
+HTTP/2 302 
+date: Thu, 03 Sep 2026 16:36:46 GMT
+content-type: text/html; charset=utf-8
+location: https://login.easybell.de/login
+cache-control: no-cache, private
+=== mail.easybell.de ===
+HTTP/1.1 301 Moved Permanently
+Date: Thu, 03 Sep 2026 16:36:47 GMT
+Server: Apache
+Strict-Transport-Security: max-age=31536000; includeSubdomains
+Referrer-Policy: no-referrer-when-downgrade
+=== portal.easybell.de ===
+=== www.easybell.de ===
+HTTP/2 200 
+date: Thu, 03 Sep 2026 16:36:53 GMT
+content-type: text/html; charset=utf-8
+content-length: 176341
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0mcurl -s -I --max-time 5 "https://portal.easybell.de" 2>/dev/null | head -10
+(no output)
+[0m
+[0m$ [0mcurl -s --max-time 10 "https://portal.easybell.de" 2>/dev/null | head -30
+(no output)
+[0m
+[0m$ [0mcurl -s --max-time 10 "https://dev.easybell.de" 2>/dev/null | head -30
+(no output)
+[0m
+[0m$ [0mcurl -v --max-time 10 "https://portal.easybell.de" 2>&1 | head -20
+% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host portal.easybell.de:443 was resolved.
+* IPv6: (none)
+* IPv4: 62.27.68.25
+*   Trying 62.27.68.25:443...
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:02 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:03 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:04 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:05 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:06 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:07 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:08 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:09 --:--:--     0* Connection timed out after 10000 milliseconds
+
+  0     0    0     0    0     0      0      0 --:--:--  0:00:10 --:--:--     0
+* Closing connection
+curl: (28) Connection timed out after 10000 milliseconds
+[0m
+[0m$ [0mcurl -v --max-time 10 "https://dev.easybell.de" 2>&1 | head -20
+% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host dev.easybell.de:443 was resolved.
+* IPv6: (none)
+* IPv4: 62.27.68.24
+*   Trying 62.27.68.24:443...
+
+  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:02 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:03 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:04 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:05 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:06 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:07 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:08 --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:--  0:00:09 --:--:--     0* Connection timed out after 10001 milliseconds
+
+  0     0    0     0    0     0      0      0 --:--:--  0:00:10 --:--:--     0
+* Closing connection
+curl: (28) Connection timed out after 10001 milliseconds
+[0m
+[0m$ [0mcurl -s --max-time 10 "https://auth.easybell.de" 2>/dev/null | head -50
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+[0m
+[0m$ [0mcurl -s --max-time 10 "https://login.easybell.de/login" 2>/dev/null | head -50
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="refresh" content="0;url='https://my.easybell.com/login'" />
+
+        <title>Redirecting to https://my.easybell.com/login</title>
+    </head>
+    <body>
+        Redirecting to <a href="https://my.easybell.com/login">https://my.easybell.com/login</a>.
+    </body>
+</html>
+[0m
+[0m$ [0mcurl -s --max-time 10 "https://mail.easybell.de" 2>/dev/null | head -50
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>301 Moved Permanently</title>
+</head><body>
+<h1>Moved Permanently</h1>
+<p>The document has moved <a href="https://mail.easybell.de/rcm/">here</a>.</p>
+</body></html>
+[0m
+[0m$ [0mcurl -s -I --max-time 10 "https://my.easybell.com/login" 2>/dev/null | head -15
+HTTP/2 200 
+date: Thu, 03 Sep 2026 16:41:58 GMT
+content-type: text/html; charset=utf-8
+cache-control: no-cache, private
+vary: X-Inertia,Accept-Encoding
+set-cookie: XSRF-TOKEN=eyJpdiI6ImY3ZUZjeVkxZ1hkbmJZVlR4Q3dMcnc9PSIsInZhbHVlIjoiSEp1ZkNnU0M2ZGdtZ2UrL1ZhZXpJNy9ZN3pCZGQ5UFRuVSttN0FaM3ppaDVBSnhmVC84aGp6a2RpdUdxOGhhUk4zNWoxb0pLbkhSMmRTc2tjYmorVVRxcmFUSmxEMHh1UmRvT0hJVElOSWVoQ0h1T0wzRHVPVytDQUxvOTFWeDMiLCJtYWMiOiJjYWIwNGI2NTgzYTZkMzhjYzMyZDdhZGZhMDdjYjFjZTgwYmFiYjZjZjM4N2U2MWFlNTY0YTY0NjZkZDM1NDA3IiwidGFnIjoiIn0%3D; expires=Thu, 24 Sep 2026 16:41:58 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=DzWB1pW2R6wBhFlMoW2mOE9Lgq5ma72jBT9Qe4ls; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0mcurl -s --max-time 10 "https://www.easybell.de" 2>/dev/null | grep -iE '(api|v1|v2|beta|graphql|swagger|openapi|oauth|token|auth)' | head -20
+...output truncated...
+
+Full output saved to: /home/runner/.local/share/opencode/tool-output/tool_068261f15001ikPiBCRmBC50BL
+
+(no output)
+[0m
+[0m$ [0mcurl -s --max-time 10 "https://mail.easybell.de/rcm/" 2>/dev/null | head -30
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>webmail :: Welcome to webmail</title>
+<link rel="index" href="/rcm/?_task=login" />
+
+<link rel="shortcut icon" href="skins/classic/images/favicon.ico?s=1638019608">
+<link rel="stylesheet" type="text/css" href="skins/classic/common.min.css?s=1638019608" />
+
+
+
+<link rel="stylesheet" type="text/css" href="skins/classic/plugins/jqueryui/jquery-ui.min.css?s=1638019608"><script src="program/js/jquery.min.js?s=1783249398" type="text/javascript"></script><script src="program/js/common.min.js?s=1783249394" type="text/javascript"></script><script src="program/js/app.min.js?s=1783249394" type="text/javascript"></script><script src="program/js/jstz.min.js?s=1783249398" type="text/javascript"></script><script type="text/javascript">
+/* <![CDATA[ */
+/*
+        @licstart  The following is the entire license notice for the 
+        JavaScript code in this page.
+
+        Copyright (C) The Roundcube Dev Team
+
+        The JavaScript code in this page is free software: you can redistribute
+        it and/or modify it under the terms of the GNU General Public License
+        as published by the Free Software Foundation, either version 3 of
+        the License, or (at your option) any later version.
+
+        The code is distributed WITHOUT ANY WARRANTY; without even the implied
+        warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU GPL for more details.
+
+        @licend  The above is the entire license notice
+        for the JavaScript code in this page.
+[0m
+[0m$ [0mcurl -s -I --max-time 5 "https://www.easybell.de/api" 2>/dev/null
+HTTP/2 302 
+date: Thu, 03 Sep 2026 16:43:02 GMT
+content-type: text/html; charset=utf-8
+cache-control: no-cache, private
+location: https://www.easybell.de/start
+set-cookie: XSRF-TOKEN=eyJpdiI6ImNtWGVvV1dGdEsvZDlENHlIaUVKNnc9PSIsInZhbHVlIjoiR2loMGgvaFAwdWZCMnIyeFI5b2FqN2ZiQ3dqRVhhTk1rb3RCMTZmYVluSlFadjZraTVqTUZmWWxvb21CZWw1Wm9GV1VOVEUyaUovVjZ5aTIvMXB2N2JYTFd0NW8zaGcwRTNQc2ljanFraVpKbnBTelIxUlRKWS8wM2hZVDFXbnoiLCJtYWMiOiJlNTU1MWE2ZDM0ZjAzMDI5NmJmOWQ2MzNlM2Q2NjBkZjEzZDNkOTkwMzdiOTM0MjAzNTE2MDI2MGZiOTBmYjVkIiwidGFnIjoiIn0%3D; expires=Fri, 04 Sep 2026 02:43:02 GMT; Max-Age=36000; path=/; domain=.easybell.de; secure; samesite=none
+set-cookie: order_session=eyJpdiI6IkhneXdBQ0xMMm0vU1ZpajF5RGY2WWc9PSIsInZhbHVlIjoiOFkzMTZOaWhEWkdTZHNrbnJCRjFrSUpabHhib0FSVlZnek5QZE4zZkQwM05WUzZnSkg0SU1OWWhkTzhIV2E2c1FGaFdWd1B0bzd2T2tzY1dySGw0czZudzRDTGNWOG8vdkVYUFpiVUtCbjA4OVlsRm9tMW9nSGNwKzhDT1ZJczAiLCJtYWMiOiI3NDQ1ZDdkNmYzNDZmYmNhNjNhNTA4MTg4NmY0MDkzNWMzODljY2RmZmQzNGRkNTkxNDI2YzEzNzkyZTU1NjVjIiwidGFnIjoiIn0%3D; expires=Fri, 04 Sep 2026 02:43:02 GMT; Max-Age=36000; path=/; domain=.easybell.de; secure; httponly; samesite=none
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0mcurl -s -I --max-time 5 "https://www.easybell.de/api/v1" 2>/dev/null; curl -s -I --max-time 5 "https://www.easybell.de/api/v2" 2>/dev/null
+HTTP/2 302 
+date: Thu, 03 Sep 2026 16:43:03 GMT
+content-type: text/html; charset=utf-8
+cache-control: no-cache, private
+location: https://www.easybell.de/start
+set-cookie: XSRF-TOKEN=eyJpdiI6IkJ4SmpiUCttRmlzTkFFRWFQUy9meHc9PSIsInZhbHVlIjoiMStnTDVyNHRnM0JpSVVHVEVkWEpKQW1lRmdBekVoampnMGhSMUhUQnFQU3l3WStNNnIzUk42eDNSRUZXNnRoUU9Ub09DV1FlcHdISkpQN2hMd0YwTTZybk9MallzdXpRZFVnU0dvVW5JUThlY2Rxeno3Qkt3YURqYXUwdTJsZzIiLCJtYWMiOiJiOTFjYmIxN2FiNWJkNWVjMWQ4ZTA0YmJiY2ExNWZlODgzMDI5NTNlYmVhZTk2MDVjODQxNDA5YTYzZTEyNGQ0IiwidGFnIjoiIn0%3D; expires=Fri, 04 Sep 2026 02:43:03 GMT; Max-Age=36000; path=/; domain=.easybell.de; secure; samesite=none
+set-cookie: order_session=eyJpdiI6IlRaQTVrU1ZHT3FLMTdLaFhrRkZWMHc9PSIsInZhbHVlIjoiY281eUVwZnBPYjd1YitBd29XRERvVnN0Zld4N2p5MWZUM294WEpkcDdqTHNpdUFEZ2lSRUtjQVFyazc2akplREZVS3k5QlBwcGp5Q2ZzalBYRy9GWU1QbGhDWmNRWXRpb1Y0a3pRckdIdE44eWNPL0lUYko0WGt1Yk1FUVAvYWUiLCJtYWMiOiI3NGQ0MjUxOTRiZDFkZDkzNzE0ZjdlOTkyOTJjOTliODdlZWU3OGNhYzA0NDk0YzVkNzY4YjNjMjI5MzQ4MTIzIiwidGFnIjoiIn0%3D; expires=Fri, 04 Sep 2026 02:43:03 GMT; Max-Age=36000; path=/; domain=.easybell.de; secure; httponly; samesite=none
+strict-transport-security: max-age=31536000; includeSubDomains
+
+HTTP/2 302 
+date: Thu, 03 Sep 2026 16:43:04 GMT
+content-type: text/html; charset=utf-8
+cache-control: no-cache, private
+location: https://www.easybell.de/start
+set-cookie: XSRF-TOKEN=eyJpdiI6IkdxdjZaYzRJRUQvcjIyK3ZtYWdzd3c9PSIsInZhbHVlIjoiUUJOamNMNnVKWXRZSlNUL2FIT3ZYVG53TlpzU1cra0pET052ZHJ5TENIRU9HNEFmMzE4ZDBNTmJEOW1ndWh0Zk5FTVQ5NWdScms5OHhqallKRmU0MW00WjQzMFNOVHNxa0R0RzFEZlBsdWdQY25PVGJ1cEdVL0xDdTRBd0ptYUciLCJtYWMiOiI4MGQyZmExZjNmZjA5ZGJmOGUxMjA5NjU3MzA0Mjg0OTYxN2U5NTY3Y2M4YTNmNDY1ZjhlYjhhMzJjYTMwNDI3IiwidGFnIjoiIn0%3D; expires=Fri, 04 Sep 2026 02:43:04 GMT; Max-Age=36000; path=/; domain=.easybell.de; secure; samesite=none
+set-cookie: order_session=eyJpdiI6IjQvVHIvZUhXeHU4ODEvSW9Kby9GVWc9PSIsInZhbHVlIjoiNHZGTmQ5UjNHYWFqZU4zeThLOGdyaFE3ZjdPQjZhcVpsYy94aHFnamxBZjl1YWxsM3lCMFMrQkxKb0swMC84VU1abWNoeGNYZTczZlpMalNHNTh6MjhmSXJkaVRhZTJYdHBvNFdxcndMMEFrcVpybVJsVG5BaWpYUldLRDJXZE4iLCJtYWMiOiJlOTFkNTA5YTE0YThlYTc3ZjM5NjBiOWEyOTBiZDE1ZTk2MWQ0MTQ1YzE5Zjg5NDQ0NTdiN2VhOTQ5MDA0MTBkIiwidGFnIjoiIn0%3D; expires=Fri, 04 Sep 2026 02:43:04 GMT; Max-Age=36000; path=/; domain=.easybell.de; secure; httponly; samesite=none
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0mcurl -s --max-time 10 "https://my.easybell.com" 2>/dev/null | head -50
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="refresh" content="0;url='https://my.easybell.com/login'" />
+
+        <title>Redirecting to https://my.easybell.com/login</title>
+    </head>
+    <body>
+        Redirecting to <a href="https://my.easybell.com/login">https://my.easybell.com/login</a>.
+    </body>
+</html>
+[0m
+[0m$ [0mcurl -s -I --max-time 5 "https://my.easybell.com/api" 2>/dev/null
+HTTP/2 302 
+date: Thu, 03 Sep 2026 16:44:39 GMT
+content-type: text/html; charset=utf-8
+location: https://my.easybell.com/login
+cache-control: no-cache, private
+vary: X-Inertia
+set-cookie: XSRF-TOKEN=eyJpdiI6Ik5hVnVqYnFsMEJqYmNSS3V6Wm1MZUE9PSIsInZhbHVlIjoiT1MvVEl1d0VEVjIvNXRrKytUeWo2SmtFb09ZeCsrbVVEWlZlWFN6L001VlUrYXZabU1OektFTzZab2ZndE91dWF3RGpJTE9LQm9SbmJmQnpBZ0hLRDBKVEhNTGhzaUhEUjNacWpqYUFEeEp5clVDSUYzRk1NRHQ4bHJDdndnaEwiLCJtYWMiOiIyZTE0OGY1YWMxZWMzZTZiYWEyZTk3ZjkyYmFjMzhmZTZlN2EyYmUwZjNmM2Q1YjIzYmNjMzg0MDQzNDFjMTIyIiwidGFnIjoiIn0%3D; expires=Thu, 24 Sep 2026 16:44:39 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=JsXHfpMka3g7wr7h8nQKCRWItPROg3wH66CIR4Tu; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0mcurl -s --max-time 10 "https://my.easybell.com/login" 2>/dev/null | head -80
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+  <link rel="preconnect" href="https://shared-libs.easybell.de" crossorigin>
+  <link rel="preload" href="https://shared-libs.easybell.de/easybell/design-shared-library/Interbell-Variable.woff2"
+    as="font" type="font/woff2" crossorigin>
+  <!-- Matomo Tag Manager -->
+  <script>
+    globalThis.import_meta_env = {"VITE_VOIP_MANAGEMENT_URL":"https:\/\/voip-management.easybell.de\/api\/"};
+
+    var _mtm = window._mtm = window._mtm || [];
+    _mtm.push({ 'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start', 'customerId': '' });
+    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.async = true; g.src = 'https://matomo.easybell.de/js/container_izWSLsWO.js'; s.parentNode.insertBefore(g, s);
+  </script>
+  <!-- End Matomo Tag Manager -->
+
+  <title>Easybell Kundenportal</title>
+  <link rel="preload" as="style" href="https://my.easybell.com/build/assets/main-CnvQgnlE.css" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/main-CKc5KWDf.js" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/components-BsWcUPQd.js" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/core-Dmrw7sL8.js" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/dist-BnNTvl_D.js" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/Default-uM3wQOgl.js" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/Translations-CeI_H3FF.js" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/validations-BRHoyPjx.js" /><link rel="stylesheet" href="https://my.easybell.com/build/assets/main-CnvQgnlE.css" /><script type="module" src="https://my.easybell.com/build/assets/main-CKc5KWDf.js"></script>  </head>
+
+<body>
+  <script data-page="app" type="application/json">{"component":"MyLogin","props":{"errors":{},"successMessage":null,"errorMessage":null,"isInternationalCustomer":false,"isDomesticCustomer":true,"isPartnerUser":false,"isSbcDownProtocol":true,"showPasswordSuccessAlert":false},"url":"\/login","version":"e37101c2ab32f917e1c5990a5813f4be","sharedProps":["errors","successMessage","errorMessage","isInternationalCustomer","isDomesticCustomer","isPartnerUser","isSbcDownProtocol"]}</script><div id="app"></div>
+</body>
+
+</html>
+[0m
+[0m$ [0mcurl -s -I --max-time 5 "https://my.easybell.com/oauth" 2>/dev/null; curl -s -I --max-time 5 "https://my.easybell.com/api/v1" 2>/dev/null; curl -s -I --max-time 5 "https://my.easybell.com/api/v2" 2>/dev/null
+HTTP/2 302 
+date: Thu, 03 Sep 2026 16:45:24 GMT
+content-type: text/html; charset=utf-8
+location: https://my.easybell.com/login
+cache-control: no-cache, private
+vary: X-Inertia
+set-cookie: XSRF-TOKEN=eyJpdiI6IjBZVDlheGJFd0ZVK3VZRG5VeXFmcEE9PSIsInZhbHVlIjoibVJrYSt1d1lSazVxTkpvc1NzR2FlZGx6V2M3V2FXMTRERDFJaitQMDFaUHFBRFNHZ3d6Mnc1SlhMYWtHZHNUUnlxYVprd1NrZXlHQmxEZFRBVUEwMXZYYkxlTzdwY1pwaTkvNUFITXpCVU42QVRzVlQvNWNrRzdVa3V3RjE2SkciLCJtYWMiOiI3ZjE0OWNjY2Y3OTM3YTdhYzUyMzhhOGJkZGI0N2U1YmMxM2IxZTI1MzFkY2MzMGI1OTMxZjVhYWEzMjI4YjU3IiwidGFnIjoiIn0%3D; expires=Thu, 24 Sep 2026 16:45:24 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=mRUFJq0eysI3aS7H97zWtehG6Fo8NrUzCxEohy9x; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+
+HTTP/2 302 
+date: Thu, 03 Sep 2026 16:45:25 GMT
+content-type: text/html; charset=utf-8
+location: https://my.easybell.com/login
+cache-control: no-cache, private
+vary: X-Inertia
+access-control-allow-origin: *
+set-cookie: XSRF-TOKEN=eyJpdiI6IkRwa3Q0TGN3UnFtb3FtOE1BdWlqR0E9PSIsInZhbHVlIjoiL2xBVk9HeElidHlVOVRWdjd3TEE1SWphVlBPWjZRUEhQbFpQNjIxWXFsOW4yck5SUVcxZVVBSitGS0xyS2lIUURYRWNkUnNLYzhjbmlUcjQ5alRTLzhYZ3lGWTlnV1BOSk9Ec05MbDNwMmtKdHNEWHNFcTVIUzRoZWRta3JjdFAiLCJtYWMiOiI1OTllMjk2ODVlMzVmNmFlNDkzY2M5ZWY5NGRlNWRiYTQzZDg2ZjNjNTU2YTljMWM5NGMyNjk5MGQ4M2U2Y2RhIiwidGFnIjoiIn0%3D; expires=Thu, 24 Sep 2026 16:45:25 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=MK03xBiJBPwuE9sXBrhmFE3zpMTUpC0CAB2RaqmG; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+
+HTTP/2 302 
+date: Thu, 03 Sep 2026 16:45:26 GMT
+content-type: text/html; charset=utf-8
+location: https://my.easybell.com/login
+cache-control: no-cache, private
+vary: X-Inertia
+access-control-allow-origin: *
+set-cookie: XSRF-TOKEN=eyJpdiI6Ikl0YmU4OEFldGdKVFJhRHFyNndwSWc9PSIsInZhbHVlIjoienVHcDBOYll1NDdMM2MrR1M4bWZZb2tpSUxlWU1Yc2Jkb25Zc3BhcUF5UkFYZlE2TnlUMVNYTGJsV0RBajNCYTlBeVl6WDhtenBiQ3BRKy81VFlxVjYxMHFpWmtzMUxzd21Zdk1tYkg3UVpleDB3b3RZVDEyeTVyNnJBOWpmWGwiLCJtYWMiOiI5ZDY2OGY3NWFhMGZiZDFhNGZhMGUzNDI0ZTI2YThkYWRlNTMxY2ZkMTE2MWViNmI1ODJkMTUwMWRkNjBiMmI5IiwidGFnIjoiIn0%3D; expires=Thu, 24 Sep 2026 16:45:26 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=PgF6n2d32woMKLa3AGFgZa6rBZvWNa5vB9JF460i; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0mdig +short voip-management.easybell.de A; dig +short shared-libs.easybell.de A; dig +short matomo.easybell.de A
+62.27.117.123
+62.27.68.14
+62.27.117.115
+[0m
+[0m$ [0mcurl -s -I --max-time 10 "https://voip-management.easybell.de" 2>/dev/null | head -15
+HTTP/2 404 
+date: Thu, 03 Sep 2026 16:46:19 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0mcurl -s -I --max-time 10 "https://voip-management.easybell.de/api/" 2>/dev/null | head -15
+HTTP/2 404 
+date: Thu, 03 Sep 2026 16:47:05 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0mcurl -s -I --max-time 10 "https://shared-libs.easybell.de" 2>/dev/null | head -10
+HTTP/1.1 404 Not Found
+Server: nginx
+Date: Thu, 03 Sep 2026 16:47:06 GMT
+Content-Type: text/html
+Content-Length: 146
+Connection: close
+[0m
+[0m$ [0mcurl -s -I --max-time 10 "https://matomo.easybell.de" 2>/dev/null | head -10
+HTTP/2 401 
+server: nginx
+date: Thu, 03 Sep 2026 16:47:55 GMT
+content-type: text/html; charset=utf-8
+x-matomo-request-id: 0e91d
+cache-control: private, no-cache, no-store
+[0m
+[0m$ [0mcurl -s -I --max-time 10 "https://voip-management.easybell.de/api/v1" 2>/dev/null; curl -s -I --max-time 10 "https://voip-management.easybell.de/api/v2" 2>/dev/null
+HTTP/2 404 
+date: Thu, 03 Sep 2026 16:47:54 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+
+HTTP/2 404 
+date: Thu, 03 Sep 2026 16:47:55 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0mcurl -s --max-time 10 "https://www.easybell.de" 2>/dev/null | grep -iE '(portal|kunden|mein|api|voip|sip|auth|oauth|token|dashboard|account)' | head -30
+...output truncated...
+
+Full output saved to: /home/runner/.local/share/opencode/tool-output/tool_0682c3bb80013BUMCGjbzlckUA
+
+(no output)
+[0m
+[0m$ [0mcurl -s --max-time 10 "https://www.easybell.de/start" 2>/dev/null | head -100
+...output truncated...
+
+Full output saved to: /home/runner/.local/share/opencode/tool-output/tool_0682c3e9d001a2z1RiyWf1jnPF
+
+en" title="Partner werden" class="menu-icon"> Partner werden </a></div></li><li class="nav-item icon" role="none"><div><a class="d-flex align-items-center gap-3" href="tel:+493080951000" role="menuitem"><img src="/fileadmin/setup/images/icons/navi-phone.svg" aria-hidden="true" alt="dynamische Telefonnummer" title="dynamische Telefonnummer" class="menu-icon"> 030 8095 1000 </a></div></li><li class="nav-item icon" role="none"><div><a class="d-flex align-items-center gap-3 " href="/kontakt/" role="menuitem"><img src="/fileadmin/bilder/icons/Navi-Icons/navi-contact.svg" aria-hidden="true" alt="Kontakt" title="Kontakt" class="menu-icon"> Kontakt </a></div></li><li class="nav-item icon" role="none"><div><a class="d-flex align-items-center gap-3 " href="https://my.easybell.com" role="menuitem"><img src="/fileadmin/bilder/icons/Navi-Icons/navi-login.svg" aria-hidden="true" alt="Login" title="Login" class="menu-icon"> Login </a></div></li><li class="nav-item"><div class="d-flex align-items-center" role="navigation" aria-label="Sprachauswahl"><a href="/error-pages/not-found/" hreflang="de-DE" title="Die aktuelle Sprache ist deutsch" class="text-uppercase font-semibold" aria-current="true" aria-label="Die aktuelle Sprache ist deutsch"> Deutsch </a><span class="mx-2" aria-hidden="true">|</span><a href="https://en.easybell.de/error-pages/not-found/" hreflang="en-DE" title="Switch to English language" class="text-uppercase font-regular" aria-label="Switch to English language"> English </a></div></li></div></ul></nav></div></div></header><div class="d-none d-lg-block"><nav class="breadcrumb-section" aria-label="breadcrumb"><ol class="breadcrumb container-xxl d-flex align-items-center px-3"><li class="breadcrumb-item"><a href="/" class="breadcrumb-link"><img alt="home" src="/_assets/e809f40fc7cdd705d4ba2ef1866bb130/Images/navbar/breadcrumb/home.svg" width="20" height="20"></a></li><li class="breadcrumb-item d-flex align-items-center"><a class="breadcrumb-link" href="/komplettanschluss/" title="Produkte für Zuhause"><span class="breadcrumb-text">Produkte für Zuhause</span></a></li></ol></nav></div><div class="bg-linear-default"><div class="container"><div id="c2129" class="frame frame-size-default frame-default frame-type-textpic frame-layout-default frame-background-none frame-no-backgroundimage frame-space-before-none frame-space-after-none "><div class="frame-group-container"><div class="frame-group-inner"><div class="frame-container frame-container-default"><div class="frame-inner"><div class="textpic textpic-centered textpic-right"><div class="textpic-item textpic-gallery"><div class="gallery-row"><div class="gallery-item gallery-item-size-1"><figure class="image"><picture><source type="image/webp" data-variant="default" data-maxwidth="620" media="(min-width: 1400px)" srcset="/fileadmin/_processed_/b/2/csm_404_16ee671ee7.webp 1x,"><source data-variant="default" data-maxwidth="620" media="(min-width: 1400px)" srcset="/fileadmin/_processed_/b/2/csm_404_d4648947aa.webp 1x,"><source type="image/webp" data-variant="xlarge" data-maxwidth="530" media="(min-width: 1200px)" srcset="/fileadmin/_processed_/b/2/csm_404_b15c2d6ee6.webp 1x,"><source data-variant="xlarge" data-maxwidth="530" media="(min-width: 1200px)" srcset="/fileadmin/_processed_/b/2/csm_404_63fce8d4e9.webp 1x,"><source type="image/webp" data-variant="large" data-maxwidth="440" media="(min-width: 992px)" srcset="/fileadmin/_processed_/b/2/csm_404_844eb53446.webp 1x,/fileadmin/_processed_/b/2/csm_404_f71fda46ae.webp 2x"><source data-variant="large" data-maxwidth="440" media="(min-width: 992px)" srcset="/fileadmin/_processed_/b/2/csm_404_70d0148399.webp 1x,/fileadmin/_processed_/b/2/csm_404_d73575398c.webp 2x"><source type="image/webp" data-variant="medium" data-maxwidth="320" media="(min-width: 768px)" srcset="/fileadmin/_processed_/b/2/csm_404_e004ff3528.webp 1x,/fileadmin/_processed_/b/2/csm_404_7c386e8a7e.webp 2x"><source data-variant="medium" data-maxwidth="320" media="(min-width: 768px)" srcset="/fileadmin/_processed_/b/2/csm_404_de0db58491.webp 1x,/fileadmin/_processed_/b/2/csm_404_a6b4f19eeb.webp 2x"><source type="image/webp" data-variant="small" data-maxwidth="500" media="(min-width: 576px)" srcset="/fileadmin/_processed_/b/2/csm_404_277d4ef0df.webp 1x,"><source data-variant="small" data-maxwidth="500" media="(min-width: 576px)" srcset="/fileadmin/_processed_/b/2/csm_404_4a04dce341.webp 1x,"><source type="image/webp" data-variant="extrasmall" data-maxwidth="374" srcset="/fileadmin/_processed_/b/2/csm_404_496374cc02.webp 1x,/fileadmin/_processed_/b/2/csm_404_04df16d522.webp 2x"><source data-variant="extrasmall" data-maxwidth="374" srcset="/fileadmin/_processed_/b/2/csm_404_846d7955eb.webp 1x,/fileadmin/_processed_/b/2/csm_404_c13c1bef88.webp 2x"><source type="image/webp" srcset="/fileadmin/_processed_/b/2/csm_404_a552897c3e.webp"><img loading="lazy" src="/fileadmin/_processed_/b/2/csm_404_f030444444.webp" width="620" height="620" title="" alt=""></picture></figure></div></div></div><div class="textpic-item textpic-text"><div class="frame-header" data-custom-all-loaded="true"><h3 class="element-header headline-m mb-0"><span>Diese Seite konnte nicht gefunden werden.</span></h3></div><p>Gründe dafür könnten sein, dass Sie eine falsche oder veraltete URL aufgerufen haben – bitte überprüfen Sie diese noch einmal. Oder aber wir haben die betreffende Seite archiviert, verschoben oder umbenannt.</p><p><a href="/" class="btn btn-primary">zur Startseite</a></p><p> </p></div></div></div></div></div></div></div></div></div><div id="page-content" class="bp-page-content main-section"><!--TYPO3SEARCH_begin--><div class="section section-default"></div><!--TYPO3SEARCH_end--><time datetime="2026-02-27"><meta itemprop="datePublished" content="20.11.2014"><meta itemprop="dateModified" content="2026-02-27"></time></div><footer id="page-footer" class="bp-page-footer"><div class="contentcontainer" data-container-identifier="container_awardbanner"><div class="awards-ping m-auto"><div class="image-center image-above"><div class="gallery-row"><div class="gallery-item gallery-item-size-1"><figure class="image"><picture><source data-variant="default" data-maxwidth="1280" media="(min-width: 1400px)" srcset=""><source data-variant="xlarge" data-maxwidth="1100" media="(min-width: 1200px)" srcset=""><source data-variant="large" data-maxwidth="920" media="(min-width: 992px)" srcset=""><source type="image/webp" data-variant="medium" data-maxwidth="680" media="(min-width: 768px)" srcset="/fileadmin/_processed_/c/d/csm_ping-awards_ee2df53ce2.webp 1x,"><source data-variant="medium" data-maxwidth="680" media="(min-width: 768px)" srcset="/fileadmin/_processed_/c/d/csm_ping-awards_0bffdef5c6.webp 1x,"><source type="image/webp" data-variant="small" data-maxwidth="500" media="(min-width: 576px)" srcset="/fileadmin/_processed_/c/d/csm_ping-awards_e7a282d220.webp 1x,"><source data-variant="small" data-maxwidth="500" media="(min-width: 576px)" srcset="/fileadmin/_processed_/c/d/csm_ping-awards_ad168fbe39.webp 1x,"><source type="image/webp" data-variant="extrasmall" data-maxwidth="374" srcset="/fileadmin/_processed_/c/d/csm_ping-awards_b6d2cd4e6a.webp 1x,"><source data-variant="extrasmall" data-maxwidth="374" srcset="/fileadmin/_processed_/c/d/csm_ping-awards_8e0aa855cb.webp 1x,"><source type="image/webp" srcset="/fileadmin/bilder/pings/ping-awards.webp"><img loading="lazy" src="/fileadmin/bilder/pings/ping-awards.webp" width="700" height="600" title="" alt=""></picture></figure></div></div></div></div><div class="awards m-auto"><div class="awards-text p-4 pb-lg-0 p-xl-0 m-auto"><div id="c41290" class="frame frame-size-default frame-default frame-type-text frame-layout-default frame-background-none frame-no-backgroundimage frame-space-before-none frame-space-after-none "><div class="frame-group-container"><div class="frame-group-inner"><div class="frame-container frame-container-default"><div class="frame-inner"><p class="body-m"><strong>Wir sind ausgezeichnet.</strong><br>Kunden, Partner und die Fachpresse schenken uns Vertrauen.</p></div></div></div></div></div></div><div class="awards-logos"><div class="awards-logo p-3"><div id="c41292" class="frame frame-size-default frame-default frame-type-html frame-layout-default frame-background-none frame-no-backgroundimage frame-space-before-none frame-space-after-none "><div class="frame-group-container"><div class="frame-group-inner"><div class="frame-container frame-container-default"><div class="frame-inner"><div class="widget_container_stars_badge text-center"></div><div class="widget_container_text_only"></div></div></div></div></div></div></div><div class="awards-logo p-3"><div id="c41293" class="frame frame-size-default frame-default frame-type-image frame-layout-default frame-background-none frame-no-backgroundimage frame-space-before-none frame-space-after-none "><div class="frame-group-container"><div class="frame-group-inner"><div class="frame-container frame-container-default"><div class="frame-inner"><div class="image-center image-above"><div class="gallery-row"><div class="gallery-item gallery-item-size-1"><figure class="image"><picture><source data-variant="default" data-maxwidth="1280" media="(min-width: 1400px)" srcset=""><source data-variant="xlarge" data-maxwidth="1100" media="(min-width: 1200px)" srcset=""><source data-variant="large" data-maxwidth="920" media="(min-width: 992px)" srcset=""><source type="image/webp" data-variant="medium" data-maxwidth="680" media="(min-width: 768px)" srcset="/fileadmin/_processed_/6/8/csm_signet-connect-professional-poty-2026_3097df57da.webp 1x,"><source data-variant="medium" data-maxwidth="680" media="(min-width: 768px)" srcset="/fileadmin/_processed_/6/8/csm_signet-connect-professional-poty-2026_07f25a084c.png 1x,"><source type="image/webp" data-variant="small" data-maxwidth="500" media="(min-width: 576px)" srcset="/fileadmin/_processed_/6/8/csm_signet-connect-professional-poty-2026_9d57cc4b6f.webp 1x,"><source data-variant="small" data-maxwidth="500" media="(min-width: 576px)" srcset="/fileadmin/_processed_/6/8/csm_signet-connect-professional-poty-2026_66cf3dd169.png 1x,"><source type="image/webp" data-variant="extrasmall" data-maxwidth="374" srcset="/fileadmin/_processed_/6/8/csm_signet-connect-professional-poty-2026_091b25c546.webp 1x,"><source data-variant="extrasmall" data-maxwidth="374" srcset="/fileadmin/_processed_/6/8/csm_signet-connect-professional-poty-2026_a6b0775e6a.png 1x,"><source type="image/webp" srcset="/fileadmin/_processed_/6/8/csm_signet-connect-professional-poty-2026_58ca24a2de.webp"><img loading="lazy" src="/fileadmin/bilder/siegel/signet-connect-professional-poty-2026.png" width="709" height="906" title="Product of the Year Award 2026 von connect professional" alt="Product of the Year Award 2026 von connect professional"></picture></figure></div></div></div></div></div></div></div></div></div><div class="awards-logo p-3"><div id="c41291" class="frame frame-size-default frame-default frame-type-image frame-layout-default frame-background-none frame-no-backgroundimage frame-space-before-none frame-space-after-none "><div class="frame-group-container"><div class="frame-group-inner"><div class="frame-container frame-container-default"><div class="frame-inner"><div class="image-center image-above"><div class="gallery-row"><div class="gallery-item gallery-item-size-1"><figure class="image"><picture><source data-variant="default" data-maxwidth="1280" media="(min-width: 1400px)" srcset=""><source data-variant="xlarge" data-maxwidth="1100" media="(min-width: 1200px)" srcset=""><source data-variant="large" data-maxwidth="920" media="(min-width: 992px)" srcset=""><source data-variant="medium" data-maxwidth="680" media="(min-width: 768px)" srcset=""><source type="image/webp" data-variant="small" data-maxwidth="500" media="(min-width: 576px)" srcset="/fileadmin/_processed_/c/2/csm_disq-siegel-internetanbieter-2026_ccf634b4a9.webp 1x,"><source data-variant="small" data-maxwidth="500" media="(min-width: 576px)" srcset="/fileadmin/_processed_/c/2/csm_disq-siegel-internetanbieter-2026_b185d6ca4b.png 1x,"><source type="image/webp" data-variant="extrasmall" data-maxwidth="374" srcset="/fileadmin/_processed_/c/2/csm_disq-siegel-internetanbieter-2026_1f35f18ba4.webp 1x,"><source data-variant="extrasmall" data-maxwidth="374" srcset="/fileadmin/_processed_/c/2/csm_disq-siegel-internetanbieter-2026_b0b270c133.png 1x,"><source type="image/webp" srcset="/fileadmin/_processed_/c/2/csm_disq-siegel-internetanbieter-2026_a210c87489.webp"><img loading="lazy" src="/fileadmin/bilder/siegel/disq-siegel-internetanbieter-2026.png" width="591" height="591" title='Siegel "Beliebtester Internetanbieter" vom deutschen Institut für Service-Qualität' alt='Siegel "Beliebtester Internetanbieter" vom deutschen Institut für Service-Qualität'></picture></figure></div></div></div></div></div></div></div></div></div><div class="awards-logo p-3"><div id="c47830" class="frame frame-size-default frame-default frame-type-image frame-layout-default frame-background-none frame-no-backgroundimage frame-space-before-none frame-space-after-none "><div class="frame-group-container"><div class="frame-group-inner"><div class="frame-container frame-container-default"><div class="frame-inner"><div class="image-center image-above"><div class="gallery-row"><div class="gallery-item gallery-item-size-1"><figure class="image"><picture><source type="image/webp" data-variant="default" data-maxwidth="1280" media="(min-width: 1400px)" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_1bf092be87.webp 1x,"><source data-variant="default" data-maxwidth="1280" media="(min-width: 1400px)" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_14cdf12167.png 1x,"><source type="image/webp" data-variant="xlarge" data-maxwidth="1100" media="(min-width: 1200px)" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_0571935c7a.webp 1x,"><source data-variant="xlarge" data-maxwidth="1100" media="(min-width: 1200px)" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_1d045a69ec.png 1x,"><source type="image/webp" data-variant="large" data-maxwidth="920" media="(min-width: 992px)" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_7a298ea278.webp 1x,"><source data-variant="large" data-maxwidth="920" media="(min-width: 992px)" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_d0e2be09e7.png 1x,"><source type="image/webp" data-variant="medium" data-maxwidth="680" media="(min-width: 768px)" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_604fa3ef28.webp 1x,/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_83b342dbd0.webp 2x"><source data-variant="medium" data-maxwidth="680" media="(min-width: 768px)" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_3b9f2b84dd.png 1x,/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_16c0aaa216.png 2x"><source type="image/webp" data-variant="small" data-maxwidth="500" media="(min-width: 576px)" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_f6273d10c3.webp 1x,/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_4ceb2206b8.webp 2x"><source data-variant="small" data-maxwidth="500" media="(min-width: 576px)" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_e37cdbfcc4.png 1x,/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_6e44296c14.png 2x"><source type="image/webp" data-variant="extrasmall" data-maxwidth="374" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_6bdb7a1ff1.webp 1x,/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_035830033e.webp 2x"><source data-variant="extrasmall" data-maxwidth="374" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_baefca663f.png 1x,/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_24dd6d10e6.png 2x"><source type="image/webp" srcset="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_bddd06c4ee.webp"><img loading="lazy" src="/fileadmin/_processed_/3/f/csm_connect-professional-cloud-pbx-test-siegel_14a3d5e305.png" width="1280" height="1413" title='Testurteil "Sehr gut" für die Cloud Telefonanlage von connect professional' alt='Testurteil "Sehr gut" für die Cloud Telefonanlage von connect professional'></picture></figure></div></div></div></div></div></div></div></div></div></div></div></div><section class="footer-main bg-neutral-800 text-sm text-neutral-100 text-center text-sm-start pt-5 pb-4 px-3"><div class="container-xxl position-relative"><img id="easybell_logo-footer" src="/_assets/e809f40fc7cdd705d4ba2ef1866bb130/Images/eb-logo_rgb.svg" width="115" height="29" alt=""><div class="row mt-4"><div class="col-12 col-sm-6 col-md-4 col-xl-2"><div class="frame-header" data-custom-all-loaded="true"><h5 class="element-header headline-s mb-0"><span>Kontakt</span></h5></div><p><a href="mailto:support@easybell.de" class="text-white" title="support@easybell.de">support@easybell.de</a></p><p class="mb-0 headline-m body-m-bold">Privatkunden</p><p><a href="tel:03080951000" class="text-white" title="030 / 80 95 10 00">030 / 80 95 10 00</a></p><div class="frame-space-after frame-space-after-small"></div><p class="mb-0 body-m-bold">Geschäftskunden</p><p><a href="tel:03080951050" class="text-white" title="030 / 80 95 10 50">030 / 80 95 10 50</a></p><div class="frame-space-after frame-space-after-small"></div><p class="mb-0">Mo.–Fr. 8–20 Uhr</p><p>Sa. 9–18 Uhr</p></div><nav class="col-12 col-sm-6 col-md-4 col-xl-2"><div class="frame-header" data-custom-all-loaded="true"><h5 class="element-header headline-s mb-0"><span>Produkte für Unternehmen</span></h5></div><ul class="list-unstyled"><li><a href="/business/internet-telefonie/" title="Internet &amp; Telefonie"> Internet &amp; Telefonie </a></li><li><a href="/business/sip-trunks/" title="SIP Trunks"> SIP Trunks </a></li><li><a href="/cloud-telefonanlage/" title="Cloud Telefonanlage"> Cloud Telefonanlage </a></li><li><a href="/business/microsoft-teams-connector/" title="Teams Connector"> Teams Connector </a></li><li><a href="/business/home-office-connect/" title="Home Office Connect"> Home Office Connect </a></li></ul><div class="frame-space-after frame-space-after-extra-large"></div><div class="frame-header" data-custom-all-loaded="true"><h5 class="element-header headline-s mb-0"><span>Produkte für Zuhause</span></h5></div><ul class="list-unstyled"><li><a href="/komplettanschluss/" title="Internet &amp; Telefon"> Internet &amp; Telefon </a></li><li><a href="/voice-over-ip/" title="Telefon"> Telefon </a></li><li><a href="/voice-over-ip/fax-online/" title="Fax Online"> Fax Online </a></li></ul><div class="frame-space-after frame-space-after-extra-large"></div></nav><nav class="col-12 col-sm-6 col-md-4 col-xl-2"><div class="frame-header" data-custom-all-loaded="true"><h5 class="element-header headline-s mb-0"><span>Unternehmen</span></h5></div><ul class="list-unstyled"><li><a href="/unternehmen/" title="Über uns"> Über uns </a></li><li><a href="/jobs/" title="Karriere"> Karriere </a></li><li><a href="/presse/" title="Presse"> Presse </a></li><li><a href="/partnerprogramm/" title="Partnerprogramm"> Partnerprogramm </a></li><li><a href="/unternehmen/bug-bounty-programm/" title="Bug-Bounty-Programm"> Bug-Bounty-Programm </a></li><li><a href="/unternehmen/easybell-speak-up/" title="Speak Up"> Speak Up </a></li><li><a href="/business/erfahrungen-und-meinungen/" title="Erfahrungen &amp; Meinungen"> Erfahrungen &amp; Meinungen </a></li><li><a href="http://www.easybell.com" title="easybell.com" target="_blank"> easybell.com </a></li></ul><div class="frame-space-after frame-space-after-extra-large"></div></nav><nav class="col-12 col-sm-6 col-md-4 col-xl-2"><div class="frame-header" data-custom-all-loaded="true"><h5 class="element-header headline-s mb-0"><span>Informationen</span></h5></div><ul class="list-unstyled"><li><a href="/systemstatus/" title="Systemstatus"> Systemstatus </a></li><li><a href="/produktinformationen/" title="Produktinformationen"> Produktinformationen </a></li><li><a href="/preise/" title="Preislisten"> Preislisten </a></li><li><a href="/kompatible-hardware-und-software/" title="Kompatibilität"> Kompatibilität </a></li><li><a href="/sitemap/" title="Sitemap"> Sitemap </a></li><li><a href="/agb/" title="AGB"> AGB </a></li><li><a href="/datenschutz/" title="Datenschutz"> Datenschutz </a></li><li><a href="/impressum/" title="Impressum"> Impressum </a></li></ul><a id="openCookieMenu" href="#" class="text-white" data-opencookiemenu="1"> Cookies anpassen </a><div class="frame-space-after frame-space-after-extra-large"></div></nav><nav class="col-12 col-sm-6 col-md-4 col-xl-2"><div class="frame-header" data-custom-all-loaded="true"><h5 class="element-header headline-s mb-0"><span>Service</span></h5></div><ul class="list-unstyled"><li><a href="/hilfe/" title="Hilfecenter"> Hilfecenter </a></li><li><a href="/business/webinare/" title="Webinare"> Webinare </a></li><li><a href="/wissen/" title="Wissen &amp; Ratgeber"> Wissen &amp; Ratgeber </a></li><li><a href="/bandbreitengarantie/" title="Bandbreitengarantie"> Bandbreitengarantie </a></li><li><a href="/bandbreitengarantie/" title="Verfügbarkeit prüfen"> Verfügbarkeit prüfen </a></li><li><a href="/barrierefreiheit/" title="Barriere melden"> Barriere melden </a></li><li><a href="/hilfe-service/kuendigung/" title="Kündigung"> Kündigung </a></li><li><a href="https://my.easybell.com/login" title="Kundenportal Login" target="zum Easybell Kundenportal"> Kundenportal Login </a></li></ul><div class="frame-space-after frame-space-after-extra-large"></div><div class="textmedia textmedia-above"><div class="textmedia-item textmedia-gallery mx-auto"></div><div class="textmedia-item textmedia-text"><p><a href="/widerruf/"><u>Vertrag widerrufen</u></a></p></div></div></nav><nav class="col-12 col-sm-6 col-md-4 col-xl-2"><h5><a href="/app/" title="Easybell-App"><strong>Easybell-App</strong></a></h5><p><a href="/hilfe/telefon-konfiguration/easybell-app/">Anleitung</a></p><div class="frame-space-after frame-space-after-extra-small"></div><div class="image-center image-above"><div class="gallery-row"><div class="gallery-item gallery-item-size-1"><figure class="image"><a href="https://play.google.com/store/apps/details?id=com.csipsimple.easybell2.android" target="_blank" rel="noreferrer" title="VoIP to go App bei Google Play"><img loading="lazy" src="/fileadmin/bilder/icons/stores/badge-playstore.svg" width="63" height="21" title="" alt="Google Playstore badge"></a></figure></div></div></div><div class="frame-space-after frame-space-after-small"></div><div class="image-center image-above"><div class="gallery-row"><div class="gallery-item gallery-item-size-1"><figure class="image"><a href="https://apps.apple.com/us/app/easybell-voip-to-go/id1390554311" target="_blank" rel="noreferrer" title="VoIP to go App im Apple App Store"><img loading="lazy" src="/fileadmin/bilder/icons/stores/badge-appstore.svg" width="63" height="21" title="" alt="Apple Appstore badge"></a></figure></div></div></div><div class="frame-space-after frame-space-after-extra-small"></div></nav></div><hr class="my-4 text-neutral-700"><div class="row footer-bottom"><div class="col-12 col-sm-8 d-md-flex align-items-center text-neutral-100 text-sm"><span>©  2026 </span><p>Easybell - eine Marke der Dstny-Gruppe</p></div><div class="col-12 col-sm-4 d-flex gap-3 justify-content-center justify-content-sm-end"><div class="image-center image-above"><div class="gallery-row"><div class="gallery-item gallery-item-size-1"><figure class="image"><a href="https://www.facebook.com/easybell" target="_blank" rel="noreferrer" title="easybell bei Facebook"><img loading="lazy" src="/fileadmin/bilder/icons/social-media/Facebook.svg" width="24" height="24" title="" alt="Logo Facebook"></a></figure></div></div></div><div class="image-center image-above"><div class="gallery-row"><div class="gallery-item gallery-item-size-1"><figure class="image"><a href="https://www.youtube.com/easybell-gmbh" target="_blank" rel="noreferrer" title="easybell bei Youtube"><img loading="lazy" src="/fileadmin/bilder/icons/social-media/Youtube.svg" width="24" height="24" title="" alt="Logo youtube"></a></figure></div></div></div><div class="image-center image-above"><div class="gallery-row"><div class="gallery-item gallery-item-size-1"><figure class="image"><a href="https://www.linkedin.com/company/8692507/" target="_blank" rel="noreferrer" title="easybell bei LinkedIn"><img loading="lazy" src="/fileadmin/bilder/icons/social-media/Linkedin.svg" width="24" height="24" title="" alt="Logo Linkedin"></a></figure></div></div></div></div></div></div></section></footer><a class="scroll-top" title="Scroll to top" href="#top"><span class="scroll-top-icon"></span></a></div> <div id="cookieman-modal" data-cookieman-showonce="1" data-cookieman-settings='{"groups":{"mandatory":{"preselected":true,"disabled":true,"trackingObjects":["CookieConsent","Matomo","apcCheckData","EasybellLocale"]},"statistik":{"respectDnt":true,"showDntMessage":true,"preselected":false,"trackingObjects":["MicrosoftClarity","Metapixel","LinkedIn","GoogleAds","GoogleAnalytics","HubSpot","CloudflareBotManagement"]}},"trackingObjects":{"CookieConsent":{"show":{"CookieConsent":{"duration":"2","durationUnit":"year","type":"cookie_http+html","provider":"Website"}}},"EasybellLocale":{"inject":" \u003Cscript\n crossorigin=\"anonymous\"\n data-what=\"EasybellLocale\"\n src=\"\/_assets\/e809f40fc7cdd705d4ba2ef1866bb130\/JavaScript\/cookieman\/Injects\/EasybellLocale.js\"\u003E\n \u003C\/script\u003E","show":{"easybell-locale":{"duration":"1","durationUnit":"month","type":"cookie_http+html","provider":"Website"}}},"GoogleAnalytics":{"inject":" \u003Cscript \n crossorigin=\"anonymous\" \n data-what=\"GoogleAnalytics\"\n data-gtm-id=\"GTM-P2F4L3\"\n src=\"\/_assets\/e809f40fc7cdd705d4ba2ef1866bb130\/JavaScript\/cookieman\/Injects\/GoogleAnalytics.js\"\u003E\n \u003C\/script\u003E","show":{"_ga":{"duration":"2","durationUnit":"years","type":"cookie_http+html","provider":"Google"},"_ga_V3PFWQFH0B":{"duration":"2","durationUnit":"years","type":"cookie_http+html","provider":"Google"},"_gid":{"duration":"1","durationUnit":"day","type":"cookie_http+html","provider":"Google"}}},"Matomo":{"inject":" \u003Cscript crossorigin=\"anonymous\" data-what=\"Matomo\" src=\"\/_assets\/e809f40fc7cdd705d4ba2ef1866bb130\/JavaScript\/cookieman\/Injects\/Matomo.js\"\u003E\u003C\/script\u003E","show":{"_pk_id":{"duration":"13","durationUnit":"months","type":"cookie_http+html","provider":"Matomo","htmlCookieRemovalPattern":"^_pk_id\\.\\d+\\.[a-fA-F0-9]+$"},"_pk_ses":{"duration":"30","durationUnit":"minutes","type":"cookie_http+html","provider":"Matomo","htmlCookieRemovalPattern":"^_pk_ses\\.\\d+\\.[a-fA-F0-9]+$"}}},"apcCheckData":{"show":{"fe_typo_user":{"duration":"","durationUnit":"session","type":"cookie_http","provider":"Website"},"order_session":{"duration":"12","durationUnit":"hours","type":"cookie_http+html","provider":"Website"},"order-available":{"duration":"12","durationUnit":"hours","type":"cookie_http+html","provider":"Website"}}},"MicrosoftClarity":{"show":{"_clck":{"duration":"1","durationUnit":"year","type":"cookie_http+html","provider":"Microsoft Corporation"},"_clsk":{"duration":"1","durationUnit":"day","type":"cookie_http+html","provider":"Microsoft Corporation"},"CLID":{"duration":"1","durationUnit":"year","type":"cookie_http+html","provider":"Microsoft Corporation"},"ANONCHK":{"duration":"10","durationUnit":"minutes","type":"cookie_http+html","provider":"Microsoft Corporation"},"MR":{"duration":"7","durationUnit":"days","type":"cookie_http+html","provider":"Microsoft Corporation"},"MUID":{"duration":"1","durationUnit":"year","type":"cookie_http+html","provider":"Microsoft Corporation"},"SM":{"duration":"","durationUnit":"session","type":"cookie_http+html","provider":"Microsoft Corporation"},"_uetsid":{"duration":"1","durationUnit":"day","type":"cookie_http+html","provider":"Microsoft"},"_uetvid":{"duration":"13","durationUnit":"months","type":"cookie_http+html","provider":"Microsoft"},"MUIDB":{"duration":"1","durationUnit":"year","type":"cookie_http+html","provider":"Microsoft"},"_uetmsclkid":{"duration":"1","durationUnit":"year","type":"cookie_http+html","provider":"Microsoft"}}},"Metapixel":{"show":{"_fbp":{"duration":"3","durationUnit":"months","type":"cookie_http+html","provider":"Facebook"},"fr":{"duration":"3","durationUnit":"months","type":"cookie_http+html","provider":"Facebook"},"_fbc":{"duration":"90","durationUnit":"days","type":"cookie_http+html","provider":"Facebook"},"datr":{"duration":"2","durationUnit":"years","type":"cookie_http+html","provider":"Facebook"}}},"LinkedIn":{"show":{"AnalyticsSyncHistory":{"duration":"30","durationUnit":"days","type":"cookie_http+html","provider":"LinkedIn"},"UserMatchHistory":{"duration":"30","durationUnit":"days","type":"cookie_http+html","provider":"LinkedIn"},"bcookie":{"duration":"1","durationUnit":"year","type":"cookie_http+html","provider":"LinkedIn"},"bscookie":{"duration":"1","durationUnit":"year","type":"cookie_http+html","provider":"LinkedIn"},"lang":{"duration":"","durationUnit":"session","type":"cookie_http+html","provider":"LinkedIn"},"li_sugr":{"duration":"90","durationUnit":"days","type":"cookie_http+html","provider":"LinkedIn"},"lidc":{"duration":"24","durationUnit":"hours","type":"cookie_http+html","provider":"LinkedIn"},"li_fat_id":{"duration":"30","durationUnit":"days","type":"cookie_http+html","provider":"LinkedIn"},"lms_ads":{"duration":"30","durationUnit":"days","type":"cookie_http+html","provider":"LinkedIn"},"lms_analytics":{"duration":"30","durationUnit":"days","type":"cookie_http+html","provider":"LinkedIn"},"li_gc":{"duration":"6","durationUnit":"months","type":"cookie_http+html","provider":"LinkedIn"},"li_mc":{"duration":"6","durationUnit":"months","type":"cookie_http+html","provider":"LinkedIn"},"li_oatml":{"duration":"1","durationUnit":"month","type":"cookie_http+html","provider":"LinkedIn"},"liap":{"duration":"1","durationUnit":"year","type":"cookie_http+html","provider":"LinkedIn"}}},"GoogleAds":{"show":{"_guid":{"duration":"90","durationUnit":"days","type":"cookie_http+html","provider":"Google"},"_gcl_au":{"duration":"90","durationUnit":"days","type":"cookie_http+html","provider":"Google"},"_gcl_aw":{"duration":"90","durationUnit":"days","type":"cookie_http+html","provider":"Google"},"_gcl_dc":{"duration":"90","durationUnit":"days","type":"cookie_http+html","provider":"Google"},"test_cookie":{"duration":"15","durationUnit":"minutes","type":"cookie_http+html","provider":"Google"},"IDE":{"duration":"13","durationUnit":"months","type":"cookie_http+html","provider":"Google"},"DSID":{"duration":"2","durationUnit":"weeks","type":"cookie_http+html","provider":"Google"},"RUL":{"duration":"12","durationUnit":"months","type":"cookie_http+html","provider":"Google"}}},"HubSpot":{"inject":" \u003Cscript crossorigin=\"anonymous\" data-what=\"HubSpot\" src=\"\/_assets\/e809f40fc7cdd705d4ba2ef1866bb130\/JavaScript\/cookieman\/Injects\/HubSpot.js\"\u003E\u003C\/script\u003E","show":{"__hstc":{"duration":"6","durationUnit":"months","type":"cookie_http+html","provider":"HubSpot Inc."},"hubspotutk":{"duration":"6","durationUnit":"months","type":"cookie_http+html","provider":"HubSpot Inc."},"__hssc":{"duration":"30","durationUnit":"minutes","type":"cookie_http+html","provider":"HubSpot Inc."},"__hssrc":{"duration":"","durationUnit":"session","type":"cookie_http+html","provider":"HubSpot Inc."},"__hs_opt_out":{"duration":"6","durationUnit":"months","type":"cookie_http+html","provider":"HubSpot Inc."}}},"CloudflareBotManagement":{"show":{"__cf_bm":{"duration":"1","durationUnit":"year","type":"cookie_http","provider":"Website"}}}}}' class="faade show" tabindex="-1" role="dialog"><div id="bannercontent" class="modal-dialog bottom-0"><div class="modal-content"><div><h4 class="modal-title font-bold mb-3" id="cookieman-modal-title"> Hinweis zu Cookies </h4><div class="modal-body d-flex flex-column flex-xl-row gap-3"><p class="mb-0"> Um Ihnen ein optimales Erlebnis zu bieten, setzen wir Cookies ein. Das sind kleine Textdateien, die auf Ihrem Computer gespeichert werden. Die Cookies auf dieser Seite werden für den Betrieb und die Optimierung, zur Analyse des Nutzerverhaltens und zur Personalisierung von Werbung verwendet. Klicken Sie auf "Akzeptieren ", um alle Cookies zu akzeptieren oder auf "Einstellungen", um mehr zu erfahren und eine persönliche Cookie-Einstellung zu wählen. Sie können der Nutzung von Analyse Cookies in den Einstellungen jederzeit widersprechen. Weitere Informationen zu Cookies auf dieser Website finden Sie in unserer <a href="/datenschutz/#c9393">Datenschutzerklärung</a> und im <a href="/impressum/">Impressum</a>. </p><div class="d-flex flex-column gap-3"><button data-cookieman-accept-all data-cookieman-save class="btn btn-primary lg w-auto ms-0"> Alle akzeptieren </button><button data-cookieman-accept-none data-cookieman-save class="btn btn-primary lg w-auto ms-0"> Nur notwendige akzeptieren </button><span id="label-settinggs" class="btn btn-outlined lg w-auto ms-0" type="button" data-bs-toggle="collapse" data-bs-target="#cookieman-settings" aria-expanded="false" aria-controls="cookieman-settings"> Einstellungen </span></div></div></div><div class="collapse" id="cookieman-settings"><form data-cookieman-form class="mt-3" data-cookieman-dnt-enabled='Sie haben bereits über die &lt;a target="_blank" rel="noopener" href="https://de.wikipedia.org/wiki/Do_Not_Track_(Software)"&gt;Do-Not-Track-Funktion Ihres Browsers&lt;/a&gt; der Erstellung von Nutzungsprofilen widersprochen. Dies akzeptieren wir. Sie können diese Funktion über die Einstellungen Ihres Browsers anpassen.'><div class="accordion" id="cookieman-acco"><div class="accordion-item"><h2 class="accordion-header" id="cookieman-acco-h-mandatory"><button type="button" class="accordion-button collapsed bg-neutral-50 font-bold" role="button" data-bs-toggle="collapse" data-bs-target="#cookieman-acco-mandatory" aria-expanded="false" aria-controls="cookieman-acco-mandatory"> Technisch notwendig </button></h2><div id="cookieman-acco-mandatory" class="accordion-collapse collapse border-0" aria-labelledby="cookieman-acco-h-mandatory" data-bs-parent="#cookieman-acco"><div class="accordion-body pt-0 pb-0"><div class="d-flex justify-content-end align-items-center mb-3"><div class="form-check fs-4 mt-3"><input class="form-check-input" type="checkbox" value="" id="mandatory" name="mandatory" checked disabled><label class="form-check-label" for="mandatory"> Alle Cookies akzeptieren </label></div></div><p class="text-center"> Diese Cookies werden für eine reibungslose Funktion unserer Website benötigt. </p><div class="table-responsive"><table class="table table-hover table-sm border-darkblue table-borderless"><thead><tr class="bg-darkblue"><th>Name</th><th>Zweck</th><th>Ablauf</th><th>Typ</th><th>Anbieter</th></tr></thead><tbody><tr><td> CookieConsent </td><td> Speichert Ihre Einwilligung zur Verwendung von Cookies. </td><td> 2 Jahr </td><td> HTML </td><td> Website </td></tr><tr><td> _pk_id </td><td> Wird verwendet, um dem Benutzer eine eindeutige Besucher-ID zu vergeben. </td><td> 13 Monate </td><td> HTML </td><td> Matomo </td></tr><tr><td> _pk_ses </td><td> Cookie, um Details Ihres Besuchs in eine Nutzungsstatistik einfließen zu lassen. </td><td> 30 Minuten </td><td> HTML </td><td> Matomo </td></tr><tr><td> fe_typo_user </td><td> Ordnet Ihren Browser einer Session auf dem Server zu. Dies beeinflusst nur die Inhalte, die Sie sehen und wird von uns nicht ausgewertet oder weiterverarbeitet. </td><td> Session </td><td> HTTP </td><td> Website </td></tr><tr><td> order_session </td><td> Speichert das Ergebnis der Internet-Verfügbarkeitsprüfung </td><td> 12 Stunden </td><td> HTML </td><td> Website </td></tr><tr><td> order-available </td><td> Speichert das Ergebnis der Internet-Verfügbarkeitsprüfung </td><td> 12 Stunden </td><td> HTML </td><td> Website </td></tr><tr><td> easybell-locale </td><td> Speichert das ausgewählte Land und die Sprache, damit die Website in der richtigen Lokalisierung angezeigt wird. </td><td> 1 Monat </td><td> HTML </td><td> Website </td></tr></tbody></table></div></div></div></div><div class="accordion-item"><h2 class="accordion-header" id="cookieman-acco-h-statistik"><button type="button" class="accordion-button collapsed bg-neutral-50 font-bold" role="button" data-bs-toggle="collapse" data-bs-target="#cookieman-acco-statistik" aria-expanded="false" aria-controls="cookieman-acco-statistik"> Marketing </button></h2><div id="cookieman-acco-statistik" class="accordion-collapse collapse border-0" aria-labelledby="cookieman-acco-h-statistik" data-bs-parent="#cookieman-acco"><div class="accordion-body pt-0 pb-0"><div class="d-flex justify-content-end align-items-center mb-3"><div class="form-check fs-4 mt-3"><input class="form-check-input" type="checkbox" value="" id="statistik" name="statistik"><label class="form-check-label" for="statistik"> Alle Cookies akzeptieren </label></div></div><div class="mb-3 text-center" data-cookieman-dnt></div><p class="text-center"> Diese Cookies helfen uns Ihre Nutzererfahrung zu verbessern. </p><div class="table-responsive"><table class="table table-hover table-sm border-darkblue table-borderless"><thead><tr class="bg-darkblue"><th>Name</th><th>Zweck</th><th>Ablauf</th><th>Typ</th><th>Anbieter</th></tr></thead><tbody><tr><td> _clck </td><td> Behält die Clarity-Benutzer-ID und -einstellungen bei, die nur für diese Website gelten und der gleichen Benutzer-ID zugeordnet sind. </td><td> 1 Jahr </td><td> HTML </td><td> Microsoft Corporation </td></tr><tr><td> _clsk </td><td> Verbindet mehrere Seitenaufrufe eines Nutzers zu einer einzigen Clarity-Session-Aufzeichnung. </td><td> 1 Tag </td><td> HTML </td><td> Microsoft Corporation </td></tr><tr><td> CLID </td><td> Identifiziert das erste Mal, dass Clarity diesen Benutzer auf einer beliebigen Site mit Clarity gesehen hat. </td><td> 1 Jahr </td><td> HTML </td><td> Microsoft Corporation </td></tr><tr><td> ANONCHK </td><td> Gibt an, ob die MUID an ANID, ein Cookie für Werbung, übertragen wird. Clarity verwendet ANID nicht, daher ist dieser Wert immer auf 0 gesetzt. </td><td> 10 Minuten </td><td> HTML </td><td> Microsoft Corporation </td></tr><tr><td> MR </td><td> Zeigt an, ob die MUID aktualisiert werden soll. </td><td> 7 Tage </td><td> HTML </td><td> Microsoft Corporation </td></tr><tr><td> MUID </td><td> Identifiziert einzelne Webbrowser, die Microsoft-Seiten besuchen. Diese Cookies werden für Werbung, Website-Analysen und andere betriebliche Zwecke verwendet. </td><td> 1 Jahr </td><td> HTML </td><td> Microsoft Corporation </td></tr><tr><td> SM </td><td> Wird für die Synchronisierung der MUID über Microsoft-Domänen hinweg verwendet. </td><td> Session </td><td> HTML </td><td> Microsoft Corporation </td></tr><tr><td> _uetsid </td><td> Microsoft Bing Ads session identifier for conversion tracking </td><td> 1 Tag </td><td> HTML </td><td> Microsoft </td></tr><tr><td> _uetvid </td><td> Microsoft Bing Ads visitor identifier for remarketing </td><td> 13 Monate </td><td> HTML </td><td> Microsoft </td></tr><tr><td> MUIDB </td><td> Speichert anonyme Daten über Besucher von mehreren Besuchen und auf mehreren Webseiten. Diese Informationen werden verwendet, um die Effizienz der Werbung auf Webseiten zu messen. </td><td> 1 Jahr </td><td> HTML </td><td> Microsoft </td></tr><tr><td> _uetmsclkid </td><td> Wird von Microsoft Advertising verwendet, um Benutzerinteraktionen zu verfolgen und die Anzeigenausrichtung zu verbessern. </td><td> 1 Jahr </td><td> HTML </td><td> Microsoft </td></tr><tr><td> _fbp </td><td> Wird von Facebook verwendet, um eine Reihe von Werbeprodukten wie Echtzeitgebote von Drittanbietern zu liefern. </td><td> 3 Monate </td><td> HTML </td><td> Facebook </td></tr><tr><td> fr </td><td> Cookie für zielgerichtete Werbung für Facebook </td><td> 3 Monate </td><td> HTML </td><td> Facebook </td></tr><tr><td> _fbc </td><td> Stores Facebook click identifier (fbclid) for ad attribution </td><td> 90 Tage </td><td> HTML </td><td> Facebook </td></tr><tr><td> datr </td><td> Facebook cookie that identifies browsers for security, fraud prevention, and ad delivery </td><td> 2 Jahre </td><td> HTML </td><td> Facebook </td></tr><tr><td> AnalyticsSyncHistory </td><td> Dieses Cookie wird von LinkedIn gesetzt. Wird verwendet, um Informationen darüber zu speichern, wann eine Synchronisierung mit dem lms_analytics-Cookie für Nutzer in den designierten Ländern stattgefunden hat. </td><td> 30 Tage </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> UserMatchHistory </td><td> LinkedIn Ads ID-Synchronisierung </td><td> 30 Tage </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> bcookie </td><td> Browser Identifier-Cookie zur eindeutigen Identifizierung von Geräten, die auf LinkedIn zugreifen, um Missbrauch auf der Plattform zu erkennen. Weitere Informationen über LinkedIn-Cookies finden Sie unter https://www.linkedin.com/legal/l/cookie-table. </td><td> 1 Jahr </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> bscookie </td><td> Wird verwendet, um die Spracheinstellung eines Nutzers zu speichern und sicherzustellen, dass LinkedIn.com in der Sprache angezeigt wird, die der Nutzer in seinen Einstellungen ausgewählt hat. </td><td> 1 Jahr </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> lang </td><td> Wird verwendet, um die Spracheinstellung eines Benutzers zu speichern. </td><td> Session </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> li_sugr </td><td> Um eine wahrscheinliche Übereinstimmung mit der Identität eines Nutzers außerhalb der designierten Länder herzustellen </td><td> 90 Tage </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> lidc </td><td> Um die Auswahl des Rechenzentrums zu erleichtern. </td><td> 24 Stunden </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> li_fat_id </td><td> Stores LinkedIn click identifier for ad attribution </td><td> 30 Tage </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> lms_ads </td><td> Identifies LinkedIn members for ad targeting </td><td> 30 Tage </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> lms_analytics </td><td> Identifies LinkedIn members for analytics </td><td> 30 Tage </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> li_gc </td><td> Stores LinkedIn guest consent for cookies to ensure privacy choices are respected </td><td> 6 Monate </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> li_mc </td><td> LinkedIn marketing conversions cookie for audience matching and analytics </td><td> 6 Monate </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> li_oatml </td><td> Identifies LinkedIn members outside LinkedIn for advertising and analytics </td><td> 1 Monat </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> liap </td><td> Indicates if a non-WWW domain can access a LinkedIn member's ID for tracking and advertising </td><td> 1 Jahr </td><td> HTML </td><td> LinkedIn </td></tr><tr><td> _guid </td><td> Zur Identifizierung eines LinkedIn-Mitglieds für Werbung über Google Ads </td><td> 90 Tage </td><td> HTML </td><td> Google </td></tr><tr><td> _gcl_au </td><td> Zur Messung der Anzeigen- und Kampagnenleistung sowie der Konversionsraten für Google-Anzeigen auf einer besuchten Website </td><td> 90 Tage </td><td> HTML </td><td> Google </td></tr><tr><td> _gcl_aw </td><td> Verwendung durch Google Ads, um die Interaktion der Nutzer mit der Website und der Werbung zu verstehen </td><td> 90 Tage </td><td> HTML </td><td> Google </td></tr><tr><td> _gcl_dc </td><td> Wird von Google Campaign Manager und DV 360 verwendet, um die Interaktion der Nutzer mit der Website und der Werbung zu verstehen. </td><td> 90 Tage </td><td> HTML </td><td> Google </td></tr><tr><td> test_cookie </td><td> Google: Funktionalität für AdSense, Campaign Manager, Google Ad Manager, Google Analytics, Display + Video 360, Search Ads 360 </td><td> 15 Minuten </td><td> HTML </td><td> Google </td></tr><tr><td> IDE </td><td> Google: Werbung for Campaign Manager, Display + Video 360, Google Ad Manager, Google Analytics, Search Ads 360 </td><td> 13 Monate </td><td> HTML </td><td> Google </td></tr><tr><td> DSID </td><td> Google: Sicherheit, Funktionalität, Werbung für AdSense, Campaign Manager, Google Ad Manager, Google Analytics, Display + Video 360, Search Ads 360 </td><td> 2 Wochen </td><td> HTML </td><td> Google </td></tr><tr><td> RUL </td><td> Google: Werbung für Display + Video 360, Google Ads </td><td> 12 Monate </td><td> HTML </td><td> Google </td></tr><tr><td> _ga </td><td> Wird von Google Analytics verwendet, um Benutzer zu unterscheiden. </td><td> 2 Jahre </td><td> HTML </td><td> Google </td></tr><tr><td> _ga_V3PFWQFH0B </td><td> Wird von Google Analytics verwendet, um Benutzer zu unterscheiden. </td><td> 2 Jahre </td><td> HTML </td><td> Google </td></tr><tr><td> _gid </td><td> Wird von Google verwendet, um Benutzer zu unterscheiden. </td><td> 1 Tag </td><td> HTML </td><td> Google </td></tr><tr><td> __hstc </td><td> Haupt-Tracking-Cookie von HubSpot, das die Domain, das Benutzer-Token, den ersten Zeitstempel, den letzten Besuchszeitstempel, den aktuellen Besuchszeitstempel und die Sitzungsnummer enthält </td><td> 6 Monate </td><td> HTML </td><td> HubSpot Inc. </td></tr><tr><td> hubspotutk </td><td> Verfolgt die Identität eines Besuchers. Wird verwendet, um die Besucheridentität an HubSpot zu übermitteln, wenn Formulare abgesendet werden </td><td> 6 Monate </td><td> HTML </td><td> HubSpot Inc. </td></tr><tr><td> __hssc </td><td> Verfolgt Sitzungen. Wird verwendet, um zu bestimmen, ob HubSpot die Sitzungsnummer und Zeitstempel erhöhen soll </td><td> 30 Minuten </td><td> HTML </td><td> HubSpot Inc. </td></tr><tr><td> __hssrc </td><td> Bestimmt, ob der Besucher eine neue Sitzung gestartet hat. Wird gesetzt, wenn sich das Sitzungs-Cookie ändert </td><td> Session </td><td> HTML </td><td> HubSpot Inc. </td></tr><tr><td> __hs_opt_out </td><td> Speichert die Opt-out-Präferenz des Besuchers für das HubSpot-Tracking </td><td> 6 Monate </td><td> HTML </td><td> HubSpot Inc. </td></tr><tr><td> __cf_bm </td><td> Bot-Management / Schutz </td><td> 1 Jahr </td><td> HTTP </td><td> Website </td></tr></tbody></table></div></div></div></div></div><button hidden data-cookieman-save type="submit" class="btn lg btn-secondary float-end mt-3"> Speichern </button></form></div></div></div></div> <script src="/error-pages/not-found/fieldmapping.js" defer=""></script><script id="lux_container" data-lux-enable="1" data-lux-autoenable="1" data-lux-identificationMethod="0" data-lux-requesturi="https://www.easybell.de/error-pages/not-found/pagevisit.json" data-lux-contenturi="https://www.easybell.de/error-pages/not-found/contentlightbox" data-lux-contextualcontenturi="https://www.easybell.de/error-pages/not-found/contentContextualContent" data-lux-contenturiwithoutheader="https://www.easybell.de/error-pages/not-found/contentAjax" data-lux-email4linktemplate="https://www.easybell.de/error-pages/not-found/email4link.json" data-lux-pageuid="493" data-lux-languageuid="0" data-lux-newsuid="0" data-lux-pagetracking="1" data-lux-downloadtracking="1" data-lux-downloadtracking-extensions="pdf,txt,doc,docx,xls,xlsx,ppt,pptx,zip"></script><script src="/error-pages/not-found/formmapping.js" defer=""></script> <script src="/_assets/3db396c377c43b4cbed454be5a82c06f/JavaScript/Lux/Lux.min.js?1788437856" defer="defer"></script> <script src="/typo3temp/assets/compressed/popper.min-min.js.gz?1788440081" compress="0"></script> <script src="/typo3temp/assets/compressed/bootstrap.min-min.js.gz?1788440081" compress="0"></script> <script src="/typo3temp/assets/compressed/productTable-min.js.gz?1788440081" compress="1"></script> <script src="/typo3temp/assets/compressed/optout-feedback-min.js.gz?1788440081"></script> <script src="/typo3temp/assets/compressed/tracking-optout-min.js.gz?1788440081"></script> <script src="/_assets/5b0581cb7ee48ebd8bf6da4060af7a38/JavaScript/Lux/LuxEnterprise.min.js?1788437856" defer="defer"></script> <script src="/typo3temp/assets/compressed/js.cookie.min-min.js.gz?1788440081"></script> <script src="/typo3temp/assets/compressed/cookieman-min.js.gz?1788440081"></script> <script src="/typo3temp/assets/compressed/cookieman-theme-min.js.gz?1788440081"></script> <script src="/typo3temp/assets/compressed/cookieman-init-min.js.gz?1788440081"></script> <script src="/typo3temp/assets/compressed/external-links-min.js.gz?1788440081"></script> <script src="/typo3temp/assets/compressed/navigation-min.js.gz?1788440081"></script> <script src="/typo3temp/assets/compressed/accessibility-min.js.gz?1788440081"></script> <script src="/typo3temp/assets/compressed/ui-utilities-min.js.gz?1788440081"></script> <script src="/typo3temp/assets/compressed/carousel-min.js.gz?1788440081"></script> <script src="/typo3temp/assets/compressed/search-results-min.js.gz?1788440081"></script> <script src="/typo3temp/assets/compressed/popup-min.js.gz?1788440081"></script> <script src="/typo3temp/assets/compressed/cta-tracking-min.js.gz?1788440081"></script> <script src="https://cdn.trustami.com/widgetapi/widget2/trustami-widget.js" data-profile="5e5fab392b5d85e9558b4568" data-user="80458981a4ef9f956dfcdf8cc0cb835c20158fc0" data-platform="0"></script> <script src="/typo3temp/assets/compressed/abtesting-tracking-min.js.gz?1788440081" defer="defer"></script> <div hidden data-optout-feedback-labels='{"googleAnalytics":"Google Analytics wurde f\u00fcr diesen Browser deaktiviert. Ihre zuk\u00fcnftigen Besuche werden nicht mehr erfasst.","googleAnalyticsStatus":"Das Opt-Out-Cookie f\u00fcr Google Analytics ist f\u00fcr diesen Browser gesetzt. Ihre Nutzung dieser Website wird nicht mehr erfasst.","matomo":"Matomo wurde f\u00fcr diesen Browser deaktiviert. Ihre zuk\u00fcnftigen Besuche werden nicht mehr erfasst.","matomoStatus":"Das Opt-Out-Cookie f\u00fcr Matomo ist f\u00fcr diesen Browser gesetzt. Ihre Besuche auf dieser Website werden nicht mehr erfasst.","dismiss":"Verstanden","close":"Hinweis schlie\u00dfen"}'></div> <template id="optout-feedback-template-success"> <div class="card card-panel easybell-card-panel-success mt-3" role="status" aria-live="polite" tabindex="-1"> <div class="icon-wrapper"> <div class="panel-content"> <div class="card-body"> <p></p> <button type="button" class="btn"></button> </div> </div> </div> </div> </template> <template id="optout-feedback-template-info"> <div class="card card-panel easybell-card-panel-info mt-3" role="status" aria-live="polite" tabindex="-1"> <div class="icon-wrapper"> <div class="panel-content"> <div class="card-body"> <p></p> </div> </div> </div> </div> </template> </body> </html>
+[0m

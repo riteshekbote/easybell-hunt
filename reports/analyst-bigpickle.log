@@ -1,0 +1,82 @@
+===== ANALYST bigpickle 2026-09-03 16:49:23 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m→ [0mRead inventory/easybell.md
+[0m✱ [0mGlob "**/scope.yml"[90m 1 match[0m
+[0m→ [0mRead scope.yml
+## STEP 1 — DELTA
+NO_DELTA. All 7 hosts from inventory unchanged. All probed, 0 live HTTP. No new leads, no hypotheses.
+
+## STEP 2 — PRIORITIZE
+```
+[PRIO] auth.easybell.de,6.5,auth_surface:9+business_value:8+tech_exposure:7+gate_ease:4+cloud_surface:5+freshness:3
+[PRIO] portal.easybell.de,6.0,auth_surface:8+business_value:9+tech_exposure:6+gate_ease:3+cloud_surface:4+freshness:3
+[PRIO] dev.easybell.de,5.5,auth_surface:7+business_value:6+tech_exposure:8+gate_ease:7+cloud_surface:5+freshness:3
+[PRIO] login.easybell.de,5.0,auth_surface:6+business_value:7+tech_exposure:5+gate_ease:3+cloud_surface:4+freshness:3
+[PRIO] easybell.de,4.5,auth_surface:5+business_value:7+tech_exposure:4+gate_ease:6+cloud_surface:3+freshness:3
+[PRIO] www.easybell.de,4.5,auth_surface:5+business_value:6+tech_exposure:4+gate_ease:6+cloud_surface:3+freshness:3
+[PRIO] mail.easybell.de,4.0,auth_surface:4+business_value:5+tech_exposure:5+gate_ease:4+cloud_surface:4+freshness:3
+```
+Note: All scores dampened by Live HTTP:0 — no confirmed attack surface yet.
+
+## STEP 3 — HYPOTHESES
+```
+[HYP] dev-staging-misconfiguration
+class: MISCONFIG
+asset: dev.easybell.de
+confidence: 55
+reasoning: dev/staging environments historically expose debug endpoints, admin panels, or unprotected APIs. Naming convention suggests internal dev infrastructure potentially exposed to internet.
+evidence_needed: HTTP response from dev.easybell.de with status code, headers, any admin/debug pages
+verify_steps: GET https://dev.easybell.de/ (HEAD fallback), GET https://dev.easybell.de/api/, GET https://dev.easybell.de/admin/, OPTIONS https://dev.easybell.de/
+impact: Internal development data, test credentials, API keys, or admin access → High severity
+testability: PASSIVE
+
+[HYP] portal-idor-bola
+class: IDOR
+asset: portal.easybell.de
+confidence: 45
+reasoning: Customer portal likely has authenticated endpoints for account management, billing, service configuration. IDOR on account/user IDs could expose cross-tenant PII or enable unauthorized modifications.
+evidence_needed: HTTP response with any API endpoints, user/account parameter patterns in URLs or requests
+verify_steps: GET https://portal.easybell.de/, GET https://portal.easybell.de/api/, GET https://portal.easybell.de/account, OPTIONS https://portal.easybell.de/
+impact: Cross-tenant PII exposure, unauthorized account changes → High severity
+testability: AUTH_HELPED
+
+[HYP] auth-oauth-flow
+class: OATH
+asset: auth.easybell.de
+confidence: 40
+reasoning: Authentication domain likely hosts OAuth/OIDC provider. Vulnerabilities in OAuth redirect_uri validation, state parameter, or JWT handling could enable account takeover chains.
+evidence_needed: HTTP response with OAuth endpoints, JWKS, authorization server metadata
+verify_steps: GET https://auth.easybell.de/.well-known/openid-configuration, GET https://auth.easybell.de/.well-known/oauth-authorization-server, GET https://auth.easybell.de/jwks, OPTIONS https://auth.easybell.de/
+impact: Account takeover via OAuth flaws → Critical severity
+testability: AUTH_HELPED
+```
+
+## STEP 4 — SELF-CRITIQUE
+```
+[PARKED] dev-staging-misconfiguration: Confidence 55 below 60 threshold for active probing without confirmed live HTTP. Re-evaluate after live probe confirms service.
+[PARKED] portal-idor-bola: Confidence 45 below 60. Requires authenticated testing which cannot proceed without confirmed live HTTP and valid credentials.
+[PARKED] auth-oauth-flow: Confidence 40 below 40 minimum. Also REJECTED-class adjacent (auth-bypass without PoC would fall under brute-force/lockout policy exclusion per scope).
+[FINAL] dev-staging-misconfiguration: 55 — retain as top priority pending live confirmation
+[FINAL] portal-idor-bola: 45 — retain as secondary, requires auth context
+[FINAL] auth-oauth-flow: 40 — RETAIN with caveat: only test redirect_uri/state/JWT alg confusion, explicitly avoid brute-force/lockout
+```
+
+## STEP 5 — NEXT ACTION
+```
+[NEXT] PROBE: GET https://dev.easybell.de/ (fallback: GET http://dev.easybell.de/) — confirm live HTTP, capture status/headers/server banner. Follow with GET https://portal.easybell.de/ and GET https://auth.easybell.de/ in same session. Rate: 1 req/sec.
+```
+
+## STEP 6 — LEARNING
+```
+[LEARN] REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or credential-stuffing hypotheses.
+[LEARN] ACCEPTED MISCONFIG @ dev.easybell.de: Dev/staging environments commonly misconfigured; high priority for initial probe.
+[LEARN] ACCEPTED IDOR @ portal.easybell.de: Customer portals are prime IDOR targets; retain pending auth context.
+```
+
+## STEP 7 — RISK
+```
+[RISK] easybell: 65
+reasoning: Private program via bugs.olivermaicher.eu with clear scope and exclusions. 0/7 hosts confirmed live — may indicate infrastructure is behind CDN/WAF or uses non-standard ports. Risk elevated by: (1) no confirmed in-scope targets with live HTTP yet, (2) narrow reporting channel (single researcher portal), (3) explicit "no data modification" rule limits active testing depth. Mitigated by: clear scope boundaries, passive-first approach, standard bug bounty norms.
+```
