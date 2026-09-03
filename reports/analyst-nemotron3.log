@@ -691,3 +691,68 @@ strict-transport-security: max-age=31536000; includeSubDomains
 [0m$ [0mcurl -s -o /dev/null -w "%{http_code}" --max-time 10 "https://portal.easybell.de/api/v2" 2>/dev/null
 000
 [0m
+===== ANALYST nemotron3 2026-09-03 21:58:47 UTC =====
+[0m
+> build · nemotron-3-ultra-free
+[0m
+[0m$ [0mls -la /home/runner/work/easybell-hunt/easybell-hunt/
+total 108
+drwxr-xr-x 12 runner runner 4096 Sep  3 21:52 .
+drwxr-xr-x  3 runner runner 4096 Sep  3 21:52 ..
+drwxr-xr-x  7 runner runner 4096 Sep  3 21:52 .git
+drwxr-xr-x  3 runner runner 4096 Sep  3 21:52 .github
+-rw-r--r--  1 runner runner 1756 Sep  3 21:52 README.md
+-rw-r--r--  1 runner runner   43 Sep  3 21:52 analyst-out.txt
+-rw-r--r--  1 runner runner 8353 Sep  3 21:52 analyst-prompt.txt
+-rw-r--r--  1 runner runner 4546 Sep  3 21:52 ctx.txt
+drwxr-xr-x  2 runner runner 4096 Sep  3 21:52 inventory
+drwxr-xr-x  2 runner runner 4096 Sep  3 21:52 knowledge
+drwxr-xr-x  2 runner runner 4096 Sep  3 21:52 leads
+-rw-r--r--  1 runner runner 1037 Sep  3 21:52 probe-results.md
+drwxr-xr-x  2 runner runner 4096 Sep  3 21:52 recon-notes
+drwxr-xr-x  2 runner runner 4096 Sep  3 21:52 reports
+drwxr-xr-x  2 runner runner 4096 Sep  3 21:52 reposcan-raw
+-rw-r--r--  1 runner runner 3220 Sep  3 21:52 scope.yml
+drwxr-xr-x  2 runner runner 4096 Sep  3 21:52 scripts
+-rw-r--r--  1 runner runner   40 Sep  3 21:52 state_bigpickle.json
+-rw-r--r--  1 runner runner   40 Sep  3 21:52 state_laguna.json
+-rw-r--r--  1 runner runner   40 Sep  3 21:52 state_ling3.json
+-rw-r--r--  1 runner runner   40 Sep  3 21:52 state_longcat.json
+-rw-r--r--  1 runner runner   33 Sep  3 21:52 state_mimo.json
+-rw-r--r--  1 runner runner   40 Sep  3 21:52 state_nemotron3.json
+drwxr-xr-x  2 runner runner 4096 Sep  3 21:52 triage
+[0m
+[0m→ [0mRead analyst-out.txt
+[0m→ [0mRead scope.yml
+[0m→ [0mRead inventory/easybell.md
+[0m→ [0mRead state_nemotron3.json
+[0m
+[0m$ [0mls -la /home/runner/work/easybell-hunt/easybell-hunt/knowledge/
+total 12
+drwxr-xr-x  2 runner runner 4096 Sep  3 21:52 .
+drwxr-xr-x 12 runner runner 4096 Sep  3 21:52 ..
+-rw-r--r--  1 runner runner  894 Sep  3 21:52 index.md
+[0m
+[0m$ [0mls -la /home/runner/work/easybell-hunt/easybell-hunt/leads/
+total 44
+drwxr-xr-x  2 runner runner  4096 Sep  3 21:52 .
+drwxr-xr-x 12 runner runner  4096 Sep  3 21:52 ..
+-rw-r--r--  1 runner runner 10353 Sep  3 21:52 lead-bigpickle.md
+-rw-r--r--  1 runner runner   102 Sep  3 21:52 lead-laguna.md
+-rw-r--r--  1 runner runner   100 Sep  3 21:52 lead-ling3.md
+-rw-r--r--  1 runner runner   104 Sep  3 21:52 lead-longcat.md
+-rw-r--r--  1 runner runner    18 Sep  3 21:52 lead-mimo.md
+-rw-r--r--  1 runner runner   108 Sep  3 21:52 lead-nemotron3.md
+-rw-r--r--  1 runner runner   597 Sep  3 21:52 reposcan-easybell.md
+[0m
+[0m→ [0mRead probe-results.md
+[0m→ [0mRead knowledge/index.md
+[0m→ [0mRead leads/lead-bigpickle.md
+[0m→ [0mRead leads/lead-nemotron3.md
+[0m→ [0mRead leads/reposcan-easybell.md
+[0m
+[0m← [0mWrite leads/lead-nemotron3.md
+Wrote file successfully.
+[0m
+[0m→ [0mRead leads/lead-nemotron3.md
+Done. Output written to `leads/lead-nemotron3.md` with all 7 structured steps.
