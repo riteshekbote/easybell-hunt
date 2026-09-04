@@ -54,3 +54,19 @@
 - LEARN: ACCEPTED IDOR @ my.easybell.com: Real customer portal (Laravel/Vue Inertia) confirmed live; `customerId` leaked in Matomo; top IDOR candidate pending auth.
 - LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
 - LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+
+## RANKED HYPOTHESES 2026-09-04 07:26:02 UTC
+- [68] voip-management.easybell.de/api/: voip-cors-cred-exfil (from art/lead_bigpickle.txt)
+- [60] voip-management.easybell.de/api/: voip-api-v2-bola (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-nemotron3.txt): PROBE: Single GET https://voip-management.easybell.de/api/extension (spaced >=6s, <=1rps), watch for non-404 JSON (data or 401/403). If blocked/empty, back off 
+- NEXT(hypotheses-bigpickle.txt): PROBE: after WAF cooldown cleared, test CORS reflection on additional Sipwise-style endpoints: single GET https://voip-management.easybell.de/api/subscribers (s
+- LEARN: ACCEPTED IDOR @ voip-management.easybell.de/api: nginx→Spring v2 rewrite map leaked via JSON 404 message (`/api/<res>` → `/api/v2/<res>`); live backend confirme
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de: WAF/rate-limit aggressive — bursts >~8 probes yield empty/timeouts; mandates >=6s spacing and 60-120s backoff.
+- LEARN: ACCEPTED IDOR @ my.easybell.com: Real customer portal (Laravel/Vue Inertia) confirmed live; `customerId` leaked in Matomo; top IDOR candidate pending auth.
+- LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
+- LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: Per-path CORS inconsistency confirmed; plural Sipwise routes (accounts/numbers/subscribers) reflect arbitr
+- LEARN: ACCEPTED IDOR @ voip-management.easybell.de/api: Sipwise NGCP backend live; plural routes 401-auth-gated; v2 rewrite map leaked; BOLA surface confirmed pending 
+- LEARN: ACCEPTED IDOR @ my.easybell.com: Laravel/Vue Inertia portal; customerId in Matomo; proxies voip-management; auth-gated object endpoints; top IDOR candidate pend
+- LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
+- LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.

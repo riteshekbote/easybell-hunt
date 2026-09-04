@@ -56,3 +56,9 @@ www.easybell.de
 - NEW No new live hosts; dev.easybell.de/portal.easybell.de remain non-routable; auth.easybell.de returns 404 on all well-known paths
 - CHANGED voip-api-v2-bola enumeration continues: customer, account, user, number, subscriber, trunk, line, contract, invoice, sip, device, tariff all unconfirmed (404 or rate-limited); backend reachable via JS
 - CHANGED my.easybell.com passive JS bundle mapping not yet performed; Inertia route table and API proxy endpoints uncataloged
+
+## 2026-09-04 07:26:02 UTC
+- NEW Current time 2026-09-04 07:25:00 UTC — >7h since last probe (2026-09-03 23:45:57); WAF backoff window long cleared
+- CHANGED voip-api-v2-bola: 13 resource names probed (customer, account, user, number, extension, subscriber, trunk, line, contract, invoice, sip, device, tariff) — all nginx HTML 404 or rate-limited; Spring v2
+- CHANGED my-portal-inertia-bola: Passive JS bundle mapping not yet performed; Inertia route table and API proxy endpoints uncataloged
+- NEW No changes to dev.easybell.de/portal.easybell.de (non-routable), auth.easybell.de (404), mail.easybell.de (Roundcube)

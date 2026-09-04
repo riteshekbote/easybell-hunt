@@ -261,3 +261,48 @@ evidence_needed: authenticated session.
 verify_steps: HUMAN — with creds, exercise Users/Subsidiary/phone-number object endpoints for cross-tenant access.
 impact: cross-tenant PII/billing/SIP tamper → High/Critical
 testability: AUTH_HELPED
+## 2026-09-04 07:25:44 UTC [target] (model bigpickle)
+[PRIO] voip-management.easybell.de/api/, 9.2, attack_surface=9 business_value=9 tech_exposure=7 gate_ease=5 cloud_surface=4 freshness=9
+[PRIO] my.easybell.com, 7.8, attack_surface=8 business_value=9 tech_exposure=6 gate_ease=3 cloud_surface=3 freshness=8
+[PRIO] auth.easybell.de, 2.0, attack_surface=2 business_value=5 tech_exposure=2 gate_ease=1 cloud_surface=1 freshness=2
+[HYP] voip-cors-cred-exfil
+class: MISCONFIG
+asset: voip-management.easybell.de/api/
+confidence: 68
+reasoning: Confirmed per-path CORS inconsistency: plural routes (accounts, numbers, subscribers) reflect arbitrary Origin in ACAO with Credentials:true; singular routes (account, session) lock to my.easybell.com origin. Live Sipwise backend confirmed on plural routes (401).
+evidence_needed: victim-side authenticated session to voip-management reachable cross-origin by browser
+verify_steps: HUMAN - with creds, test cross-origin read of /api/accounts|numbers|subscribers from malicious origin with credentials:true
+impact: cross-origin theft of VoIP numbers/subscribers/account data from authenticated customer session → High
+testability: AUTH_HELPED
+[HYP] voip-api-v2-bola
+class: IDOR
+asset: voip-management.easybell.de/api/accounts|numbers|subscribers
+confidence: 62
+reasoning: Sipwise NGCP-style backend; plural routes return 401 (live auth-gated). If per-object authorization missing, valid token could enumerate cross-customer data. v2 rewrite map leaked via 404 body.
+evidence_needed: valid voipSession token (obtainable after portal login) to test numeric id enumeration
+verify_steps: HUMAN - with creds, enumerate numeric IDs on live plural routes, verify per-object authz
+impact: cross-customer Sipwise/phone-number/PII exposure → High/Critical
+testability: AUTH_HELPED
+[HYP] my-portal-idos
+class: IDOR
+asset: my.easybell.com
+confidence: 55
+reasoning: Laravel/Vue Inertia SPA; customerId leaked in Matomo; proxies voip-management via Bearer voipSession; auth-gated object endpoints (Users/Subsidiary/phone-number) prime BOLA surface.
+evidence_needed: authenticated session to portal
+verify_steps: HUMAN - with creds, exercise Users/Subsidiary/phone-number object endpoints for cross-tenant access
+impact: cross-tenant PII/billing/SIP tamper → High/Critical
+testability: AUTH_HELPED
+[PARKED] my-portal-idos: 55. Genuine but requires auth creds; passive-only now. AUTH_HELPED.
+[PARKED] mail-rcm-logic: 42. Standard Roundcube, no program-specific anomaly; near floor.
+[PARKED] auth-oauth-flow: 40. auth.easybell.de root/well-known all 404; surface dead.
+[PARKED] dev-staging-misconfiguration: 55. dev.easybell.de non-routable; dropped.
+[FINAL] voip-cors-cred-exfil: 68 — CONFIRMED per-path CORS inconsistency; highest confidence. Victim session required.
+[FINAL] voip-api-v2-bola: 62 — live Sipwise backend confirmed; auth required to test cross-tenant enumeration.
+[NEXT] PROBE: after WAF cooldown cleared, test CORS reflection on additional Sipwise-style endpoints: single GET https://voip-management.easybell.de/api/subscribers (spaced >=6s, <=1rps) with Origin: https://evil.com, verify ACAO reflects evil.com + Allow-Credentials:true. If 401 + CORS reflected, pattern confirmed across broader surface. If rate-limited, back off 120s.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: Per-path CORS inconsistency confirmed; plural Sipwise routes (accounts/numbers/subscribers) reflect arbitrary Origin with Credentials:true; singular routes lock to my.easybell.com.
+[LEARN] ACCEPTED IDOR @ voip-management.easybell.de/api: Sipwise NGCP backend live; plural routes 401-auth-gated; v2 rewrite map leaked; BOLA surface confirmed pending auth.
+[LEARN] ACCEPTED IDOR @ my.easybell.com: Laravel/Vue Inertia portal; customerId in Matomo; proxies voip-management; auth-gated object endpoints; top IDOR candidate pending auth.
+[LEARN] REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
+[LEARN] REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+[RISK] easybell: 65
+reasoning: Live high-value VoIP API surface confirmed with CORS misconfiguration on plural Sipwise routes (reflects arbitrary Origin + Credentials:true). Upside solid for authenticated victim scenario. Elevated by aggressive WAF rate-limiting limiting enumeration throughput, no creds for authenticated portal testing, and program's auth/lockout exclusion. Mitigated by read-only GET discipline, spaced probing, clear scope. CORS finding is HIGH impact but requires victim browser session.

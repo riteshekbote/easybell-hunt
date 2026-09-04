@@ -14,3 +14,6 @@
 - 2026-09-04 ACCEPTED IDOR @ my.easybell.com: Real customer portal (Laravel/Vue Inertia) confirmed live; `customerId` leaked in Matomo; top IDOR candidate pending auth.
 - 2026-09-04 REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
 - 2026-09-04 REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+- 2026-09-04 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: Per-path CORS inconsistency confirmed; plural Sipwise routes (accounts/numbers/subscribers) reflect arbitrary Origin with Credentials:true; singular routes lock to my.easybell.com.
+- 2026-09-04 ACCEPTED IDOR @ voip-management.easybell.de/api: Sipwise NGCP backend live; plural routes 401-auth-gated; v2 rewrite map leaked; BOLA surface confirmed pending auth.
+- 2026-09-04 ACCEPTED IDOR @ my.easybell.com: Laravel/Vue Inertia portal; customerId in Matomo; proxies voip-management; auth-gated object endpoints; top IDOR candidate pending auth.
