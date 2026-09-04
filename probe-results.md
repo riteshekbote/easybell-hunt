@@ -76,3 +76,8 @@ https://voip-management.easybell.de/api/accounts' -> HTTP 404
 https://voip-management.easybell.de/api/accounts' -> HTTP 404
 https://voip-management.easybell.de/api/v2/accounts -> HTTP 404
 https://voip-management.easybell.de/api/accounts',{credentials:'include' -> HTTP 404
+
+## 2026-09-04 23:18:26 UTC
+https://voip-management.easybell.de/api/accounts' -> HTTP 404
+https://voip-management.easybell.de/api/v2/customers` -> HTTP 404
+https://voip-management.easybell.de/api/actuator` -> HTTP 404
