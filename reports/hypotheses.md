@@ -70,3 +70,17 @@
 - LEARN: ACCEPTED IDOR @ my.easybell.com: Laravel/Vue Inertia portal; customerId in Matomo; proxies voip-management; auth-gated object endpoints; top IDOR candidate pend
 - LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
 - LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+
+## RANKED HYPOTHESES 2026-09-04 12:29:49 UTC
+- [85] voip-management.easybell.de/api/: voip-cors-cred-exfil (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-bigpickle.txt): PROBE: single GET https://my.easybell.com/ with header `X-Inertia: true` (spaced >=6s, <=1rps) to retrieve the Inertia page data (JSON) and look for exposed cus
+- NEXT(hypotheses-nemotron3.txt): PROBE: Single GET https://voip-management.easybell.de/api/accounts with `Origin: https://my.easybell.com` header (spaced >=6s from last), watch for ACAO + ACAC:
+- LEARN: No new learnings from this analysis cycle.
+- LEARN: ACCEPTED IDOR @ voip-management.easybell.de/api: nginx→Spring v2 rewrite map leaked via JSON 404 message (`/api/<res>` → `/api/v2/<res>`); live backend confirme
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de: WAF/rate-limit aggressive — bursts >~8 probes yield empty/timeouts; mandates >=6s spacing and 60-120s backoff.
+- LEARN: ACCEPTED IDOR @ my.easybell.com: Real customer portal (Laravel/Vue Inertia) confirmed live; `customerId` leaked in Matomo; top IDOR candidate pending auth.
+- LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
+- LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: Per-path CORS inconsistency confirmed; plural Sipwise routes (accounts/numbers/subscribers) reflect arbitr
+- LEARN: ACCEPTED IDOR @ voip-management.easybell.de/api: Sipwise NGCP backend live; plural routes 401-auth-gated; v2 rewrite map leaked; BOLA surface confirmed pending 
+- LEARN: ACCEPTED IDOR @ my.easybell.com: Laravel/Vue Inertia portal; customerId in Matomo; proxies voip-management; auth-gated object endpoints; top IDOR candidate pend

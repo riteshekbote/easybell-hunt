@@ -62,3 +62,12 @@ www.easybell.de
 - CHANGED voip-api-v2-bola: 13 resource names probed (customer, account, user, number, extension, subscriber, trunk, line, contract, invoice, sip, device, tariff) — all nginx HTML 404 or rate-limited; Spring v2
 - CHANGED my-portal-inertia-bola: Passive JS bundle mapping not yet performed; Inertia route table and API proxy endpoints uncataloged
 - NEW No changes to dev.easybell.de/portal.easybell.de (non-routable), auth.easybell.de (404), mail.easybell.de (Roundcube)
+
+## 2026-09-04 12:29:49 UTC
+- NEW Current time 2026-09-04 12:15:55 UTC — >12h since last probe (2026-09-03 23:45:57); WAF backoff window long cleared
+- NEW 9 additional resource names probed on voip-management.easybell.de/api (extension, trunk, line, contract, invoice, sip, device, tariff, subscribers via OPTIONS) — all nginx HTML 404 except subscribers 
+- CHANGED voip-api-v2-bola: 22 resource names probed total — all nginx HTML 404; Spring v2 rewrite map confirmed but actual v2 resource names remain opaque
+- CHANGED my-portal-inertia-bola: Passive JS bundle mapping completed; Inertia route table (100+ pages) and API proxy endpoints cataloged from public bundles
+- NEW CORS misconfiguration CONFIRMED on voip-management.easybell.de/api/subscribers (plural Sipwise route): reflects arbitrary Origin with `Access-Control-Allow-Credentials: true`
+- NEW my.easybell.com portal: `VITE_VOIP_MANAGEMENT_URL` = `https://voip-management.easybell.de/api/`; axios instance attaches Bearer token from `voipSession`; proxies plural Sipwise routes (accounts, subsc
+- NEW No changes to dev.easybell.de/portal.easybell.de (non-routable), auth.easybell.de (404), mail.easybell.de (Roundcube)

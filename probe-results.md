@@ -56,3 +56,8 @@ https://voip-management.easybell.de/api/extension -> HTTP 404
 https://voip-management.easybell.de/api/extension -> HTTP 404
 https://voip-management.easybell.de/api/ -> HTTP 404
 https://voip-management.easybell.de/api/subscribers -> HTTP 401
+
+## 2026-09-04 12:29:55 UTC
+https://voip-management.easybell.de/api/` -> HTTP 404
+https://voip-management.easybell.de/api/accounts -> HTTP 401
+https://voip-management.easybell.de/api/v2/accounts -> HTTP 404

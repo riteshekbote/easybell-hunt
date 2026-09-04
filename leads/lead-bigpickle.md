@@ -306,3 +306,32 @@ testability: AUTH_HELPED
 [LEARN] REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
 [RISK] easybell: 65
 reasoning: Live high-value VoIP API surface confirmed with CORS misconfiguration on plural Sipwise routes (reflects arbitrary Origin + Credentials:true). Upside solid for authenticated victim scenario. Elevated by aggressive WAF rate-limiting limiting enumeration throughput, no creds for authenticated portal testing, and program's auth/lockout exclusion. Mitigated by read-only GET discipline, spaced probing, clear scope. CORS finding is HIGH impact but requires victim browser session.
+## 2026-09-04 12:16:11 UTC [target] (model bigpickle)
+[PRIO] voip-management.easybell.de/api/,7.6,attack_surface=9 business_value=9 tech_exposure=7 gate_ease=5 cloud_surface=4 freshness=9
+[PRIO] my.easybell.com,6.7,attack_surface=8 business_value=9 tech_exposure=6 gate_ease=3 cloud_surface=3 freshness=8
+[PRIO] auth.easybell.de,2.5,attack_surface=2 business_value=5 tech_exposure=2 gate_ease=1 cloud_surface=1 freshness=2
+[HYP] voip-cors-cred-exfil
+class: MISCONFIG
+asset: voip-management.easybell.de/api/
+confidence: 68
+reasoning: Confirmed per-path CORS inconsistency: plural routes (accounts, numbers, subscribers) reflect arbitrary Origin in ACAO with Credentials:true; singular routes (account, session) lock to my.easybell.com origin. Live Sipwise backend confirmed on plural routes (401).
+evidence_needed: victim-side authenticated session to voip-management reachable cross-origin by browser
+verify_steps: HUMAN - with creds, test cross-origin read of /api/accounts|numbers|subscribers from malicious origin with credentials:true
+impact: cross-origin theft of VoIP numbers/subscribers/account data from authenticated customer session → High
+testability: AUTH_HELPED
+[HYP] my-portal-idos
+class: IDOR
+asset: my.easybell.com
+confidence: 55
+reasoning: Laravel/Vue Inertia SPA; customerId leaked in Matomo; proxies voip-management via Bearer voipSession; auth-gated object endpoints (Users/Subsidiary/phone-number) prime BOLA surface.
+evidence_needed: authenticated session to portal
+verify_steps: HUMAN - with creds, exercise Users/Subsidiary/phone-number object endpoints for cross-tenant access
+impact: cross-tenant PII/billing/SIP tamper → High/Critical
+testability: AUTH_HELPED
+[PARKED] voip-api-v2-bola: superseded by voip-cors-cred-exfil for same asset (higher confidence).
+[FINAL] voip-cors-cred-exfil: 68
+[FINAL] my-portal-idos: 55
+[NEXT] PROBE: single GET https://my.easybell.com/ with header `X-Inertia: true` (spaced >=6s, <=1rps) to retrieve the Inertia page data (JSON) and look for exposed customer data or API endpoints.
+[LEARN] No new learnings from this analysis cycle.
+[RISK] easybell: 65
+reasoning: Live high-value VoIP API surface confirmed with CORS misconfiguration on plural Sipwise routes (reflects arbitrary Origin + Credentials:true). Upside solid for authenticated victim scenario. Elevated by aggressive WAF rate-limiting limiting enumeration throughput, no creds for authenticated portal testing, and program's auth/lockout exclusion. Mitigated by read-only GET discipline, spaced probing, clear scope. CORS finding is HIGH impact but requires victim browser session.
