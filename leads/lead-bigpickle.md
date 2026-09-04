@@ -335,3 +335,49 @@ testability: AUTH_HELPED
 [LEARN] No new learnings from this analysis cycle.
 [RISK] easybell: 65
 reasoning: Live high-value VoIP API surface confirmed with CORS misconfiguration on plural Sipwise routes (reflects arbitrary Origin + Credentials:true). Upside solid for authenticated victim scenario. Elevated by aggressive WAF rate-limiting limiting enumeration throughput, no creds for authenticated portal testing, and program's auth/lockout exclusion. Mitigated by read-only GET discipline, spaced probing, clear scope. CORS finding is HIGH impact but requires victim browser session.
+## 2026-09-04 16:31:50 UTC [target] (model bigpickle)
+[CHANGED] voip-management.easybell.de/api CORS: knowledge base claimed singular routes lock to my.easybell.com — **FALSE**. `account`, `subscriber`, `number` (singular) ALL return `ACAO: <evil.com> + ACAC:true` (Spring JSON 404 with CORS). Only nginx-only routes (customer, user, extension, trunk, etc.) lack CORS headers. CORS surface is broader than previously thought.
+[NEW] my.easybell.com internal API proxy endpoints `/api/crm`, `/api/ebit`, `/api/strapi` — ALL return `Access-Control-Allow-Origin: *` (no ACAC:true) on both redirect and OPTIONS preflight. Accepts POST with `Authorization,Content-Type` from any origin.
+[NEW] Internal k8s hostname leaked in client JS bundle: `voip-management.k8s.easybell.de/api` — fallback value in `core.js` when `VITE_VOIP_MANAGEMENT_URL` env is unset.
+[NEW] `my.easybell.com/api/strapi` — Strapi CMS proxy endpoint confirmed, same wildcard CORS pattern.
+[CHANGED] voip-management.easybell.de/api CORS surface: Spring-handled routes confirmed (404 JSON): account, accounts, subscriber, subscribers, number, numbers, session. Nginx-only routes (HTML 404, no CORS): customer, user, extension, trunk, line, contract, invoice, sip, device, tariff.
+[PRIO] voip-management.easybell.de/api,8.0,attack_surface=9 business_value=9 tech_exposure=7 gate_ease=5 cloud_surface=4 freshness=9
+[PRIO] my.easybell.com,7.5,attack_surface=9 business_value=9 tech_exposure=6 gate_ease=3 cloud_surface=3 freshness=9
+[PRIO] auth.easybell.de,2.5,attack_surface=2 business_value=5 tech_exposure=2 gate_ease=1 cloud_surface=1 freshness=2
+[HYP] voip-cors-cred-exfil-v2
+class: MISCONFIG
+asset: voip-management.easybell.de/api/
+confidence: 88
+reasoning: CORS surface broader than previously mapped. ALL Spring-handled routes (account, accounts, subscriber, subscribers, number, numbers, session) reflect arbitrary Origin in ACAO with Credentials:true. Singular routes are NOT locked to my.easybell.com as knowledge base stated. An authenticated user's browser session (Bearer voipSession) can be exfiltrated cross-origin from any of these endpoints by a malicious page. 7 distinct endpoints confirmed vulnerable.
+evidence_needed: victim-side authenticated session; confirm authenticated response body contains cross-customer data
+verify_steps: HUMAN — with valid creds, visit https://evil.com while authenticated to my.easybell.com; evil.com JS makes fetch('https://voip-management.easybell.de/api/accounts', {credentials:'include'}), reads response. Alternatively: confirm portal JS flow reads these endpoints cross-origin.
+impact: Cross-origin theft of VoIP accounts/numbers/subscribers/session data from authenticated customer → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 78
+reasoning: Three internal portal proxy endpoints (/api/crm, /api/ebit, /api/strapi) return ACAO:* on redirect responses and OPTIONS preflight with POST + Authorization+Content-Type allowed from any origin. Wildcard without ACAC:true means cookies NOT sent cross-origin, BUT the portal uses Bearer tokens via JS (not cookies) for voip-management. If an attacker can exfiltrate the Bearer token (via XSS or CORS on voip-management), the wildcard on portal proxy endpoints allows exfiltration of CRM/EBIT/Strapi data too.
+evidence_needed: confirm what /api/crm, /api/ebit, /api/strapi proxy to when authenticated; confirm whether Bearer token is accepted by these endpoints
+verify_steps: HUMAN — with creds, observe portal JS network calls to /api/crm and /api/ebit; capture request/response to determine if Bearer token is used and what data is returned
+impact: CRM/EBIT/Strapi data leakage via cross-origin requests → MEDIUM/HIGH (depends on data sensitivity)
+testability: AUTH_HELPED
+[HYP] internal-k8s-hostname-leak
+class: MISCONFIG
+asset: my.easybell.com (core.js client bundle)
+confidence: 65
+reasoning: Client-side JS bundle (core.js) contains hardcoded fallback URL `https://voip-management.k8s.easybell.de/api` — an internal Kubernetes service hostname. This reveals internal infrastructure topology (k8s cluster, internal DNS naming). While not directly exploitable from external network, it aids targeted attacks if any internal network access is available (SSRF, VPN, etc.), and may indicate misconfigured env at build time.
+evidence_needed: confirm k8s.easybell.de is not externally routable; check if any subdomain takeover or DNS rebinding possible
+verify_steps: PASSIVE — DNS lookup k8s.easybell.de; check if it resolves to private IP or if zone is available for registration
+impact: Internal infrastructure info disclosure → LOW/MEDIUM
+testability: PASSIVE
+[FINAL] voip-cors-cred-exfil-v2: 88 — CONFIRMED on 7 endpoints; broader than previously mapped. Highest priority. Requires victim browser session.
+[PARKED] my-portal-api-proxy-wildcard: 78 — Wildcard CORS without ACAC:true on portal proxies is less critical than voip-management's ACAC:true pattern. Requires authenticated context to assess full impact.
+[PARKED] internal-k8s-hostname-leak: 65 — Info disclosure only; no direct exploit path. Low actionable value.
+[NEXT] HUMAN: With authenticated session to my.easybell.com, test cross-origin exfiltration of VoIP data. Open browser console on attacker-controlled origin (or use curl with Bearer token). Make: `fetch('https://voip-management.easybell.de/api/accounts', {credentials:'include'})`. Verify: (1) response body contains customer VoIP account data, (2) response accessible from attacker origin, (3) same for /api/numbers, /api/subscribers, /api/account, /api/number, /api/subscriber, /api/session. Report with CORS header screenshot + response body snippet as POC for HIGH-impact credential-backed CORS misconfiguration.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS surface broader than knowledge base stated. ALL Spring-handled routes (singular + plural: account, accounts, subscriber, subscribers, number, numbers, session) reflect arbitrary Origin with Credentials:true. Knowledge base claim "singular routes lock to my.easybell.com" is incorrect.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: Internal proxy endpoints (/api/crm, /api/ebit, /api/strapi) return Access-Control-Allow-Origin:* with POST+Authorization+Content-Type allowed from any origin (OPTIONS preflight 204). Wildcard CORS without Credentials:true on portal proxy layer.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com: Internal k8s hostname `voip-management.k8s.easybell.de/api` leaked as fallback URL in client-side JS bundle (core.js).
+[LEARN] No new REJECTED items.
+[RISK] easybell: 68
+reasoning: voip-management CORS misconfiguration confirmed on 7 Spring-handled routes with ACAC:true — HIGH impact with victim browser session. Portal proxy wildcard CORS adds secondary exfiltration path. Internal k8s hostname leak aids reconnaissance. Elevated by: no creds available for authenticated testing, WAF rate-limiting limits probe throughput, program excludes brute-force/lockout. Mitigated by: read-only GET only, clear scope, CORS finding requires victim interaction.

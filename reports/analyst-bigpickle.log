@@ -2644,3 +2644,521 @@ STEP 6 — LEARNING
 STEP 7 — RISK
 [RISK] easybell: 65
 reasoning: Live high-value VoIP API surface confirmed with CORS misconfiguration on plural Sipwise routes (reflects arbitrary Origin + Credentials:true). Upside solid for authenticated victim scenario. Elevated by aggressive WAF rate-limiting limiting enumeration throughput, no creds for authenticated portal testing, and program's auth/lockout exclusion. Mitigated by read-only GET discipline, spaced probing, clear scope. CORS finding is HIGH impact but requires victim browser session.
+===== ANALYST bigpickle 2026-09-04 16:34:56 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mcurl -s -D - -o /tmp/opencode/inertia-response.txt -H "X-Inertia: true" -H "X-Requested-With: XMLHttpRequest" https://my.easybell.com/ 2>&1 | head -50
+HTTP/2 409 
+date: Fri, 04 Sep 2026 16:25:18 GMT
+content-type: text/html; charset=utf-8
+x-inertia-location: https://my.easybell.com
+cache-control: no-cache, private
+x-inertia-version: e37101c2ab32f917e1c5990a5813f4be
+set-cookie: XSRF-TOKEN=eyJpdiI6Im1LWEpTeGU3MWNUZ0YrZVBMNGpTclE9PSIsInZhbHVlIjoiMFZUaW9PL1QyaGpRdnpDU3AycTNxeStCZmNSY01GYkpPZWdHNjBDU3VEQzN2M24zRFE3OGxEeTFBZm5jRkVmQVVHdjhEZTQwZ2RDeXQyOUxrTkJRSGJmNTZKOXJwaDhVcUlheFpha1ZBbTJaWm1yQy8zOHlnUmVUckhyMHRLaGEiLCJtYWMiOiIwM2ZhNTEyOTllOTE0N2Q3MjAyZmU5ZWIxYTkyMjYxMGMwZWMxMzFkYjYyNWI4NTYxZjM4NDc3ZTFkYjNhZmVjIiwidGFnIjoiIn0%3D; expires=Fri, 25 Sep 2026 16:25:18 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=ioCn9vROMABb12rAwRGDhMIjWi5nU1iRPPd2TDUe; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m→ [0mRead /tmp/opencode/inertia-response.txt
+[0m
+[0m$ [0mcurl -s -L https://my.easybell.com/ -o /tmp/opencode/portal-home.html 2>&1 && wc -c /tmp/opencode/portal-home.html && head -c 2000 /tmp/opencode/portal-home.html
+2542 /tmp/opencode/portal-home.html
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+  <link rel="preconnect" href="https://shared-libs.easybell.de" crossorigin>
+  <link rel="preload" href="https://shared-libs.easybell.de/easybell/design-shared-library/Interbell-Variable.woff2"
+    as="font" type="font/woff2" crossorigin>
+  <!-- Matomo Tag Manager -->
+  <script>
+    globalThis.import_meta_env = {"VITE_VOIP_MANAGEMENT_URL":"https:\/\/voip-management.easybell.de\/api\/"};
+
+    var _mtm = window._mtm = window._mtm || [];
+    _mtm.push({ 'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start', 'customerId': '' });
+    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.async = true; g.src = 'https://matomo.easybell.de/js/container_izWSLsWO.js'; s.parentNode.insertBefore(g, s);
+  </script>
+  <!-- End Matomo Tag Manager -->
+
+  <title>Easybell Kundenportal</title>
+  <link rel="preload" as="style" href="https://my.easybell.com/build/assets/main-CnvQgnlE.css" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/main-CKc5KWDf.js" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/components-BsWcUPQd.js" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/core-Dmrw7sL8.js" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/dist-BnNTvl_D.js" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/Default-uM3wQOgl.js" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/Translations-CeI_H3FF.js" /><link rel="modulepreload" as="script" href="https://my.easybell.com/build/assets/validations-BRHoyPjx.js" /><link rel="stylesheet" href="https://my.easybell.com/build/assets/main-CnvQgnlE.css" /><script type="module" src="https://my.easybell.com/build/assets/main-CKc5KWDf.js"></script>
+[0m
+[0m$ [0mcurl -s https://my.easybell.com/build/assets/main-CKc5KWDf.js -o /tmp/opencode/main.js 2>&1 && curl -s https://my.easybell.com/build/assets/components-BsWcUPQd.js -o /tmp/opencode/components.js 2>&1 && curl -s https://my.easybell.com/build/assets/core-Dmrw7sL8.js -o /tmp/opencode/core.js 2>&1 && ls -la /tmp/opencode/*.js
+-rw-r--r-- 1 runner runner 788170 Sep  4 16:25 /tmp/opencode/components.js
+-rw-r--r-- 1 runner runner  98389 Sep  4 16:25 /tmp/opencode/core.js
+-rw-r--r-- 1 runner runner  16457 Sep  4 16:25 /tmp/opencode/main.js
+[0m
+[0m$ [0mrg -o '(https?://[a-zA-Z0-9._/-]+)' /tmp/opencode/main.js /tmp/opencode/core.js /tmp/opencode/components.js | sort -u | head -100
+/bin/bash: line 1: rg: command not found
+[0m
+[0m$ [0mgrep -oE 'https?://[a-zA-Z0-9._:/-]+' /tmp/opencode/main.js /tmp/opencode/core.js /tmp/opencode/components.js | sort -u | head -100
+/tmp/opencode/components.js:http://www.w3.org/2000/svg
+/tmp/opencode/components.js:https://evilmartians.com/chronicles/postcss-8-plugin-migration
+/tmp/opencode/components.js:https://github.com/apostrophecms/sanitize-html/issues/547
+/tmp/opencode/components.js:https://github.com/markedjs/marked.
+/tmp/opencode/components.js:https://www.w3ctech.com/topic/2226
+/tmp/opencode/core.js:http://www.example.com
+/tmp/opencode/core.js:https://56288f2b65b64c35a9ff4befba337e6e
+/tmp/opencode/core.js:https://docs.sentry.io/platforms/javascript/best-practices/browser-extensions/
+/tmp/opencode/core.js:https://my.easybell.com/api/strapi
+/tmp/opencode/core.js:https://voip-management.k8s.easybell.de/api
+[0m
+[0m$ [0mgrep -oE '"/api/[^"]*"' /tmp/opencode/main.js /tmp/opencode/core.js /tmp/opencode/components.js | sort -u | head -50
+(no output)
+[0m
+[0m$ [0mgrep -oE "'/api/[^']*'" /tmp/opencode/main.js /tmp/opencode/core.js /tmp/opencode/components.js | sort -u | head -50
+(no output)
+[0m
+[0m$ [0mgrep -oE '["/][a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+' /tmp/opencode/main.js /tmp/opencode/core.js | sort -u | head -100
+/tmp/opencode/core.js:/-/g
+/tmp/opencode/core.js:/api/crm
+/tmp/opencode/core.js:/api/ebit
+/tmp/opencode/core.js:/api/strapi
+/tmp/opencode/core.js:/best-practices/browser-extensions
+/tmp/opencode/core.js:/constructor/i
+/tmp/opencode/core.js:/platforms/javascript
+/tmp/opencode/main.js:"assets/AccountSettings-CawS7FCF
+/tmp/opencode/main.js:"assets/ActivationDateCard-D7XTGRZN
+/tmp/opencode/main.js:"assets/AddInternationalPhoneNumber-vc1HasTw
+/tmp/opencode/main.js:"assets/AddNewConnectionModals-BZ2R7_i3
+/tmp/opencode/main.js:"assets/AddNewConnectionModals-XhX6IESf
+/tmp/opencode/main.js:"assets/AddressCard-D6PQaf7d
+/tmp/opencode/main.js:"assets/Alert-WyroSncg
+/tmp/opencode/main.js:"assets/Alerts-CaJMe99P
+/tmp/opencode/main.js:"assets/Api-DpCVj5DC
+/tmp/opencode/main.js:"assets/Auth-BOWrl8tE
+/tmp/opencode/main.js:"assets/Billing-J4J3ovLh
+/tmp/opencode/main.js:"assets/Bills-CR5iSRNQ
+/tmp/opencode/main.js:"assets/BlockNumberPortingForm-BHOFvQl0
+/tmp/opencode/main.js:"assets/BlockNumberPortingForm-CIldyFG7
+/tmp/opencode/main.js:"assets/CallHistory-Bn-T5BGh
+/tmp/opencode/main.js:"assets/CancelDowngrade-D-FFyYBC
+/tmp/opencode/main.js:"assets/CancellationAlert-Bob6Yk1L
+/tmp/opencode/main.js:"assets/CancellationAlert-DhlJU18K
+/tmp/opencode/main.js:"assets/CancellationFooter-2EHeMN3T
+/tmp/opencode/main.js:"assets/CancellationHint-BL1mNR24
+/tmp/opencode/main.js:"assets/ChangeDeliveryAddress-C8TlO4sq
+/tmp/opencode/main.js:"assets/ChangeDeliveryAddress-Crv7pUvl
+/tmp/opencode/main.js:"assets/ChangeDnsHostname-DWgRrFXQ
+/tmp/opencode/main.js:"assets/CloudPbx-TXhrWKmr
+/tmp/opencode/main.js:"assets/CloudPbxConnection-BzWE4iVI
+/tmp/opencode/main.js:"assets/CloudTelefonanlage--bwKot0U
+/tmp/opencode/main.js:"assets/Confirmation-D8nUT2iE
+/tmp/opencode/main.js:"assets/ConfirmationFlow-DSBN7i8L
+/tmp/opencode/main.js:"assets/Connection-Dg-aJla_
+/tmp/opencode/main.js:"assets/Connections-D1bBEL8k
+/tmp/opencode/main.js:"assets/ContactCard-CSMsog3P
+/tmp/opencode/main.js:"assets/Container-cJQsh4_6
+/tmp/opencode/main.js:"assets/Dashboard-3vHvvdj6
+/tmp/opencode/main.js:"assets/DashboardWithSidebar-K4zvUDAJ
+/tmp/opencode/main.js:"assets/Date-DluwqAqS
+/tmp/opencode/main.js:"assets/Default-B8nJ8yEc
+/tmp/opencode/main.js:"assets/Default-uM3wQOgl
+/tmp/opencode/main.js:"assets/DeleteConfirm-DNITVeiM
+/tmp/opencode/main.js:"assets/DeleteConfirm-nKWSs0st
+/tmp/opencode/main.js:"assets/DeleteConnection-9wMevZ_9
+/tmp/opencode/main.js:"assets/DeletePhoneNumberInfoAlert-WsYI4EK3
+/tmp/opencode/main.js:"assets/DetachModal-C9mssu9v
+/tmp/opencode/main.js:"assets/Details-BNUVVmh7
+/tmp/opencode/main.js:"assets/Details-BhoArxtf
+/tmp/opencode/main.js:"assets/Details-CZnBCUkq
+/tmp/opencode/main.js:"assets/DocumentVerificationAlert-Df3V94Cr
+/tmp/opencode/main.js:"assets/DowngradeBlocked-RGy6Rxx_
+/tmp/opencode/main.js:"assets/Dropzone-BE-q-SuJ
+/tmp/opencode/main.js:"assets/Email-BzvDJRao
+/tmp/opencode/main.js:"assets/Email-CIOqZOKJ
+/tmp/opencode/main.js:"assets/EmailConfirmation-Hp3Tm7L7
+/tmp/opencode/main.js:"assets/Error-CouyMfe4
+/tmp/opencode/main.js:"assets/Error-pybMAmFk
+/tmp/opencode/main.js:"assets/ExternalNumberPorting-DgTyCVHv
+/tmp/opencode/main.js:"assets/FairFlats-CA6vEVGD
+/tmp/opencode/main.js:"assets/FairFlats-DckrlTZ9
+/tmp/opencode/main.js:"assets/FairFlats-fhSTSE1q
+/tmp/opencode/main.js:"assets/Fax-CwghPKVb
+/tmp/opencode/main.js:"assets/Fax-Da8lrd4c
+/tmp/opencode/main.js:"assets/FlatRate--uTlVtCo
+/tmp/opencode/main.js:"assets/Form-CVuJaDsD
+/tmp/opencode/main.js:"assets/Form-DkJpiPGP
+/tmp/opencode/main.js:"assets/Fqdn-C1CzzblY
+/tmp/opencode/main.js:"assets/General-D_RIVFbh
+/tmp/opencode/main.js:"assets/Header-7ScCeBsc
+/tmp/opencode/main.js:"assets/HelpCenterCard-BHDuBN0k
+/tmp/opencode/main.js:"assets/HelpCenterCard-DEk-rBLJ
+/tmp/opencode/main.js:"assets/HomeOfficeConnect-Di7-Z5MH
+/tmp/opencode/main.js:"assets/I18n-D29yf6SD
+/tmp/opencode/main.js:"assets/InternalPorting-Cq__uSPt
+/tmp/opencode/main.js:"assets/List-D_MST1wd
+/tmp/opencode/main.js:"assets/List-OmUNmKeY
+/tmp/opencode/main.js:"assets/List-dhBKkXD2
+/tmp/opencode/main.js:"assets/Loading-C0yqDexg
+/tmp/opencode/main.js:"assets/Loading-D7WT7pYG
+/tmp/opencode/main.js:"assets/LoadingCard-CI-O3Vux
+/tmp/opencode/main.js:"assets/LoadingCard-DZuJmVtO
+/tmp/opencode/main.js:"assets/Location-B9Pvb7em
+/tmp/opencode/main.js:"assets/Location-CmtUNltz
+/tmp/opencode/main.js:"assets/Login-BCNZZEg4
+/tmp/opencode/main.js:"assets/Login-Cyt2VKxW
+/tmp/opencode/main.js:"assets/Login-P0Tqx-FY
+/tmp/opencode/main.js:"assets/MarketingBannersWithLoading-Bqx1P030
+/tmp/opencode/main.js:"assets/MarketingBannersWithLoading-Dqi-T90t
+/tmp/opencode/main.js:"assets/Meta-CzFtiVWm
+/tmp/opencode/main.js:"assets/Modal-BzVqQ3je
+/tmp/opencode/main.js:"assets/Modal-Cf2LsrZQ
+/tmp/opencode/main.js:"assets/ModalError-DAYXLp5v
+/tmp/opencode/main.js:"assets/MyLogin-XHLYHAFt
+/tmp/opencode/main.js:"assets/MyReset-DiZsxYjk
+/tmp/opencode/main.js:"assets/NavigationTabs-C6wGfrc1
+/tmp/opencode/main.js:"assets/New-BR59IRs2
+/tmp/opencode/main.js:"assets/New-C4y-CiP3
+[0m
+[0m$ [0mgrep -oE '"[A-Z_]+":\s*"[^"]*"' /tmp/opencode/core.js | head -50
+(no output)
+[0m
+[0m$ [0mgrep -oE 'VOIP_MANAGEMENT_URL|voip-management|/api/[a-z]+|/crm|/ebit|/strapi' /tmp/opencode/core.js | sort -u
+/api/crm
+/api/ebit
+/api/strapi
+VOIP_MANAGEMENT_URL
+voip-management
+[0m
+[0m$ [0msleep 7 && curl -s -D - -o /tmp/opencode/portal-api-crm.txt https://my.easybell.com/api/crm 2>&1 | head -20
+HTTP/2 302 
+date: Fri, 04 Sep 2026 16:26:17 GMT
+content-type: text/html; charset=utf-8
+location: https://my.easybell.com/login
+cache-control: no-cache, private
+vary: X-Inertia
+access-control-allow-origin: *
+set-cookie: XSRF-TOKEN=eyJpdiI6ImM2MlNqTDN0ZmY0VUxuWWN1WEczaEE9PSIsInZhbHVlIjoicTVpTk0wcjVRenczamwrWjh1dk9sc01MR2Izd3VwSzdFN0FUVGI2NkJXTFlYbndBQkp0elo5NmFhN2NGZldyMlhsWEUyeG5mWFFOV3hsbU1MejBqRmkrMjc3NUxqaDZBYllLRjFKakEyZ1NaS2o1QTlQVHVyVHV1ZHdBRjFxK1EiLCJtYWMiOiI0MzJmZjYxNDExNWUzZmIyNzI2OGUzNzcxNTVjMDM1NTFkMjE2YTcxMmVkYmRiZTVhNGYyNzVjNDQ1Nzg3MjkxIiwidGFnIjoiIn0%3D; expires=Fri, 25 Sep 2026 16:26:17 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=jQAdI7Jyhbts6znlXmPZ4DP4KN7Wdat7TURaDiHu; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0msleep 7 && curl -s -D - -o /tmp/opencode/portal-api-ebit.txt https://my.easybell.com/api/ebit 2>&1 | head -20
+HTTP/2 302 
+date: Fri, 04 Sep 2026 16:26:29 GMT
+content-type: text/html; charset=utf-8
+location: https://my.easybell.com/login
+cache-control: no-cache, private
+vary: X-Inertia
+access-control-allow-origin: *
+set-cookie: XSRF-TOKEN=eyJpdiI6ImxNMHR2SGZzSGNaNVpnb3RjTk52WEE9PSIsInZhbHVlIjoiUkRORkFjZkRWT3VFSStldkhnRkd2R25lVE1RVE5RUXJIMVdVWEdoMkViRGNMemRlYmw1NE5Gbzcvdk44ZXdPVFFMNk04ZEc2VWFmMkQveXQrUjVLWmdncG9wN3FhTlhJcFpyOXNqMUlkOVVlaW9FZUtRYlI1VGxOdUpoRFF2eGIiLCJtYWMiOiJiMTU1ZGNmZjlhN2NhMmZiY2U1YThlNTAyMTZjNjM2ZWQ1NTdiM2I1ZDQwZmJhODFhNmIwNjk3ZGIzNDMyZTNjIiwidGFnIjoiIn0%3D; expires=Fri, 25 Sep 2026 16:26:29 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=M86f16TwWnnLxZ5l6AJ99LsS7P1faiDGaQB8e6az; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0msleep 7 && curl -s -D - -o /tmp/opencode/portal-api-strapi.txt https://my.easybell.com/api/strapi 2>&1 | head -20
+HTTP/2 302 
+date: Fri, 04 Sep 2026 16:26:41 GMT
+content-type: text/html; charset=utf-8
+location: https://my.easybell.com/login
+cache-control: no-cache, private
+vary: X-Inertia
+access-control-allow-origin: *
+set-cookie: XSRF-TOKEN=eyJpdiI6InBteUlMMXo3aTkvT3dXZlQ0QXhpalE9PSIsInZhbHVlIjoiMURqdWVGZmRSeDFpdlQwSUNSZ1lBd0lqRW53T1dUUkI5TGRQU09DeWZwRHRHNHZtVjN1VlUyNUgyR0ZCNzdUNVpxamtKaUl3cWdJd3ROQVZZQmFMUWtYQjZLdVBWNVhEYVBiOXVaZitOSytqYWZLc3JkbGhNb2Y2dWhqOG5xZjMiLCJtYWMiOiJiN2QxYmI4N2ZkOTBlMzM0ZTkzYzhmNjQ2YTFlYmI1ZTk1NzZlNWQ5NDgzZTc5ODIyODdkN2I1NDcwOTAyNjRjIiwidGFnIjoiIn0%3D; expires=Fri, 25 Sep 2026 16:26:41 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=8yOwKvqjYWfGhN3n8jeUo7CUFSgsl5xTBj0u17T3; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" https://my.easybell.com/api/crm 2>&1 | head -20
+HTTP/2 302 
+date: Fri, 04 Sep 2026 16:26:56 GMT
+content-type: text/html; charset=utf-8
+location: https://my.easybell.com/login
+cache-control: no-cache, private
+vary: X-Inertia
+access-control-allow-origin: *
+set-cookie: XSRF-TOKEN=eyJpdiI6IitPSjBwYmVXNzA3VnVrQ2RudWJVelE9PSIsInZhbHVlIjoiazJ3SDlnMW1mU3FoUUVtdUxTQzVDYVFON0NGSVBYS05BRCtwMUtBUE9TRFJ5Y29TUHhTK3JsOGYrZXRrREF2a0VmOVVLWXFhUncyb1FmOXBmREdqdGpQYXpEbU01UVlCMk1IUFVrbktEY3VOSXNoT3RoVTZ0blVOaW1UUjRzL1ciLCJtYWMiOiIxMzI0Y2IxYmMyOTFmM2FkMjhjZTcyNzM4MjRiYzFlZDM3MDY1MDk0NDViYjk0NjYyN2EwMDdjZTE1NWQ3ZmJiIiwidGFnIjoiIn0%3D; expires=Fri, 25 Sep 2026 16:26:55 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=0uHooRoZ7ul0aZ5uJoNaVqsZCtF2TlCbt6zbXXGj; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="refresh" content="0;url='https://my.easybell.com/login'" />
+
+        <title>Redirecting to https://my.easybell.com/login</title>
+    </head>
+    <body>
+[0m
+Found two significant findings:
+
+1. **`my.easybell.com/api/*` returns `Access-Control-Allow-Origin: *`** on unauthenticated 302 responses for internal proxy routes (`/api/crm`, `/api/ebit`, `/api/strapi`). This means the portal's own API proxy endpoints have wildcard CORS, and authenticated responses likely also reflect it.
+
+2. **Internal k8s hostname leaked in JS bundle**: `voip-management.k8s.easybell.de/api` — an internal Kubernetes service hostname exposed in client-side code.
+
+Let me explore the k8s hostname and investigate the core.js context around it.
+[0m$ [0mgrep -oP '.{0,80}voip-management\.k8s\.easybell\.de.{0,80}' /tmp/opencode/core.js
+errors:e}}var _c=globalThis.import_meta_env?.VITE_VOIP_MANAGEMENT_URL??`https://voip-management.k8s.easybell.de/api`,vc=`https://my.easybell.com/api/strapi`,yc=`${_c}/session`;async function
+[0m
+[0m$ [0mgrep -oP '.{0,200}strapi.{0,200}' /tmp/opencode/core.js | head -5
+n{isPending:!1}}function gc(e){return{isPending:!1,errors:e}}var _c=globalThis.import_meta_env?.VITE_VOIP_MANAGEMENT_URL??`https://voip-management.k8s.easybell.de/api`,vc=`https://my.easybell.com/api/strapi`,yc=`${_c}/session`;async function bc(){return await zc.post(yc)}async function xc(){try{return{status:`success`,payload:(await bc()).data}}catch(e){return sc(e),{status:`error`,type:`other`,payload:
+[0m
+[0m$ [0mgrep -oP '.{0,100}/session.{0,100}' /tmp/opencode/core.js | head -5
+URL??`https://voip-management.k8s.easybell.de/api`,vc=`https://my.easybell.com/api/strapi`,yc=`${_c}/session`;async function bc(){return await zc.post(yc)}async function xc(){try{return{status:`success`,paylo
+eferredCalls=[],await Promise.all(e.map(e=>e()))}}}),jc=ge();function Mc(e){let t=[`/api/crm`,`${_c}/session`,`/api/ebit`],n=[_c];if(t.some(t=>e.startsWith(t)))return`crm`;if(n.some(t=>e.startsWith(t)))return
+[0m
+[0m$ [0mgrep -oP '.{0,100}Bearer.{0,100}' /tmp/opencode/core.js | head -10
+nTimeout()}async function Fc(e){let t=await Nc(e.url??``);return t&&(e.headers.set(`Authorization`,`Bearer ${t}`),e.headers.set(`Cache-Control`,`no-cache`)),e}async function Ic(e){return await Fc(e),e}funct
+[0m
+Now let me also check `my.easybell.com` for additional CORS behavior on actual XHR requests and examine any strapi/CMS endpoints.
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" -H "X-Requested-With: XMLHttpRequest" https://my.easybell.com/api/strapi 2>&1 | head -30
+HTTP/2 302 
+date: Fri, 04 Sep 2026 16:27:35 GMT
+content-type: text/html; charset=utf-8
+location: https://my.easybell.com/login
+cache-control: no-cache, private
+vary: X-Inertia
+access-control-allow-origin: *
+set-cookie: XSRF-TOKEN=eyJpdiI6IkRHQzdrN3JQNTBDbEkwZlhKaFZyUGc9PSIsInZhbHVlIjoiTUJOUXF5STlWbUtodDFqazkwaGVNUWl1bndCc0xOYk5IcFZVeitCM1NGeFZ2bzNoSVBZSjZ5dGdRYm1EQU01Qy8wdC96K29QWlBUdkRBeFpPK0JrMER0eHJHTVZ1MTJ6WlRQOWhjaEIxaXQ1WXJOSkIxVW9mTjFha21ibWxxNFYiLCJtYWMiOiI4OWIzNzY2ZTdkMGVlZGIxNjc1YTgyNmYyNTY2NzUyM2FkNzhmYWFjZDU4OTNjMTRmZTJiZGY0ZjUwOTZlYzk3IiwidGFnIjoiIn0%3D; expires=Fri, 25 Sep 2026 16:27:35 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=TAaUdGMei4A37gaAydmEqilEt2Eii0x735DqDy8k; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="refresh" content="0;url='https://my.easybell.com/login'" />
+
+        <title>Redirecting to https://my.easybell.com/login</title>
+    </head>
+    <body>
+        Redirecting to <a href="https://my.easybell.com/login">https://my.easybell.com/login</a>.
+    </body>
+</html>
+[0m
+[0m$ [0msleep 7 && curl -s -D - -X OPTIONS -H "Origin: https://evil.com" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: Authorization,Content-Type" https://my.easybell.com/api/crm 2>&1 | head -30
+HTTP/2 204 
+date: Fri, 04 Sep 2026 16:27:46 GMT
+cache-control: no-cache, private
+access-control-allow-origin: *
+vary: Access-Control-Request-Method,Access-Control-Request-Headers
+access-control-allow-methods: POST
+access-control-allow-headers: Authorization,Content-Type
+access-control-max-age: 0
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0msleep 7 && curl -s -D - -X OPTIONS -H "Origin: https://evil.com" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: Authorization,Content-Type" https://my.easybell.com/api/ebit 2>&1 | head -20
+HTTP/2 204 
+date: Fri, 04 Sep 2026 16:27:59 GMT
+cache-control: no-cache, private
+access-control-allow-origin: *
+vary: Access-Control-Request-Method,Access-Control-Request-Headers
+access-control-allow-methods: POST
+access-control-allow-headers: Authorization,Content-Type
+access-control-max-age: 0
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0msleep 7 && curl -s -D - -X OPTIONS -H "Origin: https://evil.com" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: Authorization,Content-Type" https://my.easybell.com/api/strapi 2>&1 | head -20
+HTTP/2 204 
+date: Fri, 04 Sep 2026 16:28:10 GMT
+cache-control: no-cache, private
+access-control-allow-origin: *
+vary: Access-Control-Request-Method,Access-Control-Request-Headers
+access-control-allow-methods: POST
+access-control-allow-headers: Authorization,Content-Type
+access-control-max-age: 0
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+Now let me also probe the `my.easybell.com/api/crm` etc. for GET with authenticated context, and check the `k8s` internal hostname.
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" https://voip-management.easybell.de/api/accounts 2>&1 | head -30
+HTTP/2 401 
+date: Fri, 04 Sep 2026 16:28:30 GMT
+content-length: 0
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.com
+www-authenticate: Basic realm="sipwisebroker.easybell.de,voip-management"
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" https://voip-management.easybell.de/api/numbers 2>&1 | head -20
+HTTP/2 401 
+date: Fri, 04 Sep 2026 16:28:44 GMT
+content-length: 0
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.com
+www-authenticate: Basic realm="sipwisebroker.easybell.de,voip-management"
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" https://voip-management.easybell.de/api/account 2>&1 | head -20
+HTTP/2 404 
+date: Fri, 04 Sep 2026 16:28:58 GMT
+content-type: application/json;charset=UTF-8
+content-length: 51
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.com
+strict-transport-security: max-age=31536000; includeSubDomains
+
+{
+  "code" : 404,
+  "message" : "/api/v2/account"
+}
+[0m
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" https://voip-management.easybell.de/api/session 2>&1 | head -20
+HTTP/2 405 
+date: Fri, 04 Sep 2026 16:29:11 GMT
+content-length: 0
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.com
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+Wait — the singular endpoints are ALSO reflecting arbitrary Origin + Credentials:true now! The knowledge base said they were locked to my.easybell.com. This is a CHANGED state. Let me check more endpoints systematically.
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" https://voip-management.easybell.de/api/user 2>&1 | head -20
+HTTP/2 404 
+date: Fri, 04 Sep 2026 16:29:25 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+[0m
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" https://voip-management.easybell.de/api/customer 2>&1 | head -20
+HTTP/2 404 
+date: Fri, 04 Sep 2026 16:29:37 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+[0m
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" https://voip-management.easybell.de/api/accounts 2>&1 | head -20
+HTTP/2 401 
+date: Fri, 04 Sep 2026 16:29:56 GMT
+content-length: 0
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.com
+www-authenticate: Basic realm="sipwisebroker.easybell.de,voip-management"
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+Now let me check a few more paths to map which routes are Spring-handled (CORS-reflected) vs nginx-only.
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" https://voip-management.easybell.de/api/subscriber 2>&1 | head -20
+HTTP/2 404 
+date: Fri, 04 Sep 2026 16:30:16 GMT
+content-type: application/json;charset=UTF-8
+content-length: 54
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.com
+strict-transport-security: max-age=31536000; includeSubDomains
+
+{
+  "code" : 404,
+  "message" : "/api/v2/subscriber"
+}
+[0m
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" https://voip-management.easybell.de/api/customer 2>&1 | head -5
+HTTP/2 404 
+date: Fri, 04 Sep 2026 16:30:39 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" https://voip-management.easybell.de/api/number 2>&1 | head -15
+HTTP/2 404 
+date: Fri, 04 Sep 2026 16:30:52 GMT
+content-type: application/json;charset=UTF-8
+content-length: 50
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.com
+strict-transport-security: max-age=31536000; includeSubDomains
+
+{
+  "code" : 404,
+  "message" : "/api/v2/number"
+}
+[0m
+[0m$ [0msleep 7 && curl -s -D - -H "Origin: https://evil.com" https://voip-management.easybell.de/api/extension 2>&1 | head -10
+HTTP/2 404 
+date: Fri, 04 Sep 2026 16:31:07 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+[0m
+Now I have a comprehensive picture. Let me compile the full structured analysis.
+
+---
+
+## STEP 1 — DELTA
+
+[CHANGED] voip-management.easybell.de/api CORS: knowledge base claimed singular routes lock to my.easybell.com — **FALSE**. `account`, `subscriber`, `number` (singular) ALL return `ACAO: <evil.com> + ACAC:true` (Spring JSON 404 with CORS). Only nginx-only routes (customer, user, extension, trunk, etc.) lack CORS headers. CORS surface is broader than previously thought.
+[NEW] my.easybell.com internal API proxy endpoints `/api/crm`, `/api/ebit`, `/api/strapi` — ALL return `Access-Control-Allow-Origin: *` (no ACAC:true) on both redirect and OPTIONS preflight. Accepts POST with `Authorization,Content-Type` from any origin.
+[NEW] Internal k8s hostname leaked in client JS bundle: `voip-management.k8s.easybell.de/api` — fallback value in `core.js` when `VITE_VOIP_MANAGEMENT_URL` env is unset.
+[NEW] `my.easybell.com/api/strapi` — Strapi CMS proxy endpoint confirmed, same wildcard CORS pattern.
+[CHANGED] voip-management.easybell.de/api CORS surface: Spring-handled routes confirmed (404 JSON): account, accounts, subscriber, subscribers, number, numbers, session. Nginx-only routes (HTML 404, no CORS): customer, user, extension, trunk, line, contract, invoice, sip, device, tariff.
+
+## STEP 2 — PRIORITIZE
+
+[PRIO] voip-management.easybell.de/api,8.0,attack_surface=9 business_value=9 tech_exposure=7 gate_ease=5 cloud_surface=4 freshness=9
+[PRIO] my.easybell.com,7.5,attack_surface=9 business_value=9 tech_exposure=6 gate_ease=3 cloud_surface=3 freshness=9
+[PRIO] auth.easybell.de,2.5,attack_surface=2 business_value=5 tech_exposure=2 gate_ease=1 cloud_surface=1 freshness=2
+
+## STEP 3 — HYPOTHESES
+
+[HYP] voip-cors-cred-exfil-v2
+class: MISCONFIG
+asset: voip-management.easybell.de/api/
+confidence: 88
+reasoning: CORS surface broader than previously mapped. ALL Spring-handled routes (account, accounts, subscriber, subscribers, number, numbers, session) reflect arbitrary Origin in ACAO with Credentials:true. Singular routes are NOT locked to my.easybell.com as knowledge base stated. An authenticated user's browser session (Bearer voipSession) can be exfiltrated cross-origin from any of these endpoints by a malicious page. 7 distinct endpoints confirmed vulnerable.
+evidence_needed: victim-side authenticated session; confirm authenticated response body contains cross-customer data
+verify_steps: HUMAN — with valid creds, visit https://evil.com while authenticated to my.easybell.com; evil.com JS makes fetch('https://voip-management.easybell.de/api/accounts', {credentials:'include'}), reads response. Alternatively: confirm portal JS flow reads these endpoints cross-origin.
+impact: Cross-origin theft of VoIP accounts/numbers/subscribers/session data from authenticated customer → HIGH
+testability: AUTH_HELPED
+
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 78
+reasoning: Three internal portal proxy endpoints (/api/crm, /api/ebit, /api/strapi) return ACAO:* on redirect responses and OPTIONS preflight with POST + Authorization+Content-Type allowed from any origin. Wildcard without ACAC:true means cookies NOT sent cross-origin, BUT the portal uses Bearer tokens via JS (not cookies) for voip-management. If an attacker can exfiltrate the Bearer token (via XSS or CORS on voip-management), the wildcard on portal proxy endpoints allows exfiltration of CRM/EBIT/Strapi data too.
+evidence_needed: confirm what /api/crm, /api/ebit, /api/strapi proxy to when authenticated; confirm whether Bearer token is accepted by these endpoints
+verify_steps: HUMAN — with creds, observe portal JS network calls to /api/crm and /api/ebit; capture request/response to determine if Bearer token is used and what data is returned
+impact: CRM/EBIT/Strapi data leakage via cross-origin requests → MEDIUM/HIGH (depends on data sensitivity)
+testability: AUTH_HELPED
+
+[HYP] internal-k8s-hostname-leak
+class: MISCONFIG
+asset: my.easybell.com (core.js client bundle)
+confidence: 65
+reasoning: Client-side JS bundle (core.js) contains hardcoded fallback URL `https://voip-management.k8s.easybell.de/api` — an internal Kubernetes service hostname. This reveals internal infrastructure topology (k8s cluster, internal DNS naming). While not directly exploitable from external network, it aids targeted attacks if any internal network access is available (SSRF, VPN, etc.), and may indicate misconfigured env at build time.
+evidence_needed: confirm k8s.easybell.de is not externally routable; check if any subdomain takeover or DNS rebinding possible
+verify_steps: PASSIVE — DNS lookup k8s.easybell.de; check if it resolves to private IP or if zone is available for registration
+impact: Internal infrastructure info disclosure → LOW/MEDIUM
+testability: PASSIVE
+
+## STEP 4 — SELF-CRITIQUE
+
+[FINAL] voip-cors-cred-exfil-v2: 88 — CONFIRMED on 7 endpoints; broader than previously mapped. Highest priority. Requires victim browser session.
+[PARKED] my-portal-api-proxy-wildcard: 78 — Wildcard CORS without ACAC:true on portal proxies is less critical than voip-management's ACAC:true pattern. Requires authenticated context to assess full impact.
+[PARKED] internal-k8s-hostname-leak: 65 — Info disclosure only; no direct exploit path. Low actionable value.
+
+## STEP 5 — NEXT ACTION
+
+[NEXT] HUMAN: With authenticated session to my.easybell.com, test cross-origin exfiltration of VoIP data. Open browser console on attacker-controlled origin (or use curl with Bearer token). Make: `fetch('https://voip-management.easybell.de/api/accounts', {credentials:'include'})`. Verify: (1) response body contains customer VoIP account data, (2) response accessible from attacker origin, (3) same for /api/numbers, /api/subscribers, /api/account, /api/number, /api/subscriber, /api/session. Report with CORS header screenshot + response body snippet as POC for HIGH-impact credential-backed CORS misconfiguration.
+
+## STEP 6 — LEARNING
+
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS surface broader than knowledge base stated. ALL Spring-handled routes (singular + plural: account, accounts, subscriber, subscribers, number, numbers, session) reflect arbitrary Origin with Credentials:true. Knowledge base claim "singular routes lock to my.easybell.com" is incorrect.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: Internal proxy endpoints (/api/crm, /api/ebit, /api/strapi) return Access-Control-Allow-Origin:* with POST+Authorization+Content-Type allowed from any origin (OPTIONS preflight 204). Wildcard CORS without Credentials:true on portal proxy layer.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com: Internal k8s hostname `voip-management.k8s.easybell.de/api` leaked as fallback URL in client-side JS bundle (core.js).
+[LEARN] No new REJECTED items.
+
+## STEP 7 — RISK
+
+[RISK] easybell: 68
+reasoning: voip-management CORS misconfiguration confirmed on 7 Spring-handled routes with ACAC:true — HIGH impact with victim browser session. Portal proxy wildcard CORS adds secondary exfiltration path. Internal k8s hostname leak aids reconnaissance. Elevated by: no creds available for authenticated testing, WAF rate-limiting limits probe throughput, program excludes brute-force/lockout. Mitigated by: read-only GET only, clear scope, CORS finding requires victim interaction.

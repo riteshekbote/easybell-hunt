@@ -71,3 +71,16 @@ www.easybell.de
 - NEW CORS misconfiguration CONFIRMED on voip-management.easybell.de/api/subscribers (plural Sipwise route): reflects arbitrary Origin with `Access-Control-Allow-Credentials: true`
 - NEW my.easybell.com portal: `VITE_VOIP_MANAGEMENT_URL` = `https://voip-management.easybell.de/api/`; axios instance attaches Bearer token from `voipSession`; proxies plural Sipwise routes (accounts, subsc
 - NEW No changes to dev.easybell.de/portal.easybell.de (non-routable), auth.easybell.de (404), mail.easybell.de (Roundcube)
+
+## 2026-09-04 16:34:56 UTC
+- CHANGED voip-management.easybell.de/api CORS: knowledge base claimed singular routes lock to my.easybell.com — **FALSE**. `account`, `subscriber`, `number` (singular) ALL return `ACAO: <evil.com> + ACAC:true`
+- NEW my.easybell.com internal API proxy endpoints `/api/crm`, `/api/ebit`, `/api/strapi` — ALL return `Access-Control-Allow-Origin: *` (no ACAC:true) on both redirect and OPTIONS preflight. Accepts POST wi
+- NEW Internal k8s hostname leaked in client JS bundle: `voip-management.k8s.easybell.de/api` — fallback value in `core.js` when `VITE_VOIP_MANAGEMENT_URL` env is unset.
+- NEW `my.easybell.com/api/strapi` — Strapi CMS proxy endpoint confirmed, same wildcard CORS pattern.
+- CHANGED voip-management.easybell.de/api CORS surface: Spring-handled routes confirmed (404 JSON): account, accounts, subscriber, subscribers, number, numbers, session. Nginx-only routes (HTML 404, no CORS): c
+- NEW CORS credentialed misconfiguration CONFIRMED on voip-management.easybell.de/api/subscribers (plural Sipwise route): reflects arbitrary Origin with `Access-Control-Allow-Credentials: true`
+- NEW my.easybell.com portal JS analysis complete: `VITE_VOIP_MANAGEMENT_URL` = `https://voip-management.easybell.de/api/`; axios attaches Bearer from `voipSession`; proxies 8 plural Sipwise routes (account
+- NEW Passive JS bundle mapping completed for my.easybell.com: Inertia route table (100+ pages) and API proxy endpoints cataloged
+- CHANGED voip-api-v2-bola: 22 resource names probed total — all nginx HTML 404; Spring v2 rewrite map confirmed (`/api/<res>` → `/api/v2/<res>` leaked via JSON 404) but actual v2 resource names remain opaque
+- CHANGED WAF backoff window long cleared: >12h since last probe (2026-09-03 23:45:57 UTC); safe to resume spaced probing
+- CHANGED Risk elevated to 70: confirmed credentialed CORS exfiltration vector on live authenticated endpoints
