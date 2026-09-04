@@ -94,3 +94,13 @@ www.easybell.de
 - CHANGED voip-api-v2-bola: 22 resource names probed total — all nginx HTML 404; Spring v2 rewrite map confirmed (`/api/<res>` → `/api/v2/<res>` via JSON 404) but actual v2 resource names remain opaque
 - CHANGED WAF backoff window long cleared: >12h since last probe (2026-09-03 23:45:57 UTC); safe to resume spaced probing
 - CHANGED Risk elevated to 70 (nemotron3) / 68 (bigpickle): confirmed credentialed CORS exfiltration vector on 7 live authenticated endpoints
+
+## 2026-09-04 21:34:53 UTC
+- NEW CORS credentialed misconfiguration CONFIRMED on ALL 7 Spring-handled routes at voip-management.easybell.de/api (account, accounts, subscriber, subscribers, number, numbers, session) — reflect arbitrar
+- NEW my.easybell.com internal API proxy endpoints `/api/crm`, `/api/ebit`, `/api/strapi` return `Access-Control-Allow-Origin: *` (no ACAC:true) on redirect + OPTIONS preflight; accept POST with `Authorizat
+- NEW Internal k8s hostname `voip-management.k8s.easybell.de/api` leaked as fallback URL in client-side JS bundle (`core.js`)
+- NEW `my.easybell.com/api/strapi` — Strapi CMS proxy endpoint confirmed, same wildcard CORS pattern
+- CHANGED voip-management.easybell.de/api CORS surface broader than KB: Spring-handled routes (7 endpoints) all credentialed-reflect; nginx-only routes (customer, user, extension, trunk, line, contract, invoice
+- CHANGED voip-api-v2-bola: 22 resource names probed total — all nginx HTML 404; Spring v2 rewrite map confirmed (`/api/<res>` → `/api/v2/<res>` via JSON 404) but actual v2 resource names remain opaque
+- CHANGED WAF backoff window long cleared: >12h since last probe (2026-09-03 23:45:57 UTC); safe to resume spaced probing
+- CHANGED Risk elevated to 70: confirmed credentialed CORS exfiltration vector on 7 live authenticated endpoints

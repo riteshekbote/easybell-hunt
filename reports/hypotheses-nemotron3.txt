@@ -1,17 +1,17 @@
-## 2026-09-04 19:12:56 UTC [target] (model nemotron3)
-[NEW] CORS credentialed misconfiguration CONFIRMED on ALL Spring-handled routes at voip-management.easybell.de/api (account, accounts, subscriber, subscribers, number, numbers, session) — reflect arbitrary Origin with `Access-Control-Allow-Credentials: true`; previous KB claim "singular routes lock to my.easybell.com" is FALSE  
+## 2026-09-04 21:33:05 UTC [target] (model nemotron3)
+[NEW] CORS credentialed misconfiguration CONFIRMED on ALL 7 Spring-handled routes at voip-management.easybell.de/api (account, accounts, subscriber, subscribers, number, numbers, session) — reflect arbitrary Origin with `Access-Control-Allow-Credentials: true`; previous KB claim "singular routes lock to my.easybell.com" is FALSE  
 [NEW] my.easybell.com internal API proxy endpoints `/api/crm`, `/api/ebit`, `/api/strapi` return `Access-Control-Allow-Origin: *` (no ACAC:true) on redirect + OPTIONS preflight; accept POST with `Authorization,Content-Type` from any origin  
 [NEW] Internal k8s hostname `voip-management.k8s.easybell.de/api` leaked as fallback URL in client-side JS bundle (`core.js`)  
 [NEW] `my.easybell.com/api/strapi` — Strapi CMS proxy endpoint confirmed, same wildcard CORS pattern  
 [CHANGED] voip-management.easybell.de/api CORS surface broader than KB: Spring-handled routes (7 endpoints) all credentialed-reflect; nginx-only routes (customer, user, extension, trunk, line, contract, invoice, sip, device, tariff) return HTML 404 no CORS  
 [CHANGED] voip-api-v2-bola: 22 resource names probed total — all nginx HTML 404; Spring v2 rewrite map confirmed (`/api/<res>` → `/api/v2/<res>` via JSON 404) but actual v2 resource names remain opaque  
 [CHANGED] WAF backoff window long cleared: >12h since last probe (2026-09-03 23:45:57 UTC); safe to resume spaced probing  
-[CHANGED] Risk elevated to 70 (nemotron3) / 68 (bigpickle): confirmed credentialed CORS exfiltration vector on 7 live authenticated endpoints  
+[CHANGED] Risk elevated to 70: confirmed credentialed CORS exfiltration vector on 7 live authenticated endpoints
 [PRIO] voip-management.easybell.de/api,8.8,attack_surface:9+business_value:9+tech_exposure:9+gate_ease:7+cloud_surface:6+freshness:8  
 [PRIO] my.easybell.com,7.9,attack_surface:8+business_value:9+tech_exposure:8+gate_ease:4+cloud_surface:5+freshness:7  
 [PRIO] mail.easybell.de,5.6,attack_surface:7+business_value:5+tech_exposure:6+gate_ease:5+cloud_surface:4+freshness:5  
 [PRIO] www.easybell.de,4.8,attack_surface:4+business_value:6+tech_exposure:5+gate_ease:7+cloud_surface:3+freshness:5  
-[PRIO] auth.easybell.de,4.5,attack_surface:6+business_value:7+tech_exposure:6+gate_ease:3+cloud_surface:4+freshness:4  
+[PRIO] auth.easybell.de,4.5,attack_surface:6+business_value:7+tech_exposure:6+gate_ease:3+cloud_surface:4+freshness:4
 [HYP] voip-cors-cred-exfil-v2  
 class: MISCONFIG  
 asset: voip-management.easybell.de/api/  
@@ -20,7 +20,7 @@ reasoning: ALL 7 Spring-handled routes (account, accounts, subscriber, subscribe
 evidence_needed: victim-side authenticated session; confirm authenticated response body contains cross-customer data  
 verify_steps: HUMAN — with valid creds, visit attacker-controlled origin while authenticated to my.easybell.com; fetch('https://voip-management.easybell.de/api/accounts', {credentials:'include'}) and verify response body accessible. Test all 7 endpoints.  
 impact: Cross-origin theft of VoIP accounts/numbers/subscribers/session data from authenticated customer → HIGH  
-testability: AUTH_HELPED  
+testability: AUTH_HELPED
 [HYP] my-portal-api-proxy-wildcard  
 class: MISCONFIG  
 asset: my.easybell.com/api/{crm,ebit,strapi}  
@@ -29,29 +29,26 @@ reasoning: Three internal portal proxy endpoints (/api/crm, /api/ebit, /api/stra
 evidence_needed: confirm what /api/crm, /api/ebit, /api/strapi proxy to when authenticated; confirm whether Bearer token is accepted by these endpoints  
 verify_steps: HUMAN — with creds, observe portal JS network calls to /api/crm and /api/ebit; capture request/response to determine if Bearer token is used and what data is returned  
 impact: CRM/EBIT/Strapi data leakage via cross-origin requests → MEDIUM/HIGH (depends on data sensitivity)  
-testability: AUTH_HELPED  
-[HYP] my-portal-inertia-bola  
+testability: AUTH_HELPED
+[HYP] voip-api-v2-bola-discovery  
 class: IDOR  
-asset: my.easybell.com  
-confidence: 60  
-reasoning: Laravel 10 + Vue 3 Inertia SPA customer portal confirmed live; `customerId` leaked in Matomo tracker (empty pre-auth). Inertia route table exposes 100+ pages in public JS bundle. Portal proxies to voip-management via axios with Bearer token from `voipSession`. Auth-scoped object endpoints (accounts, subscribers, numbers, call-forwardings, voicemail, trusted-ips) use numeric IDs in paths — prime BOLA surface.  
-evidence_needed: Any API proxy endpoint the SPA calls unauthenticated; object-id param patterns in routes; cross-tenant IDOR on proxied endpoints  
-verify_steps: GET https://my.easybell.com/build/assets/Api-DpCVj5DC.js (API client) to catalog all proxied endpoints and ID patterns; GET https://my.easybell.com/build/assets/trunk-jHoPihNs.js (trunk store). Passive only.  
-impact: Cross-tenant PII dump, billing tamper, SIP config hijack → High/Critical  
-testability: AUTH_HELPED  
-[PARKED] voip-api-v2-bola: Confidence 55 < 60. 22 resource names probed — all nginx HTML 404; actual v2 resource names remain opaque. No live v2 endpoint discovered to test BOLA against. Requires discovery of real v2 resource first.  
-[PARKED] voip-api-ssrf-to-metadata: Confidence 35 < 40. No URL-accepting endpoint discovered; purely speculative without live resource. Requires voip-api-v2-bola success first.  
-[PARKED] internal-k8s-hostname-leak: Confidence 65. Info disclosure only; no direct exploit path from external network. Low actionable value.  
+asset: voip-management.easybell.de/api/v2/  
+confidence: 55  
+reasoning: Spring v2 rewrite map confirmed via JSON 404 leak (`/api/<res>` → `/api/v2/<res>`). 22 resource names probed at v1 — all nginx HTML 404. Actual v2 resource names remain opaque. Sipwise NGCP backend is live; plural routes 401-auth-gated. Discovering a live v2 resource would expose BOLA surface on versioned API.  
+evidence_needed: at least one live (non-404) v2 resource endpoint responding with JSON  
+verify_steps: PROBE — spaced GET to candidate v2 resource paths: /api/v2/accounts, /api/v2/subscribers, /api/v2/numbers, /api/v2/account, /api/v2/subscriber, /api/v2/number, /api/v2/session, /api/v2/customers, /api/v2/contracts, /api/v2/trunks (>=6s spacing, Origin: https://my.easybell.com, watch for Spring JSON vs nginx HTML)  
+impact: Cross-tenant VoIP data access via BOLA on versioned API → HIGH/CRITICAL  
+testability: PASSIVE
+[PARKED] voip-api-v2-bola-discovery: Confidence 55 < 60. No live v2 endpoint discovered yet; 22 v1 probes all nginx 404. Speculative without confirmed live v2 resource. Requires discovery first.  
 [FINAL] voip-cors-cred-exfil-v2: 88 — CONFIRMED on 7 Spring-handled endpoints; broader than previously mapped. Highest priority. Requires victim browser session.  
-[FINAL] my-portal-api-proxy-wildcard: 78 — Wildcard CORS on portal proxy endpoints; secondary exfiltration path if Bearer token compromised.  
-[FINAL] my-portal-inertia-bola: 60 — Genuine high-value target; passive route mapping completed, AUTH_HELPED for depth.  
-[NEXT] HUMAN: With authenticated session to my.easybell.com, test cross-origin exfiltration of VoIP data. Open browser console on attacker-controlled origin (or use curl with Bearer token from authenticated portal session). Make: `fetch('https://voip-management.easybell.de/api/accounts', {credentials:'include'})`. Verify: (1) response body contains customer VoIP account data, (2) response accessible from attacker origin, (3) same for /api/numbers, /api/subscribers, /api/account, /api/number, /api/subscriber, /api/session. Report with CORS header screenshot + response body snippet as POC for HIGH-impact credential-backed CORS misconfiguration.
+[FINAL] my-portal-api-proxy-wildcard: 78 — Wildcard CORS on portal proxy endpoints; secondary exfiltration path if Bearer token compromised.
+[NEXT] PROBE: Spaced GET to https://voip-management.easybell.de/api/v2/accounts with header `Origin: https://my.easybell.com` (>=6s from last probe), watch for Spring JSON 404 (confirms v2 resource exists) vs nginx HTML 404. Repeat for /api/v2/subscribers, /api/v2/numbers, /api/v2/session if first returns Spring JSON.
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS surface broader than knowledge base stated. ALL Spring-handled routes (singular + plural: account, accounts, subscriber, subscribers, number, numbers, session) reflect arbitrary Origin with Credentials:true. Knowledge base claim "singular routes lock to my.easybell.com" is incorrect.  
 [LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: Internal proxy endpoints (/api/crm, /api/ebit, /api/strapi) return Access-Control-Allow-Origin:* with POST+Authorization+Content-Type allowed from any origin (OPTIONS preflight 204). Wildcard CORS without Credentials:true on portal proxy layer.  
 [LEARN] ACCEPTED MISCONFIG @ my.easybell.com: Internal k8s hostname `voip-management.k8s.easybell.de/api` leaked as fallback URL in client-side JS bundle (core.js).  
 [LEARN] ACCEPTED IDOR @ voip-management.easybell.de/api: Sipwise NGCP backend live; plural routes 401-auth-gated; v2 rewrite map leaked; BOLA surface confirmed pending auth.  
 [LEARN] ACCEPTED IDOR @ my.easybell.com: Laravel/Vue Inertia portal; customerId in Matomo; proxies voip-management; auth-gated object endpoints; top IDOR candidate pending auth.  
 [LEARN] REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.  
-[LEARN] REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.  
+[LEARN] REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
 [RISK] easybell: 70  
 reasoning: Live high-value VoIP JSON API surface confirmed reachable; CORS credentialed misconfig on 7 Spring-handled routes CONFIRMED (exfiltration vector). Upside solid. Elevated by: aggressive WAF rate-limiting tightening enumeration throughput, no creds for authenticated portal testing, program's auth/lockout exclusion limiting attack classes. Mitigated by read-only GET discipline, spaced probing, clear scope boundaries.

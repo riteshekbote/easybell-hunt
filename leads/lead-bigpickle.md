@@ -382,3 +382,32 @@ testability: PASSIVE
 [RISK] easybell: 68
 reasoning: voip-management CORS misconfiguration confirmed on 7 Spring-handled routes with ACAC:true — HIGH impact with victim browser session. Portal proxy wildcard CORS adds secondary exfiltration path. Internal k8s hostname leak aids reconnaissance. Elevated by: no creds available for authenticated testing, WAF rate-limiting limits probe throughput, program excludes brute-force/lockout. Mitigated by: read-only GET only, clear scope, CORS finding requires victim interaction.
 ## 2026-09-04 19:07:01 UTC [target] (model bigpickle)
+## 2026-09-04 21:34:41 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-exfil-v3
+class: MISCONFIG
+asset: voip-management.easybell.de/api/
+confidence: 92
+reasoning: All 7 Spring/Basic-auth routes reflect arbitrary Origin with ACAC:true (confirmed prior cycles). This cycle confirmed auth mechanism = HTTP Basic realm "sipwisebroker.easybell.de,voip-management", which browsers cache per-origin and transparently attach to cross-origin `credentials:'include'` fetches. No cookie session exists (/api/session: 405 GET, no Set-Cookie). Chain is browser-native: victim logs into portal/VoIP surface (Basic creds cached) → visits evil.com → `fetch('/api/accounts',{credentials:'include'})` → server returns 200 customer data with ACAO:evil.com+ACAC:true → attacker JS reads VoIP accounts/numbers/subscribers/session JSON.
+evidence_needed: authenticated response body confirmation (with valid Basic/Bearer creds, response to /api/accounts must contain cross-customer data + reflect CORS headers on the 200).
+verify_steps: HUMAN — while authenticated to my.easybell.com/voip-management in a browser, open attacker origin and run `fetch('https://voip-management.easybell.de/api/accounts',{credentials:'include'}).then(r=>r.text())`; verify readable body + `Access-Control-Allow-Credentials:true`. Repeat for numbers, subscribers, account, number, subscriber, session.
+impact: Cross-origin theft of full VoIP/account/subscriber dataset of any authenticated customer → HIGH (PII/telephony).
+testability: AUTH_HELPED
+[HYP] my-portal-idos
+class: IDOR
+asset: my.easybell.com
+confidence: 55
+reasoning: Laravel/Vue Inertia portal; customerId in Matomo; X-Inertia props show customer-type flags only (no leak); proxies voip-management via Bearer voipSession; auth-gated object endpoints (Users/Subsidiary/phone-number) are prime BOLA surface. No creds → passive-only.
+evidence_needed: authenticated session; cross-tenant object access on Users/Subsidiary/phone-number endpoints.
+verify_steps: HUMAN — with creds, exercise object endpoints across two tenants for cross-tenant reads.
+impact: cross-tenant PII/billing/SIP tamper → High/Critical.
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 78
+reasoning: Three portal proxy endpoints return ACAO:* + POST/Authorization/Content-Type preflight from any origin (no ACAC:true → cookies not sent cross-origin). Impact only if these accept a JS-held Bearer token that an attacker already controls/exfiltrates (secondary to the voip-management CORS finding) or if any response contains data gated only by Authorization absence.
+evidence_needed: what /api/crm, /api/ebit, /api/strapi proxy to when authenticated; whether Bearer token is accepted.
+verify_steps: HUMAN — capture portal JS network calls to /api/crm and /api/ebit post-auth; test cross-origin POST from attacker origin with attacker-supplied bearer.
+impact: CRM/EBIT/Strapi data via cross-origin → MEDIUM/HIGH.
+testability: AUTH_HELPED
+reasoning: #1 finding (voip-management credentialed CORS exfil) now has a browser-native, mechanically-confirmed exploit chain (HTTP Basic realm → cached creds → cross-origin `credentials:'include'`), verified across 7 endpoints incl. /api/session; rising to POC-ready. Elevators: 401 body confirms auth gate so unauth read impossible (needs victim session → HUMAN); WAF rate-limits enumeration; no creds for authenticated portal IDOR testing; program excludes brute-force/auth classes. Mitigated by read-only GET/OPTIONS discipline, clear in-scope corporate assets, single clear reporting path.
