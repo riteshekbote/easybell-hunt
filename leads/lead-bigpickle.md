@@ -233,3 +233,31 @@ testability: AUTH_HELPED
 [RISK] easybell: 60
 reasoning: Live reachable high-value VoIP JSON API surface confirmed; upside solid. Elevated by aggressive WAF rate-limiting tightening enumeration throughput, no creds for authenticated portal testing, and program's auth/lockout exclusion. Mitigated by read-only GET discipline, spaced probing, clear scope.
 ## 2026-09-03 23:44:15 UTC [target] (model bigpickle)
+## 2026-09-04 02:34:38 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-exfil
+class: MISCONFIG
+asset: voip-management.easybell.de/api/
+confidence: 68
+reasoning: OPTIONS+GET on `/api/accounts|numbers|subscribers` (401 Sipwise data routes) reflect arbitrary Origin in ACAO with `Access-Control-Allow-Credentials:true`, while other paths (`/api/account`, `/api/session`) lock origin to `https://my.easybell.com` — a per-path permit-list inconsistency where the Sipwise-proxy layer is un-scoped. If a victim browser holds an authenticated session to voip-management (cached Basic for realm `sipwisebroker.easybell.de` or a voip-management cookie from the portal flow), any malicious origin can issue a credentialed GET and read VoIP/account JSON cross-origin.
+evidence_needed: victim-side authenticated session to voip-management reachable cross-origin by a browser (cookie-based or cached-Basic) + read of `/api/accounts|numbers|subscribers` with that session.
+verify_steps: ACAO-* + credentials reflection CONFIRMED. Full-read exploit requires a victim with an active voip-management session (HUMAN authenticated). No unauth read possible (401 without creds).
+impact: cross-origin theft of VoIP numbers/subscribers/account data from an authenticated customer session → High
+testability: AUTH_HELPED
+[HYP] voip-api-v2-bola
+class: IDOR
+asset: voip-management.easybell.de/api/accounts|numbers|subscribers
+confidence: 55
+reasoning: Sipwise NGCP-style backend; singular paths 404 but plural live auth-gated (accounts/numbers/subscribers). If per-object authorization is missing, a valid session token could read any customer's objects. Surface is 401-gated; no creds to test cross-customer enumeration.
+evidence_needed: valid voipSession token (obtainable after portal login) to test numeric id enumeration on `/api/accounts/{id}` etc.
+verify_steps: HUMAN — with creds, enumerate numeric IDs on live plural routes, verify per-object authz. No unauth passive test possible (401).
+impact: cross-customer Sipwise/phone-number/PII exposure → High/Critical
+testability: AUTH_HELPED
+[HYP] my-portal-idos
+class: IDOR
+asset: my.easybell.com
+confidence: 55
+reasoning: Laravel/Vue Inertia portal maps proxies `/api/strapi|crm|ebit` (302→/login) and proxies voip-management via Bearer `voipSession`. Authenticated object endpoints (Users/New, Subsidiary, UserManagement, phone numbers, billing) prime BOLA surface.
+evidence_needed: authenticated session.
+verify_steps: HUMAN — with creds, exercise Users/Subsidiary/phone-number object endpoints for cross-tenant access.
+impact: cross-tenant PII/billing/SIP tamper → High/Critical
+testability: AUTH_HELPED

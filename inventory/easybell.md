@@ -50,3 +50,9 @@ www.easybell.de
 - CHANGED dev.easybell.de / portal.easybell.de: No DNS/route — effectively dead (probe timeouts confirmed). Top targets shift to my.easybell.com + voip-management.
 - CHANGED voip-management WAF: Aggressive rate-limit confirmed. Bursts >~8-10 probes → empty/timeouts. Mandates >=6s spacing, 60-120s backoff after block.
 - CHANGED voip-api-v2-bola: No live (non-404) Spring resource discovered yet across customer/account/number/user/subscriber/trunk/line/contract/invoice/sip/device/tariff probes — all nginx-HTML 404 or rate-limi
+
+## 2026-09-04 02:34:48 UTC
+- NEW voip-management.easybell.de/api/customer → HTTP 404 (nginx HTML) at 2026-09-03 23:45:57 UTC; Spring v2 rewrite not triggered — resource name still unknown
+- NEW No new live hosts; dev.easybell.de/portal.easybell.de remain non-routable; auth.easybell.de returns 404 on all well-known paths
+- CHANGED voip-api-v2-bola enumeration continues: customer, account, user, number, subscriber, trunk, line, contract, invoice, sip, device, tariff all unconfirmed (404 or rate-limited); backend reachable via JS
+- CHANGED my.easybell.com passive JS bundle mapping not yet performed; Inertia route table and API proxy endpoints uncataloged

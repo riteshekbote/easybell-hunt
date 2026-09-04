@@ -44,3 +44,13 @@
 - LEARN: ACCEPTED IDOR @ my.easybell.com: Real customer portal (Laravel/Vue Inertia) confirmed live; `customerId` leaked in Matomo; top IDOR candidate pending auth.
 - LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
 - LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+
+## RANKED HYPOTHESES 2026-09-04 02:34:48 UTC
+- [68] voip-management.easybell.de/api/: voip-cors-cred-exfil (from art/lead_bigpickle.txt)
+- [60] voip-management.easybell.de/api/: voip-api-v2-bola (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-nemotron3.txt): PROBE: After >=120s cooldown from last probe (2026-09-03 23:45:57), single GET https://voip-management.easybell.de/api/extension (spaced >=6s, <=1rps), watch fo
+- LEARN: ACCEPTED IDOR @ voip-management.easybell.de/api: nginx→Spring v2 rewrite map leaked via JSON 404 message (`/api/<res>` → `/api/v2/<res>`); live backend confirme
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de: WAF/rate-limit aggressive — bursts >~8 probes yield empty/timeouts; mandates >=6s spacing and 60-120s backoff.
+- LEARN: ACCEPTED IDOR @ my.easybell.com: Real customer portal (Laravel/Vue Inertia) confirmed live; `customerId` leaked in Matomo; top IDOR candidate pending auth.
+- LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
+- LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
