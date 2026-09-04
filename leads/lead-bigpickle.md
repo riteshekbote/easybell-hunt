@@ -381,3 +381,4 @@ testability: PASSIVE
 [LEARN] No new REJECTED items.
 [RISK] easybell: 68
 reasoning: voip-management CORS misconfiguration confirmed on 7 Spring-handled routes with ACAC:true — HIGH impact with victim browser session. Portal proxy wildcard CORS adds secondary exfiltration path. Internal k8s hostname leak aids reconnaissance. Elevated by: no creds available for authenticated testing, WAF rate-limiting limits probe throughput, program excludes brute-force/lockout. Mitigated by: read-only GET only, clear scope, CORS finding requires victim interaction.
+## 2026-09-04 19:07:01 UTC [target] (model bigpickle)

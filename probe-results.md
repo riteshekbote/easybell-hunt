@@ -68,3 +68,6 @@ https://voip-management.easybell.de/api/accounts -> HTTP 401
 https://voip-management.easybell.de/api/v2/accounts -> HTTP 404
 https://voip-management.easybell.de/api/accounts' -> HTTP 404
 https://voip-management.k8s.easybell.de/api` -> ERR <urlopen error [Errno -2] Name or service not know
+
+## 2026-09-04 19:13:09 UTC
+https://voip-management.easybell.de/api/accounts' -> HTTP 404
