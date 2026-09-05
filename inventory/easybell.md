@@ -115,3 +115,11 @@ www.easybell.de
 - NEW Internal k8s hostname `voip-management.k8s.easybell.de/api` (leaked in `core.js`) not resolvable externally — internal-only
 - CHANGED WAF backoff window cleared: >23h since last probe (2026-09-03 23:45:57 UTC); safe for spaced probing (≥6s, 60-120s backoff)
 - CHANGED Risk stable at 70: confirmed credentialed CORS exfiltration vector on 7 authenticated endpoints; limited by no victim creds for AUTH_HELPED verification, program auth/lockout exclusion
+
+## 2026-09-05 01:07:06 UTC
+- NEW Passive DNS confirms `voip-management.k8s.easybell.de` and `k8s.easybell.de` have NO public A record (NXDOMAIN) — internal hostname leak from `core.js` is not externally resolvable; downgraded from ac
+- NEW `my.easybell.com` and `voip-management.easybell.de` share public ingress IP 62.27.117.123 (same nginx); "cross-origin" split is host-header-only at same ingress — undermines same-origin policy assumpt
+- CHANGED WAF backoff window fully cleared: >23h since last live probe (2026-09-03 23:45:57 UTC); safe for spaced probing (≥6s, 60-120s backoff)
+- CHANGED Passive surface saturated: all three top leads (CORS exfil 92 / proxy-wildcard 78 / portal IDOR 55) are AUTH_HELPED and unchanged since 2026-09-04 21:34; only unprobed passive surface left = Spring ac
+- CHANGED `my.easybell.com/api/{crm,ebit,strapi}` proxy endpoints confirmed: OPTIONS preflight returns `Access-Control-Allow-Origin: *` (wildcard, no ACAC:true) with `Allow: GET,HEAD` and `Vary: Access-Control-
+- CHANGED `voip-management.easybell.de/api/v2/{accounts,subscribers,numbers,account,subscriber,number,session}` all return nginx HTML 404 (no CORS headers, `content-type: text/html`) — Spring v2 rewrite map lea

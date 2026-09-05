@@ -3875,3 +3875,487 @@ STEP 6 — LEARNING
 STEP 7 — RISK
 [RISK] easybell: 70
 reasoning: Leading finding (voip-management credentialed CORS exfil, 7 endpoints) confirmed but POC-blocked on HUMAN session; new passive actuator probe line could unlock the opaque v2 BOLA map at zero credential cost. Elevated by: WAF throttles enumeration, no creds for portal IDOR, auth/lockout classes excluded. Mitigated by read-only GET/OPTIONS discipline, >=6s spacing, clear scope.
+===== ANALYST bigpickle 2026-09-05 01:07:06 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mfor p in "api/actuator" "api/v2/actuator" "api/actuator/mappings" "api/actuator/gateway/routes" "actuator"; do echo "=== /$p ==="; curl -s -i -m 12 -A "Mozilla/5.0 (X11; Linux x86_64)" -H "Origin: https://my.easybell.com" -H "Accept: application/json" "https://voip-management.easybell.de/$p" | head -c 900; echo; sleep 7; done
+=== /api/actuator ===
+HTTP/2 404 
+date: Sat, 05 Sep 2026 01:02:23 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+=== /api/v2/actuator ===
+HTTP/2 404 
+date: Sat, 05 Sep 2026 01:02:31 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+=== /api/actuator/mappings ===
+HTTP/2 404 
+date: Sat, 05 Sep 2026 01:02:38 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+=== /api/actuator/gateway/routes ===
+HTTP/2 404 
+date: Sat, 05 Sep 2026 01:02:46 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+=== /actuator ===
+HTTP/2 404 
+date: Sat, 05 Sep 2026 01:02:53 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+[0m
+All five actuator paths returned nginx HTML 404 (content-length 146) — nginx allowlist only proxies the 7 known Spring routes, so actuator/swagger-family paths never reach Spring. That kills the route-map-disclosure venue at the nginx layer. Characterizing the credential-free gate on the portal proxy layer now:
+[0m$ [0mfor p in "api/crm" "api/ebit" "api/strapi"; do echo "=== /$p (no auth) ==="; curl -s -i -m 12 -A "Mozilla/5.0 (X11; Linux x86_64)" -H "Accept: application/json" "https://my.easybell.com/$p" | head -c 900; echo; sleep 7; done
+=== /api/crm (no auth) ===
+HTTP/2 302 
+date: Sat, 05 Sep 2026 01:04:19 GMT
+content-type: text/html; charset=utf-8
+location: https://my.easybell.com/login
+cache-control: no-cache, private
+vary: X-Inertia
+access-control-allow-origin: *
+set-cookie: XSRF-TOKEN=eyJpdiI6IkxHNUl4K2JiMTZrNVRPM3U5QlV0Z0E9PSIsInZhbHVlIjoiT1dpQzhpcHNDWHNOMDBzaXprT0RkTXRlYVpmbjc0Q25hNFA5OGNQM2FIMHlOQnBWQm0vMkJKaW1xenpmbU16UjZCMlQ0TkRlM05hUDNyRWNsa1d2dEVxL1pjeE5ZUUl5dWRKSVVpbVovdFNJVlp4UklZZU5kVHk5dDdVRm5Ec3EiLCJtYWMiOiJmM2JkNGQwOWQyMDdiYjAxMjdhZjhjNjJhYTQ2ZjQ0MWI0NDMwYzYyNTcwZjc5OTQyMTcxZjllMGIxNjE0ZDgxIiwidGFnIjoiIn0%3D; expires=Sat, 26 Sep 2026 01:04:19 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=7YJ9LV5uCntnKANiMcf8fFJZcRiyHglHrHoh75Cn; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-
+=== /api/ebit (no auth) ===
+HTTP/2 302 
+date: Sat, 05 Sep 2026 01:04:27 GMT
+content-type: text/html; charset=utf-8
+location: https://my.easybell.com/login
+cache-control: no-cache, private
+vary: X-Inertia
+access-control-allow-origin: *
+set-cookie: XSRF-TOKEN=eyJpdiI6IjRBTXlrVHczcTRtUEc3SVZUTWk4T2c9PSIsInZhbHVlIjoibGlCOG5ZM2RnNE1aWnY4STRVZlFnbHUyQlkzQ2tUSGNTOTQ2WGVkMlRMdmxvdEY1dTZMdWtCaFVxQVBSdWNDWUU5aDEwWDZSWUNhd3F0M0dLM3NGNVF4VlBtN25lcFA1WkU4ZXZTUkZZRXNVWk54RXQ1dFFsWlkzU1h2cFFMK1QiLCJtYWMiOiI2MTYwOTE5ZjAwMTcxNWUxNzNiMTc2MWFhNzQyM2M3NjU0NGJiYjAwNTlmM2MwMTgzZjg2Y2E0ZGFiMjViZmY5IiwidGFnIjoiIn0%3D; expires=Sat, 26 Sep 2026 01:04:27 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=3kx9cNGBeYHRXEF0m0O9vBswk5mHq1cEP6PF9aIX; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-
+=== /api/strapi (no auth) ===
+HTTP/2 302 
+date: Sat, 05 Sep 2026 01:04:35 GMT
+content-type: text/html; charset=utf-8
+location: https://my.easybell.com/login
+cache-control: no-cache, private
+vary: X-Inertia
+access-control-allow-origin: *
+set-cookie: XSRF-TOKEN=eyJpdiI6InpTaDYvUVFqU1hMb0FyQ2YxNjlqTlE9PSIsInZhbHVlIjoiN29JTjNZVGQ0QWp4bVdDWFNvM3hWbTVESFNZckE1Y1RaVU1IOGIrMFVaQXFrTXEvNTBmZmliZEI0WmdNVGQxOWhjMVNTTU1rVk5kb1FCUUVFZWdvRDZYNmZUVTFoUVlGcFFpa3Q3OVRFdkhCRU1Yb0tPWDA1bGJOTXh4a1FDUUIiLCJtYWMiOiI1YmZiZmZkY2EzNzc1YTExOTI4ZGMxNmUwYTBjNTlmMGVjMzZkNzg1NGU2OTA5ZTI2ZjQ4ODUzM2Q5NjJkZGVlIiwidGFnIjoiIn0%3D; expires=Sat, 26 Sep 2026 01:04:35 GMT; Max-Age=1814400; path=/; secure; samesite=lax
+set-cookie: ekp_session=nDktUY9hoUX7o610h6bExPlEcsj9cZd5optVq9Ts; path=/; secure; httponly; samesite=lax
+strict-transport-security: max-age=31536000; includeSubDomains
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-
+[0m
+[0m$ [0mls -la && echo "---" && ls -la art 2>/dev/null; ls -la inventory 2>/dev/null
+total 160
+drwxr-xr-x 12 runner runner  4096 Sep  5 01:01 .
+drwxr-xr-x  3 runner runner  4096 Sep  5 01:01 ..
+drwxr-xr-x  7 runner runner  4096 Sep  5 01:01 .git
+drwxr-xr-x  3 runner runner  4096 Sep  5 01:01 .github
+-rw-r--r--  1 runner runner  1756 Sep  5 01:01 README.md
+-rw-r--r--  1 runner runner  5394 Sep  5 01:04 analyst-out.txt
+-rw-r--r--  1 runner runner 34956 Sep  5 01:01 analyst-prompt.txt
+-rw-r--r--  1 runner runner 31149 Sep  5 01:01 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep  5 01:01 inventory
+drwxr-xr-x  2 runner runner  4096 Sep  5 01:01 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep  5 01:01 leads
+-rw-r--r--  1 runner runner  3298 Sep  5 01:01 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep  5 01:01 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep  5 01:01 reports
+drwxr-xr-x  2 runner runner  4096 Sep  5 01:01 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep  5 01:01 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep  5 01:01 scripts
+-rw-r--r--  1 runner runner    33 Sep  5 01:01 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep  5 01:01 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep  5 01:01 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep  5 01:01 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep  5 01:01 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep  5 01:01 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep  5 01:01 triage
+---
+total 24
+drwxr-xr-x  2 runner runner  4096 Sep  5 01:01 .
+drwxr-xr-x 12 runner runner  4096 Sep  5 01:01 ..
+-rw-r--r--  1 runner runner 12825 Sep  5 01:01 easybell.md
+[0m
+Unauthenticated `/api/{crm,ebit,strapi}` all return 302 → `/login` (Laravel session gate) — proxy layer adds no standalone credential-free value; wildcard-CORS only matters post-token-theft. Let me pull the passive context (matomo hostname, scope, prior art) before concluding surface saturation:
+[0m$ [0mcat inventory/easybell.md; echo "=====PROBE-RESULTS====="; cat probe-results.md
+# easybell GmbH inventory (discovery seed 2026-09-02)
+# NOTE: hosts below are discovery candidates from passive DNS/CT; confirm in-scope vs program scope before active testing.
+auth.easybell.de
+dev.easybell.de
+easybell.de
+login.easybell.de
+mail.easybell.de
+portal.easybell.de
+www.easybell.de
+
+## PASSIVE RECON 2026-09-02 (read-only, non-intrusive)
+
+> Recon observations only. These are NOT confirmed vulnerabilities; ownership/in-scope of each host must be confirmed against the program scope before any active testing. Hosts resolve + serve HTTP — investigation requires scoped authorization.
+
+**Probed:** 7 hosts | **Live HTTP:** 0
+
+| Host | Status | Server/Tech |
+|---|---|---|
+
+## 2026-09-02 21:54:05 UTC
+
+## 2026-09-02 23:47:09 UTC
+
+## 2026-09-03 02:32:15 UTC
+
+## 2026-09-03 07:23:53 UTC
+
+## 2026-09-03 12:16:38 UTC
+
+## 2026-09-03 16:49:23 UTC
+
+## 2026-09-03 19:45:37 UTC
+- NEW my.easybell.com: real customer portal ("Easybell Kundenportal", Laravel 10 + Vue 3 Inertia SPA), 200 at /login, sets Laravel `ekp_session`+encrypted `XSRF-TOKEN`, `X-Inertia` header. Supersedes `porta
+- NEW voip-management.easybell.de: nginx front with live JSON REST API at /api/ ; custom Spring-style error `{"code":404,"message":"/api/v2/<path>"}`. Referenced as `VITE_VOIP_MANAGEMENT_URL` in portal SPA.
+- CHANGED inventory 0/7 "not live" is stale: www(200 TYPO3), easybell(301), login(302->my), my.easybell.com(200), mail->rcm(200 Roundcube), auth(404 nginx), shared-libs(404 asset CDN), matomo, voip-management(A
+- CHANGED dev.easybell.de / portal.easybell.de: no DNS/route — effectively dead; top target shifts to my.easybell.com + voip-management.
+
+## 2026-09-03 21:58:47 UTC
+- NEW my.easybell.com: real customer portal ("Easybell Kundenportal", Laravel 10 + Vue 3 Inertia SPA), 200 at /login, sets Laravel `ekp_session`+encrypted `XSRF-TOKEN`, `X-Inertia` header. Supersedes `porta
+- NEW voip-management.easybell.de: nginx front with live JSON REST API at /api/ ; custom Spring-style error `{"code":404,"message":"/api/v2/<path>"}`. Referenced as `VITE_VOIP_MANAGEMENT_URL` in portal SPA.
+- CHANGED inventory 0/7 "not live" is stale: www(200 TYPO3), easybell(301), login(302->my), my.easybell.com(200), mail->rcm(200 Roundcube), auth(404 nginx), shared-libs(404 asset CDN), matomo, voip-management(A
+- CHANGED dev.easybell.de / portal.easybell.de: no DNS/route — effectively dead; top target shifts to my.easybell.com + voip-management.
+- NEW voip-management.easybell.de routing map resolved: `/api/<res>` → proxied to Spring backend (returns Spring JSON 404 `{"code":404,"message":"/api/v2/<res>"}` revealing internal v2 rewrite); `/api/` and
+- CHANGED voip-management WAF: aggressive rate-limit confirmed. Bursts of >~8-10 rapid probes → empty/timed-out responses. Must space probes >=5-6s, back off 60s after block.
+- CHANGED voip-api-v2-bola: no live (non-404) Spring resource discovered yet across customer/account/number/user/subscriber probes — all nginx-HTML or rate-limited. Backend is reachable and versioned but actual
+
+## 2026-09-03 23:45:55 UTC
+- NEW my.easybell.com: Confirmed live customer portal (Laravel 10 + Vue 3 Inertia SPA), 200 at /login, sets `ekp_session` + encrypted `XSRF-TOKEN`, `X-Inertia` header; `customerId` leaked in Matomo tracker 
+- NEW voip-management.easybell.de: Live nginx→Spring JSON API at `/api/<res>` (rewrites to internal `/api/v2/<res>`, leaked via 404 body `{"code":404,"message":"/api/v2/<res>"}`). `/api/` and `/api/v2/` dir
+- CHANGED dev.easybell.de / portal.easybell.de: No DNS/route — effectively dead (probe timeouts confirmed). Top targets shift to my.easybell.com + voip-management.
+- CHANGED voip-management WAF: Aggressive rate-limit confirmed. Bursts >~8-10 probes → empty/timeouts. Mandates >=6s spacing, 60-120s backoff after block.
+- CHANGED voip-api-v2-bola: No live (non-404) Spring resource discovered yet across customer/account/number/user/subscriber/trunk/line/contract/invoice/sip/device/tariff probes — all nginx-HTML 404 or rate-limi
+
+## 2026-09-04 02:34:48 UTC
+- NEW voip-management.easybell.de/api/customer → HTTP 404 (nginx HTML) at 2026-09-03 23:45:57 UTC; Spring v2 rewrite not triggered — resource name still unknown
+- NEW No new live hosts; dev.easybell.de/portal.easybell.de remain non-routable; auth.easybell.de returns 404 on all well-known paths
+- CHANGED voip-api-v2-bola enumeration continues: customer, account, user, number, subscriber, trunk, line, contract, invoice, sip, device, tariff all unconfirmed (404 or rate-limited); backend reachable via JS
+- CHANGED my.easybell.com passive JS bundle mapping not yet performed; Inertia route table and API proxy endpoints uncataloged
+
+## 2026-09-04 07:26:02 UTC
+- NEW Current time 2026-09-04 07:25:00 UTC — >7h since last probe (2026-09-03 23:45:57); WAF backoff window long cleared
+- CHANGED voip-api-v2-bola: 13 resource names probed (customer, account, user, number, extension, subscriber, trunk, line, contract, invoice, sip, device, tariff) — all nginx HTML 404 or rate-limited; Spring v2
+- CHANGED my-portal-inertia-bola: Passive JS bundle mapping not yet performed; Inertia route table and API proxy endpoints uncataloged
+- NEW No changes to dev.easybell.de/portal.easybell.de (non-routable), auth.easybell.de (404), mail.easybell.de (Roundcube)
+
+## 2026-09-04 12:29:49 UTC
+- NEW Current time 2026-09-04 12:15:55 UTC — >12h since last probe (2026-09-03 23:45:57); WAF backoff window long cleared
+- NEW 9 additional resource names probed on voip-management.easybell.de/api (extension, trunk, line, contract, invoice, sip, device, tariff, subscribers via OPTIONS) — all nginx HTML 404 except subscribers 
+- CHANGED voip-api-v2-bola: 22 resource names probed total — all nginx HTML 404; Spring v2 rewrite map confirmed but actual v2 resource names remain opaque
+- CHANGED my-portal-inertia-bola: Passive JS bundle mapping completed; Inertia route table (100+ pages) and API proxy endpoints cataloged from public bundles
+- NEW CORS misconfiguration CONFIRMED on voip-management.easybell.de/api/subscribers (plural Sipwise route): reflects arbitrary Origin with `Access-Control-Allow-Credentials: true`
+- NEW my.easybell.com portal: `VITE_VOIP_MANAGEMENT_URL` = `https://voip-management.easybell.de/api/`; axios instance attaches Bearer token from `voipSession`; proxies plural Sipwise routes (accounts, subsc
+- NEW No changes to dev.easybell.de/portal.easybell.de (non-routable), auth.easybell.de (404), mail.easybell.de (Roundcube)
+
+## 2026-09-04 16:34:56 UTC
+- CHANGED voip-management.easybell.de/api CORS: knowledge base claimed singular routes lock to my.easybell.com — **FALSE**. `account`, `subscriber`, `number` (singular) ALL return `ACAO: <evil.com> + ACAC:true`
+- NEW my.easybell.com internal API proxy endpoints `/api/crm`, `/api/ebit`, `/api/strapi` — ALL return `Access-Control-Allow-Origin: *` (no ACAC:true) on both redirect and OPTIONS preflight. Accepts POST wi
+- NEW Internal k8s hostname leaked in client JS bundle: `voip-management.k8s.easybell.de/api` — fallback value in `core.js` when `VITE_VOIP_MANAGEMENT_URL` env is unset.
+- NEW `my.easybell.com/api/strapi` — Strapi CMS proxy endpoint confirmed, same wildcard CORS pattern.
+- CHANGED voip-management.easybell.de/api CORS surface: Spring-handled routes confirmed (404 JSON): account, accounts, subscriber, subscribers, number, numbers, session. Nginx-only routes (HTML 404, no CORS): c
+- NEW CORS credentialed misconfiguration CONFIRMED on voip-management.easybell.de/api/subscribers (plural Sipwise route): reflects arbitrary Origin with `Access-Control-Allow-Credentials: true`
+- NEW my.easybell.com portal JS analysis complete: `VITE_VOIP_MANAGEMENT_URL` = `https://voip-management.easybell.de/api/`; axios attaches Bearer from `voipSession`; proxies 8 plural Sipwise routes (account
+- NEW Passive JS bundle mapping completed for my.easybell.com: Inertia route table (100+ pages) and API proxy endpoints cataloged
+- CHANGED voip-api-v2-bola: 22 resource names probed total — all nginx HTML 404; Spring v2 rewrite map confirmed (`/api/<res>` → `/api/v2/<res>` leaked via JSON 404) but actual v2 resource names remain opaque
+- CHANGED WAF backoff window long cleared: >12h since last probe (2026-09-03 23:45:57 UTC); safe to resume spaced probing
+- CHANGED Risk elevated to 70: confirmed credentialed CORS exfiltration vector on live authenticated endpoints
+
+## 2026-09-04 19:13:07 UTC
+- NEW CORS credentialed misconfiguration CONFIRMED on ALL Spring-handled routes at voip-management.easybell.de/api (account, accounts, subscriber, subscribers, number, numbers, session) — reflect arbitrary 
+- NEW my.easybell.com internal API proxy endpoints `/api/crm`, `/api/ebit`, `/api/strapi` return `Access-Control-Allow-Origin: *` (no ACAC:true) on redirect + OPTIONS preflight; accept POST with `Authorizat
+- NEW Internal k8s hostname `voip-management.k8s.easybell.de/api` leaked as fallback URL in client-side JS bundle (`core.js`)
+- NEW `my.easybell.com/api/strapi` — Strapi CMS proxy endpoint confirmed, same wildcard CORS pattern
+- CHANGED voip-management.easybell.de/api CORS surface broader than KB: Spring-handled routes (7 endpoints) all credentialed-reflect; nginx-only routes (customer, user, extension, trunk, line, contract, invoice
+- CHANGED voip-api-v2-bola: 22 resource names probed total — all nginx HTML 404; Spring v2 rewrite map confirmed (`/api/<res>` → `/api/v2/<res>` via JSON 404) but actual v2 resource names remain opaque
+- CHANGED WAF backoff window long cleared: >12h since last probe (2026-09-03 23:45:57 UTC); safe to resume spaced probing
+- CHANGED Risk elevated to 70 (nemotron3) / 68 (bigpickle): confirmed credentialed CORS exfiltration vector on 7 live authenticated endpoints
+
+## 2026-09-04 21:34:53 UTC
+- NEW CORS credentialed misconfiguration CONFIRMED on ALL 7 Spring-handled routes at voip-management.easybell.de/api (account, accounts, subscriber, subscribers, number, numbers, session) — reflect arbitrar
+- NEW my.easybell.com internal API proxy endpoints `/api/crm`, `/api/ebit`, `/api/strapi` return `Access-Control-Allow-Origin: *` (no ACAC:true) on redirect + OPTIONS preflight; accept POST with `Authorizat
+- NEW Internal k8s hostname `voip-management.k8s.easybell.de/api` leaked as fallback URL in client-side JS bundle (`core.js`)
+- NEW `my.easybell.com/api/strapi` — Strapi CMS proxy endpoint confirmed, same wildcard CORS pattern
+- CHANGED voip-management.easybell.de/api CORS surface broader than KB: Spring-handled routes (7 endpoints) all credentialed-reflect; nginx-only routes (customer, user, extension, trunk, line, contract, invoice
+- CHANGED voip-api-v2-bola: 22 resource names probed total — all nginx HTML 404; Spring v2 rewrite map confirmed (`/api/<res>` → `/api/v2/<res>` via JSON 404) but actual v2 resource names remain opaque
+- CHANGED WAF backoff window long cleared: >12h since last probe (2026-09-03 23:45:57 UTC); safe to resume spaced probing
+- CHANGED Risk elevated to 70: confirmed credentialed CORS exfiltration vector on 7 live authenticated endpoints
+
+## 2026-09-04 23:18:21 UTC
+- NEW Passive DNS (2026-09-04 23:15 UTC): `voip-management.k8s.easybell.de` and `k8s.easybell.de` return NO public A record (NXDOMAIN/empty). Internal k8s hostname leak from core.js is NOT externally resolv
+- NEW `my.easybell.com` and `voip-management.easybell.de` share public IP 62.27.117.123 (one nginx ingress); `easybell.de` → 62.27.117.125. The "cross-origin" split between portal and VoIP API is host-heade
+- CHANGED Passive surface saturated: all three top leads (CORS exfil 92 / proxy-wildcard 78 / portal IDOR 55) are AUTH_HELPED and unchanged since 21:34. Only unprobed passive surface left = Spring actuator/rout
+- NEW Live verification confirms CORS credentialed misconfiguration on ALL 7 Spring-handled routes at `voip-management.easybell.de/api` (account, accounts, subscriber, subscribers, number, numbers, session)
+- NEW `my.easybell.com/api/{crm,ebit,strapi}` proxy endpoints confirmed: OPTIONS preflight returns `Access-Control-Allow-Origin: *` (wildcard, no ACAC:true) with `Allow: GET,HEAD` and `Vary: Access-Control-
+- NEW `voip-management.easybell.de/api/v2/{accounts,subscribers,numbers,account,subscriber,number,session}` all return nginx HTML 404 (no CORS headers, `content-type: text/html`) — Spring v2 rewrite map lea
+- NEW Internal k8s hostname `voip-management.k8s.easybell.de/api` (leaked in `core.js`) not resolvable externally — internal-only
+- CHANGED WAF backoff window cleared: >23h since last probe (2026-09-03 23:45:57 UTC); safe for spaced probing (≥6s, 60-120s backoff)
+- CHANGED Risk stable at 70: confirmed credentialed CORS exfiltration vector on 7 authenticated endpoints; limited by no victim creds for AUTH_HELPED verification, program auth/lockout exclusion
+=====PROBE-RESULTS=====
+
+## 2026-09-02 21:54:05 UTC
+
+
+## 2026-09-02 23:47:09 UTC
+
+
+## 2026-09-03 02:32:15 UTC
+
+
+## 2026-09-03 07:23:53 UTC
+
+
+## 2026-09-03 12:16:38 UTC
+
+
+## 2026-09-03 16:50:49 UTC
+https://dev.easybell.de/ -> ERR <urlopen error timed out>
+https://dev.easybell.de/api/ -> ERR <urlopen error timed out>
+https://dev.easybell.de/admin/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/api/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/account -> ERR <urlopen error timed out>
+https://auth.easybell.de/.well-known/openid-configuration -> HTTP 404
+https://auth.easybell.de/.well-known/oauth-authorization-server -> HTTP 404
+https://auth.easybell.de/jwks -> HTTP 404
+https://auth.easybell.de/ -> HTTP 404
+
+## 2026-09-03 19:45:43 UTC
+https://voip-management.easybell.de/api/v2/account/ -> HTTP 404
+https://voip-management.easybell.de/api/ -> HTTP 404
+https://mail.easybell.de/rcm/?_task=login -> 200 len=?
+https://voip-management.easybell.de/api/account -> HTTP 404
+
+## 2026-09-03 22:00:15 UTC
+https://dev.easybell.de/ -> ERR <urlopen error timed out>
+https://dev.easybell.de/api/ -> ERR <urlopen error timed out>
+https://dev.easybell.de/admin/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/api/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/account -> ERR <urlopen error timed out>
+https://auth.easybell.de/.well-known/openid-configuration -> HTTP 404
+https://auth.easybell.de/.well-known/oauth-authorization-server -> HTTP 404
+https://auth.easybell.de/jwks -> HTTP 404
+https://auth.easybell.de/ -> HTTP 404
+https://voip-management.easybell.de/api/v2/account/ -> HTTP 404
+https://voip-management.easybell.de/api/ -> HTTP 404
+
+## 2026-09-03 23:45:57 UTC
+https://voip-management.easybell.de/api/customer -> HTTP 404
+
+## 2026-09-04 02:34:50 UTC
+https://voip-management.easybell.de/api/extension -> HTTP 404
+
+## 2026-09-04 07:26:07 UTC
+https://voip-management.easybell.de/api/extension -> HTTP 404
+https://voip-management.easybell.de/api/ -> HTTP 404
+https://voip-management.easybell.de/api/subscribers -> HTTP 401
+
+## 2026-09-04 12:29:55 UTC
+https://voip-management.easybell.de/api/` -> HTTP 404
+https://voip-management.easybell.de/api/accounts -> HTTP 401
+https://voip-management.easybell.de/api/v2/accounts -> HTTP 404
+
+## 2026-09-04 16:35:04 UTC
+https://voip-management.easybell.de/api/` -> HTTP 404
+https://voip-management.easybell.de/api/accounts -> HTTP 401
+https://voip-management.easybell.de/api/v2/accounts -> HTTP 404
+https://voip-management.easybell.de/api/accounts' -> HTTP 404
+https://voip-management.k8s.easybell.de/api` -> ERR <urlopen error [Errno -2] Name or service not know
+
+## 2026-09-04 19:13:09 UTC
+https://voip-management.easybell.de/api/accounts' -> HTTP 404
+
+## 2026-09-04 21:34:58 UTC
+https://voip-management.easybell.de/api/accounts' -> HTTP 404
+https://voip-management.easybell.de/api/v2/accounts -> HTTP 404
+https://voip-management.easybell.de/api/accounts',{credentials:'include' -> HTTP 404
+
+## 2026-09-04 23:18:26 UTC
+https://voip-management.easybell.de/api/accounts' -> HTTP 404
+https://voip-management.easybell.de/api/v2/customers` -> HTTP 404
+https://voip-management.easybell.de/api/actuator` -> HTTP 404
+[0m
+[0m✱ [0mGrep "matomo|Matomo"[90m in . · 100 matches[0m
+`matomo.easybell.de` is live (Tag Manager container exposed) and `customerId` is pushed into it from the portal — an unprobed credential-free surface. Probing it meteredly:
+[0m
+[0m$ [0mecho "=== matomo API version (anonymous) ==="; curl -s -i -m 15 -A "Mozilla/5.0" "https://matomo.easybell.de/index.php?module=API&method=API.getMatomoVersion&format=json" | head -c 600; echo; sleep 6; echo "=== matomo anonymous sites list ==="; curl -s -i -m 15 -A "Mozilla/5.0" "https://matomo.easybell.de/index.php?module=API&method=SitesManager.getSitesIdWithAtLeastViewAccess&format=json" | head -c 600; echo; sleep 6; curl -s -m 20 -A "Mozilla/5.0" "https://matomo.easybell.de/js/container_izWSLsWO.js" -o /tmp/matomo-container.js; echo "container size: $(wc -c < /tmp/matomo-container.js)"
+=== matomo API version (anonymous) ===
+HTTP/2 401 
+server: nginx
+date: Sat, 05 Sep 2026 01:05:32 GMT
+content-type: application/json; charset=utf-8
+content-length: 114
+x-matomo-request-id: 783cd
+vary: Origin
+cache-control: must-revalidate
+
+{"result":"error","message":"You can't access this resource as it requires view access for at least one website."}
+=== matomo anonymous sites list ===
+HTTP/2 200 
+server: nginx
+date: Sat, 05 Sep 2026 01:05:39 GMT
+content-type: application/json; charset=utf-8
+content-length: 2
+x-matomo-request-id: e7233
+vary: Origin
+cache-control: must-revalidate
+
+[]
+container size: 190472
+[0m
+[0m$ [0mrg -o -i -m 20 'customerId.{0,40}' /tmp/matomo-container.js; echo "---URLs---"; rg -o -m 20 'https?://[a-zA-Z0-9._/-]{4,60}' /tmp/matomo-container.js | sort -u | head -20
+/bin/bash: line 1: rg: command not found
+---URLs---
+/bin/bash: line 1: rg: command not found
+[0m
+Matomo API is anonymous-locked (401 for version, `[]` for sites). Scanning the public 190KB Tag Manager container for what it sends:
+[0m$ [0mgrep -o -i 'customerId.\{0,50\}' /tmp/matomo-container.js | head -10; echo "---URLs---"; grep -o 'https\?://[a-zA-Z0-9._/-]\{4,60\}' /tmp/matomo-container.js | sort -u | head -20; echo "---keylog/token refs---"; grep -o -i 'token_auth\|apiKey\|api_key[^c]\{0,20\}\|accessKey[^c]\{0,20\}' /tmp/matomo-container.js | sort -u | head
+customerID as custom dimension","revision":18,"environment":
+CustomerID","type":"DataLayer","lookUpTable":[],"defaultValu
+customerId"},"Variable":"DataLayerVariable"}}],"areCustomDim
+customerId"},"Variable":"DataLayerVariable"}]}, Templates);}
+---URLs---
+http://www.apache.org/licenses/LICENSE-2.0
+https://admin-matomo.easybell.de/js/container_izWSLsWO_preview.js
+https://developer.matomo.org/api-reference/tracking-javascript
+https://developer.matomo.org/guides/tracking-javascript-guide
+https://github.com/matomo-org/matomo/blob/master/js/piwik.js
+https://github.com/matomo-org/tag-manager/blob/master/js/piwik.js
+https://matomo.org
+https://matomo.org/free-software/bsd/
+https://piwik.org
+https://piwik.org/free-software/bsd/
+https://www.innocraft.com/
+https://www.innocraft.com/license
+---keylog/token refs---
+token_auth
+[0m
+`admin-matomo.easybell.de` leaked from the public container (preview/debug URL) — a new in-scope asset. Probing it and the `token_auth` context:
+[0m$ [0mecho "=== admin-matomo root ==="; curl -s -i -m 15 -A "Mozilla/5.0" "https://admin-matomo.easybell.de/" | head -c 800; echo; sleep 6; echo "=== admin-matomo anonymous API ==="; curl -s -i -m 15 -A "Mozilla/5.0" "https://admin-matomo.easybell.de/index.php?module=API&method=API.getMatomoVersion&format=json" | head -c 600; echo; sleep 6; echo "=== token_auth context ==="; grep -o -i '.\{60\}token_auth.\{60\}' /tmp/matomo-container.js | head -5
+=== admin-matomo root ===
+
+=== admin-matomo anonymous API ===
+
+=== token_auth context ===
+iladresse","mail","epos","ebost","epost","eposta","authpw","token_auth","tokenauth","token","pin","ibanaccountnum","ibanaccountnum
+[0m
+[0m$ [0mfor h in admin-matomo.easybell.de matomo.easybell.de my.easybell.com voip-management.easybell.de; do echo -n "$h -> "; getent hosts "$h" | awk '{print $1}' | head -1; echo -n "$h (A via dig) -> "; (dig +short "$h" A 2>/dev/null | tr '\n' ' '); echo; done
+admin-matomo.easybell.de -> admin-matomo.easybell.de (A via dig) -> 
+matomo.easybell.de -> 62.27.117.115
+matomo.easybell.de (A via dig) -> 62.27.117.115 
+my.easybell.com -> 62.27.117.123
+my.easybell.com (A via dig) -> 62.27.117.123 
+voip-management.easybell.de -> 62.27.117.123
+voip-management.easybell.de (A via dig) -> 62.27.117.123
+[0m
+`admin-matomo.easybell.de` has no public A record — internal-only leak (PARKED). The `token_auth` hit is just Matomo's built-in field-redaction list, not a secret. Final passive pass: refresh the portal bundle inventory for any undocumented API surface to complete the BOLA test list:
+[0m$ [0mcurl -s -m 15 -A "Mozilla/5.0" "https://my.easybell.com/login" -o /tmp/portal-login.html; grep -o 'src="[^"]*"' /tmp/portal-login.html | grep -i '\.js' | head -20; echo "---inline api refs---"; grep -o '/api/[a-zA-Z0-9_/-]*' /tmp/portal-login.html | sort -u | head -20
+src="https://my.easybell.com/build/assets/main-CKc5KWDf.js"
+---inline api refs---
+[0m
+[0m$ [0mcurl -s -m 25 -A "Mozilla/5.0" "https://my.easybell.com/build/assets/main-CKc5KWDf.js" -o /tmp/portal-main.js; echo "size: $(wc -c < /tmp/portal-main.js)"; echo "--- /api/ strings ---"; grep -o '"\(/api/[a-zA-Z0-9_/${}.-]*\)' /tmp/portal-main.js | tr -d '"' | sort -u | head -40; echo "--- voipSession / token keys ---"; grep -o -i 'voipSession\|voip_session\|bearer[^,}]\{0,30\}' /tmp/portal-main.js | sort -u | head
+size: 16457
+--- /api/ strings ---
+--- voipSession / token keys ---
+[0m
+Main bundle is a 16KB loader — async chunks live elsewhere. Pulling the Vite manifest:
+[0m$ [0mcurl -s -m 15 -A "Mozilla/5.0" "https://my.easybell.com/build/manifest.json" -o /tmp/manifest.json; echo "code=$?"; wc -c /tmp/manifest.json; head -c 400 /tmp/manifest.json; echo; echo "--- asset names ---"; grep -o '"name":"[^"]*"' /tmp/manifest.json 2>/dev/null | sort -u | head -40
+code=0
+70106 /tmp/manifest.json
+{
+  "_AccountSettings-CawS7FCF.js": {
+    "file": "assets/AccountSettings-CawS7FCF.js",
+    "name": "AccountSettings",
+    "imports": [
+      "_components-BsWcUPQd.js",
+      "_dist-BnNTvl_D.js",
+      "_runtime-dom.esm-bundler-BnJtmh3R.js",
+      "_MarketingBannersWithLoading-Dqi-T90t.js",
+      "_Default-uM3wQOgl.js",
+      "_windowSize-CVuhMaBI.js"
+    ]
+  },
+  "_ActivationDateCard-D7XTGRZN.js"
+--- asset names ---
+[0m
+[0m$ [0mgrep -o '"file": *"[^"]*"' /tmp/manifest.json | sed 's/"file": *"//;s/"$//' | sort -u > /tmp/assets.txt; wc -l /tmp/assets.txt; echo "--- candidate chunks ---"; grep -v -i 'node_modules' /tmp/assets.txt | grep -i 'core\|voip\|api\|sip\|http\|request\|auth\|axios\|store\|index\|app' | head -30
+173 /tmp/assets.txt
+--- candidate chunks ---
+assets/Api-DpCVj5DC.js
+assets/Auth-BOWrl8tE.js
+assets/Sip-DNQciJPH.js
+assets/api-Bo2nGs5H.js
+assets/axios-DV8gXIjW.js
+assets/core-BR7B5uLk.js
+assets/core-Dmrw7sL8.js
+[0m
+[93m[1m! [0mpermission requested: external_directory (/tmp/*); auto-rejecting
+[0m✗ [0mmkdir -p /tmp/portal; cd /tmp/portal; for a in core-BR7B5uLk core-Dmrw7sL8 axios-DV8gXIjW api-Bo2nGs5H Api-DpCVj5DC Auth-BOWrl8tE Sip-DNQciJPH; do curl -s -m 25 -A "Mozilla/5.0" "https://my.easybell.com/build/assets/$a.js" -o "$a.js"; done; wc -c *.js failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.
