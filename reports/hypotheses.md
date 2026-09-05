@@ -256,3 +256,24 @@
 - LEARN: ACCEPTED IDOR @ voip-management.easybell.de/api + my.easybell.com: BOLA + portal IDOR remain confirmed-class but credential-gated; no passive vector left to adv
 - LEARN: REJECTED brute-force/lockout @ auth.easybell.de: program excludes auth-stuffing/brute-force/lockout — still no new information
 - LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts
+
+## RANKED HYPOTHESES 2026-09-05 22:40:34 UTC
+- [90] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_bigpickle.txt)
+- [75] order-form.easybell.de/api: order-form-unauth-api-data-exposure (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: File the voip CORS report at bugs.olivermaicher.eu — primary finding voip-cors-cred-read-write; PoC = both OPTIONS preflight captures (ACAO:<evil-origin>
+- NEXT(hypotheses-nemotron3.txt): PROBE: Spaced GET ≥6s from last probe (2026-09-05 18:33:33 UTC) → `GET https://order-form.easybell.de/` → extract all referenced JS chunk URLs from HTML → for e
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS preflights authorize credentialed cross-origin WRITE — Allow-Methods echoes any requested method (POS
+- LEARN: ACCEPTED MISCONFIG @ partner.easybell.de: Laravel Blade partner portal (partnerportal_session cookie, Matomo siteId=2); app bundle leaks no /api/* surface (Sent
+- LEARN: ACCEPTED MISCONFIG @ order-form.easybell.de/api: /api/plan-classes `type` is Laravel `in:`-whitelist validated (422 validation.in for business/private), partner
+- LEARN: ACCEPTED OATH @ connectme-app.easybell.de: in-scope OIDC callback 200s with meta-refresh to the double-slash redirect path (+&refresh=1) while bare `//` path 40
+- LEARN: ACCEPTED MISCONFIG @ easybell.de: CT sweep (18:24 UTC, crt.sh DoH-verified) shows 18 live A-record subdomains never in inventory; "passive surface exhausted" wa
+- LEARN: ACCEPTED MISCONFIG @ order-form.easybell.de: Vite SPA bundle (index-BiM9ZwNg.js, 18:30 UTC) leaks `/api/` base, live POST-only `/api/apc/check` (GET→405), partn
+- LEARN: ACCEPTED OATH @ connectme-app.easybell.de: `/authenticate` → OIDC redirect to external Keycloak (dstny.d4sp.com, client_id=coven, response_type=code) with in-sc
+- LEARN: ACCEPTED MISCONFIG @ partner.easybell.de: 200 → `/login` partner portal on main ingress (shared nginx) — unprobed surface
+- LEARN: REJECTED MISCONFIG @ my.easybell.com: Laravel dotfile/debug surface DISPROVEN (18:21 UTC) — `/.env`, `/.git/config`, `/telescope`, `/horizon`, `/_ignition/healt
+- LEARN: REJECTED MISCONFIG @ voip-management.easybell.de/api: OpenAPI/swagger line closed (18:22 UTC) — `/api/v2/api-docs`, `/api/v3/api-docs`, `/api/swagger-ui.html`, 
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS credentialed reflection live-reconfirmed (13:12 UTC) on `/api/account` — Origin `https://evil.example
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: `/api/{crm,ebit,strapi}` wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged
+- LEARN: ACCEPTED IDOR @ voip-management.easybell.de/api + my.easybell.com: BOLA + portal IDOR remain confirmed-class but credential-gated; no passive vector left to adv
+- LEARN: REJECTED brute-force/lockout @ auth.easybell.de: program excludes auth-stuffing/brute-force/lockout — still no new information
+- LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts

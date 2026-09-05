@@ -176,3 +176,14 @@ www.easybell.de
 - CHANGED Prior "passive surface exhausted" verdict RETRACTED — was relative to incomplete 7-host seed; fresh zero-credential breadth reopens via CT sweep
 - CHANGED `voip-management.k8s.easybell.de` / `k8s.easybell.de` confirmed NXDOMAIN — internal hostname leak is info-disclosure only
 - CHANGED `my.easybell.com` + `voip-management.easybell.de` share ingress IP 62.27.117.123 (same nginx); "cross-origin" split is host-header-only
+
+## 2026-09-05 22:40:34 UTC
+- NEW order-form.easybell.de: Vite SPA on shared ingress 62.27.117.123; bundle index-BiM9ZwNg.js leaks `/api/` base, live POST-only `/api/apc/check` (GET→405), references partner.easybell.de + login.easybel
+- NEW connectme-app.easybell.de (prod/uat/dev): nginx SPA; `/authenticate` → 200 + OIDC redirect to external Keycloak `dstny.d4sp.com` (client_id=coven, response_type=code) with in-scope `redirect_uri=https
+- NEW partner.easybell.de: 200 → `/login` partner portal on main ingress (shared nginx), unprobed surface
+- NEW survey.easybell.de, backmon.easybell.de: live A-records from CT sweep, zero prior coverage
+- CHANGED my.easybell.com dotfile/debug surface DISPROVEN (18:21 UTC) — `/.env`, `/.git/config`, `/telescope`, `/horizon`, `/_ignition/health-check`, `/storage/logs/laravel.log` all return 200 text/html = ident
+- CHANGED voip-management.easybell.de/api OpenAPI/swagger line CLOSED (18:22 UTC) — `/api/v2/api-docs`, `/api/v3/api-docs`, `/api/swagger-ui.html`, `/api/openapi.json`, `/api/swagger-ui/index.html` all nginx HT
+- CHANGED Prior "passive surface exhausted" verdict RETRACTED — was relative to incomplete 7-host seed; fresh zero-credential breadth reopens via CT sweep (18 live subdomains)
+- CHANGED `voip-management.k8s.easybell.de` / `k8s.easybell.de` confirmed NXDOMAIN via passive DNS — internal hostname leak from `core.js` is info-disclosure only
+- CHANGED `my.easybell.com` + `voip-management.easybell.de` share ingress IP 62.27.117.123 (same nginx); "cross-origin" split is host-header-only

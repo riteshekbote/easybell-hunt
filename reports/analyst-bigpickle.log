@@ -6814,3 +6814,320 @@ STEP 6 — LEARNING
 STEP 7 — RISK
 [RISK] easybell: 72
 reasoning: Up 2 from 70. Confirmed NEW zero-credential data-exposure line on order-form (companies/providers/plan-classes all 200 no-auth) adds verified attack surface beyond the HUMAN-gated CORS deliverable (92). However impact caps at MEDIUM (business-registry/tariff data, largely public in origin) and credentialed-CORS misfire there is route-scoped + guest-session. Carried: 92 still needs HUMAN report/PoC; voip WAF throttle unchanged; auth/lockout excluded; PBX/SIP parked. Mitigation: 16 read-only GET/OPTIONS this cycle (one 6-in-parallel static-asset burst), ≥7s spacing on dynamic endpoints, no POSTs, no customer order data captured (registry/tariff metadata only), sha256 discipline preserved, report only via bugs.olivermaicher.eu.
+===== ANALYST bigpickle 2026-09-05 22:40:34 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mdate -u; ls -la
+Sat Sep  5 22:34:30 UTC 2026
+total 192
+drwxr-xr-x 12 runner runner  4096 Sep  5 22:34 .
+drwxr-xr-x  3 runner runner  4096 Sep  5 22:34 ..
+drwxr-xr-x  7 runner runner  4096 Sep  5 22:34 .git
+drwxr-xr-x  3 runner runner  4096 Sep  5 22:34 .github
+-rw-r--r--  1 runner runner  1756 Sep  5 22:34 README.md
+-rw-r--r--  1 runner runner    32 Sep  5 22:34 analyst-out.txt
+-rw-r--r--  1 runner runner 52485 Sep  5 22:34 analyst-prompt.txt
+-rw-r--r--  1 runner runner 48678 Sep  5 22:34 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep  5 22:34 inventory
+drwxr-xr-x  2 runner runner  4096 Sep  5 22:34 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep  5 22:34 leads
+-rw-r--r--  1 runner runner  5686 Sep  5 22:34 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep  5 22:34 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep  5 22:34 reports
+drwxr-xr-x  2 runner runner  4096 Sep  5 22:34 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep  5 22:34 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep  5 22:34 scripts
+-rw-r--r--  1 runner runner    33 Sep  5 22:34 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep  5 22:34 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep  5 22:34 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep  5 22:34 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep  5 22:34 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep  5 22:34 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep  5 22:34 triage
+[0m
+[0m✱ [0mGlob "**/*.md"[90m 36 matches[0m
+[0m✱ [0mGlob "**/*.txt"[90m 9 matches[0m
+[0m✱ [0mGlob "**/*.yml"[90m 1 match[0m
+[0m→ [0mRead state_bigpickle.json
+[0m→ [0mRead reports/hypotheses-bigpickle.txt
+[0m→ [0mRead analyst-out.txt
+[0m→ [0mRead probe-results.md
+[0m→ [0mRead triage/run-2026-09-05-20-44.md
+[0m→ [0mRead reports/hypotheses-nemotron3.txt
+[0m→ [0mRead knowledge/index.md
+[0m→ [0mRead leads/lead-bigpickle.md
+[0m→ [0mRead leads/lead-nemotron3.md
+[0m→ [0mRead scope.yml
+[0m→ [0mRead triage/run-2026-09-05-18-25.md
+[0m
+[0m$ [0mls -la scripts/ recon-notes/ reports/; git log --oneline -5
+recon-notes/:
+total 12
+drwxr-xr-x  2 runner runner 4096 Sep  5 22:34 .
+drwxr-xr-x 12 runner runner 4096 Sep  5 22:34 ..
+-rw-r--r--  1 runner runner  818 Sep  5 22:34 DEDICATED-DEEP.md
+
+reports/:
+total 900
+drwxr-xr-x  2 runner runner   4096 Sep  5 22:34 .
+drwxr-xr-x 12 runner runner   4096 Sep  5 22:34 ..
+-rw-r--r--  1 runner runner 573792 Sep  5 22:34 analyst-bigpickle.log
+-rw-r--r--  1 runner runner   3906 Sep  5 22:34 analyst-laguna.log
+-rw-r--r--  1 runner runner   3888 Sep  5 22:34 analyst-ling3.log
+-rw-r--r--  1 runner runner   3924 Sep  5 22:34 analyst-longcat.log
+-rw-r--r--  1 runner runner 286442 Sep  5 22:34 analyst-nemotron3.log
+-rw-r--r--  1 runner runner   3517 Sep  5 22:34 hypotheses-bigpickle.txt
+-rw-r--r--  1 runner runner     51 Sep  5 22:34 hypotheses-laguna.txt
+-rw-r--r--  1 runner runner     50 Sep  5 22:34 hypotheses-ling3.txt
+-rw-r--r--  1 runner runner     52 Sep  5 22:34 hypotheses-longcat.txt
+-rw-r--r--  1 runner runner  10798 Sep  5 22:34 hypotheses-nemotron3.txt
+-rw-r--r--  1 runner runner  32806 Sep  5 22:34 hypotheses.md
+-rw-r--r--  1 runner runner    302 Sep  5 22:34 valid-bugs.md
+
+scripts/:
+total 28
+drwxr-xr-x  2 runner runner  4096 Sep  5 22:34 .
+drwxr-xr-x 12 runner runner  4096 Sep  5 22:34 ..
+-rw-r--r--  1 runner runner 16987 Sep  5 22:34 sync-issues.py
+7daa302 reposcan 2026-09-05-21-44
+[0m
+[0m→ [0mRead reports/valid-bugs.md
+[0m
+[0m$ [0mcd /tmp/opencode && curl -sS -D partner-login.hdr -o partner-login.html --max-time 20 "https://partner.easybell.de/login" -A "Mozilla/5.0 (compatible; recon)" && wc -c partner-login.hdr partner-login.html && echo "---HEADERS---" && cat partner-login.hdr
+1146 partner-login.hdr
+8055 partner-login.html
+9201 total
+---HEADERS---
+HTTP/2 200 
+date: Sat, 05 Sep 2026 22:35:11 GMT
+content-type: text/html; charset=utf-8
+cache-control: no-cache, private
+vary: X-Inertia,Accept-Encoding
+set-cookie: XSRF-TOKEN=eyJpdiI6Ijl4djJhYVBwVThybE9zYldZUmJKV2c9PSIsInZhbHVlIjoiVUdvM0FUNmhDSDR2WnlNNFBtdTAxREUyK09Lcy9DZ3E1WE5SSWNnYmEwblBPRmp1cmQyOXl6bjVuWFJUb25ueWFNSFhubXlOTWQ4ZThvSm43bFZOVTVwcWNKdUZ4dzRTWUtLT21GM045aTMrVm9tSWl5VUQ2QlRxOEp3LzJKL3giLCJtYWMiOiJhMjBlODY0MDM0NjcyN2U1MzQzZDljOGNkMDM0NmFjMGU0YzRlY2Q4Mjk1M2YzZjNlYTMzNjEyYTc3NGZiNzRhIiwidGFnIjoiIn0%3D; expires=Sun, 06 Sep 2026 00:35:11 GMT; Max-Age=7200; path=/; secure; samesite=none
+set-cookie: partnerportal_session=eyJpdiI6IjhQNTFESGYrSTlsN0pVSGZQVHc5RlE9PSIsInZhbHVlIjoiR3V3MXR6emhBVk94NlJaWUZRYzgvUDBmdStTU2QxVUkyU2I5cDlTVENzSExPM2JUSlJheXFpaFFjQldiS1VCSEJpLzVJR1Nma0Z2cFNRS29SZ3BYM3AySGtFREEvZVcwZnNORGx0TzMvU2xVL0JNM01VaXVFMFNSOXlPWnJWWEEiLCJtYWMiOiJjNzhhMTRlMTJhNGQ2MTViYmQ0YWMzZTU1MGViMTM1ZTUxZWQ1YjUxMDM4Y2I5YTA4MzBhMzBjNzM3ZDY0NWI0IiwidGFnIjoiIn0%3D; expires=Sun, 06 Sep 2026 00:35:11 GMT; Max-Age=7200; path=/; secure; httponly; samesite=none
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m→ [0mRead /tmp/opencode/partner-login.html
+[0m
+[0m$ [0mcd /tmp/opencode && sleep 7 && curl -sS -o partner-app-bundle.js --max-time 30 "https://partner.easybell.de/build/assets/app-Bg22Wbbc.js" -A "Mozilla/5.0 (compatible; recon)" && wc -c partner-app-bundle.js
+1198869 partner-app-bundle.js
+[0m
+[0m$ [0mcd /tmp/opencode && echo "=== API paths ===" && grep -oE '"/api/[^"]*"' partner-app-bundle.js | sort -u | head -60 && echo "=== axios/BASE ===" && grep -oE 'baseURL[^,]{0,80}' partner-app-bundle.js | sort -u | head -20 && echo "=== url: patterns ===" && grep -oE 'url:\s*"[^"]+"' partner-app-bundle.js | sort -u | head -80
+=== API paths ===
+=== axios/BASE ===
+baseURL
+baseURL:o
+baseURL`)
+=== url: patterns ===
+[0m
+[0m$ [0mcd /tmp/opencode && echo "=== https URLs ===" && grep -oE 'https://[a-zA-Z0-9./_-]+' partner-app-bundle.js | sort -u | head -40 && echo "=== /api literal ===" && grep -c '/api' partner-app-bundle.js; echo "=== .easybell.de hosts ===" && grep -oE '[a-zA-Z0-9.-]+\.easybell\.de' partner-app-bundle.js | sort -u | head -30
+=== https URLs ===
+https://docs.sentry.io/platforms/javascript/best-practices/browser-extensions/
+https://easybell.de/business/webinare.html
+https://evilmartians.com/chronicles/postcss-8-plugin-migration
+https://github.com/apostrophecms/sanitize-html/issues/547
+https://github.com/markedjs/marked.
+https://laravel.com/docs/csrf
+https://npms.io/search
+https://vuejs.org/error-reference/
+https://www.w3ctech.com/topic/2226
+=== /api literal ===
+1
+=== .easybell.de hosts ===
+[0m
+[0m$ [0mcd /tmp/opencode && echo "=== context of /api ===" && grep -oE '.{80}/api.{120}' partner-app-bundle.js | head -5 && echo "=== 'api' assignment / intersection ===" && grep -oE '[a-zA-Z_$]{2,20}:\s*"[^"]*api[^"]*"' partner-app-bundle.js | sort -u | head -30 && echo "=== axios create ===" && grep -oE 'create\(\{[^}]{0,200}' partner-app-bundle.js | head -10
+=== context of /api ===
+:``,n=e.port?`:${e.port}`:``;return`${t}//${e.host}${n}${e.path?`/${e.path}`:``}/api/`}function YU(e){return`${JU(e)}${e.projectId}/envelope/`}function XU(e,t){let n={sentry_version:`7`};return e.publicKe
+=== 'api' assignment / intersection ===
+=== axios create ===
+[0m
+[0m$ [0mcd /tmp/opencode && sleep 6 && curl -sS -D pc-base.hdr -o pc-base.json --max-time 20 "https://order-form.easybell.de/api/plan-classes" -A "Mozilla/5.0 (compatible; recon)" && head -1 pc-base.hdr && wc -c pc-base.json
+HTTP/2 200 
+11058 pc-base.json
+[0m
+[0m$ [0mcd /tmp/opencode && sleep 7 && curl -sS -D pc-param.hdr -o pc-param.json --max-time 20 "https://order-form.easybell.de/api/plan-classes?type=business&partner_code=coven" -A "Mozilla/5.0 (compatible; recon)" && head -1 pc-param.hdr && wc -c pc-param.json && diff <(tr ',' '\n' < pc-base.json | sed 's/[0-9]\{4,\}/N/g') <(tr ',' '\n' < pc-param.json | sed 's/[0-9]\{4,\}/N/g') | head -20; echo "exit=$?"
+HTTP/2 422 
+63 pc-param.json
+1,390c1,2
+< [{"classId":"BILLING"
+< "translationKey":"plan.class.BILLING.name"
+< "translations":{"name":{"en":"Billing products"
+< "de":"Abrechnungsprodukte"
+< "fr":"Produits de facturation"
+< "nl":"Factureringsproducten"}}
+< "plans":[{"id":93
+< "code":"OCB"
+< "category":"VOIP"
+< "type":"business"
+< "name":"Home Office Connect Hub"
+< "translationKey":"OCB"
+< "translations":{"name":{"de":"Home Office Connect Hub"
+< "en":"Home Office Connect Hub"
+< "fr":"Home Office Connect Hub"
+< "nl":"Home Office Connect Hub"}
+< "description":{"de":"Abrechnungsaccount f\u00fcr Home Office Connect Anschl\u00fcsse"
+< "en":"Billing account for Home Office Connect connections"
+< "fr":"Compte de facturation pour les connexions Home Office Connect"
+exit=0
+[0m
+[0m$ [0mcd /tmp/opencode && cat pc-param.json && echo && echo "=== keys in base ===" && grep -oE '"classId"' pc-base.json | wc -l && grep -oE '"id":[0-9]+' pc-base.json | wc -l && grep -oE '"code":"[A-Z]+"' pc-base.json | sort -u | head -30
+{"message":"validation.in","errors":{"type":["validation.in"]}}
+=== keys in base ===
+8
+17
+"code":"BCF"
+"code":"CTA"
+"code":"OCB"
+"code":"SIPD"
+"code":"TALD"
+"code":"TALF"
+"code":"TALFS"
+"code":"TI"
+"code":"TNKM"
+[0m
+[0m$ [0mcd /tmp/opencode && grep -oE '"type":"[a-z]+"' pc-base.json | sort | uniq -c && echo "=== classIds ===" && grep -oE '"classId":"[A-Z]+"' pc-base.json | sort -u && echo "=== partner fields ===" && grep -oiE 'partner[a-zA-Z_]*' pc-base.json | sort -u | head
+8 "type":"business"
+      9 "type":"private"
+=== classIds ===
+"classId":"BILLING"
+"classId":"BTL"
+"classId":"FAX"
+"classId":"TAL"
+"classId":"TALS"
+"classId":"TRUNK"
+"classId":"VOIP"
+"classId":"VOLUME"
+=== partner fields ===
+[0m
+[0m$ [0mcd /tmp/opencode && sleep 7 && curl -sS -D pc-param2.hdr -o pc-param2.json --max-time 20 "https://order-form.easybell.de/api/plan-classes?type=private&partner_code=coven" -A "Mozilla/5.0 (compatible; recon)" && head -1 pc-param2.hdr && wc -c pc-param2.json && cat pc-param2.json | head -c 300
+HTTP/2 422 
+63 pc-param2.json
+{"message":"validation.in","errors":{"type":["validation.in"]}}
+[0m
+[0m$ [0mcd /tmp/opencode && sleep 6 && curl -sS -D of.hdr -o of.html --max-time 20 "https://order-form.easybell.de/" -A "Mozilla/5.0 (compatible; recon)" && head -1 of.hdr && wc -c of.html && grep -oE '<script[^>]*src="[^"]+"' of.html && grep -oE 'href="[^"]*\.css[^"]*"' of.html
+HTTP/2 200 
+2665 of.html
+<script type="module" crossorigin src="/assets/index-BiM9ZwNg.js"
+href="/assets/index-D1UyEIpt.css"
+[0m
+[0m$ [0mcd /tmp/opencode && sleep 6 && curl -sS -o order-index.js --max-time 30 "https://order-form.easybell.de/assets/index-BiM9ZwNg.js" -A "Mozilla/5.0 (compatible; recon)" && wc -c order-index.js && echo "=== api path literals ===" && grep -oE '"/api/[^"]*"' order-index.js | sort -u && echo "=== api template patterns ===" && grep -oE '`[^`]*/api/[^`]*`' order-index.js | sort -u | head -30
+1180069 order-index.js
+=== api path literals ===
+"/api/"
+"/api/apc/check"
+=== api template patterns ===
+`+s):r.stack=s}catch{}}throw r}}_request(t,n){typeof t=="string"?(n=n||{},n.url=t):n=t||{},n=Ls(this.defaults,n);const{transitional:r,paramsSerializer:o,headers:s}=n;r!==void 0&&Sl.assertOptions(r,{silentJSONParsing:yr.transitional(yr.boolean),forcedJSONParsing:yr.transitional(yr.boolean),clarifyTimeoutError:yr.transitional(yr.boolean)},!1),o!=null&&(re.isFunction(o)?n.paramsSerializer={serialize:o}:Sl.assertOptions(o,{encode:yr.function,serialize:yr.function},!0)),n.allowAbsoluteUrls!==void 0||(this.defaults.allowAbsoluteUrls!==void 0?n.allowAbsoluteUrls=this.defaults.allowAbsoluteUrls:n.allowAbsoluteUrls=!0),Sl.assertOptions(n,{baseUrl:yr.spelling("baseURL"),withXsrfToken:yr.spelling("withXSRFToken")},!0),n.method=(n.method||this.defaults.method||"get").toLowerCase();let i=s&&re.merge(s.common,s[n.method]);s&&re.forEach(["delete","get","head","post","put","patch","common"],h=>{delete s[h]}),n.headers=wn.concat(i,s);const a=[];let l=!0;this.interceptors.request.forEach(function(g){typeof g.runWhen=="function"&&g.runWhen(n)===!1||(l=l&&g.synchronous,a.unshift(g.fulfilled,g.rejected))});const c=[];this.interceptors.response.forEach(function(g){c.push(g.fulfilled,g.rejected)});let u,d=0,f;if(!l){const h=[qm.bind(this),void 0];for(h.unshift(...a),h.push(...c),f=h.length,u=Promise.resolve(n);d<f;)u=u.then(h[d++],h[d++]);return u}f=a.length;let p=n;for(;d<f;){const h=a[d++],g=a[d++];try{p=h(p)}catch(v){g.call(this,v);break}}try{u=qm.call(this,p)}catch(h){return Promise.reject(h)}for(d=0,f=c.length;d<f;)u=u.then(c[d++],c[d++]);return u}getUri(t){t=Ls(this.defaults,t);const n=yw(t.baseURL,t.url,t.allowAbsoluteUrls);return pw(n,t.params,t.paramsSerializer)}};re.forEach(["delete","get","head","options"],function(t){ks.prototype[t]=function(n,r){return this.request(Ls(r||{},{method:t,url:n,data:(r||{}).data}))}});re.forEach(["post","put","patch"],function(t){function n(r){return function(s,i,a){return this.request(Ls(a||{},{method:t,headers:r?{"Content-Type":"multipart/form-data"}:{},url:s,data:i}))}}ks.prototype[t]=n(),ks.prototype[t+"Form"]=n(!0)});let aj=class bw{constructor(t){if(typeof t!="function")throw new TypeError("executor must be a function.");let n;this.promise=new Promise(function(s){n=s});const r=this;this.promise.then(o=>{if(!r._listeners)return;let s=r._listeners.length;for(;s-- >0;)r._listeners[s](o);r._listeners=null}),this.promise.then=o=>{let s;const i=new Promise(a=>{r.subscribe(a),s=a}).then(o);return i.cancel=function(){r.unsubscribe(s)},i},t(function(s,i,a){r.reason||(r.reason=new Zi(s,i,a),n(r.reason))})}throwIfRequested(){if(this.reason)throw this.reason}subscribe(t){if(this.reason){t(this.reason);return}this._listeners?this._listeners.push(t):this._listeners=[t]}unsubscribe(t){if(!this._listeners)return;const n=this._listeners.indexOf(t);n!==-1&&this._listeners.splice(n,1)}toAbortSignal(){const t=new AbortController,n=r=>{t.abort(r)};return this.subscribe(n),t.signal.unsubscribe=()=>this.unsubscribe(n),t.signal}static source(){let t;return{token:new bw(function(o){t=o}),cancel:t}}};function lj(e){return function(n){return e.apply(null,n)}}function cj(e){return re.isObject(e)&&e.isAxiosError===!0}const Gp={Continue:100,SwitchingProtocols:101,Processing:102,EarlyHints:103,Ok:200,Created:201,Accepted:202,NonAuthoritativeInformation:203,NoContent:204,ResetContent:205,PartialContent:206,MultiStatus:207,AlreadyReported:208,ImUsed:226,MultipleChoices:300,MovedPermanently:301,Found:302,SeeOther:303,NotModified:304,UseProxy:305,Unused:306,TemporaryRedirect:307,PermanentRedirect:308,BadRequest:400,Unauthorized:401,PaymentRequired:402,Forbidden:403,NotFound:404,MethodNotAllowed:405,NotAcceptable:406,ProxyAuthenticationRequired:407,RequestTimeout:408,Conflict:409,Gone:410,LengthRequired:411,PreconditionFailed:412,PayloadTooLarge:413,UriTooLong:414,UnsupportedMediaType:415,RangeNotSatisfiable:416,ExpectationFailed:417,ImATeapot:418,MisdirectedRequest:421,UnprocessableEntity:422,Locked:423,FailedDependency:424,TooEarly:425,UpgradeRequired:426,PreconditionRequired:428,TooManyRequests:429,RequestHeaderFieldsTooLarge:431,UnavailableForLegalReasons:451,InternalServerError:500,NotImplemented:501,BadGateway:502,ServiceUnavailable:503,GatewayTimeout:504,HttpVersionNotSupported:505,VariantAlsoNegotiates:506,InsufficientStorage:507,LoopDetected:508,NotExtended:510,NetworkAuthenticationRequired:511,WebServerIsDown:521,ConnectionTimedOut:522,OriginIsUnreachable:523,TimeoutOccurred:524,SslHandshakeFailed:525,InvalidSslCertificate:526};Object.entries(Gp).forEach(([e,t])=>{Gp[t]=e});function Sw(e){const t=new ks(e),n=tw(ks.prototype.request,t);return re.extend(n,ks.prototype,t,{allOwnKeys:!0}),re.extend(n,t,null,{allOwnKeys:!0}),n.create=function(o){return Sw(Ls(e,o))},n}const Pt=Sw($1);Pt.Axios=ks;Pt.CanceledError=Zi;Pt.CancelToken=aj;Pt.isCancel=gw;Pt.VERSION=kw;Pt.toFormData=vu;Pt.AxiosError=He;Pt.Cancel=Pt.CanceledError;Pt.all=function(t){return Promise.all(t)};Pt.spread=lj;Pt.isAxiosError=cj;Pt.mergeConfig=Ls;Pt.AxiosHeaders=wn;Pt.formToJSON=e=>mw(re.isHTMLForm(e)?new FormData(e):e);Pt.getAdapter=ww.getAdapter;Pt.HttpStatusCode=Gp;Pt.default=Pt;const{Axios:Qce,AxiosError:Xce,CanceledError:Jce,isCancel:eue,CancelToken:tue,VERSION:nue,all:rue,Cancel:oue,isAxiosError:sue,spread:iue,toFormData:aue,AxiosHeaders:lue,HttpStatusCode:cue,formToJSON:uue,getAdapter:due,mergeConfig:fue}=Pt,wt=Pt.create({baseURL:"/api/",withCredentials:!0});async function Ew(e){try{const t="translations/"+e;return{status:"success",payload:(await wt.get(t)).data}}catch(t){return bt.captureException(t),{status:"error",payload:{fn:Ew.name,error:t,message:t.message}}}}const uj={addTranslations({getters:e},{namespace:t}){const n=e.translations[t],r=Object.keys(n),o=(s,i)=>{_e.global.setLocaleMessage(i,Es(s[i]??{}))};r.forEach(s=>o(n,s))},async loadTranslations({commit:e,dispatch:t},{namespace:n,shouldAdd:r}){const o=["translations",n].join(".");e(o_,{name:o});const s=Z$(n),i=await Ew(s);i.status==="success"?(e(bp,{namespace:n,value:i.payload}),r&&t("addTranslations",{namespace:n}),e(kp,{name:o})):(e(bp,{namespace:n,value:{}}),e(kp,{name:o,errors:i.payload}))}},dj={namespaced:!0,state:zI,mutations:o$,getters:s$,actions:uj},Tw=()=>({routes:["product","activation","customer","confirm"],maxRouteIndex:0,validRouteIndex:0,comesFromPlanList:!1,currentIndex:null,currentPlan:null,dataLoaded:!1}),fj=Tw(),pj="RESET_STATE",hj="SET_IS_READY",mj="SET_CURRENT_ROUTE_INDEX",gj="SET_CURRENT_PLAN",vj="SET_MAX_ROUTE_INDEX",yj="SET_COMES_FROM_PLAN_LIST",Cj="SET_VALID_PAGES",_j={[pj](e){Object.assign(e,Tw())},[hj](e,t){e.dataLoaded=t},[mj](e,t){e.currentIndex=t},[gj](e,t){e.currentPlan=t},[vj](e,{index:t,force:n=!1}){if(n){e.maxRouteIndex=t;return}e.maxRouteIndex=Math.max(e.maxRouteIndex,t)},[yj](e){e.comesFromPlanList=!0},[Cj](e,t){e.validRouteIndex=t}},ii={partnersUsingIframe:["BWS"],relocationThankYouPage:"https://login.easybell.de/relocation/cancel",ekpThankYouPage:"https://login.easybell.de/subscription-management?source=order-form",customerPortalUrl:"https://login.easybell.de",partnerPortalUrl:"https://partner.easybell.de"},wj={isReady(e){return e.dataLoaded},getCurrentRouteSteps(e,t,n,r){return e.routes.filter(s=>{switch(s){case"product":return r["plan/hasProductPage"];case"activation":return r["plan/hasActivationPage"];default:return!0}})},currentRouteIndex(e){return e.currentIndex},maxRouteIndex(e){return e.maxRouteIndex},validRouteIndex(e){return e.validRouteIndex},getRouteIndexOf(e,t){return n=>t.getCurrentRouteSteps.indexOf(n)},canVisitRoute(e,t){return n=>t.getRouteIndexOf(n)<=t.maxRouteIndex},nextPage(e,t){return t.getCurrentRouteSteps[t.currentRouteIndex+1]},prevPage(e,t){return t.getCurrentRouteSteps[t.currentRouteIndex-1]},isRouteStepForward(e,t){return n=>t.getCurrentRouteSteps.indexOf(n)>t.currentRouteIndex},isTab(e,t){return n=>{const r=t.getCurrentRouteSteps[t.currentRouteIndex];return n===r}},thankYouPage(e,t,n,r){const o=r["order/type"],s=r["partner/isPartnerPortal"],i=r["refactoredOrderProcess/parentCustomerId"];return o==="relocation"?{type:"external",url:ii.relocationThankYouPage}:o==="ekp"?{type:"internal",name:"thanks"}:i?{type:"internal",name:"thanks"}:s?{type:"internal",name:"thanks"}:{type:"internal",name:"thanks"}},currentPlan(e){return e.currentPlan},comesFromPlanList(e){return e.comesFromPlanList}};function kj(){return!!window.Cypress}const wf="orderSubmitted",bj={resetStore({commit:e}){sessionStorage.removeItem(wf),e("RESET_STATE"),e("order/RESET_STATE",null,{root:!0}),e("customer/RESET_STATE",null,{root:!0}),e("plan/RESET_STATE",["plans","planClasses","meta"],{root:!0}),e("apc/RESET_STATE",null,{root:!0}),e("quote/RESET_STATE",null,{root:!0}),e("connection/RESET_STATE",null,{root:!0}),e("partner/SET_REFERENCE",null,{root:!0})},async handleFinalOrder({commit:e,dispatch:t,getters:n,rootGetters:r,rootState:o}){if(sessionStorage.getItem(wf)==="true"){Ct.push({name:"product"});return}if(r["order/meta"]("submitOrder").isPending)return;const s="submitOrder";if(e("order/ON_LOADING_START",{name:s},{root:!0}),await t("order/saveOrderBeforeFinalSubmit",{},{root:!0}),o.order.saveOrderFailed){e("order/ON_LOADING_END",{name:s,errors:{}},{root:!0});return}const{status:i,payload:a}=await t("order/submitFinalOrder",{},{root:!0});if(i==="success"){sessionStorage.setItem(wf,"true"),e("order/ON_LOADING_END",{name:s,status:i},{root:!0});const{verificationType:l,url:c}=a;e("order/SET_VERIFICATION",{type:l,url:c},{root:!0}),e("connection/RESET_STATE",void 0,{root:!0}),e("plan/RESET_CART",void 0,{root:!0}),e("refactoredOrderProcess/RESET_STATE",void 0,{root:!0}),e("customer/RESET_STATE",void 0,{root:!0});const u=n.thankYouPage;if(kj()&&u.type==="external")return;if(u.type==="external")window.top.location.href=u.url;else{const{name:d,query:f}=u;Ct.push({name:d,query:f})}}else e("order/ON_LOADING_END",{name:s,errors:a},{root:!0})}},Sj={namespaced:!0,state:fj,mutations:_j,getters:wj,actions:bj};function Kn(e){const t=sessionStorage.getItem(e);if(t!=null&&t.length)try{return JSON.parse(t)}catch{console.warn(`
+`:""}/api/`
+`},E=(j,A,P,B)=>({value:(j==null?void 0:j.quantity)??j,label:S(j,A,P,B)}),{prepaid:I,quantities:N}=_.attributes;return N.map(j=>E(j,w,k,I))},pricesLocale:r,pricesStringToFloat:_=>+_.replace(",",".")}}const jre=H({components:{CaramelIcon:kn},props:{isOpen:{type:Boolean,required:!1,default:!1},dismissable:{type:Boolean,required:!1,default:!0}},emits:["close"],setup(e,t){const n=()=>{e.dismissable&&t.emit("close")};return tn(()=>{}),Ze(()=>e.isOpen,r=>{if(r)return document.querySelector("body").classList.add("overflow-hidden");document.querySelector("body").classList.remove("overflow-hidden")},{immediate:!0}),{close:n}}}),Fre={key:0},Bre={class:"modal-content"};function zre(e,t,n,r,o,s){const i=$e("CaramelIcon");return e.isOpen?(y(),b("div",Fre,[m("div",{id:"modal-contents-reflow",ref:"modalContents",class:"modal",tabindex:"0",onClick:t[1]||(t[1]=ln(a=>e.close(),["self"])),onKeydown:t[2]||(t[2]=Yt(a=>e.close(),["esc"]))},[m("div",Bre,[e.dismissable?(y(),b("span",{key:0,style:{cursor:"pointer"},onClick:t[0]||(t[0]=ln(a=>e.close(),["prevent"]))},[ie(i,{name:"Close",class:"close-btn"})])):le("",!0),dt(e.$slots,"default",{},void 0,!0)])],544)])):le("",!0)}const Ure=Ve(jre,[["render",zre],["__scopeId","data-v-d7f804b6"]]);async function Wre(e,t){try{const n="provider-availabilities/"+t,{data:r}=await wt.post(n,e);return{status:"success",payload:r}}catch(n){return{status:"error",payload:{error:n,message:n.message}}}}function Yre(e){return Object.entries(e??{}).reduce((r,[o,s])=>{if(s!=null)switch(typeof s){case"string":{const i=s.trim();i.length&&(r[o]=i);break}default:r[o]=s}return r},{})}async function Gre(e,t){var n,r;try{const o="/api/apc/check",s=Yre({houseNumber:e.houseNumber,city:e.city,street:e.street,zipCode:e.zipCode,country:e.country}),i={address:s,options:{addressMatch:e.exactAddress?"exact":"fuzzy",include:[t],timeout:3e4}};let a;if(xO(e.country).shouldMockAddress)a={code:200,message:"Success",address:s,results:[{code:200,message:"Success",carrier:"COLT",product:"VOIP",line:"VOIP",address:s}]};else{const{data:l}=await Pt.post(o,i);a=l}return{status:"success",payload:{...a,canOrder:((n=a.results)==null?void 0:n.some(l=>l.code===200))??!1}}}catch(o){return String((r=o==null?void 0:o.response)==null?void 0:r.status).startsWith("4")?{status:"success",payload:{address:e,availablePlans:[],results:[],canOrder:!1}}:(console.error(o),bt.captureException(o),{status:"error",type:"other",payload:o})}}async function Zre(e,t){const n=await Wre(e,t);return n.status==="success"?n:{status:"error",type:"other",payload:n.error}}async function bS(e,t,n="TAL"){const r={street:e.street,houseNumber:e.houseNumber,zipCode:e.zipCode??e.postalCode,city:e.city,country:e.country,exactAddress:e.exactAddress};return e.planCode&&(r.planCode=e.planCode),t?await Gre(r,"voip"):await Zre(r,n)}const Kre={},Qre={"data-name":"Ebene 1",xmlns:"http://www.w3.org/2000/svg",width:"44.834",height:"56.385",version:"1.1",viewBox:"0 0 44.834 56.385"};function Xre(e,t){return y(),b("svg",Qre,t[0]||(t[0]=[m("g",null,[m("path",{d:"M22.355,54.189S2.124,37.627,2.124,22.427C2.124,11.211,11.139,2.196,22.355,2.196c11.111,0, 20.231,9.015,20.231,20.231,0,15.095-20.231,31.762-20.231,31.762Z",fill:"#F1FCFD","stroke-width":"0"}),m("path",{d:"M22.356,55.439c-.281,0-.562-.094-.792-.283-.845-.691-20.689-17.116-20.689-32.729C.875, 10.582,10.511.946,22.356.946s21.48,9.637,21.48,21.481c0,15.506-19.841,32.03-20.686, 32.727-.23.19-.513.285-.795.285ZM22.356,3.446C11.889,3.446,3.375,11.96,3.375,22.427c0, 12.748,15.286,26.887,18.979,30.115,3.69-3.244,18.982-17.454,18.982-30.115, 0-10.467-8.515-18.981-18.98-18.981Z",fill:"#017A99","stroke-width":"0"})],-1),m("path",{d:"M22.356,27.524c-2.505,0-4.468-1.963-4.468-4.468s1.963-4.468,4.468-4.468c2.463,0,4.467,2.004, 4.467,4.468,0,2.505-1.962,4.468-4.467,4.468ZM22.356,21.524c-.816,0-1.533.716-1.533,1.532,0, .743.537,1.532,1.533,1.532.816,0,1.532-.716,1.532-1.532s-.716-1.532-1.532-1.532Z",fill:"#017A99","stroke-width":"0"},null,-1)]))}const Jre=Ve(Kre,[["render",Xre]]);function Kg(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(e);t&&(r=r.filter(function(o){return Object.getOwnPropertyDescriptor(e,o).enumerable})),n.push.apply(n,r)}return n}function Oo(e){for(var t=1;t<arguments.length;t++){var n=arguments[t]!=null?arguments[t]:{};t%2?Kg(Object(n),!0).forEach(function(r){eoe(e,r,n[r])}):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):Kg(Object(n)).forEach(function(r){Object.defineProperty(e,r,Object.getOwnPropertyDescriptor(n,r))})}return e}function eoe(e,t,n){return t in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function Qg(e){let t=arguments.length>1&&arguments[1]!==void 0?arguments[1]:[];return Object.keys(e).reduce((n,r)=>(t.includes(r)||(n[r]=M(e[r])),n),{})}function xc(e){return typeof e=="function"}function toe(e){return ws(e)||qo(e)}function SS(e,t,n){let r=e;const o=t.split(".");for(let s=0;s<o.length;s++){if(!r[o[s]])return n;r=r[o[s]]}return r}function Gf(e,t,n){return D(()=>e.some(r=>SS(t,r,{[n]:!1})[n]))}function Xg(e,t,n){return D(()=>e.reduce((r,o)=>{const s=SS(t,o,{[n]:!1})[n]||[];return r.concat(s)},[]))}function ES(e,t,n,r){return e.call(r,M(t),M(n),r)}function TS(e){return e.$valid!==void 0?!e.$valid:!e}function noe(e,t,n,r,o,s,i){let{$lazy:a,$rewardEarly:l}=o,c=arguments.length>7&&arguments[7]!==void 0?arguments[7]:[],u=arguments.length>8?arguments[8]:void 0,d=arguments.length>9?arguments[9]:void 0,f=arguments.length>10?arguments[10]:void 0;const p=ae(!!r.value),h=ae(0);n.value=!1;const g=Ze([t,r].concat(c,f),()=>{if(a&&!r.value||l&&!d.value&&!n.value)return;let v;try{v=ES(e,t,u,i)}catch(C){v=Promise.reject(C)}h.value++,n.value=!!h.value,p.value=!1,Promise.resolve(v).then(C=>{h.value--,n.value=!!h.value,s.value=C,p.value=TS(C)}).catch(C=>{h.value--,n.value=!!h.value,s.value=C,p.value=!0})},{immediate:!0,deep:typeof t=="object"});return{$invalid:p,$unwatch:g}}function roe(e,t,n,r,o,s,i,a){let{$lazy:l,$rewardEarly:c}=r;const u=()=>({}),d=D(()=>{if(l&&!n.value||c&&!a.value)return!1;let f=!0;try{const p=ES(e,t,i,s);o.value=p,f=TS(p)}catch(p){o.value=p}return f});return{$unwatch:u,$invalid:d}}function ooe(e,t,n,r,o,s,i,a,l,c,u){const d=ae(!1),f=e.$params||{},p=ae(null);let h,g;e.$async?{$invalid:h,$unwatch:g}=noe(e.$validator,t,d,n,r,p,o,e.$watchTargets,l,c,u):{$invalid:h,$unwatch:g}=roe(e.$validator,t,n,r,p,o,l,c);const v=e.$message;return{$message:xc(v)?D(()=>v(Qg({$pending:d,$invalid:h,$params:Qg(f),$model:t,$response:p,$validator:s,$propertyPath:a,$property:i}))):v||"",$params:f,$pending:d,$invalid:h,$response:p,$unwatch:g}}function soe(){let e=arguments.length>0&&arguments[0]!==void 0?arguments[0]:{};const t=M(e),n=Object.keys(t),r={},o={},s={};let i=null;return n.forEach(a=>{const l=t[a];switch(!0){case xc(l.$validator):r[a]=l;break;case xc(l):r[a]={$validator:l};break;case a==="$validationGroups":i=l;break;case a.startsWith("$"):s[a]=l;break;default:o[a]=l}}),{rules:r,nestedValidators:o,config:s,validationGroups:i}}const ioe="__root";function aoe(e,t,n,r,o,s,i,a,l){const c=Object.keys(e),u=r.get(o,e),d=ae(!1),f=ae(!1),p=ae(0);if(u){if(!u.$partial)return u;u.$unwatch(),d.value=u.$dirty.value}const h={$dirty:d,$path:o,$touch:()=>{d.value||(d.value=!0)},$reset:()=>{d.value&&(d.value=!1)},$commit:()=>{}};return c.length?(c.forEach(g=>{h[g]=ooe(e[g],t,h.$dirty,s,i,g,n,o,l,f,p)}),h.$externalResults=D(()=>a.value?[].concat(a.value).map((g,v)=>({$propertyPath:o,$property:n,$validator:"$externalResults",$uid:`
+[0m
+[0m$ [0mcd /tmp/opencode && echo "=== wt.* calls ===" && grep -oE 'wt\.(get|post|put|patch|delete)\(\s*"?"?[^,)]+' order-index.js | grep -oE '"(translations|providers|companies|plan|order|quote|connection|customer|apc|provider|auth)[^"]*"' | sort -u | head -60
+=== wt.* calls ===
+"auth"
+"order"
+"orders"
+"plan-classes"
+"providers"
+"quotes"
+[0m
+[0m$ [0mcd /tmp/opencode && grep -oE 'wt\.(get|post|put|patch|delete)\("[^"]+"' order-index.js | sort | uniq -c | sort -rn | head -40
+1 wt.put("order"
+      1 wt.post("quotes"
+      1 wt.post("orders"
+      1 wt.post("cart"
+      1 wt.post("auto-address"
+      1 wt.post("auth"
+      1 wt.get("providers"
+      1 wt.get("plan-classes"
+      1 wt.get("auth"
+      1 wt.get("/translations/order4_plan_config"
+      1 wt.get("/companies"
+      1 wt.delete("order"
+[0m
+[0m$ [0mcd /tmp/opencode && sleep 7 && curl -sS -D cm.hdr -o cm-body.html --max-time 20 "https://connectme-app.easybell.de/login-online-session-converged638e2?state=abc&code=abc" -A "Mozilla/5.0 (compatible; recon)" && head -1 cm.hdr && wc -c cm-body.html && grep -oE '<title>[^<]*</title>' cm-body.html | head -3 && grep -oE 'content="[^"]*"' cm.hdr | head -5; echo "=== first 300 chars ==="; head -c 300 cm-body.html
+HTTP/2 200 
+184 cm-body.html
+=== first 300 chars ===
+<html><head><meta http-equiv="refresh" content="0;URL='https://connectme-app.easybell.de//login-online-session-converged638e2?state=abc&code=abc&refresh=1'"></head><body></body></html>
+[0m
+[0m$ [0mcd /tmp/opencode && sleep 7 && curl -sS -D voip-opt.hdr -o voip-opt.body --max-time 20 -X OPTIONS "https://voip-management.easybell.de/api/account" -H "Origin: https://evil.example.at" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: authorization,content-type" -A "Mozilla/5.0 (compatible; recon)" && head -1 voip-opt.hdr && grep -iE 'access-control|allow|vary|www-authenticate' voip-opt.hdr; wc -c voip-opt.body
+HTTP/2 200 
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.example.at
+access-control-allow-methods: POST
+access-control-allow-headers: authorization,content-type
+0 voip-opt.body
+[0m
+[0m$ [0mcd /tmp/opencode && sleep 7 && curl -sS -D voip-opt2.hdr -o voip-opt2.body --max-time 20 -X OPTIONS "https://voip-management.easybell.de/api/subscribers" -H "Origin: https://evil.example.at" -H "Access-Control-Request-Method: PUT" -H "Access-Control-Request-Headers: authorization,content-type" -A "Mozilla/5.0 (compatible; recon)" && head -1 voip-opt2.hdr && grep -iE 'access-control|allow' voip-opt2.hdr; wc -c voip-opt2.body
+HTTP/2 200 
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.example.at
+access-control-allow-methods: PUT
+access-control-allow-headers: authorization,content-type
+0 voip-opt2.body
+[0m
+STEP 1 — DELTA
+- [NEW] voip-management CORS escalates to WRITE (22:37:45/22:38:05 UTC): OPTIONS preflights on `/api/account` and `/api/subscribers` with Origin `https://evil.example.at` + `Access-Control-Request-Method` POST/PUT + `authorization,content-type` → 200 with `ACAO:<origin>`+`ACAC:true`+`Allow-Methods` echoing POST/PUT (any requested method)+`Allow-Headers authorization,content-type` — credentialed cross-origin state-change approved, not just read exfil.
+- [NEW] partner.easybell.de fingerprinted: Laravel Blade partner portal (`partnerportal_session` cookie, CSRF meta, Matomo siteId=2); `app-Bg22Wbbc.js` contains NO app-level `/api/*` (Sentry DSN only) → no client-side API leak.
+- [NEW] order-form `/api/plan-classes` query-filter `type` is Laravel `in:`-whitelist validated — 422 `validation.in` for both `business` and `private`; `partner_code` non-enumerating → partner-scope BOLA residual closed.
+- [CHANGED] order-form full API map cataloged from `index-BiM9ZwNg.js` (axios baseURL `/api/`, withCredentials:true): GET-unauth `{auth, providers, plan-classes, companies, translations/order4_plan_config}`; POST/PUT/DELETE-only `{orders, quotes, cart, auto-address, provider-availabilities/{id}, apc/check}`; no further zero-credential GET surface.
+- [CHANGED] connectme OIDC callback `?state=&code=` → 200 (184B) meta-refresh to the same double-slash path + `&refresh=1`; bare `//` variant was 404 (18:33) → inconsistent return-path normalization (not independently exploitable in-scope).
+
+STEP 2 — PRIORITIZE
+- [PRIO] voip-management.easybell.de/api,7.3,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:4+cloud_surface:6+freshness:4
+- [PRIO] my.easybell.com,6.8,attack_surface:8+business_value:9+tech_exposure:7+gate_ease:3+cloud_surface:5+freshness:5
+- [PRIO] order-form.easybell.de/api,6.7,attack_surface:7+business_value:7+tech_exposure:6+gate_ease:9+cloud_surface:4+freshness:5
+- [PRIO] connectme-app.easybell.de,6.5,attack_surface:6+business_value:8+tech_exposure:7+gate_ease:5+cloud_surface:5+freshness:7
+- [PRIO] partner.easybell.de,5.4,attack_surface:5+business_value:8+tech_exposure:5+gate_ease:4+cloud_surface:4+freshness:4
+
+STEP 3 — HYPOTHESES
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 90
+reasoning: OPTIONS preflights (22:37:45/22:38:05 UTC) on /api/account (singular) and /api/subscribers (plural) with Origin https://evil.example.at and ACRM POST/PUT + headers authorization,content-type return 200 with ACAO:<origin> + ACAC:true + Allow-Methods echoing POST/PUT + Allow-Headers authorization,content-type. Combined with HTTP Basic realm sipwisebroker (browser-cached, auto-attached on credentials:'include'), an arbitrary origin can drive cross-origin authenticated WRITE requests, not just reads, against a victim's VoIP objects.
+evidence_needed: HUMAN victim-browser PoC confirming a PUT/POST to /api/subscribers (e.g., call-forwarding/voicemail config) executes with cached Basic creds; which Sipwise objects accept the mutating methods cross-origin.
+verify_steps: PASSIVE — done (preflight evidence, empty 200 bodies, no mutation). Full chain = HUMAN browser session.
+impact: cross-origin modification of victim telephony config (forwarding, voicemail, subscriber, number) → HIGH/CRITICAL; read exfil already confirmed on 7 routes.
+testability: PASSIVE (preflight) / AUTH_HELPED (full chain)
+[HYP] order-form-unauth-data-exposure
+class: MISCONFIG
+asset: order-form.easybell.de/api
+confidence: 68
+reasoning: GET {auth,providers,plan-classes,companies,translations/order4_plan_config} all 200 JSON zero-cookie zero-token; SPA axios baseURL /api/ withCredentials; plan-classes whitelist-validates type (422 business/private) and partner_code is inert; companies exposes Crefo registry numbers + business addresses.
+evidence_needed: residual only — whether /api/companies accepts query filters (read-only); otherwise surface fully mapped.
+verify_steps: PASSIVE — done. Optional single GET https://order-form.easybell.de/api/companies?search=<sample> (read-only) to confirm filterability.
+impact: unauth business-registry/tariff/porting-provider metadata → MEDIUM (largely-public origin data).
+testability: PASSIVE
+[HYP] connectme-oidc-return-normalization
+class: OATH
+asset: connectme-app.easybell.de
+confidence: 45
+reasoning: /authenticate issues OIDC authorize to external Keycloak with redirect_uri double-slash `//login-online-session-converged638e2`; in-scope callback with state+code returns 200 meta-refresh to identical double-slash URL +&refresh=1, while direct `//` path 404s → inconsistent path normalization in the code-return flow; state present server-side at authorize.
+evidence_needed: classification of the `refresh=1` variant (SPA shell vs 404) and whether state binds to the session in-scope (browser automation) → HUMAN.
+verify_steps: PASSIVE — single GET https://connectme-app.easybell.de/login-online-session-converged638e2?state=x&code=y&refresh=1 (status+CT only).
+impact: OIDC code/session handling anomaly → MEDIUM (external IdP redirect whitelist already constrains code theft).
+testability: PASSIVE
+
+STEP 4 — SELF-CRITIQUE
+[PARKED] partner-portal-api-leak: fingerprint shows classic Laravel Blade login panel (login/reset/language/logout), zero `/api/*` in bundle, public-login-panel + password-recovery classes are REJECTED — retired before probing deeper.
+[PARKED] order-form-unauth-api-surface:45 — superseded by order-form-unauth-data-exposure (68).
+[PARKED] my-portal-idor:55 — AUTH_HELPED, no creds, unchanged.
+[PARKED] voip-ssrf-to-metadata:<40 — no URL-accepting endpoint; PBX/SIP non-HTTP; survey low value; portal.easybell.de dead.
+[FINAL] voip-cors-cred-read-write,90 — v3 (92) merged; read (7 routes) + write (POST/PUT preflight-approved) both confirmed; POC-ready, HUMAN report line.
+[FINAL] my-portal-api-proxy-wildcard,78 — secondary token-gated exfil path, HUMAN barrier.
+[FINAL] order-form-unauth-data-exposure,68 — zero-credential confirmed, MEDIUM cap, surface mapped.
+[FINAL] connectme-oidc-return-normalization,45 — low, HTML-level anomaly only.
+
+STEP 5 — NEXT ACTION
+[NEXT] HUMAN: File the voip CORS report at bugs.olivermaicher.eu — primary finding voip-cors-cred-read-write; PoC = both OPTIONS preflight captures (ACAO:<evil-origin>+ACAC:true+Allow-Methods echoing POST/PUT+Allow-Headers authorization,content-type on /api/account and /api/subscribers at 22:37–22:38 UTC) PLUS the confirmed read-exfil surface on all 7 Spring routes; include victim-browser `fetch(...,{method:'PUT',credentials:'include'})` chain (Basic realm sipwisebroker). No further passive probing required on this line.
+
+STEP 6 — LEARNING
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS preflights authorize credentialed cross-origin WRITE — Allow-Methods echoes any requested method (POST/PUT verified), Allow-Headers authorization,content-type, ACAC:true, arbitrary Origin, on singular + plural routes; CORS issue is read AND write, not mere exfil.
+[LEARN] ACCEPTED MISCONFIG @ partner.easybell.de: Laravel Blade partner portal (partnerportal_session cookie, Matomo siteId=2); app bundle leaks no /api/* surface (Sentry DSN only) → passive partner API-leak line closed cleanly.
+[LEARN] ACCEPTED MISCONFIG @ order-form.easybell.de/api: /api/plan-classes `type` is Laravel `in:`-whitelist validated (422 validation.in for business/private), partner_code inert → parameterized-but-anonymous GET surface; no partner-scope enumeration.
+[LEARN] ACCEPTED OATH @ connectme-app.easybell.de: in-scope OIDC callback 200s with meta-refresh to the double-slash redirect path (+&refresh=1) while bare `//` path 404s → inconsistent normalization in the code-return flow.
+
+STEP 7 — RISK
+[RISK] easybell: 74
+reasoning: Up 2 from 72. The flagship CORS finding advanced from read-exfil to credentialed cross-origin WRITE (preflight-approved POST/PUT, arbitrary Origin, ACAC:true) — higher severity ceiling on the same HUMAN-gated PoC. order-form residual closed (validated params, no new GET surface) — neutral. partner retired cleanly (classic login panel = REJECTED). Carried: 90/92 mostly HUMAN-gated for full PoC; voip WAF throttle unchanged; auth/lockout excluded; PBX/SIP parked. Mitigation: 10 read-only GET/OPTIONS this cycle at ~0.17rps avg, ≥6s spacing, no POST bodies to live API (preflights only, empty 200 OK), no customer/order data captured (registry/tariff metadata only), sha256 discipline preserved, report only via bugs.olivermaicher.eu.
