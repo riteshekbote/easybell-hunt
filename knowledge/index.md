@@ -33,3 +33,8 @@
 - 2026-09-05 ACCEPTED IDOR @ my.easybell.com: Laravel/Vue Inertia portal; customerId in Matomo; proxies voip-management; auth-gated object endpoints; top IDOR candidate pending auth.
 - 2026-09-05 REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
 - 2026-09-05 REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+- 2026-09-05 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS surface confirmed across ALL Spring-handled routes (singular + plural: account, accounts, subscriber, subscribers, number, numbers, session) — ACAC:true reflection of arbitrary Origin verified.
+- 2026-09-05 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/crm, /api/ebit, /api/strapi return ACAO:* wildcard without ACAC:true — preflight 200, POST+Authorization+Content-Type accepted from any origin.
+- 2026-09-05 ACCEPTED MISCONFIG @ my.easybell.com: Internal k8s hostname `voip-management.k8s.easybell.de/api` leaked in core.js as fallback URL; NXDOMAIN via passive DNS — not externally resolvable.
+- 2026-09-05 ACCEPTED IDOR @ voip-management.easybell.de/api: Sipwise NGCP backend live; plural routes 401-auth-gated; v2 rewrite map leaked; BOLA surface confirmed pending authenticated HUMAN POC.
+- 2026-09-05 ACCEPTED IDOR @ my.easybell.com: Laravel/Vue Inertia portal; customerId in Matomo; proxies 8 plural Sipwise routes to voip-management; auth-gated object endpoints — top IDOR candidate pending authenticated POC.

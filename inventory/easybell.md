@@ -130,3 +130,8 @@ www.easybell.de
 - CHANGED Confirmed: `my.easybell.com` + `voip-management.easybell.de` share ingress IP 62.27.117.123 (same nginx); "cross-origin" split is host-header-only — undermines same-origin policy assumption for CORS e
 - CHANGED `voip-management.k8s.easybell.de` / `k8s.easybell.de` confirmed NXDOMAIN via passive DNS — internal hostname leak from `core.js` is info-disclosure only, not actionable
 - CHANGED `voip-management.easybell.de/api/v2/{accounts,subscribers,numbers,account,subscriber,number,session}` all return nginx HTML 404 (no CORS, `content-type: text/html`) — Spring v2 rewrite map leaked but 
+
+## 2026-09-05 09:51:21 UTC
+- CHANGED Time since last live probe: ~8.7h (2026-09-05 01:07:09 UTC → 2026-09-05 09:49:10 UTC); WAF backoff fully cleared, safe for spaced probing (≥6s, 60-120s backoff)
+- CHANGED Passive surface unchanged: three top leads (voip-cors-cred-exfil-v3 92, my-portal-api-proxy-wildcard-exfil 82, portal IDOR 55) all AUTH_HELPED, no new passive findings since 2026-09-04 21:34
+- CHANGED Only unprobed passive vector remains: Spring actuator/route-map disclosure on voip-management ingress (`/api/actuator`, `/actuator/*`)
