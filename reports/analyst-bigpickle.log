@@ -4594,3 +4594,217 @@ STEP 6 — LEARNING
 STEP 7 — RISK
 [RISK] easybell: 70
 reasoning: Leading finding (voip-management credentialed CORS exfil, 7 endpoints) confirmed and POC-ready but blocked on HUMAN session; actuator probe line (50) is the single cheapest way to unlock the opaque v2 BOLA map at zero credential cost. WAF throttles enumeration, no creds available for portal IDOR testing, auth/lockout classes excluded from scope. Risk mitigated by read-only GET/OPTIONS probes, ≥6s spacing, clear single reporting path via bugs.olivermaicher.eu.
+===== ANALYST bigpickle 2026-09-05 13:13:48 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mcurl -s -o /dev/null -w "HTTP %{http_code} | Size: %{size_download} | Time: %{time_total}s | Headers:\n" -D - -X GET "https://voip-management.easybell.de/api/actuator" -H "Origin: https://my.easybell.com" 2>&1
+HTTP/2 404 
+date: Sat, 05 Sep 2026 13:11:02 GMT
+content-type: text/html
+content-length: 146
+strict-transport-security: max-age=31536000; includeSubDomains
+
+HTTP 404 | Size: 146 | Time: 0.488189s | Headers:
+[0m
+nginx HTML 404 (146B) on `/api/actuator` — no Spring actuator there. Continuing spaced probing.
+[0m$ [0msleep 7; curl -s -o /dev/null -w "HTTP %{http_code} | CT: %{content_type} | Size: %{size_download} | Time: %{time_total}s\n" -X GET "https://voip-management.easybell.de/api/v2/actuator" -H "Origin: https://my.easybell.com" 2>&1
+HTTP 404 | CT: text/html | Size: 146 | Time: 0.397369s
+[0m
+[0m$ [0msleep 7; curl -s -o /dev/null -w "HTTP %{http_code} | CT: %{content_type} | Size: %{size_download} | Time: %{time_total}s\n" -X GET "https://voip-management.easybell.de/api/actuator/mappings" -H "Origin: https://my.easybell.com" 2>&1
+HTTP 404 | CT: text/html | Size: 146 | Time: 0.467015s
+[0m
+[0m$ [0msleep 7; curl -s -w "\nHTTP %{http_code} | CT: %{content_type} | Size: %{size_download}\n" -X GET "https://voip-management.easybell.de/api/actuator/gateway/routes" -H "Origin: https://my.easybell.com" 2>&1
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+HTTP 404 | CT: text/html | Size: 146
+[0m
+[0m$ [0msleep 7; curl -s -w "\nHTTP %{http_code} | CT: %{content_type} | Size: %{size_download}\n" -X GET "https://voip-management.easybell.de/actuator" 2>&1
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+HTTP 404 | CT: text/html | Size: 146
+[0m
+All 5 actuator paths return nginx HTML 404 — disproving the actuator hypothesis. One control probe to confirm the Spring backend is still live (vs the whole proxy being down).
+[0m$ [0msleep 7; curl -s -w "\nHTTP %{http_code} | CT: %{content_type} | Size: %{size_download}\n" -X OPTIONS "https://voip-management.easybell.de/api/account" -H "Origin: https://evil.example.at" -H "Access-Control-Request-Method: GET" -D - 2>&1 | head -40
+HTTP/2 200 
+date: Sat, 05 Sep 2026 13:12:39 GMT
+content-length: 0
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.example.at
+access-control-allow-methods: GET
+strict-transport-security: max-age=31536000; includeSubDomains
+
+
+HTTP 200 | CT:  | Size: 0
+[0m
+[0m$ [0mls -la art/ 2>/dev/null; ls -la | head -30
+total 172
+drwxr-xr-x 12 runner runner  4096 Sep  5 13:10 .
+drwxr-xr-x  3 runner runner  4096 Sep  5 13:10 ..
+drwxr-xr-x  7 runner runner  4096 Sep  5 13:10 .git
+drwxr-xr-x  3 runner runner  4096 Sep  5 13:10 .github
+-rw-r--r--  1 runner runner  1756 Sep  5 13:10 README.md
+-rw-r--r--  1 runner runner  2657 Sep  5 13:12 analyst-out.txt
+-rw-r--r--  1 runner runner 41197 Sep  5 13:10 analyst-prompt.txt
+-rw-r--r--  1 runner runner 37390 Sep  5 13:10 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep  5 13:10 inventory
+drwxr-xr-x  2 runner runner  4096 Sep  5 13:10 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep  5 13:10 leads
+-rw-r--r--  1 runner runner  3879 Sep  5 13:10 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep  5 13:10 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep  5 13:10 reports
+drwxr-xr-x  2 runner runner  4096 Sep  5 13:10 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep  5 13:10 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep  5 13:10 scripts
+-rw-r--r--  1 runner runner    33 Sep  5 13:10 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep  5 13:10 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep  5 13:10 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep  5 13:10 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep  5 13:10 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep  5 13:10 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep  5 13:10 triage
+[0m
+Control probe confirms Spring backend still live and the credentialed CORS reflection on `/api/account` (ACAO: evil.example.at + ACAC:true). Actuator line is actively disproven. Let me check the lead file location to persist learnings.
+[0m$ [0mls -la leads/ knowledge/; tail -5 state_bigpickle.json
+knowledge/:
+total 16
+drwxr-xr-x  2 runner runner 4096 Sep  5 13:10 .
+drwxr-xr-x 12 runner runner 4096 Sep  5 13:10 ..
+-rw-r--r--  1 runner runner 7352 Sep  5 13:10 index.md
+
+leads/:
+total 172
+drwxr-xr-x  2 runner runner  4096 Sep  5 13:10 .
+drwxr-xr-x 12 runner runner  4096 Sep  5 13:10 ..
+-rw-r--r--  1 runner runner 60226 Sep  5 13:10 lead-bigpickle.md
+-rw-r--r--  1 runner runner   714 Sep  5 13:10 lead-laguna.md
+-rw-r--r--  1 runner runner   700 Sep  5 13:10 lead-ling3.md
+-rw-r--r--  1 runner runner   728 Sep  5 13:10 lead-longcat.md
+-rw-r--r--  1 runner runner    18 Sep  5 13:10 lead-mimo.md
+-rw-r--r--  1 runner runner 83940 Sep  5 13:10 lead-nemotron3.md
+-rw-r--r--  1 runner runner  1881 Sep  5 13:10 reposcan-easybell.md
+{"phase": "POC", "target": "api"}
+[0m
+[0m$ [0mtail -40 leads/lead-bigpickle.md
+confidence: 92
+reasoning: Credentialed CORS misconfiguration confirmed on ALL 7 Spring-handled routes (account, accounts, subscriber, subscribers, number, numbers, session). Reflects arbitrary Origin with ACAC:true. Browser-native exploit chain verified (HTTP Basic realm → cached creds → cross-origin credentials:'include'). Rising to POC-ready; blocked only on authenticated HUMAN POC.
+evidence_needed: authenticated cross-origin read of victim session data via reflected Origin + credentials.
+verify_steps: HUMAN — from attacker origin, send GET https://voip-management.easybell.de/api/account with credentials:include and victim's cached Basic credentials; confirm JSON response body readable cross-origin.
+impact: cross-tenant PII/SIP config/account data exfiltration via browser → HIGH/CRITICAL.
+testability: HUMAN_ONLY
+[HYP] voip-spring-actuator-route-map
+class: MISCONFIG
+asset: voip-management.easybell.de/api/
+confidence: 50
+reasoning: Live Spring JSON backend behind nginx confirmed (rewrite /api/<res>→/api/v2/<res> leaked in 404 body). 22 v1 resource names probed — all nginx HTML 404, actual v2 names opaque. Spring Boot apps commonly expose /actuator; /actuator/mappings or /actuator/gateway/routes discloses the complete internal route table, ending the v2-name opacity and giving BOLA the exact (path,method) surface. Last live probe 2026-09-05 01:07:09 UTC (~4.7h ago) — WAF backoff window fully cleared.
+evidence_needed: non-nginx JSON response (Spring-formatted) on any actuator path — concretely a 2xx/401/403 on /api/actuator, /api/v2/actuator, or /actuator instead of nginx HTML 404.
+verify_steps: After confirming WAF cooldown (≥120s from last probe), spaced ≥6s single GETs: /api/actuator, /api/v2/actuator, /api/actuator/mappings, /api/actuator/gateway/routes, /actuator. Spring JSON => dump /api/actuator/mappings for full v2 route map. Report route-topology existence only; do NOT exfiltrate /actuator/env secrets.
+impact: Full internal Spring route topology (v2 resource names/methods) disclosed → converts opaque BOLA surface into testable cross-tenant VoIP/account/NGC endpoints → HIGH enabler.
+testability: PASSIVE
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 78
+reasoning: Three portal proxy endpoints return Access-Control-Allow-Origin:* + OPTIONS allowing POST/Authorization/Content-Type from any origin (no ACAC:true → cookies not forwarded cross-origin; portal uses JS Bearer for voip-management). If any accept the JS-held bearer/voipSession, an attacker who extracts a token (via the confirmed voip-management CORS exfil) can read CRM/EBIT/Strapi through the wildcard proxy.
+evidence_needed: authenticated request/response to /api/crm + /api/ebit showing Bearer acceptance and proxied data; cross-origin readability.
+verify_steps: HUMAN — capture portal JS network calls to /api/crm, /api/ebit post-auth (method, headers, body, response); then from attacker origin POST with attacker-supplied/or stolen bearer and confirm readable response.
+impact: CRM/EBIT/Strapi data leakage via cross-origin reads once Bearer is obtained → MEDIUM/HIGH.
+testability: AUTH_HELPED
+[PARKED] my-portal-idor: 55 — AUTH_HELPED, pending credentials, unchanged, no new passive vector; deferred.
+[PARKED] internal-k8s-hostname-leak: confidence <40, not externally resolvable; no actionable surface.
+[PARKED] voip-api-ssrf-to-metadata: no URL-accepting endpoint discovered; dependent on route discovery.
+[FINAL] voip-cors-cred-exfil-v3: 92 — confirmed on 7 endpoints; POC-ready pending HUMAN session.
+[FINAL] my-portal-api-proxy-wildcard: 78 — secondary exfil path; same HUMAN barrier.
+[FINAL] voip-spring-actuator-route-map: 50 — sole untested passive line; zero credential cost; unlocks opaque BOLA surface.
+[NEXT] PROBE: GET https://voip-management.easybell.de/api/actuator with Header `Origin: https://my.easybell.com` — spaced ≥6s from each subsequent probe to /api/v2/actuator, /api/actuator/mappings, /actuator/gateway/routes, /actuator. Expected: Spring JSON (2xx/401/403) vs nginx HTML 404. If Spring JSON returned on any path, follow with GET /api/actuator/mappings to extract full v2 route table for BOLA enumeration. If blocked/empty, back off 120s.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS surface confirmed across ALL Spring-handled routes (singular + plural: account, accounts, subscriber, subscribers, number, numbers, session) — ACAC:true reflection of arbitrary Origin verified.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: /api/crm, /api/ebit, /api/strapi return ACAO:* wildcard without ACAC:true — preflight 200, POST+Authorization+Content-Type accepted from any origin.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com: Internal k8s hostname `voip-management.k8s.easybell.de/api` leaked in core.js as fallback URL; NXDOMAIN via passive DNS — not externally resolvable.
+[LEARN] ACCEPTED IDOR @ voip-management.easybell.de/api: Sipwise NGCP backend live; plural routes 401-auth-gated; v2 rewrite map leaked; BOLA surface confirmed pending authenticated HUMAN POC.
+[LEARN] ACCEPTED IDOR @ my.easybell.com: Laravel/Vue Inertia portal; customerId in Matomo; proxies 8 plural Sipwise routes to voip-management; auth-gated object endpoints — top IDOR candidate pending authenticated POC.
+[LEARN] REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
+[LEARN] REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+[RISK] easybell: 70
+reasoning: Leading finding (voip-management credentialed CORS exfil, 7 endpoints) confirmed and POC-ready but blocked on HUMAN session; actuator probe line (50) is the single cheapest way to unlock the opaque v2 BOLA map at zero credential cost. WAF throttles enumeration, no creds available for portal IDOR testing, auth/lockout classes excluded from scope. Risk mitigated by read-only GET/OPTIONS probes, ≥6s spacing, clear single reporting path via bugs.olivermaicher.eu.
+[0m
+[0m$ [0mcat >> leads/lead-bigpickle.md << 'EOF'
+
+## 2026-09-05 13:13 UTC — CYCLE: actuator-line TESTED, DISPROVEN; CORS exfil re-confirmed live
+[PROBE]: GET https://voip-management.easybell.de/api/actuator (Origin: https://my.easybell.com) → 404 nginx HTML 146B
+[PROBE]: GET /api/v2/actuator → 404 nginx HTML 146B
+[PROBE]: GET /api/actuator/mappings → 404 nginx HTML 146B
+[PROBE]: GET /api/actuator/gateway/routes → 404 nginx HTML 146B
+[PROBE]: GET /actuator → 404 nginx HTML 146B
+[CONTROL]: OPTIONS /api/account (Origin: https://evil.example.at, ACRM: GET) → 200, ACAO: https://evil.example.at, ACAC:true — Spring backend LIVE, credentialed CORS reflection confirmed live
+[DECISION] voip-spring-actuator-route-map: DISPROVEN — all 5 actuator paths hit nginx default location (HTML 404), none reach Spring JSON handler. v2 backend does NOT expose actuator (or it is ingress-blocked). Route-map unlock dead; remove from FINAL.
+[CHANGED] Passive surface now fully exhausted: CORS exfil (92), proxy wildcard (78), portal IDOR (55) all unchanged; actuator line dead. All forward motion requires HUMAN session/creds or report filing.
+[NEXT] HUMAN: Request an authenticated test session/credentials via bugs.olivermaicher.eu to run the logged-in POC for voip-cors-cred-exfil-v3 on 7 endpoints; if vendor declines, file the confirmed credentialed CORS misconfig (7 endpoints, arbitrary-Origin ACAC:true reflection) as the primary reportable finding.
+EOF
+git add leads/lead-bigpickle.md && git -c user.name=bigpickle -c user.email=bigpickle@local commit -m "bigpickle: actuator line disproven, CORS exfil reconfirmed live" --quiet && echo committed
+committed
+[0m
+Probes complete. Updating my lead file with this cycle's results.
+STEP 1 — DELTA
+- **NEW** All 5 actuator paths on voip-management ingress return nginx HTML 404 (146B): `/api/actuator`, `/api/v2/actuator`, `/api/actuator/mappings`, `/api/actuator/gateway/routes`, `/actuator` — Spring actuator NOT exposed; hypothesis actively disproven.
+- **CHANGED** Control probe OPTIONS `/api/account` (Origin `https://evil.example.at`) → 200, `ACAO:https://evil.example.at` + `ACAC:true` — Spring backend live, credentialed CORS reflection reconfirmed (2026-09-05 13:12:39 UTC).
+- **CHANGED** Passive surface now fully exhausted: no unprobed passive vector remains on voip-management; all open leads are credential-gated.
+
+STEP 2 — PRIORITIZE
+- [PRIO] voip-management.easybell.de/api,8.3,attack_surface:9+business_value:9+tech_exposure:9+gate_ease:7+cloud_surface:6+freshness:8
+- [PRIO] my.easybell.com,7.3,attack_surface:8+business_value:9+tech_exposure:8+gate_ease:4+cloud_surface:5+freshness:7
+- [PRIO] mail.easybell.de,5.6,attack_surface:7+business_value:5+tech_exposure:6+gate_ease:5+cloud_surface:4+freshness:5
+
+STEP 3 — HYPOTHESES
+[HYP] voip-cors-cred-exfil-v3
+class: MISCONFIG
+asset: voip-management.easybell.de/api
+confidence: 92
+reasoning: Control probe 2026-09-05 13:12:39 UTC: OPTIONS /api/account with Origin https://evil.example.at returned 200 + ACAO https://evil.example.at + ACAC:true. Same behavior reconfirmed on all 7 Spring-handled routes (account, accounts, subscriber, subscribers, number, numbers, session). Calls from attacker origin with include-credentials would carry the browser's cached HTTP Basic creds for victim's Sipwise realm into cross-origin read of account/SIP data.
+evidence_needed: authenticated cross-origin GET /api/account from attacker origin returning victim JSON readable via credentials:include.
+verify_steps: HUMAN — attacker page fetches https://voip-management.easybell.de/api/account with credentials:'include' against a victim browser holding cached Basic creds; confirm JSON visible cross-origin.
+impact: cross-tenant PII/SIP config/account data exfiltration → HIGH/CRITICAL.
+testability: HUMAN_ONLY
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 78
+reasoning: Confirmed ACAO:* (no ACAC:true), preflight 200, POST+Authorization+Content-Type allowed from any origin. If proxy passes a stolen Bearer (obtainable via the confirmed voip-management CORS exfil), CRM/EBIT/Strapi data becomes cross-origin readable. Credential-gated for live proof.
+evidence_needed: authenticated request to /api/crm + /api/ebit showing Bearer acceptance and readable response from attacker origin.
+verify_steps: HUMAN — POST to /api/crm with stolen Bearer from attacker origin; confirm 200 + proxied data readable.
+impact: CRM/EBIT/Strapi data read via wildcard proxy once bearer obtained → MEDIUM/HIGH.
+testability: AUTH_HELPED
+
+STEP 4 — SELF-CRITIQUE
+- **DISPROVEN** voip-spring-actuator-route-map (was 50): 5/5 actuator paths = nginx HTML 404 (146B), none reach the Spring JSON handler. v2 backend exposes no actuator (or ingress-blocks it). Drop.
+- [PARKED] my-portal-idor: 55 — AUTH_HELPED, no creds, unchanged; deferred.
+- [PARKED] internal-k8s-hostname-leak: NXDOMAIN, not externally resolvable; no action.
+- [PARKED] voip-api-ssrf-to-metadata: no URL-accepting endpoint discovered; dependent on route discovery.
+- [PARKED] voip-api-v2-bola: route map opaque, v2 names still secret; resume only if a live v2 resource or a session appears.
+- [FINAL] voip-cors-cred-exfil-v3: 92 — live-reconfirmed via control probe on /api/account; POC pending HUMAN session.
+- [FINAL] my-portal-api-proxy-wildcard: 78 — secondary exfil path; same credential barrier.
+
+STEP 5 — NEXT ACTION
+[NEXT] HUMAN: Via bugs.olivermaicher.eu, request an authenticated test session (or file the confirmed finding): voip-management.easybell.de/api reflects arbitrary Origin with Access-Control-Allow-Credentials:true on all 7 Spring-handled routes (account, accounts, subscriber, subscribers, number, numbers, session), enabling credentialed cross-origin read of account/SIP data — repro: OPTIONS /api/account w/ Origin https://evil.example.at → 200 ACAO+ACAC:true (verified 13:12 UTC today).
+
+STEP 6 — LEARNING
+[LEARN] REJECTED MISCONFIG @ voip-management.easybell.de/api: Spring actuator route-map hypothesis DISPROVEN by direct probe — /api/actuator, /api/v2/actuator, /api/actuator/mappings, /api/actuator/gateway/routes, /actuator all return nginx HTML 404 (146B), backend does not expose actuator; no route-table disclosure.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS credentialed reflection live-reconfirmed (13:12 UTC) on /api/account — Origin https://evil.example.at reflected with ACAC:true; 7 Spring routes affected.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains the secondary (token-gated) exfil path — unchanged.
+[LEARN] ACCEPTED IDOR @ voip-management.easybell.de/api + my.easybell.com: BOLA + portal IDOR remain confirmed-class but credential-gated; no passive vector left to advance them.
+[LEARN] REJECTED brute-force/lockout @ auth.easybell.de: program excludes auth-stuffing/brute-force/lockout — still no new information.
+
+STEP 7 — RISK
+[RISK] easybell: 68
+reasoning: Leading finding (credentialed CORS exfil, 7 endpoints) is live-confirmed but POC-blocked on a HUMAN session; the one remaining zero-credential unlock (actuator route map) is now disproven, so no cheap passive progress is possible — all forward motion requires credentials or reporting. WAF throttle slows enumeration, auth/lockout classes excluded, read-only GET/OPTIONS discipline at ≥7s spacing maintained throughout this cycle. Risk slightly down from 70: a low-probability line was closed, leaving a clear single deliverable (report/filed finding).
