@@ -458,3 +458,4 @@ testability: AUTH_HELPED
 [RISK] easybell: 70
 reasoning: Leading finding (voip-management credentialed CORS exfil, 7 endpoints) confirmed but POC-blocked on HUMAN session; new passive actuator probe line could unlock the opaque v2 BOLA map at zero credential cost. Elevated by: WAF throttles enumeration, no creds for portal IDOR, auth/lockout classes excluded. Mitigated by read-only GET/OPTIONS discipline, >=6s spacing, clear scope.
 ## 2026-09-05 01:06:55 UTC [target] (model bigpickle)
+## 2026-09-05 05:55:38 UTC [target] (model bigpickle)

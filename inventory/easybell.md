@@ -123,3 +123,10 @@ www.easybell.de
 - CHANGED Passive surface saturated: all three top leads (CORS exfil 92 / proxy-wildcard 78 / portal IDOR 55) are AUTH_HELPED and unchanged since 2026-09-04 21:34; only unprobed passive surface left = Spring ac
 - CHANGED `my.easybell.com/api/{crm,ebit,strapi}` proxy endpoints confirmed: OPTIONS preflight returns `Access-Control-Allow-Origin: *` (wildcard, no ACAC:true) with `Allow: GET,HEAD` and `Vary: Access-Control-
 - CHANGED `voip-management.easybell.de/api/v2/{accounts,subscribers,numbers,account,subscriber,number,session}` all return nginx HTML 404 (no CORS headers, `content-type: text/html`) — Spring v2 rewrite map lea
+
+## 2026-09-05 05:55:47 UTC
+- NEW Last live probe was 2026-09-05 01:07:09 UTC (~4.7h ago); WAF backoff window fully cleared (>23h since last burst probe at 2026-09-03 23:45:57 UTC) — safe for spaced probing (≥6s, 60-120s backoff)
+- CHANGED Passive surface remains saturated: three top leads (voip-cors-cred-exfil-v3 92, my-portal-api-proxy-wildcard-exfil 82, portal IDOR 55) all AUTH_HELPED, unchanged since 2026-09-04 21:34; only unprobed 
+- CHANGED Confirmed: `my.easybell.com` + `voip-management.easybell.de` share ingress IP 62.27.117.123 (same nginx); "cross-origin" split is host-header-only — undermines same-origin policy assumption for CORS e
+- CHANGED `voip-management.k8s.easybell.de` / `k8s.easybell.de` confirmed NXDOMAIN via passive DNS — internal hostname leak from `core.js` is info-disclosure only, not actionable
+- CHANGED `voip-management.easybell.de/api/v2/{accounts,subscribers,numbers,account,subscriber,number,session}` all return nginx HTML 404 (no CORS, `content-type: text/html`) — Spring v2 rewrite map leaked but 
