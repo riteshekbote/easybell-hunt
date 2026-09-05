@@ -117,3 +117,13 @@ https://connectme-app.easybell.de/login-online-session-converged638e2?state=x&co
 https://partner.easybell.de/login` -> 200 len=?
 https://order-form.easybell.de/ -> 200 len=2665
 https://order-form.easybell.de/api/apc/check -> HTTP 405
+
+## 2026-09-05 20:47:57 UTC
+https://order-form.easybell.de/ -> 200 len=2665
+https://dstny.d4sp.com/auth/realms/coven/protocol/openid-connect/auth?client_id=coven&response_type=code&redirect_uri=https://connectme-app.easybell.de//login-online-session-converged638e2&state=...` -> ERR <urlopen error [Errno -5] No address associated wi
+https://connectme-app.easybell.de//login-online-session-converged638e2@evil.com` -> HTTP 404
+https://connectme-app.easybell.de/authenticate -> 200 len=20205
+https://partner.easybell.de/login -> 200 len=?
+https://order-form.easybell.de/` -> 200 len=2665
+https://order-form.easybell.de/api/apc/check` -> HTTP 404
+https://partner.easybell.de/login` -> 200 len=?

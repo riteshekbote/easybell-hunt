@@ -239,3 +239,20 @@
 - LEARN: ACCEPTED IDOR @ voip-management.easybell.de/api + my.easybell.com: BOLA + portal IDOR remain confirmed-class but credential-gated; no passive vector left to adv
 - LEARN: REJECTED brute-force/lockout @ auth.easybell.de: program excludes auth-stuffing/brute-force/lockout — still no new information
 - LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts
+
+## RANKED HYPOTHESES 2026-09-05 20:47:39 UTC
+- [72] order-form.easybell.de/api: order-form-unauth-data-exposure (from art/lead_bigpickle.txt)
+- [70] order-form.easybell.de/api: order-form-unauth-api-surface (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-bigpickle.txt): PROBE: Single GET `https://partner.easybell.de/login` → extract script/css asset paths → fetch referenced JS (read-only, ≥6s spacing, ≤1rps) → grep `/api/`, `VI
+- NEXT(hypotheses-nemotron3.txt): PROBE: Spaced GET ≥6s from last probe (2026-09-05 18:33:33 UTC) → `GET https://order-form.easybell.de/` → extract all referenced JS chunk URLs from HTML → for e
+- LEARN: ACCEPTED MISCONFIG @ easybell.de: CT sweep (18:24 UTC, crt.sh DoH-verified) shows 18 live A-record subdomains never in inventory; "passive surface exhausted" wa
+- LEARN: ACCEPTED MISCONFIG @ order-form.easybell.de: Vite SPA bundle (index-BiM9ZwNg.js, 18:30 UTC) leaks `/api/` base, live POST-only `/api/apc/check` (GET→405), partn
+- LEARN: ACCEPTED OATH @ connectme-app.easybell.de: `/authenticate` → OIDC redirect to external Keycloak (dstny.d4sp.com, client_id=coven, response_type=code) with in-sc
+- LEARN: ACCEPTED MISCONFIG @ partner.easybell.de: 200 → `/login` partner portal on main ingress (shared nginx) — unprobed surface
+- LEARN: REJECTED MISCONFIG @ my.easybell.com: Laravel dotfile/debug surface DISPROVEN (18:21 UTC) — `/.env`, `/.git/config`, `/telescope`, `/horizon`, `/_ignition/healt
+- LEARN: REJECTED MISCONFIG @ voip-management.easybell.de/api: OpenAPI/swagger line closed (18:22 UTC) — `/api/v2/api-docs`, `/api/swagger-ui.html`, `/api/openapi.json`,
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS credentialed reflection live-reconfirmed (13:12 UTC) on `/api/account` — Origin `https://evil.example
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: `/api/{crm,ebit,strapi}` wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged
+- LEARN: ACCEPTED IDOR @ voip-management.easybell.de/api + my.easybell.com: BOLA + portal IDOR remain confirmed-class but credential-gated; no passive vector left to adv
+- LEARN: REJECTED brute-force/lockout @ auth.easybell.de: program excludes auth-stuffing/brute-force/lockout — still no new information
+- LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts

@@ -671,3 +671,34 @@ testability: PASSIVE
 [LEARN] ACCEPTED OATH @ connectme-app.easybell.de: /authenticate → OIDC redirect to external Keycloak (dstny.d4sp.com, client_id=coven, response_type=code) with in-scope redirect_uri carrying double-slash `//login-online-session-converged638e2`; state present; prod+UAT+dev variants.
 [RISK] easybell: 70
 reasoning: Up 2 from 68. Rationale: fresh zero-credential breadth (order-form API surface, connectme OIDC, partner portal) reopens passive discovery toward a non-credential HIGH, previously judged exhausted — net upside. Two false lines closed cleanly with evidence (dotfile catch-all, openapi 404). Carried: primary CORS deliverable (92) still HUMAN-gated pending report/Po C; WAF throttle on voip unchanged; auth/lockout excluded; PBX/SIP deemed non-HTTP and parked not tested. Mitigation held throughout: ~45 read-only GET/OPTIONS this cycle at ≤0.6rps, ≥1.8–7s spacing, no POSTs, no customer/order/partner data captured (status+headers+title only), sha256 discipline for any future secret, report only via bugs.olivermaicher.eu.
+## 2026-09-05 20:45:47 UTC [target] (model bigpickle)
+[HYP] order-form-unauth-data-exposure
+class: MISCONFIG
+asset: order-form.easybell.de/api
+confidence: 72
+reasoning: 5 GET endpoints return 200 JSON with no auth: companies (Crefo numbers + business addresses, query-enumerable), providers (numeric TNB ids), plan-classes (full tariff catalog w/ business VOIP codes), translations/order4_plan_config, auth (session bootstrap). Release-verified 20:41–20:50 UTC with Origin evil.example.at; no ACAO on these Laravel GETs, no rate-limit evidence.
+evidence_needed: confirmation that no token/cookie gates it (GET was cookie-less) — met; residual: whether partner_code param on plan-classes yields partner-specific pricing (read-only, next cycle).
+verify_steps: PASSIVE — done: spaced GETs `/api/{auth,providers,plan-classes,companies,translations/order4_plan_config}` all 200 JSON, zero-auth. Optional next: `GET /api/plan-classes?type=business&partner_code=coven` to test partner-scope enumeration (read-only).
+impact: unauth bulk access to business registry (Crefo), porting provider, and tariff config used by order flow; input to BOLA/partner enumeration → MEDIUM.
+testability: PASSIVE
+[HYP] connectme-oidc-redirect-state-flaw
+class: OATH
+asset: connectme-app.easybell.de
+confidence: 42
+reasoning: unchanged — `/authenticate` issues OIDC authorize to dstny.d4sp.com (client_id=coven) with redirect_uri double-slash `//login-online-session-converged638e2` + base64 state.
+evidence_needed: in-scope callback behavior with tampered/missing state; app vs 404 on path variants.
+verify_steps: PASSIVE — single GET `/login-online-session-converged638e2?state=x&code=y` and variant `/login-online-session-converged638e2/../login` (expect 4xx not auth); never touch dstny IdP.
+impact: OIDC code theft → session/account compromise → HIGH.
+testability: PASSIVE
+[HYP] partner-portal-api-leak
+class: MISCONFIG
+asset: partner.easybell.de
+confidence: 40
+reasoning: unchanged — referenced from order-form bundle + CSP frame-ancestors lists partner.easybell.de/.nl/.fr/.at/.ch; partner portals proxy order/commission data; no framework fingerprint yet.
+evidence_needed: framework fingerprint + any client `/api/*` or env config in its assets.
+verify_steps: PASSIVE — GET `/login`, pull referenced assets, grep for `/api/`+env, single spaced GET of discovered paths.
+impact: partner/order/commission data → MEDIUM/HIGH.
+testability: PASSIVE
+[NEXT] PROBE: Single GET `https://partner.easybell.de/login` → extract script/css asset paths → fetch referenced JS (read-only, ≥6s spacing, ≤1rps) → grep `/api/`, `VITE_`/env, partner/order/commission endpoints → one spaced GET of each unique discovered path. Record method+status+CT only.
+[RISK] easybell: 72
+reasoning: Up 2 from 70. Confirmed NEW zero-credential data-exposure line on order-form (companies/providers/plan-classes all 200 no-auth) adds verified attack surface beyond the HUMAN-gated CORS deliverable (92). However impact caps at MEDIUM (business-registry/tariff data, largely public in origin) and credentialed-CORS misfire there is route-scoped + guest-session. Carried: 92 still needs HUMAN report/PoC; voip WAF throttle unchanged; auth/lockout excluded; PBX/SIP parked. Mitigation: 16 read-only GET/OPTIONS this cycle (one 6-in-parallel static-asset burst), ≥7s spacing on dynamic endpoints, no POSTs, no customer order data captured (registry/tariff metadata only), sha256 discipline preserved, report only via bugs.olivermaicher.eu.

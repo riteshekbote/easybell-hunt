@@ -165,3 +165,14 @@ www.easybell.de
 - CHANGED Passive surface fully exhausted for CORS exfil (92), proxy wildcard (82), portal IDOR (55) — all AUTH_HELPED, unchanged since 2026-09-04 21:34
 - CHANGED `voip-management.k8s.easybell.de` / `k8s.easybell.de` confirmed NXDOMAIN — internal hostname leak is info-disclosure only
 - CHANGED `my.easybell.com` + `voip-management.easybell.de` share ingress IP 62.27.117.123 (same nginx); "cross-origin" split is host-header-only
+
+## 2026-09-05 20:47:39 UTC
+- NEW CT sweep (18:23–18:24 UTC, crt.sh DoH-verified) surfaces 18 live A-record subdomains absent from all 4 days of inventory; ~6 never-probed web apps (order-form, connectme-app prod/UAT/dev, partner, sur
+- NEW order-form.easybell.de (on main ingress 62.27.117.123 shared with portal/voip): Vite/Vue SPA bundle (index-BiM9ZwNg.js) leaks `/api/` base, live POST-only `/api/apc/check` (GET→405), partner.easybell.
+- NEW connectme-app.easybell.de: nginx SPA; `/authenticate` → 200 + OIDC redirect to external Keycloak `dstny.d4sp.com`, `client_id=coven`, `response_type=code`, in-scope `redirect_uri` with double-slash `/
+- NEW partner.easybell.de: 200 → `/login` partner portal on main ingress
+- CHANGED my.easybell.com dotfile/debug surface DISPROVEN (18:21 UTC) — `/.env`, `/.git/config`, `/telescope`, `/horizon`, `/_ignition/health-check`, `/storage/logs/laravel.log` all return 200 text/html = ident
+- CHANGED voip-management OpenAPI/swagger line CLOSED (18:22 UTC) — `/api/v2/api-docs`, `/api/v3/api-docs`, `/api/swagger-ui.html`, `/api/openapi.json`, `/api/swagger-ui/index.html`, `/api/swagger-ui.html` all 
+- CHANGED Prior "passive surface exhausted" verdict RETRACTED — was relative to incomplete 7-host seed; fresh zero-credential breadth reopens via CT sweep
+- CHANGED `voip-management.k8s.easybell.de` / `k8s.easybell.de` confirmed NXDOMAIN — internal hostname leak is info-disclosure only
+- CHANGED `my.easybell.com` + `voip-management.easybell.de` share ingress IP 62.27.117.123 (same nginx); "cross-origin" split is host-header-only
