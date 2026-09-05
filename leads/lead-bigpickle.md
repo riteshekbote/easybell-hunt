@@ -575,3 +575,42 @@ testability: AUTH_HELPED
 [LEARN] REJECTED brute-force/lockout @ auth.easybell.de: program excludes auth-stuffing/brute-force/lockout — still no new information.
 [RISK] easybell: 68
 reasoning: Leading finding (credentialed CORS exfil, 7 endpoints) is live-confirmed but POC-blocked on a HUMAN session; the one remaining zero-credential unlock (actuator route map) is now disproven, so no cheap passive progress is possible — all forward motion requires credentials or reporting. WAF throttle slows enumeration, auth/lockout classes excluded, read-only GET/OPTIONS discipline at ≥7s spacing maintained throughout this cycle. Risk slightly down from 70: a low-probability line was closed, leaving a clear single deliverable (report/filed finding).
+## 2026-09-05 16:10:04 UTC [target] (model bigpickle)
+[CHANGED] Probe log 13:13:54 UTC re-confirms actuator line dead: /api/actuator, /api/actuator`, /api/account → nginx HTML 404. WAF cooldown cleared (~1h since last burst). No Spring JSON on any path.
+[NEW] Laravel misconfig surface on `my.easybell.com` (.env, /.git/config, /telescope, /horizon, /_ignition, /storage/logs) has ZERO coverage in all 4 days of probes/leads/triage (repo-wide grep = no matches). Fresh zero-credential line on the highest-business-value asset.
+[NEW] Spring OpenAPI/swagger (springfox `/v2/api-docs`, springdoc `/v3/api-docs`, `/swagger-ui.html`, `/openapi.json`) on the voip-management `/api/` proxy is likewise UNTRIED — distinct from the dead actuator line.
+[CHANGED] RANKED HYPOTHESES header mis-score: `[92] voip-spring-actuator-route-map` is stale — actuator was 50 and is disproven; the 92 belongs to voip-cors-cred-exfil-v3. Reporting artifact, not a live line.
+[PRIO] my.easybell.com,7.6: attack_surface:8 biz:9 tech:7 gate_ease:10 cloud:3 fresh:5 — 0.25*8+0.25*9+0.15*7+0.15*10+0.10*3+0.10*5
+[PRIO] voip-management.easybell.de/api,7.2: attack_surface:9 biz:9 tech:8 gate_ease:5(WAF) cloud:4 fresh:4
+[PRIO] my.easybell.com (confirmed CORS report line),8.3: carried for report pipeline — 92-conf finding, HUMAN-gated
+[HYP] my-laravel-misconfig-surface
+class: MISCONFIG
+asset: my.easybell.com
+confidence: 42
+reasoning: Laravel 10 + Inertia portal; dotfile/debug assets (.env, /.git/config, /telescope, /_ignition, /storage/logs/laravel.log) never probed in 4 days of hunting. Exposed .env alone (APP_KEY/DB creds) enables Laravel cookie forging → ATO. Telescope unauthenticated exposes cross-user request/session traces. Read-only single GETs distinguish a 200 misconfig from blocked 403/404.
+evidence_needed: HTTP 200 on any of: /.env, /.git/config, /telescope, /_ignition/health-check, /storage/logs/laravel.log
+verify_steps: spaced ≥6s (≤1rps) GET https://my.easybell.com/.env → /.git/config → /telescope → /_ignition/health-check. On 200 for .env: record existence + sha256 of APP_KEY only, do NOT print secrets. On 200 /_ignition: framework fingerprint only (not a finding alone).
+impact: full prod env disclosure (DB/APP_KEY) → cookie forge/session ATO → HIGH/CRITICAL
+testability: PASSIVE
+[HYP] voip-spring-openapi-route-map
+class: MISCONFIG
+asset: voip-management.easybell.de/api/
+confidence: 40
+reasoning: Spring backend proven live behind the `/api/<res>`→`/api/v2/<res>` nginx rewrite (404 JSON leak). Actuator dead, but springdoc/springfox doc endpoints are a separate unprobed disclosure class; `/api/v2/v3/api-docs` or `/api/swagger-ui.html` would enumerate the full v2 route table (paths+methods), dissolving the 22-name opacity blocking BOLA. knife-line, low odds, zero cost.
+evidence_needed: Spring JSON (not nginx HTML 404) on any of /api/v3/api-docs, /api/v2/api-docs, /api/swagger-ui.html, /api/openapi.json
+verify_steps: spaced ≥6s GETs of the 4 paths (respect WAF; back off 120s on empty/timeout). If any returns JSON doc, map v2 resources → BOLA candidates; report topology only, no exfil.
+impact: full v2 route table → unlocks cross-tenant BOLA surface → HIGH enabler
+testability: PASSIVE
+[PARKED] my-portal-idor:55 — AUTH_HELPED, no creds, no new passive vector; unchanged.
+[PARKED] internal-k8s-hostname-leak:<40 — NXDOMAIN, not resolvable, info-only.
+[PARKED] voip-api-ssrf-to-metadata:<40 — no URL-accepting endpoint; still route-dependent.
+[FINAL] voip-cors-cred-exfil-v3,92 — confirmed 7 endpoints, POC-ready, HUMAN report line.
+[FINAL] my-portal-api-proxy-wildcard,78 — secondary exfil path, same HUMAN barrier.
+[FINAL] my-laravel-misconfig-surface,42 — new zero-credential line, concrete GET proof, not REJECTED-class.
+[FINAL] voip-spring-openapi-route-map,40 — floor, cheap single GETs, only live line left on voip surface.
+[NEXT] PROBE: POST-13:13:54UTC cooldown done → spaced ≥6s, ≤1rps, GET-only: 1) https://my.easybell.com/.env (expect 200 PHP env vs 403/404 block), 2) https://my.easybell.com/.git/config, 3) https://my.easybell.com/telescope, 4) https://my.easybell.com/_ignition/health-check, 5) https://my.easybell.com/storage/logs/laravel.log. On .env 200: record existence + sha256 APP_KEY, redact everything else, report as misconfig finding (cookie-forge ATO chain is verify-only, do not exploit). Then same cooldown-aware single GETs to https://voip-management.easybell.de/api/v3/api-docs and /api/swagger-ui.html for the v2 route map.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com: Laravel dotfile/debug misconfig surface (.env, /.git, /telescope, /_ignition) confirmed untested across all prior cycles — new zero-credential line; single GETs may surface HIGH env/app-key exposure.
+[LEARN] REJECTED MISCONFIG @ voip-management.easybell.de/api: Actuator re-probed 13:13:54 UTC — all paths nginx HTML 404; Spring Boot actuator definitively not exposed; line closed.
+[LEARN] REJECTED MISCONFIG @ voip-management.easybell.de/api: OpenAPI/swagger unprobed — next (and last) passive doc-disclosure line, confidence floor 40.
+[RISK] easybell: 68
+reasoning: Primary deliverable (7-endpoint credentialed CORS exfil, 92) confirmed and re-verified today but remains HUMAN-gated for the authenticated PoC; two fresh zero-credential lines (portal dotfile/env surface, voip openapi map) offer the only passive unlock toward a non-credential HIGH. Actuator dead → no cheap route-table win. WAF throttles voip probing; auth/lockout classes excluded; no creds for portal IDOR. Mitigations held: read-only GET/OPTIONS, ≥6s spacing, secret redaction (sha256-only), no customer data touched, report via bugs.olivermaicher.eu only.

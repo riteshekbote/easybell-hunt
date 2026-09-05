@@ -43,3 +43,6 @@
 - 2026-09-05 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains the secondary (token-gated) exfil path — unchanged.
 - 2026-09-05 ACCEPTED IDOR @ voip-management.easybell.de/api + my.easybell.com: BOLA + portal IDOR remain confirmed-class but credential-gated; no passive vector left to advance them.
 - 2026-09-05 REJECTED brute-force/lockout @ auth.easybell.de: program excludes auth-stuffing/brute-force/lockout — still no new information.
+- 2026-09-05 ACCEPTED MISCONFIG @ my.easybell.com: Laravel dotfile/debug misconfig surface (.env, /.git, /telescope, /_ignition) confirmed untested across all prior cycles — new zero-credential line; single GETs may surface HIGH env/app-key exposure.
+- 2026-09-05 REJECTED MISCONFIG @ voip-management.easybell.de/api: Actuator re-probed 13:13:54 UTC — all paths nginx HTML 404; Spring Boot actuator definitively not exposed; line closed.
+- 2026-09-05 REJECTED MISCONFIG @ voip-management.easybell.de/api: OpenAPI/swagger unprobed — next (and last) passive doc-disclosure line, confidence floor 40.

@@ -205,3 +205,18 @@
 - LEARN: ACCEPTED IDOR @ my.easybell.com: Laravel/Vue Inertia portal; customerId in Matomo; proxies 8 plural Sipwise routes to voip-management; auth-gated object endpoin
 - LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing.
 - LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+
+## RANKED HYPOTHESES 2026-09-05 16:10:13 UTC
+- [92] voip-management.easybell.de/api/: voip-cors-cred-exfil-v3 (from art/lead_nemotron3.txt)
+- [42] my.easybell.com: my-laravel-misconfig-surface (from art/lead_bigpickle.txt)
+- NEXT(hypotheses-bigpickle.txt): PROBE: POST-13:13:54UTC cooldown done → spaced ≥6s, ≤1rps, GET-only: 1) https://my.easybell.com/.env (expect 200 PHP env vs 403/404 block), 2) https://my.easybe
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File consolidated report for voip-cors-cred-exfil-v3 (92) and my-portal-api-proxy-wildcard-exfil (82) with verified CORS evidence; request credentialed t
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com: Laravel dotfile/debug misconfig surface (.env, /.git, /telescope, /_ignition) confirmed untested across all prior cycles —
+- LEARN: REJECTED MISCONFIG @ voip-management.easybell.de/api: Actuator re-probed 13:13:54 UTC — all paths nginx HTML 404; Spring Boot actuator definitively not exposed;
+- LEARN: REJECTED MISCONFIG @ voip-management.easybell.de/api: OpenAPI/swagger unprobed — next (and last) passive doc-disclosure line, confidence floor 40.
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS credentialed reflection live-reconfirmed (13:12 UTC) on /api/account — Origin https://evil.example.at
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains the secondary (token-gated) exfil path — unchanged
+- LEARN: ACCEPTED IDOR @ voip-management.easybell.de/api + my.easybell.com: BOLA + portal IDOR remain confirmed-class but credential-gated; no passive vector left to adv
+- LEARN: REJECTED MISCONFIG @ voip-management.easybell.de/api: Spring actuator route-map hypothesis DISPROVEN by direct probe — /api/actuator, /api/v2/actuator, /api/act
+- LEARN: REJECTED brute-force/lockout @ auth.easybell.de: program excludes auth-stuffing/brute-force/lockout — still no new information
+- LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts

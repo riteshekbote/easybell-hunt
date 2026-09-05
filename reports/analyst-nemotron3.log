@@ -2306,3 +2306,70 @@ STEP 6 — LEARNING:
 STEP 7 — RISK:
 [RISK] easybell: 70
 reasoning: Live high-value VoIP JSON API surface confirmed reachable; CORS credentialed misconfig on 7 Spring-handled routes CONFIRMED (exfiltration vector). Upside solid. Elevated by: aggressive WAF rate-limiting tightening enumeration throughput, no creds for authenticated portal testing, program's auth/lockout exclusion limiting attack classes. Mitigated by read-only GET discipline, spaced probing, clear scope boundaries.
+===== ANALYST nemotron3 2026-09-05 16:10:13 UTC =====
+[0m
+> build · nemotron-3-ultra-free
+[0m
+STEP 1 — DELTA
+[CHANGED] Spring actuator hypothesis DISPROVEN — all `/api/actuator*`, `/actuator*` return nginx HTML 404 (146B); no Spring JSON exposure
+[CHANGED] Passive surface fully exhausted: CORS exfil (92), proxy wildcard (82), portal IDOR (55) all AUTH_HELPED, unchanged since 2026-09-04 21:34
+[CHANGED] No unprobed passive vectors remain; all forward motion requires HUMAN session/creds or report filing
+
+STEP 2 — PRIORITIZE
+[PRIO] voip-management.easybell.de/api,9.1,attack_surface:10+business_value:9+tech_exposure:10+gate_ease:7+cloud_surface:7+freshness:9
+[PRIO] my.easybell.com,8.3,attack_surface:9+business_value:9+tech_exposure:9+gate_ease:4+cloud_surface:6+freshness:8
+[PRIO] voip-management.k8s.easybell.de/api,3.0,attack_surface:3+business_value:4+tech_exposure:2+gate_ease:1+cloud_surface:5+freshness:2
+[PRIO] www.easybell.de,4.8,attack_surface:4+business_value:6+tech_exposure:5+gate_ease:7+cloud_surface:3+freshness:5
+[PRIO] auth.easybell.de,4.2,attack_surface:5+business_value:7+tech_exposure:5+gate_ease:3+cloud_surface:4+freshness:3
+
+STEP 3 — HYPOTHESES
+[HYP] voip-cors-cred-exfil-v3
+class: MISCONFIG
+asset: voip-management.easybell.de/api/
+confidence: 92
+reasoning: All 7 Spring-handled routes (account, accounts, subscriber, subscribers, number, numbers, session) reflect arbitrary Origin in ACAO with Credentials:true. Singular routes return 404/405 but still emit credentialed CORS headers. Authenticated user's browser session (Bearer voipSession from my.easybell.com portal or cached HTTP Basic for realm "sipwisebroker.easybell.de") can be exfiltrated cross-origin from any of these 7 endpoints by a malicious page. Confirmed live via read-only probes.
+evidence_needed: Victim-side authenticated session (voipSession Bearer token or cached Basic creds); confirm authenticated response body contains cross-customer VoIP data (accounts/numbers/subscribers/session)
+verify_steps: HUMAN — with valid creds, visit attacker-controlled origin while authenticated to my.easybell.com; fetch('https://voip-management.easybell.de/api/accounts', {credentials:'include', headers:{Authorization:'Bearer <voipSession>'}}) and verify response body accessible. Test all 7 endpoints.
+impact: Cross-origin theft of VoIP accounts/numbers/subscribers/session data from authenticated customer → HIGH
+testability: AUTH_HELPED
+
+[HYP] my-portal-api-proxy-wildcard-exfil
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 82
+reasoning: Three internal portal proxy endpoints return ACAO:* on redirect responses and OPTIONS preflight with POST + Authorization+Content-Type allowed from any origin. Wildcard without ACAC:true means cookies NOT sent cross-origin, BUT the portal uses Bearer tokens via JS for voip-management. If an attacker can exfiltrate the Bearer token (via XSS or CORS on voip-management), the wildcard on portal proxy endpoints allows exfiltration of CRM/EBIT/Strapi data too. Strapi CMS proxy confirmed.
+evidence_needed: Confirm what /api/crm, /api/ebit, /api/strapi proxy to when authenticated; confirm whether Bearer token (voipSession) is accepted by these endpoints; confirm data sensitivity
+verify_steps: HUMAN — with creds, observe portal JS network calls to /api/crm, /api/ebit, /api/strapi; capture request/response to determine if Bearer token is used and what data is returned. Test cross-origin fetch with captured Bearer token.
+impact: CRM/EBIT/Strapi data leakage via cross-origin requests → MEDIUM/HIGH (depends on data sensitivity)
+testability: AUTH_HELPED
+
+[HYP] portal-idor-bola
+class: IDOR
+asset: my.easybell.com
+confidence: 55
+reasoning: Laravel/Vue Inertia portal; customerId leaked in Matomo; proxies 8 plural Sipwise routes to voip-management; auth-gated object endpoints. Portal is the primary customer-facing application with direct access to VoIP management functions.
+evidence_needed: Authenticated session with valid customerId; enumerate object references (accountId, subscriberId, numberId) across portal endpoints; test cross-customer access
+verify_steps: HUMAN — with creds, log into my.easybell.com; capture Inertia page loads and API calls to /api/* proxy endpoints; manipulate object IDs in requests (account/subscriber/number) and observe authorization checks
+impact: Cross-customer access to VoIP accounts, numbers, subscribers, call data → HIGH
+testability: AUTH_HELPED
+
+STEP 4 — SELF-CRITIQUE
+[PARKED] voip-spring-actuator-route-map: DISPROVEN — all actuator endpoints return nginx HTML 404, no Spring exposure
+[FINAL] voip-cors-cred-exfil-v3: 92 — CONFIRMED on 7 Spring-handled endpoints; highest priority, requires victim browser session
+[FINAL] my-portal-api-proxy-wildcard-exfil: 82 — Wildcard CORS on portal proxy endpoints; secondary exfiltration path if Bearer token compromised
+[FINAL] portal-idor-bola: 55 — Confirmed-class IDOR/BOLA but fully credential-gated; no passive vector to advance
+
+STEP 5 — NEXT ACTION
+[NEXT] HUMAN: File consolidated report for voip-cors-cred-exfil-v3 (92) and my-portal-api-proxy-wildcard-exfil (82) with verified CORS evidence; request credentialed testing window for portal IDOR validation
+
+STEP 6 — LEARNING
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS credentialed reflection live-reconfirmed (13:12 UTC) on /api/account — Origin https://evil.example.at reflected with ACAC:true; 7 Spring routes affected
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains the secondary (token-gated) exfil path — unchanged
+[LEARN] ACCEPTED IDOR @ voip-management.easybell.de/api + my.easybell.com: BOLA + portal IDOR remain confirmed-class but credential-gated; no passive vector left to advance them
+[LEARN] REJECTED MISCONFIG @ voip-management.easybell.de/api: Spring actuator route-map hypothesis DISPROVEN by direct probe — /api/actuator, /api/v2/actuator, /api/actuator/mappings, /api/actuator/gateway/routes, /actuator all return nginx HTML 404 (146B), backend does not expose actuator; no route-table disclosure
+[LEARN] REJECTED brute-force/lockout @ auth.easybell.de: program excludes auth-stuffing/brute-force/lockout — still no new information
+[LEARN] REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts
+
+STEP 7 — RISK
+[RISK] easybell: 70
+reasoning: Live high-value VoIP JSON API surface confirmed reachable; CORS credentialed misconfig on 7 Spring-handled routes CONFIRMED (exfiltration vector). Upside solid. Elevated by: aggressive WAF rate-limiting tightening enumeration throughput, no creds for authenticated portal testing, program's auth/lockout exclusion limiting attack classes. Mitigated by read-only GET discipline, spaced probing, clear scope boundaries.

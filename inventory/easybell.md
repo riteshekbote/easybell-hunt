@@ -141,3 +141,12 @@ www.easybell.de
 - CHANGED Time since last live probe: ~8.7h (2026-09-05 01:07:09 UTC → now); WAF backoff fully cleared, safe for spaced probing (≥6s, 60-120s backoff)
 - CHANGED Passive surface unchanged: three top leads (voip-cors-cred-exfil-v3 92, my-portal-api-proxy-wildcard-exfil 82, portal IDOR 55) all AUTH_HELPED, no new passive findings since 2026-09-04 21:34
 - CHANGED Only unprobed passive vector remains: Spring actuator/route-map disclosure on voip-management ingress (`/api/actuator`, `/actuator/*`)
+
+## 2026-09-05 16:10:13 UTC
+- CHANGED Probe log 13:13:54 UTC re-confirms actuator line dead: /api/actuator, /api/actuator`, /api/account → nginx HTML 404. WAF cooldown cleared (~1h since last burst). No Spring JSON on any path.
+- NEW Laravel misconfig surface on `my.easybell.com` (.env, /.git/config, /telescope, /horizon, /_ignition, /storage/logs) has ZERO coverage in all 4 days of probes/leads/triage (repo-wide grep = no matches
+- NEW Spring OpenAPI/swagger (springfox `/v2/api-docs`, springdoc `/v3/api-docs`, `/swagger-ui.html`, `/openapi.json`) on the voip-management `/api/` proxy is likewise UNTRIED — distinct from the dead actua
+- CHANGED RANKED HYPOTHESES header mis-score: `[92] voip-spring-actuator-route-map` is stale — actuator was 50 and is disproven; the 92 belongs to voip-cors-cred-exfil-v3. Reporting artifact, not a live line.
+- CHANGED Spring actuator hypothesis DISPROVEN — all `/api/actuator*`, `/actuator*` return nginx HTML 404 (146B); no Spring JSON exposure
+- CHANGED Passive surface fully exhausted: CORS exfil (92), proxy wildcard (82), portal IDOR (55) all AUTH_HELPED, unchanged since 2026-09-04 21:34
+- CHANGED No unprobed passive vectors remain; all forward motion requires HUMAN session/creds or report filing
