@@ -105,3 +105,15 @@ https://voip-management.easybell.de/api/actuator -> HTTP 404
 ## 2026-09-05 16:10:17 UTC
 https://voip-management.easybell.de/api/accounts' -> HTTP 404
 https://voip-management.easybell.de/api/v3/api-docs -> HTTP 404
+
+## 2026-09-05 18:33:33 UTC
+https://voip-management.easybell.de/api/v2/api-docs -> HTTP 404
+https://voip-management.easybell.de/api/v3/api-docs -> HTTP 404
+https://voip-management.easybell.de/api/swagger-ui.html -> HTTP 404
+https://voip-management.easybell.de/api/openapi.json -> HTTP 404
+https://voip-management.easybell.de/api/accounts' -> HTTP 404
+https://connectme-app.easybell.de//login-online-session-converged638e2` -> HTTP 404
+https://connectme-app.easybell.de/login-online-session-converged638e2?state=x&code=y` -> 200 len=?
+https://partner.easybell.de/login` -> 200 len=?
+https://order-form.easybell.de/ -> 200 len=2665
+https://order-form.easybell.de/api/apc/check -> HTTP 405

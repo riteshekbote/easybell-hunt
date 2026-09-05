@@ -670,3 +670,54 @@ testability: AUTH_HELPED
 [LEARN] REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts
 [RISK] easybell: 70
 reasoning: Live high-value VoIP JSON API surface confirmed reachable; CORS credentialed misconfig on 7 Spring-handled routes CONFIRMED (exfiltration vector). Upside solid. Elevated by: aggressive WAF rate-limiting tightening enumeration throughput, no creds for authenticated portal testing, program's auth/lockout exclusion limiting attack classes. Mitigated by read-only GET discipline, spaced probing, clear scope boundaries.
+## 2026-09-05 18:24:09 UTC [target] (model nemotron3)
+[NEW] Laravel misconfig surface on `my.easybell.com` (.env, /.git/config, /telescope, /horizon, /_ignition, /storage/logs) has ZERO coverage in all prior cycles — new zero-credential passive line
+[NEW] Spring OpenAPI/swagger (springfox `/v2/api-docs`, springdoc `/v3/api-docs`, `/swagger-ui.html`, `/openapi.json`) on `voip-management.easybell.de/api/` proxy UNTRIED — distinct from dead actuator
+[CHANGED] Spring actuator hypothesis DISPROVEN — all `/api/actuator*`, `/actuator*` return nginx HTML 404 (146B); no Spring JSON exposure
+[CHANGED] Passive surface fully exhausted for CORS exfil (92), proxy wildcard (82), portal IDOR (55) — all AUTH_HELPED, unchanged since 2026-09-04 21:34
+[CHANGED] `voip-management.k8s.easybell.de` / `k8s.easybell.de` confirmed NXDOMAIN — internal hostname leak is info-disclosure only
+[CHANGED] `my.easybell.com` + `voip-management.easybell.de` share ingress IP 62.27.117.123 (same nginx); "cross-origin" split is host-header-only
+[PRIO] my.easybell.com,7.8,attack_surface:8+business_value:9+tech_exposure:8+gate_ease:7+cloud_surface:5+freshness:9
+[PRIO] voip-management.easybell.de/api/,7.3,attack_surface:8+business_value:9+tech_exposure:7+gate_ease:5+cloud_surface:7+freshness:6
+[PRIO] www.easybell.de,4.8,attack_surface:4+business_value:6+tech_exposure:5+gate_ease:7+cloud_surface:3+freshness:5
+[HYP] my-laravel-misconfig-surface
+class: MISCONFIG
+asset: my.easybell.com
+confidence: 65
+reasoning: Laravel 10 + Vue 3 Inertia SPA confirmed; .env, /.git/config, /telescope, /horizon, /_ignition, /storage/logs entirely untested across 4 days of probes. Single GETs may surface HIGH env/app-key exposure (APP_KEY, DB creds, AWS keys). No WAF on static asset paths observed.
+evidence_needed: Any 200 response with PHP/env content vs 403/404 block; presence of APP_KEY, database credentials, or service tokens in response body
+verify_steps: GET https://my.easybell.com/.env (≥6s spaced); GET https://my.easybell.com/.git/config; GET https://my.easybell.com/telescope; GET https://my.easybell.com/_ignition; GET https://my.easybell.com/storage/logs/laravel.log — all GET/HEAD only, ≥6s between each
+impact: Full Laravel env disclosure → APP_KEY (signed cookie forgery, encryption bypass), DB creds, service tokens → CRITICAL
+testability: PASSIVE
+[HYP] voip-spring-openapi-disclosure
+class: MISCONFIG
+asset: voip-management.easybell.de/api/
+confidence: 45
+reasoning: Spring backend confirmed live (Sipwise NGCP, v2 rewrite map leaked via JSON 404). Standard Spring Boot doc endpoints (springfox `/v2/api-docs`, springdoc `/v3/api-docs`, `/swagger-ui.html`, `/openapi.json`) never probed on the `/api/` proxy path. If exposed, would disclose full BOLA surface (all v1/v2 resource names, schemas, auth requirements).
+evidence_needed: 200 with `content-type: application/json` containing OpenAPI spec (paths, components, securitySchemes) vs nginx HTML 404
+verify_steps: GET https://voip-management.easybell.de/api/v2/api-docs (≥6s); GET https://voip-management.easybell.de/api/v3/api-docs; GET https://voip-management.easybell.de/api/swagger-ui.html; GET https://voip-management.easybell.de/api/openapi.json — all GET only, ≥6s spacing
+impact: Complete API contract disclosure → targeted BOLA/IDOR enumeration without guesswork → HIGH
+testability: PASSIVE
+[HYP] voip-cors-cred-exfil-v3
+class: MISCONFIG
+asset: voip-management.easybell.de/api/
+confidence: 92
+reasoning: All 7 Spring-handled routes (account, accounts, subscriber, subscribers, number, numbers, session) reflect arbitrary Origin in ACAO with Credentials:true. Authenticated user's browser session (Bearer voipSession from my.easybell.com portal or cached HTTP Basic for realm "sipwisebroker.easybell.de") can be exfiltrated cross-origin from any of these 7 endpoints by a malicious page. Confirmed live via read-only probes.
+evidence_needed: Victim-side authenticated session (voipSession Bearer token or cached Basic creds); confirm authenticated response body contains cross-customer VoIP data (accounts/numbers/subscribers/session)
+verify_steps: HUMAN — with valid creds, visit attacker-controlled origin while authenticated to my.easybell.com; fetch('https://voip-management.easybell.de/api/accounts', {credentials:'include', headers:{Authorization:'Bearer <voipSession>'}}) and verify response body accessible. Test all 7 endpoints.
+impact: Cross-origin theft of VoIP accounts/numbers/subscribers/session data from authenticated customer → HIGH
+testability: AUTH_HELPED
+[PARKED] voip-spring-openapi-disclosure: confidence 45 below actionable threshold for passive-only; distinct from disproven actuator but floor remains low without any positive signal
+[FINAL] voip-cors-cred-exfil-v3: 92 — CONFIRMED on 7 Spring-handled endpoints; highest priority, requires victim browser session
+[FINAL] my-laravel-misconfig-surface: 65 — New zero-credential passive line; single GETs testable now with ≥6s spacing
+[NEXT] PROBE: Spaced GET (≥6s from last probe at 2026-09-05 13:13:54 UTC) to `https://my.easybell.com/.env` — watch for 200 with PHP/env content (APP_KEY, DB_*, MAIL_*, AWS_*) vs 403/404. If 200, follow with `/.git/config`, `/telescope`, `/_ignition`, `/storage/logs/laravel.log` spaced ≥6s each.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com: Laravel dotfile/debug misconfig surface (.env, /.git, /telescope, /_ignition) confirmed untested across all prior cycles — new zero-credential line; single GETs may surface HIGH env/app-key exposure
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: Spring OpenAPI/swagger (springfox `/v2/api-docs`, springdoc `/v3/api-docs`, `/swagger-ui.html`, `/openapi.json`) on the `/api/` proxy is unprobed — next (and last) passive doc-disclosure line, confidence floor 40
+[LEARN] REJECTED MISCONFIG @ voip-management.easybell.de/api: Actuator re-probed 13:13:54 UTC — all paths nginx HTML 404; Spring Boot actuator definitively not exposed; line closed
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS credentialed reflection live-reconfirmed (13:12 UTC) on /api/account — Origin https://evil.example.at reflected with ACAC:true; 7 Spring routes affected
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains the secondary (token-gated) exfil path — unchanged
+[LEARN] ACCEPTED IDOR @ voip-management.easybell.de/api + my.easybell.com: BOLA + portal IDOR remain confirmed-class but credential-gated; no passive vector left to advance them
+[LEARN] REJECTED brute-force/lockout @ auth.easybell.de: program excludes auth-stuffing/brute-force/lockout — still no new information
+[LEARN] REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts
+[RISK] easybell: 70
+reasoning: Live high-value VoIP JSON API surface confirmed reachable; CORS credentialed misconfig on 7 Spring-handled routes CONFIRMED (exfiltration vector). New Laravel misconfig surface on portal adds CRITICAL potential (APP_KEY, DB creds) with zero-credential testability. Upside solid. Elevated by: aggressive WAF rate-limiting tightening enumeration throughput, no creds for authenticated portal testing, program's auth/lockout exclusion limiting attack classes. Mitigated by read-only GET discipline, spaced probing, clear scope boundaries.

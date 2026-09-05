@@ -1,39 +1,57 @@
-## 2026-09-05 16:10:04 UTC [target] (model bigpickle)
-[CHANGED] Probe log 13:13:54 UTC re-confirms actuator line dead: /api/actuator, /api/actuator`, /api/account → nginx HTML 404. WAF cooldown cleared (~1h since last burst). No Spring JSON on any path.
-[NEW] Laravel misconfig surface on `my.easybell.com` (.env, /.git/config, /telescope, /horizon, /_ignition, /storage/logs) has ZERO coverage in all 4 days of probes/leads/triage (repo-wide grep = no matches). Fresh zero-credential line on the highest-business-value asset.
-[NEW] Spring OpenAPI/swagger (springfox `/v2/api-docs`, springdoc `/v3/api-docs`, `/swagger-ui.html`, `/openapi.json`) on the voip-management `/api/` proxy is likewise UNTRIED — distinct from the dead actuator line.
-[CHANGED] RANKED HYPOTHESES header mis-score: `[92] voip-spring-actuator-route-map` is stale — actuator was 50 and is disproven; the 92 belongs to voip-cors-cred-exfil-v3. Reporting artifact, not a live line.
-[PRIO] my.easybell.com,7.6: attack_surface:8 biz:9 tech:7 gate_ease:10 cloud:3 fresh:5 — 0.25*8+0.25*9+0.15*7+0.15*10+0.10*3+0.10*5
-[PRIO] voip-management.easybell.de/api,7.2: attack_surface:9 biz:9 tech:8 gate_ease:5(WAF) cloud:4 fresh:4
-[PRIO] my.easybell.com (confirmed CORS report line),8.3: carried for report pipeline — 92-conf finding, HUMAN-gated
-[HYP] my-laravel-misconfig-surface
+## 2026-09-05 18:33:02 UTC [target] (model bigpickle)
+[NEW] CT sweep (18:23–18:24 UTC) surfaces 18 live A-record subdomains absent from all 4 days of inventory; ~6 never-probed web apps (order-form, connectme-app prod/UAT/dev, partner.easybell.de, survey) + backmon 403.
+[CHANGED] Prior "passive surface exhausted" verdict RETRACTED — exhaustion was relative to an incomplete 7-host seed inventory; fresh zero-credential breadth reopens.
+[NEW] order-form.easybell.de (on main ingress 62.27.117.123, shared with portal/voip-management): Vite/Vue SPA; bundle leaks `/api/` base + live POST endpoint `/api/apc/check` (GET→405, 18:30:44 UTC) + `partner.easybell.de` + login.easybell.de flows.
+[NEW] connectme-app.easybell.de: nginx SPA; `/authenticate` → 200 + OIDC redirect to external Keycloak `dstny.d4sp.com`, `client_id=coven`, `response_type=code`, `redirect_uri=...//login-online-session-converged638e2` (double-slash anomaly). UAT + developer envs live.
+[NEW] partner.easybell.de: 200 → `/login` partner portal on main ingress (18:31:22 UTC).
+[CHANGED] my.easybell.com dotfile line DISPROVEN: `/.env`, `/.git/config`, `/telescope`, `/_ignition/health-check`, `/storage/logs/laravel.log`, `/horizon` all 200 = identical Inertia SPA catch-all shell, no file content (18:21 UTC).
+[CHANGED] voip openapi line closed: `/api/v2/api-docs`, `/api/swagger-ui.html`, `/api/openapi.json`, `/api/swagger-ui/index.html` all nginx HTML 404 (18:22 UTC).
+[PRIO] order-form.easybell.de,7.8: a7 b9 t7 g9 c4 f10 = 1.75+2.25+1.05+1.35+0.40+1.00
+[PRIO] partner.easybell.de,7.7: a8 b9 t6 g8 c4 f10 = 2.00+2.25+0.90+1.20+0.40+1.00
+[PRIO] connectme-app.easybell.de,7.0: a7 b7 t7 g8 c3 f10 = 1.75+1.75+1.05+1.20+0.30+1.00
+[HYP] order-form-unauth-api-surface
 class: MISCONFIG
-asset: my.easybell.com
+asset: order-form.easybell.de/api
+confidence: 45
+reasoning: Vite SPA on shared main ingress; bundle contains API base `/api/` and `/api/apc/check` (APC = number-portability availability check). GET → 405 proves path is live and POST-bound; SPA catch-all returns 200 HTML everywhere. Zero auth gate observed on the app shell; any API method-guess returns 405 (path exists) — direct route discovery is possible.
+evidence_needed: additional live `/api/*` paths beyond apc/check; Allow-method info on apc/check; whether availability-check data is readable without auth.
+verify_steps: PASSIVE — fetch homepage, download remaining JS chunks (read-only); grep `/api/` regex; then single GET (≥6s) of each unique discovered path against order-form; OPTIONS `/api/apc/check` for Allow (established in-program technique). No POST (writes into order/avail flow).
+impact: unauth order/porting/no-portability data + endpoint surface for BOLA → MEDIUM/HIGH.
+testability: PASSIVE
+[HYP] connectme-oidc-redirect-state-flaw
+class: OATH
+asset: connectme-app.easybell.de
 confidence: 42
-reasoning: Laravel 10 + Inertia portal; dotfile/debug assets (.env, /.git/config, /telescope, /_ignition, /storage/logs/laravel.log) never probed in 4 days of hunting. Exposed .env alone (APP_KEY/DB creds) enables Laravel cookie forging → ATO. Telescope unauthenticated exposes cross-user request/session traces. Read-only single GETs distinguish a 200 misconfig from blocked 403/404.
-evidence_needed: HTTP 200 on any of: /.env, /.git/config, /telescope, /_ignition/health-check, /storage/logs/laravel.log
-verify_steps: spaced ≥6s (≤1rps) GET https://my.easybell.com/.env → /.git/config → /telescope → /_ignition/health-check. On 200 for .env: record existence + sha256 of APP_KEY only, do NOT print secrets. On 200 /_ignition: framework fingerprint only (not a finding alone).
-impact: full prod env disclosure (DB/APP_KEY) → cookie forge/session ATO → HIGH/CRITICAL
+reasoning: `/authenticate` (200, 18:30:51 UTC) issues OIDC authorize to external Keycloak (client_id=coven, response_type=code) with redirect_uri `https://connectme-app.easybell.de//login-online-session-converged638e2` — double-slash, fixed-path structural anomaly — and state token `/L2F1dGhlbnRpY2F0ZQ==`. If the callback does not re-validate state/redirect_uri on the in-scope host, OIDC code re-use / redirect confusion chains to session issues on this app.
+evidence_needed: behavior of the in-scope callback `/login-online-session-converged638e2` with tampered/missing state and alternate path; no interaction with the external IdP beyond the observed redirect.
+verify_steps: PASSIVE — single GET `https://connectme-app.easybell.de/login-online-session-converged638e2?state=x&code=y` (dummy params, expect 4xx/5xx not auth); test path variants `/login-online-session-converged638e2/../login` returning app vs 404. Never authenticate against dstny IdP.
+impact: OIDC code theft → session/account compromise on customer app → HIGH.
 testability: PASSIVE
-[HYP] voip-spring-openapi-route-map
+[HYP] partner-portal-api-leak
 class: MISCONFIG
-asset: voip-management.easybell.de/api/
+asset: partner.easybell.de
 confidence: 40
-reasoning: Spring backend proven live behind the `/api/<res>`→`/api/v2/<res>` nginx rewrite (404 JSON leak). Actuator dead, but springdoc/springfox doc endpoints are a separate unprobed disclosure class; `/api/v2/v3/api-docs` or `/api/swagger-ui.html` would enumerate the full v2 route table (paths+methods), dissolving the 22-name opacity blocking BOLA. knife-line, low odds, zero cost.
-evidence_needed: Spring JSON (not nginx HTML 404) on any of /api/v3/api-docs, /api/v2/api-docs, /api/swagger-ui.html, /api/openapi.json
-verify_steps: spaced ≥6s GETs of the 4 paths (respect WAF; back off 120s on empty/timeout). If any returns JSON doc, map v2 resources → BOLA candidates; report topology only, no exfil.
-impact: full v2 route table → unlocks cross-tenant BOLA surface → HIGH enabler
+reasoning: Live partner portal (200 → `/login`, referenced from order-form bundle, shared ingress). Partner portals commonly proxy order/commission/customer APIs; app fingerprint (Laravel vs Vue) determines the exact passive checks. No auth bypass attempted — enumeration of the public login page's own assets only.
+evidence_needed: framework fingerprint + any client-side `/api/*` or env config in its own assets.
+verify_steps: PASSIVE — GET `https://partner.easybell.de/login`; extract script/css paths; fetch referenced assets (read-only); grep for `/api/`, `VITE_`/env, partner/order endpoints; single GET of each discovered path (≥6s).
+impact: partner/order/commission data exposure → MEDIUM/HIGH.
 testability: PASSIVE
-[PARKED] my-portal-idor:55 — AUTH_HELPED, no creds, no new passive vector; unchanged.
-[PARKED] internal-k8s-hostname-leak:<40 — NXDOMAIN, not resolvable, info-only.
-[PARKED] voip-api-ssrf-to-metadata:<40 — no URL-accepting endpoint; still route-dependent.
-[FINAL] voip-cors-cred-exfil-v3,92 — confirmed 7 endpoints, POC-ready, HUMAN report line.
-[FINAL] my-portal-api-proxy-wildcard,78 — secondary exfil path, same HUMAN barrier.
-[FINAL] my-laravel-misconfig-surface,42 — new zero-credential line, concrete GET proof, not REJECTED-class.
-[FINAL] voip-spring-openapi-route-map,40 — floor, cheap single GETs, only live line left on voip surface.
-[NEXT] PROBE: POST-13:13:54UTC cooldown done → spaced ≥6s, ≤1rps, GET-only: 1) https://my.easybell.com/.env (expect 200 PHP env vs 403/404 block), 2) https://my.easybell.com/.git/config, 3) https://my.easybell.com/telescope, 4) https://my.easybell.com/_ignition/health-check, 5) https://my.easybell.com/storage/logs/laravel.log. On .env 200: record existence + sha256 APP_KEY, redact everything else, report as misconfig finding (cookie-forge ATO chain is verify-only, do not exploit). Then same cooldown-aware single GETs to https://voip-management.easybell.de/api/v3/api-docs and /api/swagger-ui.html for the v2 route map.
-[LEARN] ACCEPTED MISCONFIG @ my.easybell.com: Laravel dotfile/debug misconfig surface (.env, /.git, /telescope, /_ignition) confirmed untested across all prior cycles — new zero-credential line; single GETs may surface HIGH env/app-key exposure.
-[LEARN] REJECTED MISCONFIG @ voip-management.easybell.de/api: Actuator re-probed 13:13:54 UTC — all paths nginx HTML 404; Spring Boot actuator definitively not exposed; line closed.
-[LEARN] REJECTED MISCONFIG @ voip-management.easybell.de/api: OpenAPI/swagger unprobed — next (and last) passive doc-disclosure line, confidence floor 40.
-[RISK] easybell: 68
-reasoning: Primary deliverable (7-endpoint credentialed CORS exfil, 92) confirmed and re-verified today but remains HUMAN-gated for the authenticated PoC; two fresh zero-credential lines (portal dotfile/env surface, voip openapi map) offer the only passive unlock toward a non-credential HIGH. Actuator dead → no cheap route-table win. WAF throttles voip probing; auth/lockout classes excluded; no creds for portal IDOR. Mitigations held: read-only GET/OPTIONS, ≥6s spacing, secret redaction (sha256-only), no customer data touched, report via bugs.olivermaicher.eu only.
+[PARKED] my-portal-idor:55 — unchanged, AUTH_HELPED, no creds.
+[PARKED] voip-api-ssrf-to-metadata:<40 — no URL-accepting endpoint; unchanged.
+[PARKED] PBX/SIP HTTP surface (pbx, secure.pbx, staging-pbx, sbc-test, sip, secure.sip, ipv6.sip, voip): SIP-protocol-only, no HTTP; non-HTTP active probing outside passive discipline — parked.
+[PARKED] survey.easybell.de: Caddy survey app, low value, adjacent to rejected known-lib class — parked <40.
+[PARKED] homer/jira/confluence/connectme SaaS-backing others: NXDOMAIN or third-party (Atlassian/AWS Cloud) redirected infra — not easybell-controlled → out.
+[PARKED] portal.easybell.de: A-record present but no HTTP — dead, unchanged.
+[FINAL] voip-cors-cred-exfil-v3,92 — confirmed 7 endpoints, POC-ready, HUMAN report line. Unchanged.
+[FINAL] my-portal-api-proxy-wildcard,78 — secondary exfil path, same HUMAN barrier. Unchanged.
+[FINAL] order-form-unauth-api-surface,45 — live 405 endpoint + chunk-greppable API map, zero-credential.
+[FINAL] connectme-oidc-redirect-state-flaw,42 — fresh OIDC surface with observable structural anomaly.
+[FINAL] partner-portal-api-leak,40 — floor, cheap passive mapping.
+[NEXT] PROBE: Passive depth on order-form: GET https://order-form.easybell.de/ → extract all referenced JS chunks → grep `/api/` and endpoint strings → single spaced GET (≥6s) of every unique `/api/<path>` route derived (apc/check already confirmed live 405) + OPTIONS https://order-form.easybell.de/api/apc/check for Allow-list. Record method+status+CT only; no POSTs, no body dumps of order data.
+[LEARN] REJECTED MISCONFIG @ my.easybell.com: Laravel dotfile/debug surface DISPROVEN (18:21 UTC) — /.env, /.git/config, /telescope, /horizon, /_ignition/health-check, /storage/logs/laravel.log all return 200 text/html = Inertia SPA catch-all shell (identical portal page); no file content; catch-all makes naive 200-check a false positive.
+[LEARN] REJECTED MISCONFIG @ voip-management.easybell.de/api: OpenAPI/swagger line closed (18:22 UTC) — /api/v2/api-docs, /api/swagger-ui.html, /api/openapi.json, /api/swagger-ui/index.html (+ /api/v3/api-docs at 16:10) all nginx HTML 404; no springdoc/springfox exposure; passive doc-disclosure surface on voip now fully exhausted.
+[LEARN] ACCEPTED MISCONFIG @ easybell.de: CT sweep (18:24 UTC, crt.sh DoH-verified) shows 18 live A-record subdomains never in inventory; "passive surface exhausted" was inventory-incomplete — order-form, connectme-app(±uat/dev), partner, survey, backmon live; pbx/sip/secure.*/voip/sbc-test SIP-protocol-only; homer NX; jira/confluence = third-party cloud.
+[LEARN] ACCEPTED MISCONFIG @ order-form.easybell.de: Vite SPA bundle (index-BiM9ZwNg.js, 18:30 UTC) leaks /api/ base, live POST-only /api/apc/check (GET→405), partner.easybell.de, login.easybell.de relocation/subscription flows; shares main ingress 62.27.117.123.
+[LEARN] ACCEPTED OATH @ connectme-app.easybell.de: /authenticate → OIDC redirect to external Keycloak (dstny.d4sp.com, client_id=coven, response_type=code) with in-scope redirect_uri carrying double-slash `//login-online-session-converged638e2`; state present; prod+UAT+dev variants.
+[RISK] easybell: 70
+reasoning: Up 2 from 68. Rationale: fresh zero-credential breadth (order-form API surface, connectme OIDC, partner portal) reopens passive discovery toward a non-credential HIGH, previously judged exhausted — net upside. Two false lines closed cleanly with evidence (dotfile catch-all, openapi 404). Carried: primary CORS deliverable (92) still HUMAN-gated pending report/Po C; WAF throttle on voip unchanged; auth/lockout excluded; PBX/SIP deemed non-HTTP and parked not tested. Mitigation held throughout: ~45 read-only GET/OPTIONS this cycle at ≤0.6rps, ≥1.8–7s spacing, no POSTs, no customer/order/partner data captured (status+headers+title only), sha256 discipline for any future secret, report only via bugs.olivermaicher.eu.

@@ -150,3 +150,18 @@ www.easybell.de
 - CHANGED Spring actuator hypothesis DISPROVEN — all `/api/actuator*`, `/actuator*` return nginx HTML 404 (146B); no Spring JSON exposure
 - CHANGED Passive surface fully exhausted: CORS exfil (92), proxy wildcard (82), portal IDOR (55) all AUTH_HELPED, unchanged since 2026-09-04 21:34
 - CHANGED No unprobed passive vectors remain; all forward motion requires HUMAN session/creds or report filing
+
+## 2026-09-05 18:33:14 UTC
+- NEW CT sweep (18:23–18:24 UTC) surfaces 18 live A-record subdomains absent from all 4 days of inventory; ~6 never-probed web apps (order-form, connectme-app prod/UAT/dev, partner.easybell.de, survey) + ba
+- CHANGED Prior "passive surface exhausted" verdict RETRACTED — exhaustion was relative to an incomplete 7-host seed inventory; fresh zero-credential breadth reopens.
+- NEW order-form.easybell.de (on main ingress 62.27.117.123, shared with portal/voip-management): Vite/Vue SPA; bundle leaks `/api/` base + live POST endpoint `/api/apc/check` (GET→405, 18:30:44 UTC) + `par
+- NEW connectme-app.easybell.de: nginx SPA; `/authenticate` → 200 + OIDC redirect to external Keycloak `dstny.d4sp.com`, `client_id=coven`, `response_type=code`, `redirect_uri=...//login-online-session-conv
+- NEW partner.easybell.de: 200 → `/login` partner portal on main ingress (18:31:22 UTC).
+- CHANGED my.easybell.com dotfile line DISPROVEN: `/.env`, `/.git/config`, `/telescope`, `/_ignition/health-check`, `/storage/logs/laravel.log`, `/horizon` all 200 = identical Inertia SPA catch-all shell, no fi
+- CHANGED voip openapi line closed: `/api/v2/api-docs`, `/api/swagger-ui.html`, `/api/openapi.json`, `/api/swagger-ui/index.html` all nginx HTML 404 (18:22 UTC).
+- NEW Laravel misconfig surface on `my.easybell.com` (.env, /.git/config, /telescope, /horizon, /_ignition, /storage/logs) has ZERO coverage in all prior cycles — new zero-credential passive line
+- NEW Spring OpenAPI/swagger (springfox `/v2/api-docs`, springdoc `/v3/api-docs`, `/swagger-ui.html`, `/openapi.json`) on `voip-management.easybell.de/api/` proxy UNTRIED — distinct from dead actuator
+- CHANGED Spring actuator hypothesis DISPROVEN — all `/api/actuator*`, `/actuator*` return nginx HTML 404 (146B); no Spring JSON exposure
+- CHANGED Passive surface fully exhausted for CORS exfil (92), proxy wildcard (82), portal IDOR (55) — all AUTH_HELPED, unchanged since 2026-09-04 21:34
+- CHANGED `voip-management.k8s.easybell.de` / `k8s.easybell.de` confirmed NXDOMAIN — internal hostname leak is info-disclosure only
+- CHANGED `my.easybell.com` + `voip-management.easybell.de` share ingress IP 62.27.117.123 (same nginx); "cross-origin" split is host-header-only

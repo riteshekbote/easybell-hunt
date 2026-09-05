@@ -4881,3 +4881,1541 @@ testability: PASSIVE
 ===== RISK =====
 [RISK] easybell: 68
 reasoning: Primary deliverable (7-endpoint credentialed CORS exfil, 92) confirmed and re-verified today but remains HUMAN-gated for the authenticated PoC; two fresh zero-credential lines (portal dotfile/env surface, voip openapi map) offer the only passive unlock toward a non-credential HIGH. Actuator dead → no cheap route-table win. WAF throttles voip probing; auth/lockout classes excluded; no creds for portal IDOR. Mitigations held: read-only GET/OPTIONS, ≥6s spacing, secret redaction (sha256-only), no customer data touched, report via bugs.olivermaicher.eu only.
+===== ANALYST bigpickle 2026-09-05 18:33:14 UTC =====
+[0m
+> build · big-pickle
+[0m
+I'll analyze the current state and determine the best structured output.
+
+Let me check the current time and recent activity to inform the delta analysis.
+[0m$ [0mdate -u
+Sat Sep  5 18:21:13 UTC 2026
+[0m
+Current time is 18:21 UTC, ~2.1h since last cycle (16:10). WAF cooldown long cleared. The last cycle emitted a PROBE action for the two zero-credential passive lines. Let me determine whether those probes were actually executed, since my job is to advance, not just re-emit.
+
+Let me check whether any probe records exist after 16:10 UTC.
+[0m$ [0mls -la /home/runner/work/easybell-hunt/easybell-hunt/ 2>/dev/null; echo "---"; find /home/runner/work/easybell-hunt/easybell-hunt -name "*.txt" -o -name "*.md" 2>/dev/null | head -50
+total 184
+drwxr-xr-x 12 runner runner  4096 Sep  5 18:21 .
+drwxr-xr-x  3 runner runner  4096 Sep  5 18:20 ..
+drwxr-xr-x  7 runner runner  4096 Sep  5 18:21 .git
+drwxr-xr-x  3 runner runner  4096 Sep  5 18:20 .github
+-rw-r--r--  1 runner runner  1756 Sep  5 18:20 README.md
+-rw-r--r--  1 runner runner   576 Sep  5 18:21 analyst-out.txt
+-rw-r--r--  1 runner runner 45354 Sep  5 18:21 analyst-prompt.txt
+-rw-r--r--  1 runner runner 41547 Sep  5 18:21 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep  5 18:20 inventory
+drwxr-xr-x  2 runner runner  4096 Sep  5 18:20 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep  5 18:20 leads
+-rw-r--r--  1 runner runner  4306 Sep  5 18:20 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep  5 18:20 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep  5 18:20 reports
+drwxr-xr-x  2 runner runner  4096 Sep  5 18:20 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep  5 18:20 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep  5 18:20 scripts
+-rw-r--r--  1 runner runner    33 Sep  5 18:20 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep  5 18:20 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep  5 18:20 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep  5 18:20 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep  5 18:20 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep  5 18:20 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep  5 18:20 triage
+---
+/home/runner/work/easybell-hunt/easybell-hunt/analyst-out.txt
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-03-17-47.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-05-01-06.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-04-06-02.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-03-20-54.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-04-15-06.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-04-18-29.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-05-16-16.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-04-23-05.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-02-21-59.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-04-21-03.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-03-00-06.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-04-11-29.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-03-13-56.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-03-04-45.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-05-10-27.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-05-05-54.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-04-01-05.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-05-13-32.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-03-23-11.md
+/home/runner/work/easybell-hunt/easybell-hunt/triage/run-2026-09-03-09-37.md
+/home/runner/work/easybell-hunt/easybell-hunt/recon-notes/DEDICATED-DEEP.md
+/home/runner/work/easybell-hunt/easybell-hunt/inventory/easybell.md
+/home/runner/work/easybell-hunt/easybell-hunt/knowledge/index.md
+/home/runner/work/easybell-hunt/easybell-hunt/analyst-prompt.txt
+/home/runner/work/easybell-hunt/easybell-hunt/probe-results.md
+/home/runner/work/easybell-hunt/easybell-hunt/reports/hypotheses-ling3.txt
+/home/runner/work/easybell-hunt/easybell-hunt/reports/hypotheses-bigpickle.txt
+/home/runner/work/easybell-hunt/easybell-hunt/reports/hypotheses-longcat.txt
+/home/runner/work/easybell-hunt/easybell-hunt/reports/hypotheses-laguna.txt
+/home/runner/work/easybell-hunt/easybell-hunt/reports/hypotheses-nemotron3.txt
+/home/runner/work/easybell-hunt/easybell-hunt/reports/hypotheses.md
+/home/runner/work/easybell-hunt/easybell-hunt/reports/valid-bugs.md
+/home/runner/work/easybell-hunt/easybell-hunt/leads/reposcan-easybell.md
+/home/runner/work/easybell-hunt/easybell-hunt/leads/lead-nemotron3.md
+/home/runner/work/easybell-hunt/easybell-hunt/leads/lead-bigpickle.md
+/home/runner/work/easybell-hunt/easybell-hunt/leads/lead-laguna.md
+/home/runner/work/easybell-hunt/easybell-hunt/leads/lead-ling3.md
+/home/runner/work/easybell-hunt/easybell-hunt/leads/lead-mimo.md
+/home/runner/work/easybell-hunt/easybell-hunt/leads/lead-longcat.md
+/home/runner/work/easybell-hunt/easybell-hunt/reposcan-raw/summary.txt
+/home/runner/work/easybell-hunt/easybell-hunt/README.md
+/home/runner/work/easybell-hunt/easybell-hunt/ctx.txt
+[0m
+[0m→ [0mRead probe-results.md
+[0m→ [0mRead leads/lead-bigpickle.md
+Let me check the probe-results.md and the latest triage run to determine what's been executed since 16:10, and whether the two zero-credential lines (Laravel dotfile surface + voip openapi) were already probed.
+[0m→ [0mRead triage/run-2026-09-05-16-16.md
+[0m→ [0mRead reports/hypotheses-bigpickle.txt
+The last probe log (16:10:17 UTC) shows `/api/v3/api-docs -> HTTP 404` was already probed in my last cycle. That confirms the OpenAPI line was partially tested. Let me look at the most recent triage run and the probe results right after 16:10 to understand what's been completed versus what remains.
+
+Key finding: at 16:10:17 UTC, `/api/v3/api-docs` returned HTTP 404 (nginx HTML presumably). So the openapi line on voip was partially probed. The Laravel dotfile surface on my.easybell.com seems NOT yet probed (no probe-results entries for my.easybell.com/.env etc).
+
+Let me check the triage run from 16:16 and any subsequent probe activity.
+The probe log at 16:10:17 showed `/api/v3/api-docs -> HTTP 404` was executed (part of the openapi line). But the Laravel dotfile probes (.env, .git/config, telescope, etc.) do NOT appear in the probe-results.md. So my last cycle executed only the first voip openapi probe and stopped. The Laravel dotfile surface on my.easybell.com remains completely unprobed.
+
+Since my NEXT ACTION already emitted the probe plan, and I'm now in a fresh analysis cycle, I should determine whether to actually execute those paused probes. My instructions work passively-first but the probes I can run are read-only GETs which are allowed. Let me actually execute the highest-value zero-credential pauses now to generate real evidence rather than re-emitting.
+
+Let me run the Laravel dotfile probes on my.easybell.com (these are read-only GET, within discipline) and confirm the voip openapi remaining paths (v2/api-docs, swagger-ui.html). Given WAF on voip, I need ≥6s spacing. my.easybell.com has no WAF noted.
+
+Let me execute them, respecting rate limits.
+[0m
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error, time
+
+def get(url, timeout=20):
+    req = urllib.request.Request(url, method='GET', headers={'User-Agent':'Mozilla/5.0 (compatible; scan/1.0)'})
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        body = r.read(500)
+        return r.status, dict(r.headers), body
+    except urllib.error.HTTPError as e:
+        return e.code, dict(e.headers), e.read(500)
+    except Exception as e:
+        return 'ERR', {}, str(e).encode()
+
+urls = [
+    'https://my.easybell.com/.env',
+    'https://my.easybell.com/.git/config',
+    'https://my.easybell.com/telescope',
+    'https://my.easybell.com/_ignition/health-check',
+    'https://my.easybell.com/storage/logs/laravel.log',
+    'https://my.easybell.com/horizon',
+]
+for u in urls:
+    st, h, b = get(u)
+    ct = h.get('Content-Type','')
+    ser = h.get('Server','')
+    print(f"{st}\t{ct}\t{ser}\t{u}")
+    # note first 200 chars of body for status discrimination only
+    print("   body:", b[:160])
+    time.sleep(6)
+EOF
+Sat Sep  5 18:21:24 UTC 2026
+200	text/html; charset=utf-8		https://my.easybell.com/.env
+   body: b'<!DOCTYPE html>\n<html lang="de">\n\n<head>\n  <meta charset="utf-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />\n\n '
+200	text/html; charset=utf-8		https://my.easybell.com/.git/config
+   body: b'<!DOCTYPE html>\n<html lang="de">\n\n<head>\n  <meta charset="utf-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />\n\n '
+200	text/html; charset=utf-8		https://my.easybell.com/telescope
+   body: b'<!DOCTYPE html>\n<html lang="de">\n\n<head>\n  <meta charset="utf-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />\n\n '
+200	text/html; charset=utf-8		https://my.easybell.com/_ignition/health-check
+   body: b'<!DOCTYPE html>\n<html lang="de">\n\n<head>\n  <meta charset="utf-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />\n\n '
+200	text/html; charset=utf-8		https://my.easybell.com/storage/logs/laravel.log
+   body: b'<!DOCTYPE html>\n<html lang="de">\n\n<head>\n  <meta charset="utf-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />\n\n '
+200	text/html; charset=utf-8		https://my.easybell.com/horizon
+   body: b'<!DOCTYPE html>\n<html lang="de">\n\n<head>\n  <meta charset="utf-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />\n\n '
+[0m
+All six Laravel paths return `200 text/html` with the identical Vue SPA shell (`<!DOCTYPE html><html lang="de">...`). That's the Inertia catch-all route serving the portal for ANY unknown path — not a file exposure. The `.env`/`.git/telescope` line is a false positive: 200-on-any-path, no actual dotfile content. Line closed.
+
+Now the remaining voip openapi paths, respecting ≥6s spacing and WAF cooldown (~2h since last voip probe):
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error, time
+
+def get(url, timeout=25):
+    req = urllib.request.Request(url, method='GET', headers={'User-Agent':'Mozilla/5.0 (compatible; scan/1.0)'})
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        body = r.read(300)
+        return r.status, dict(r.headers), body
+    except urllib.error.HTTPError as e:
+        return e.code, dict(e.headers), e.read(300)
+    except Exception as e:
+        return 'ERR', {}, str(e).encode()
+
+urls = [
+    'https://voip-management.easybell.de/api/v2/api-docs',
+    'https://voip-management.easybell.de/api/swagger-ui.html',
+    'https://voip-management.easybell.de/api/openapi.json',
+    'https://voip-management.easybell.de/api/swagger-ui/index.html',
+]
+for u in urls:
+    st, h, b = get(u)
+    ct = h.get('Content-Type','')
+    print(f"{st}\t{ct}\t{u}")
+    print("   body[:120]:", b[:120])
+    time.sleep(7)
+EOF
+Sat Sep  5 18:22:23 UTC 2026
+404	text/html	https://voip-management.easybell.de/api/v2/api-docs
+   body[:120]: b'<html>\r\n<head><title>404 Not Found</title></head>\r\n<body>\r\n<center><h1>404 Not Found</h1></center>\r\n<hr><center>nginx</c'
+404	text/html	https://voip-management.easybell.de/api/swagger-ui.html
+   body[:120]: b'<html>\r\n<head><title>404 Not Found</title></head>\r\n<body>\r\n<center><h1>404 Not Found</h1></center>\r\n<hr><center>nginx</c'
+404	text/html	https://voip-management.easybell.de/api/openapi.json
+   body[:120]: b'<html>\r\n<head><title>404 Not Found</title></head>\r\n<body>\r\n<center><h1>404 Not Found</h1></center>\r\n<hr><center>nginx</c'
+404	text/html	https://voip-management.easybell.de/api/swagger-ui/index.html
+   body[:120]: b'<html>\r\n<head><title>404 Not Found</title></head>\r\n<body>\r\n<center><h1>404 Not Found</h1></center>\r\n<hr><center>nginx</c'
+[0m
+Both remaining voip paths return nginx HTML 404 — identical to actuator. The Spring backend exposes no springdoc/springfox; combined with `/api/v3/api-docs` 404 at 16:10, the entire OpenAPI disclosure line is disproven. Both zero-credential pause lines are now closed by actual probes.
+
+Last passive breadth check before conceding saturation — fresh certificate-transparency sweep for any subdomains not in the seed inventory:
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error, json, time
+
+def fetch(url, timeout=30):
+    req = urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0'})
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        return r.status, r.read()
+    except urllib.error.HTTPError as e:
+        return e.code, e.read()
+    except Exception as e:
+        return 'ERR', str(e).encode()
+
+st, body = fetch('https://crt.sh/?q=%25.easybell.de&output=json')
+print("status:", st, "len:", len(body))
+if st == 200:
+    try:
+        data = json.loads(body)
+        names = set()
+        for e in data:
+            nm = e.get('name_value','')
+            for n in nm.split('\n'):
+                n = n.strip().lower()
+                if n:
+                    names.add(n)
+        for n in sorted(names):
+            print(n)
+    except Exception as ex:
+        print("parse err", ex)
+        print(body[:400])
+EOF
+Sat Sep  5 18:23:20 UTC 2026
+status: 502 len: 150
+[0m
+crt.sh 502. Retrying once, with certspotter as fallback:
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error, json, time
+
+def fetch(url, timeout=30):
+    req = urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0'})
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        return r.status, r.read()
+    except urllib.error.HTTPError as e:
+        return e.code, e.read()
+    except Exception as e:
+        return 'ERR', str(e).encode()
+
+time.sleep(3)
+st, body = fetch('https://crt.sh/?q=%25.easybell.de&output=json')
+print("crt.sh status:", st, "len:", len(body))
+if st == 200:
+    try:
+        data = json.loads(body)
+        names = set()
+        for e in data:
+            for n in e.get('name_value','').split('\n'):
+                n = n.strip().lower()
+                if n: names.add(n)
+        for n in sorted(names): print(n)
+    except Exception as ex:
+        print("parse err", ex, body[:300])
+else:
+    st2, body2 = fetch('https://api.certspotter.com/v1/issuances?domain=easybell.de&include_subdomains=true&expand=dns_names')
+    print("certspotter status:", st2, "len:", len(body2))
+    if st2 == 200:
+        try:
+            data = json.loads(body2)
+            names = set()
+            for e in data:
+                for n in e.get('dns_names', []):
+                    n = n.strip().lower().rstrip('.').lstrip('*.')
+                    if n: names.add(n)
+            for n in sorted(names): print(n)
+        except Exception as ex:
+            print("parse err", ex, body2[:300])
+EOF
+Sat Sep  5 18:23:31 UTC 2026
+crt.sh status: 200 len: 1410632
+*.bak-k8s.easybell.de
+*.dev-k8s.easybell.de
+*.easybell.de
+*.k8s.easybell.de
+*.kube.easybell.de
+*.pages.gitlab.easybell.de
+*.tmp-k8s.easybell.de
+*.vp.easybell.de
+acs-test.easybell.de
+add-plan-duplicat-jfbiq9.order.k8s.easybell.de
+admin-add-endpoin-aedb2q.teams-connector.k8s.easybell.de
+al-1088-9avapy.crm.k8s.easybell.de
+al-1101-bf3xu1.crm.k8s.easybell.de
+al-1115-lxv0n2.crm.k8s.easybell.de
+al-1131-kicu6t.crm.k8s.easybell.de
+al-1179-umeitv.crm.k8s.easybell.de
+al-1193-zd275g.crm.k8s.easybell.de
+al-1196-ss8k65.crm.k8s.easybell.de
+al-1212-sss6p9.crm.k8s.easybell.de
+al-827-ucuc3s.crm.k8s.easybell.de
+al-883-pd52ib.crm.k8s.easybell.de
+al-899-m1758f.strapi.k8s.easybell.de
+al-903-x9fjpr.crm.k8s.easybell.de
+al-967-vr4df5.crm.k8s.easybell.de
+al-974-khq3tg.crm.k8s.easybell.de
+andrius-asterisk-33s2t2.voice-features.k8s.easybell.de
+apc.k8s.easybell.de
+argocd.k8s.easybell.de
+askozia-wallboard-proxy.k8s.easybell.de
+autoconfig.easybell.de
+autodiscover.easybell.de
+ava.k8s.easybell.de
+backend-ci-switch-to-new-gc8myh-cta.k8s.easybell.de
+backend-cta-2529-create-s-0r7nxv-cta.k8s.easybell.de
+backend-cta.k8s.easybell.de
+backend-feat-3028-get-tar-s11rf0-cta.k8s.easybell.de
+backend-feat-cat-2305-sno-i8fef8-cta.k8s.easybell.de
+backend-feat-cta-2607-pus-hppkb7-cta.k8s.easybell.de
+backend-feat-cta-2778-ana-odyie6-cta.k8s.easybell.de
+backend-feat-cta-2986-bac-gey1d3-cta.k8s.easybell.de
+backend-feature-2996-api-oglrzq-cta.k8s.easybell.de
+backend-feature-cta-2202-e3ikkk-cta.k8s.easybell.de
+backend-feature-cta-2573-1n4mk7-cta.k8s.easybell.de
+backend-feature-cta-2665-y6rige-cta.k8s.easybell.de
+backend-feature-cta-2796-3legjj-cta.k8s.easybell.de
+backend-fix-cta-2477-allo-4wzqoa-cta.k8s.easybell.de
+backend-fix-cta-2518-chan-6lyv2v-cta.k8s.easybell.de
+backend-fix-cta-2530-fix-9r2e07-cta.k8s.easybell.de
+backend-fix-cta-2535-cta.k8s.easybell.de
+backend-fix-cta-2583-cont-d567tr-cta.k8s.easybell.de
+backend-fix-cta-2663-some-bine3p-cta.k8s.easybell.de
+backend-fix-cta-2672-cfc-djbt3q-cta.k8s.easybell.de
+backend-fix-cta-2682-manu-sre7bx-cta.k8s.easybell.de
+backend-fix-cta-2760-offi-nxkv84-cta.k8s.easybell.de
+backend-fix-cta-2778-add-7mvipb-cta.k8s.easybell.de
+backend-fix-cta-2780-queu-eyzx2c-cta.k8s.easybell.de
+backend-fix-cta-2828-rest-gc2349-cta.k8s.easybell.de
+backend-fix-cta-2854-dele-2qa8wv-cta.k8s.easybell.de
+backend-fix-cta-2858-chan-kw9m3k-cta.k8s.easybell.de
+backend-fix-cta-2950-cfc-ahw2m5-cta.k8s.easybell.de
+backend-fix-cta-2979-migr-3z38q5-cta.k8s.easybell.de
+backend-order.k8s.easybell.de
+backend-staging-cta.k8s.easybell.de
+backend-staging-order.k8s.easybell.de
+backend-staging-teams-connector.k8s.easybell.de
+backend-teams-connector.k8s.easybell.de
+backend-update-cta-2284-u-evj49y-cta.k8s.easybell.de
+backend.add-plan-duplicat-jfbiq9.order.k8s.easybell.de
+backend.admin-add-endpoin-aedb2q.teams-connector.k8s.easybell.de
+backend.build-apache-perm-wixyoh.teams-connector.k8s.easybell.de
+backend.build-kaniko-o8jn2p.teams-connector.k8s.easybell.de
+backend.cfc-basic-plan-test.cta.k8s.easybell.de
+backend.change-vp-858-cha-krk3dv.cta.k8s.easybell.de
+backend.ci-cta-1893-squas-vk9xl3.cta.k8s.easybell.de
+backend.ci-deploy-k8s-g6tksv.cta.k8s.easybell.de
+backend.ci-deploy-k8s-g6tksv.order.k8s.easybell.de
+backend.cta-1710-cfc-be-w-p2dke0.cta.k8s.easybell.de
+backend.cta-1782-add-audi-va0trl.cta.k8s.easybell.de
+backend.cta.k8s.easybell.de
+backend.feat-cta-1335-lim-kt90a5.cta.k8s.easybell.de
+backend.feat-cta-1386-cal-3ijsfh.cta.k8s.easybell.de
+backend.feat-cta-1433-imp-5zrk78.cta.k8s.easybell.de
+backend.feat-cta-1494-bac-dklfj4.cta.k8s.easybell.de
+backend.feat-cta-1564-bac-aaium1.cta.k8s.easybell.de
+backend.feat-cta-1784-bac-28qw5q.cta.k8s.easybell.de
+backend.feat-ttc-1058-add-6c60g8.teams-connector.k8s.easybell.de
+backend.feat-ttc-1472-ski-8gt3bq.teams-connector.k8s.easybell.de
+backend.feat-ttc-1473-sho-eafe22.teams-connector.k8s.easybell.de
+backend.feat-ttc-1481-add-orgyjn.teams-connector.k8s.easybell.de
+backend.feat-ttc-1553-add-se0na8.teams-connector.k8s.easybell.de
+backend.feat-vp-895-vp-85-n69ufn.cta.k8s.easybell.de
+backend.feature-cta-1483-hajkln.cta.k8s.easybell.de
+backend.feature-cta-1483-inports.cta.k8s.easybell.de
+backend.feature-cta-1517-gx9x8k.cta.k8s.easybell.de
+backend.feature-cta-1526-wklznr.cta.k8s.easybell.de
+backend.feature-cta-1534-gm0fvd.cta.k8s.easybell.de
+backend.feature-cta-1544-xtgln6.cta.k8s.easybell.de
+backend.feature-cta-1551-hqjupz.cta.k8s.easybell.de
+backend.feature-cta-1571-ksuy2p.cta.k8s.easybell.de
+backend.feature-cta-1619-nnw50t.cta.k8s.easybell.de
+backend.feature-cta-1773-kj4bkx.cta.k8s.easybell.de
+backend.feature-cta-1854-ch6yjd.cta.k8s.easybell.de
+backend.feature-cta-1863-qx56j1.cta.k8s.easybell.de
+backend.feature-cta-1870-xy1ros.cta.k8s.easybell.de
+backend.feature-cta-1904-2zcz32.cta.k8s.easybell.de
+backend.feature-ttc-1605-cscvns.teams-connector.k8s.easybell.de
+backend.featurexyz.cta.k8s.easybell.de
+backend.fix-1582-forwarde-2xp37p.cta.k8s.easybell.de
+backend.fix-al-1028-do-no-sts6ka.teams-connector.k8s.easybell.de
+backend.fix-apc-check-url-02yjze.order.k8s.easybell.de
+backend.fix-cta-1363-cont-w4hsw3.cta.k8s.easybell.de
+backend.fix-cta-1379-queu-qia6bs.cta.k8s.easybell.de
+backend.fix-cta-1386-forw-hec5ty.cta.k8s.easybell.de
+backend.fix-cta-1396-chec-04moxk.cta.k8s.easybell.de
+backend.fix-cta-1423-nigh-t9y0yb.cta.k8s.easybell.de
+backend.fix-cta-1425-chan-o0jn3p.cta.k8s.easybell.de
+backend.fix-cta-1432-show-geaxx6.cta.k8s.easybell.de
+backend.fix-cta-1444-devi-xvfncn.cta.k8s.easybell.de
+backend.fix-cta-1449-wait-5i6mj9.cta.k8s.easybell.de
+backend.fix-cta-1488-mste-ic4oqe.cta.k8s.easybell.de
+backend.fix-cta-1496-remo-3qyame.cta.k8s.easybell.de
+backend.fix-cta-1518-disp-fye7r6.cta.k8s.easybell.de
+backend.fix-cta-1528-cont-xk2akh.cta.k8s.easybell.de
+backend.fix-cta-1531-no-o-wgabwv.cta.k8s.easybell.de
+backend.fix-cta-1532-fix-brfkbj.cta.k8s.easybell.de
+backend.fix-cta-1605-load-d4jwvl.cta.k8s.easybell.de
+backend.fix-cta-1648-spec-jj9ksy.cta.k8s.easybell.de
+backend.fix-cta-1664-send-6ueb2y.cta.k8s.easybell.de
+backend.fix-cta-1669-wron-5vzxsw.cta.k8s.easybell.de
+backend.fix-cta-1675-allo-st6hji.cta.k8s.easybell.de
+backend.fix-cta-1740-queu-ivueoi.cta.k8s.easybell.de
+backend.fix-cta-1749-ttc-9xc38d.cta.k8s.easybell.de
+backend.fix-cta-1817-miss-kt5v91.cta.k8s.easybell.de
+backend.fix-cta-1826-exce-05tpp7.cta.k8s.easybell.de
+backend.fix-cta-1925-exce-hsp3lm.cta.k8s.easybell.de
+backend.fix-cta-27-phoneb-wvv20x.cta.k8s.easybell.de
+backend.fix-logging-klm854.order.k8s.easybell.de
+backend.fix-ttc-1363-do-n-dnfn8g.teams-connector.k8s.easybell.de
+backend.fix-ttc-1417-rese-g4w6ic.teams-connector.k8s.easybell.de
+backend.fix-ttc-1492-aste-mu8hxi.cta.k8s.easybell.de
+backend.itop-1486-0wgczv.order.k8s.easybell.de
+backend.last-tc-cta-fixes-gt9lg1.cta.k8s.easybell.de
+backend.order.k8s.easybell.de
+backend.rdr4-1079-tp5qu1.order.k8s.easybell.de
+backend.rdr4-1103-0t0d1o.order.k8s.easybell.de
+backend.rdr4-1145-6qc3pa.order.k8s.easybell.de
+backend.refactor-cta-1781-qssccv.cta.k8s.easybell.de
+backend.security-cta-1777-75o59b.cta.k8s.easybell.de
+backend.staging.cta.k8s.easybell.de
+backend.staging.document-handler.k8s.easybell.de
+backend.staging.order.k8s.easybell.de
+backend.staging.payment-management.k8s.easybell.de
+backend.staging.teams-connector.k8s.easybell.de
+backend.task-al-731-ulyiyk.teams-connector.k8s.easybell.de
+backend.teams-connector.k8s.easybell.de
+backend.test-al-976-authe-84i32h.teams-connector.k8s.easybell.de
+backend.test-logging-o36ip8.teams-connector.k8s.easybell.de
+backend.ttc-1475-flush-re-su8n56.teams-connector.k8s.easybell.de
+backend.ttc-1539-fix-aste-wzv1tg.teams-connector.k8s.easybell.de
+backend.ttc-1544-add-ms-l-5q0j7w.teams-connector.k8s.easybell.de
+backend.ttc-1619-return-p-8lyl1a.teams-connector.k8s.easybell.de
+backend.upgrade-cta-1728-3o0w5d.cta.k8s.easybell.de
+backmon.easybell.de
+bugfix-al-1139-fi-megiqf.crm.k8s.easybell.de
+bugfix-al-1166-th-uhg9y3.crm.k8s.easybell.de
+bugfix-ekp-1338-i-x5hhjs.ekp.k8s.easybell.de
+build-apache-perm-wixyoh.teams-connector.k8s.easybell.de
+build-java17b-r0ddfd.workflow-engine.k8s.easybell.de
+build-kaniko-o8jn2p.teams-connector.k8s.easybell.de
+cdr-repository.k8s.easybell.de
+cerberus-staging.k8s.easybell.de
+cerberus.k8s.easybell.de
+certtest2.k8s.easybell.de
+cfc-basic-plan-test.cta.k8s.easybell.de
+change-asterisk-e-a10mkn.voice-features.k8s.easybell.de
+change-fax-file-n-3f1mvg.voice-features.k8s.easybell.de
+change-vp-858-cha-krk3dv.cta.k8s.easybell.de
+chatbot.easybell.de
+check-source-min-isgcf1-voice-features.k8s.easybell.de
+ci-cta-1893-squas-vk9xl3.cta.k8s.easybell.de
+ci-depliy-k8-42z9ib.order-gateway.k8s.easybell.de
+ci-deploy-k8s-g6tksv.crm.k8s.easybell.de
+ci-deploy-k8s-g6tksv.cta.k8s.easybell.de
+ci-deploy-k8s-g6tksv.order.k8s.easybell.de
+ci-deploy-k8s-g6tksv.partner.k8s.easybell.de
+ci-deploy-k8s-g6tksv.partnerportal.k8s.easybell.de
+ci-domain-b29zj9.cta.k8s.easybell.de
+ci-feature-test-bsr6oh.phone-provisioning.k8s.easybell.de
+ci-k8s-deployment-udlzz5.esis.k8s.easybell.de
+ci-logging-lkpsc6.partner.k8s.easybell.de
+ci-use-k8s-nr2-7s56el.ekp.k8s.easybell.de
+ci-use-k8s-tw08j6.ava.k8s.easybell.de
+ci-use-k8s-tw08j6.ekp.k8s.easybell.de
+colt-gateway.k8s.easybell.de
+confluence.easybell.de
+connectme-app-developer.easybell.de
+connectme-app-uat.easybell.de
+connectme-app.easybell.de
+crm.k8s.easybell.de
+cta-1459-drawflow-00mbuc.cta.k8s.easybell.de
+cta-1619-restrict-s64xka.cta.k8s.easybell.de
+cta-1710-cfc-be-w-p2dke0.cta.k8s.easybell.de
+cta-1710-cfc-fe-w-snbycb.cta.k8s.easybell.de
+cta-1782-add-audi-va0trl.cta.k8s.easybell.de
+cta-1891-add-heal-m4dy5l.phone-provisioning.k8s.easybell.de
+cta.k8s.easybell.de
+ddevops-284-vuv33x.document-handler.k8s.easybell.de
+debitor-management-ebit.k8s.easybell.de
+debitor-management.k8s.easybell.de
+deploy-k8s-7sc7ht.cdr-repository.k8s.easybell.de
+deploy-k8s-7sc7ht.colt-gateway.k8s.easybell.de
+devops-120-oin7f7.payment-management.k8s.easybell.de
+devops-285-b4l2yg.debitor-management.k8s.easybell.de
+disc-fix-cache-pa-e9e7co.partner.k8s.easybell.de
+document-handler-ebit.k8s.easybell.de
+document-handler.k8s.easybell.de
+eadev-219-1uflog-easybell.k8s.easybell.de
+easybell.de
+easybellcom-new.k8s.easybell.de
+easybellcom-testing.k8s.easybell.de
+easybellcom.k8s.easybell.de
+easybellde.k8s.easybell.de
+easytest.k8s.easybell.de
+ekp.k8s.easybell.de
+en-bugfix-eadev-315-gjoa8a-easybell.k8s.easybell.de
+en-eadev-219-1uflog-easybell.k8s.easybell.de
+en-eadev-219-1uflog-easybellde.k8s.easybell.de
+en-feat-eadev-153-st-gwvkj6.easybell.k8s.easybell.de
+en-feat-eadev-182-pa-xlyl14.easybell.k8s.easybell.de
+en-feat-eadev-197-op-f6qjzm.easybell.k8s.easybell.de
+en-feat-eadev-2-move-112kgh-easybell.k8s.easybell.de
+en-feat-eadev-2-move-112kgh-easybellde.k8s.easybell.de
+en-feat-eadev-201-ri-dzl8d7-easybell.k8s.easybell.de
+en-feat-eadev-201-ri-dzl8d7-easybellde.k8s.easybell.de
+en-feat-eadev-203-al-wn6w33.easybell.k8s.easybell.de
+en-feat-eadev-205-sh-6fvt1r.easybell.k8s.easybell.de
+en-feat-eadev-296-re-wltbg6.easybell.k8s.easybell.de
+en-feat-eadev-297-ne-edpwn6.easybell.k8s.easybell.de
+en-feature-eadev-219-dxz6l1.easybell.k8s.easybell.de
+en-feature-eadev-285-a9qf0c-easybell.k8s.easybell.de
+en-feature-eadev-285-a9qf0c-easybellde.k8s.easybell.de
+en-feature-eadev-43-vo89ct-easybell.k8s.easybell.de
+en-feature-eadev-43-vo89ct-easybellde.k8s.easybell.de
+en-fix-eadev-222-ce-51igq2.easybell.k8s.easybell.de
+en-fix-eadev-299-lan-kpnpzd.easybell.k8s.easybell.de
+en-fix-eadev-309-fix-gg6jxw.easybell.k8s.easybell.de
+en-staging-easybellde.k8s.easybell.de
+en-staging.easybellde.k8s.easybell.de
+en-task-eadev-195-ad-tdxd1d.easybell.k8s.easybell.de
+en-task-eadev-198-xa1kvd-easybell.k8s.easybell.de
+en-task-eadev-198-xa1kvd-easybellde.k8s.easybell.de
+en.easybellde.k8s.easybell.de
+esis.k8s.easybell.de
+feat-al-1021-agen-1wnlen.crm.k8s.easybell.de
+feat-al-1045-crea-lmkht8.crm.k8s.easybell.de
+feat-al-1087-remo-wn8pr7.cdr-repository.k8s.easybell.de
+feat-al-1091-down-3prdz9.crm.k8s.easybell.de
+feat-al-1106-endp-a4dbxv.crm.k8s.easybell.de
+feat-al-1130-disp-dp2xul.crm.k8s.easybell.de
+feat-al-1178-sent-ikfwul.crm.k8s.easybell.de
+feat-al-600-consu-n0xjaw.apc.k8s.easybell.de
+feat-al-600-sip-t-ag95w4.apc.k8s.easybell.de
+feat-al-841-api-v-irambt.crm.k8s.easybell.de
+feat-al-920-adjus-wxdiy0.crm.k8s.easybell.de
+feat-al-927-chang-9j8zbd.crm.k8s.easybell.de
+feat-al-961-apis-dqwec3.crm.k8s.easybell.de
+feat-al-999-al-10-hcbci2.cdr-repository.k8s.easybell.de
+feat-api-1mtbr7.voice-features.k8s.easybell.de
+feat-cta-1293-add-6ldsvz.cta.k8s.easybell.de
+feat-cta-1335-lim-kt90a5.cta.k8s.easybell.de
+feat-cta-1362-fro-ki6u7c.cta.k8s.easybell.de
+feat-cta-1386-cal-3ijsfh.cta.k8s.easybell.de
+feat-cta-1433-imp-5zrk78.cta.k8s.easybell.de
+feat-cta-1434-add-12v85r.cta.k8s.easybell.de
+feat-cta-1494-bac-dklfj4.cta.k8s.easybell.de
+feat-cta-1518-sho-19w97r.cta.k8s.easybell.de
+feat-cta-1563-add-39jgtf.cta.k8s.easybell.de
+feat-cta-1564-bac-aaium1.cta.k8s.easybell.de
+feat-cta-1618-sho-veleb0.cta.k8s.easybell.de
+feat-cta-1626-add-w6o0u1.cta.k8s.easybell.de
+feat-cta-1656-dis-i7vb5x.cta.k8s.easybell.de
+feat-cta-1663-aut-gfnrzt.cta.k8s.easybell.de
+feat-cta-1779-rem-8x8n48.cta.k8s.easybell.de
+feat-cta-1784-bac-28qw5q.cta.k8s.easybell.de
+feat-cta-1784-fro-jsdhkv.cta.k8s.easybell.de
+feat-cta-1807-add-7proi5.cta.k8s.easybell.de
+feat-cta-877-play-3ilblf.cta.k8s.easybell.de
+feat-eadev-153-st-gwvkj6.easybell.k8s.easybell.de
+feat-eadev-182-pa-xlyl14.easybell.k8s.easybell.de
+feat-eadev-197-op-f6qjzm.easybell.k8s.easybell.de
+feat-eadev-203-al-wn6w33.easybell.k8s.easybell.de
+feat-eadev-205-sh-6fvt1r.easybell.k8s.easybell.de
+feat-eadev-296-re-wltbg6.easybell.k8s.easybell.de
+feat-eadev-297-ne-edpwn6.easybell.k8s.easybell.de
+feat-esis-332-u3tmj8.esis.k8s.easybell.de
+feat-rating-cdrs-1070u9.cdr-repository.k8s.easybell.de
+feat-ttc-1058-add-6c60g8.backend.teams-connector.k8s.easybell.de
+feat-ttc-1058-add-6c60g8.teams-connector.k8s.easybell.de
+feat-ttc-1302-rem-vwug47.cta.k8s.easybell.de
+feat-ttc-1332-cta-824yfm.teams-connector.k8s.easybell.de
+feat-ttc-1439-hid-5uk5t2.teams-connector.k8s.easybell.de
+feat-ttc-1472-ski-8gt3bq.teams-connector.k8s.easybell.de
+feat-ttc-1473-sho-eafe22.backend.teams-connector.k8s.easybell.de
+feat-ttc-1473-sho-eafe22.teams-connector.k8s.easybell.de
+feat-ttc-1481-add-orgyjn.teams-connector.k8s.easybell.de
+feat-ttc-1502-con-wivi68.teams-connector.k8s.easybell.de
+feat-ttc-1502-red-ym1jc8-teams-connector.k8s.easybell.de
+feat-ttc-1502-red-ym1jc8.teams-connector.k8s.easybell.de
+feat-ttc-1544-fix-jah3sh.teams-connector.k8s.easybell.de
+feat-ttc-1544-ms-uoy7r5.teams-connector.k8s.easybell.de
+feat-ttc-1544-pro-69vhmm.teams-connector.k8s.easybell.de
+feat-ttc-1544-pro-fv8gac.teams-connector.k8s.easybell.de
+feat-ttc-1544-pro-wwyz36.teams-connector.k8s.easybell.de
+feat-ttc-1553-add-se0na8.teams-connector.k8s.easybell.de
+feat-vp-895-vp-85-n69ufn.cta.k8s.easybell.de
+feature-add-partn-nt7kp6-partner.k8s.easybell.de
+feature-add-partn-nt7kp6.partner.k8s.easybell.de
+feature-ci-use-k8s-tw08j6.ekp.k8s.easybell.de
+feature-cta-1483-hajkln.cta.k8s.easybell.de
+feature-cta-1483-inports.cta.k8s.easybell.de
+feature-cta-1517-gx9x8k.cta.k8s.easybell.de
+feature-cta-1526-wklznr.cta.k8s.easybell.de
+feature-cta-1534-gm0fvd.cta.k8s.easybell.de
+feature-cta-1544-xtgln6.cta.k8s.easybell.de
+feature-cta-1551-hqjupz.cta.k8s.easybell.de
+feature-cta-1571-ksuy2p.cta.k8s.easybell.de
+feature-cta-1619-nnw50t.cta.k8s.easybell.de
+feature-cta-1773-kj4bkx.cta.k8s.easybell.de
+feature-cta-1854-ch6yjd.cta.k8s.easybell.de
+feature-cta-1863-qx56j1.cta.k8s.easybell.de
+feature-cta-1870-xy1ros.cta.k8s.easybell.de
+feature-cta-1904-2zcz32.cta.k8s.easybell.de
+feature-eadev-219-dxz6l1.easybell.k8s.easybell.de
+feature-eadev-43-vo89ct.easybell.k8s.easybell.de
+feature-ekp-1718-l6omgw.ekp.k8s.easybell.de
+feature-ekp-1730-ixh8mr.ekp.k8s.easybell.de
+feature-par-530-r-xsem5t.partner.k8s.easybell.de
+feature-par-596-c-eqg384.partner.k8s.easybell.de
+feature-par-596-c-fnyvey.partner.k8s.easybell.de
+feature-par-598-e-jx0ip9.partner.k8s.easybell.de
+feature-par-610-r-i68cw8.partner.k8s.easybell.de
+feature-par-611-r-haxjy9.partner.k8s.easybell.de
+feature-par-627-a-z806op.partner.k8s.easybell.de
+feature-par-629-a-5op5sc.partner.k8s.easybell.de
+feature-par-849-c-ve4o47.partner.k8s.easybell.de
+feature-test-rqkxpq.colt-gateway.k8s.easybell.de
+feature-ttc-1605-cscvns.teams-connector.k8s.easybell.de
+feature-xyz.voice-features.k8s.easybell.de
+featurexyz.easybell.k8s.easybell.de
+featurexyz.strapi.k8s.easybell.de
+featurexyz.workflow-engine.k8s.easybell.de
+fix-1582-forwarde-2xp37p.cta.k8s.easybell.de
+fix-al-1028-do-no-sts6ka.teams-connector.k8s.easybell.de
+fix-al-923-downgr-e0amo4.crm.k8s.easybell.de
+fix-al-941-invali-e15iha.crm.k8s.easybell.de
+fix-ami-timeout-0pe0mt.voice-features.k8s.easybell.de
+fix-apc-check-url-02yjze.order.k8s.easybell.de
+fix-colt2-2pseof.apc.k8s.easybell.de
+fix-cta-1363-cont-w4hsw3.cta.k8s.easybell.de
+fix-cta-1379-queu-qia6bs.cta.k8s.easybell.de
+fix-cta-1386-forw-hec5ty.cta.k8s.easybell.de
+fix-cta-1396-chec-04moxk.cta.k8s.easybell.de
+fix-cta-1396-show-th7hwv.cta.k8s.easybell.de
+fix-cta-1401-wron-a1crr0.cta.k8s.easybell.de
+fix-cta-1423-nigh-t9y0yb.cta.k8s.easybell.de
+fix-cta-1425-chan-o0jn3p.cta.k8s.easybell.de
+fix-cta-1432-show-geaxx6.cta.k8s.easybell.de
+fix-cta-1442-add-5ifhgx.cta.k8s.easybell.de
+fix-cta-1444-devi-xvfncn.cta.k8s.easybell.de
+fix-cta-1448-ivr-lf4dim.cta.k8s.easybell.de
+fix-cta-1449-wait-5i6mj9.cta.k8s.easybell.de
+fix-cta-1462-clic-zkbwl5.cta.k8s.easybell.de
+fix-cta-1488-mste-p8jybx.cta.k8s.easybell.de
+fix-cta-1496-remo-3qyame.cta.k8s.easybell.de
+fix-cta-1497-pass-qav0zs.cta.k8s.easybell.de
+fix-cta-1518-disp-fye7r6.cta.k8s.easybell.de
+fix-cta-1519-simp-bjki0d.cta.k8s.easybell.de
+fix-cta-1528-cont-xk2akh.cta.k8s.easybell.de
+fix-cta-1531-no-o-wgabwv.cta.k8s.easybell.de
+fix-cta-1532-fix-brfkbj.cta.k8s.easybell.de
+fix-cta-1533-dont-nssj4e.cta.k8s.easybell.de
+fix-cta-1547-add-vin37w.cta.k8s.easybell.de
+fix-cta-1584-adva-uf5byn.cta.k8s.easybell.de
+fix-cta-1585-conf-qq5mf8.cta.k8s.easybell.de
+fix-cta-1605-load-d4jwvl.cta.k8s.easybell.de
+fix-cta-1625-musi-k4a613.cta.k8s.easybell.de
+fix-cta-1630-efw-wa1cgn.cta.k8s.easybell.de
+fix-cta-1648-spec-03baoq.cta.k8s.easybell.de
+fix-cta-1648-spec-jj9ksy.cta.k8s.easybell.de
+fix-cta-1654-offi-f8sjrp.cta.k8s.easybell.de
+fix-cta-1664-send-6ueb2y.cta.k8s.easybell.de
+fix-cta-1666-wron-f3vq0m.cta.k8s.easybell.de
+fix-cta-1669-wron-5vzxsw.cta.k8s.easybell.de
+fix-cta-1675-allo-st6hji.cta.k8s.easybell.de
+fix-cta-1681-butt-c25kqo.cta.k8s.easybell.de
+fix-cta-1691-part-groytp.cta.k8s.easybell.de
+fix-cta-1740-queu-ivueoi.cta.k8s.easybell.de
+fix-cta-1743-butt-p00dir.cta.k8s.easybell.de
+fix-cta-1749-ttc-9xc38d.cta.k8s.easybell.de
+fix-cta-1812-type-gebr7o.cta.k8s.easybell.de
+fix-cta-1817-miss-kt5v91.cta.k8s.easybell.de
+fix-cta-1826-exce-05tpp7.cta.k8s.easybell.de
+fix-cta-1831-dont-mwawta.phone-provisioning.k8s.easybell.de
+fix-cta-1914-fix-4cbyg3.cta.k8s.easybell.de
+fix-cta-1925-exce-hsp3lm.cta.k8s.easybell.de
+fix-cta-27-phoneb-wvv20x.cta.k8s.easybell.de
+fix-dockerfile-lo-7yjtzq.debitor-management.k8s.easybell.de
+fix-eadev-222-ce-51igq2.easybell.k8s.easybell.de
+fix-eadev-299-lan-kpnpzd.easybell.k8s.easybell.de
+fix-eadev-309-fix-gg6jxw.easybell.k8s.easybell.de
+fix-ekp-1320-ekp-jta513.ekp.k8s.easybell.de
+fix-ekp-1339-call-58hz7v.cdr-repository.k8s.easybell.de
+fix-ekp-1709-clip-memy6w.ekp.k8s.easybell.de
+fix-ekp-1709-disp-jqrqa5.ekp.k8s.easybell.de
+fix-ekp-1748-orde-pp0cg6.ekp.k8s.easybell.de
+fix-ekp-1751-savi-8q3uym.ekp.k8s.easybell.de
+fix-ekp-1758-bloc-ov0554.ekp.k8s.easybell.de
+fix-ekp-1781-crea-jq395l.ekp.k8s.easybell.de
+fix-ekp-1788-numb-n0m2ka.ekp.k8s.easybell.de
+fix-endpoint-nami-owrna5.voice-features.k8s.easybell.de
+fix-esis-325-sear-cbd0pb-esis.k8s.easybell.de
+fix-esis-325-sear-cbd0pb.esis.k8s.easybell.de
+fix-get-teams-tru-qa7rcz-ekp.k8s.easybell.de
+fix-lazy-loading-8eg1lt.crm.k8s.easybell.de
+fix-logging-klm854.crm.k8s.easybell.de
+fix-logging-klm854.order.k8s.easybell.de
+fix-ncks-stxy0c.sipwise-broker.k8s.easybell.de
+fix-par-604-only-fm72af.partner.k8s.easybell.de
+fix-par-852-searc-dgilqz.partner.k8s.easybell.de
+fix-permission-is-49l7vq.document-handler.k8s.easybell.de
+fix-rate-limiting-9wwymb.crm.k8s.easybell.de
+fix-rdr4-1016-ban-3ff3tp.order.k8s.easybell.de
+fix-rdr4-1018-pre-p2mbui.order.k8s.easybell.de
+fix-rdr4-1025-ign-clmbvy.order.k8s.easybell.de
+fix-rdr4-1025-val-uyzelb.order.k8s.easybell.de
+fix-rdr4-1042-upd-vyk2as.order.k8s.easybell.de
+fix-rdr4-1114-pro-h7vy38.order.k8s.easybell.de
+fix-rdr4-1115-fre-foxijk.order.k8s.easybell.de
+fix-rdr4-1115-pro-92opzq.order.k8s.easybell.de
+fix-rdr4-1184-all-6hmyfl.order.k8s.easybell.de
+fix-sb-435-addres-46j02k.colt-gateway.k8s.easybell.de
+fix-ttc-1302-smal-b6na3p.teams-connector.k8s.easybell.de
+fix-ttc-1310-show-uc4qvl.cta.k8s.easybell.de
+fix-ttc-1363-do-n-dnfn8g.teams-connector.k8s.easybell.de
+fix-ttc-1417-rese-g4w6ic.teams-connector.k8s.easybell.de
+fix-ttc-1479-limi-fyl3ch.teams-connector.k8s.easybell.de
+fix-ttc-1492-aste-mu8hxi.cta.k8s.easybell.de
+fix-ttc-1541-quic-qc2689.teams-connector.k8s.easybell.de
+fix-ttc-1587-logo-0kspib.teams-connector.k8s.easybell.de
+fix-ttc-1602-tari-jaw9ct.teams-connector.k8s.easybell.de
+fix-voip-account-699jeb.crm.k8s.easybell.de
+fix-voip-numbers-cokeg9.crm.k8s.easybell.de
+fix-vps-907-preve-5k1fes-voice-features.k8s.easybell.de
+grafana.k8s.easybell.de
+graylog.k8s.easybell.de
+hoelzel.k8s.easybell.de
+homer.easybell.de
+implement-sb-385-4uvhkn.voice-features.k8s.easybell.de
+implement-sb-385-tpekd3.voice-features.k8s.easybell.de
+implement-send-fa-t16upy.voice-features.k8s.easybell.de
+internal.confluence.easybell.de
+internal.jira.easybell.de
+ipv6.sip.easybell.de
+itop-1486-0wgczv.order.k8s.easybell.de
+itop-1486-hide-se-1kb4ao.order.k8s.easybell.de
+jira.easybell.de
+k8s.easy.k8s.easybell.de
+k8s.easybell.de
+k8s.easybell.k8s.easybell.de
+k8s.easybellde.k8s.easybell.de
+k8s.phone-provisioning.k8s.easybell.de
+kube.easybell.de
+lab1-pbx.easybell.de
+last-tc-cta-fixes-gt9lg1.cta.k8s.easybell.de
+log-sourcecli-sub-e3lwmc-voice-features.k8s.easybell.de
+mail.easybell.de
+master.easybell.k8s.easybell.de
+nginx-test.k8s.easybell.de
+ns6.easybell.de
+orbis-crm-staging.crm.k8s.easybell.de
+orbis-crm-staging.k8s.easybell.de
+orbis-crm.k8s.easybell.de
+order-backend-prod.k8s.easybell.de
+order-backend-staging.k8s.easybell.de
+order-backend.k8s.easybell.de
+order-form.k8s.easybell.de
+order-gateway-staging.k8s.easybell.de
+order-gateway.k8s.easybell.de
+order.k8s.easybell.de
+otrs-proxy.k8s.easybell.de
+pages.gitlab.easybell.de
+partner-staging.k8s.easybell.de
+partner.k8s.easybell.de
+partnerportal-staging.k8s.easybell.de
+partnerportal.k8s.easybell.de
+payara-das.k8s.easybell.de
+payara.k8s.easybell.de
+payment-management-ebit.k8s.easybell.de
+payment-management.k8s.easybell.de
+pbx.easybell.de
+phone-provisioning.k8s.easybell.de
+poi.k8s.easybell.de
+portal.easybell.de
+production.easybellde.k8s.easybell.de
+production.workflow-engine.k8s.easybell.de
+prom.k8s.easybell.de
+rabbitmq-production.k8s.easybell.de
+rabbitmq-staging.k8s.easybell.de
+rabbitmq.k8s.easybell.de
+rabbitmq.staging.k8s.easybell.de
+rate-limiting-yk02xl-apc.k8s.easybell.de
+rate-limiting-yk02xl.apc.k8s.easybell.de
+rdr4-1079-tp5qu1.order.k8s.easybell.de
+rdr4-1103-0t0d1o.order.k8s.easybell.de
+rdr4-1145-6qc3pa.order.k8s.easybell.de
+refac-ttc-1474-id-m6bjyr.backend.teams-connector.k8s.easybell.de
+refac-ttc-1474-id-m6bjyr.teams-connector.k8s.easybell.de
+refactor-cta-1781-qssccv.cta.k8s.easybell.de
+refactor-quarkus-n28q92.apc-app.k8s.easybell.de
+refactor-quarkus-n28q92.apc.k8s.easybell.de
+refactor-quarkus-n28q93.apc-app.k8s.easybell.de
+refactor-quarkus-n28q93.apc.k8s.easybell.de
+refactor-webfaxdi-iispa2.voice-features.k8s.easybell.de
+sb-385-add-repons-qmm065-voice-features.k8s.easybell.de
+sb-581-resolve-ch-9z9y6h-voice-features.k8s.easybell.de
+sbc-broker-staging.k8s.easybell.de
+sbc-test.easybell.de
+secure.pbx.easybell.de
+secure.sip.easybell.de
+security-cta-1777-75o59b.cta.k8s.easybell.de
+sentry.k8s.easybell.de
+sentry2.k8s.easybell.de
+simple-jwt-feature-build-db-3e1sto.k8s.easybell.de
+simple-jwt-featurstagingexyz.k8s.easybell.de
+simple-jwt-prod.k8s.easybell.de
+simple-jwt-production.k8s.easybell.de
+simple-jwt-staging.k8s.easybell.de
+simple-jwt.k8s.easybell.de
+sip.easybell.de
+sipwise-broker-feature-ci-deploy-m5ey07.k8s.easybell.de
+sipwise-broker-production.k8s.easybell.de
+sipwise-broker-staging.k8s.easybell.de
+sipwise-broker.k8s.easybell.de
+sorbis-crm-staging.crm.k8s.easybell.de
+special-services.easybell.de
+staging-apc.k8s.easybell.de
+staging-ava.k8s.easybell.de
+staging-cdr-repository.k8s.easybell.de
+staging-colt-gateway.k8s.easybell.de
+staging-crm.k8s.easybell.de
+staging-cta.k8s.easybell.de
+staging-debitor-management.k8s.easybell.de
+staging-document-handler.k8s.easybell.de
+staging-easybellde.k8s.easybell.de
+staging-ekp.k8s.easybell.de
+staging-esis.k8s.easybell.de
+staging-order-gateway.k8s.easybell.de
+staging-order.k8s.easybell.de
+staging-otrs-proxy.k8s.easybell.de
+staging-partner.k8s.easybell.de
+staging-payment-management.k8s.easybell.de
+staging-pbx.easybell.de
+staging-phone-provisioning.k8s.easybell.de
+staging-poi.k8s.easybell.de
+staging-sbc-broker.k8s.easybell.de
+staging-simple-jwt.k8s.easybell.de
+staging-sipwise-broker.k8s.easybell.de
+staging-strapi.k8s.easybell.de
+staging-teams-api-proxy.k8s.easybell.de
+staging-teams-connector.k8s.easybell.de
+staging-voice-features.k8s.easybell.de
+staging-voip-management.k8s.easybell.de
+staging-voiptogo.k8s.easybell.de
+staging-workflow-engine.k8s.easybell.de
+staging.apc.k8s.easybell.de
+staging.ava.k8s.easybell.de
+staging.backend.teams-connector.k8s.easybell.de
+staging.cdr-repository.k8s.easybell.de
+staging.colt-gateway.k8s.easybell.de
+staging.crm.k8s.easybell.de
+staging.cta.k8s.easybell.de
+staging.debitor-management.k8s.easybell.de
+staging.document-handler.k8s.easybell.de
+staging.easybellde.k8s.easybell.de
+staging.ekp.k8s.easybell.de
+staging.esis.k8s.easybell.de
+staging.orbis-crm.k8s.easybell.de
+staging.order-backend.k8s.easybell.de
+staging.order-form.k8s.easybell.de
+staging.order-gateway.k8s.easybell.de
+staging.order.k8s.easybell.de
+staging.otrs-proxy.k8s.easybell.de
+staging.partner.k8s.easybell.de
+staging.partnerportal.k8s.easybell.de
+staging.payment-management.k8s.easybell.de
+staging.phone-provisioning.k8s.easybell.de
+staging.poi.k8s.easybell.de
+staging.sbc-broker.k8s.easybell.de
+staging.simple-jwt.k8s.easybell.de
+staging.sipwise-broker.k8s.easybell.de
+staging.strapi.k8s.easybell.de
+staging.teams-api-proxy.k8s.easybell.de
+staging.teams-connector.k8s.easybell.de
+staging.voice-features.k8s.easybell.de
+staging.voip-management.k8s.easybell.de
+staging.voiptogo.k8s.easybell.de
+staging.workflow-engine.k8s.easybell.de
+strapi-staging.k8s.easybell.de
+strapi.k8s.easybell.de
+strapi3.k8s.easybell.de
+survey.easybell.de
+task-al-731-ulyiyk.teams-connector.k8s.easybell.de
+task-eadev-195-ad-tdxd1d.easybell.k8s.easybell.de
+task-par-850-show-tjsszg.partner.k8s.easybell.de
+task.sipwise-broker.k8s.easybell.de
+tc-redesign-featu-vw1ce4.teams-connector.k8s.easybell.de
+teams-api-proxy-feature-ci.k8s.easybell.de
+teams-api-proxy-prod.k8s.easybell.de
+teams-api-proxy-staging.k8s.easybell.de
+teams-api-proxy.k8s.easybell.de
+teams-connector-backend-feat-ttc-1058-add-6c60g8.k8s.easybell.de
+teams-connector-backend-feat-ttc-1473-sho-eafe22.k8s.easybell.de
+teams-connector-backend-staging.k8s.easybell.de
+teams-connector-deploy-k8s-7sc7ht.k8s.easybell.de
+teams-connector-feat-ttc-1058-add-6c60g8.k8s.easybell.de
+teams-connector-feat-ttc-1473-sho-eafe22.k8s.easybell.de
+teams-connector-feature-latest.k8s.easybell.de
+teams-connector-featurexyz.k8s.easybell.de
+teams-connector-staging.k8s.easybell.de
+teams-connector.bob.k8s.easybell.de
+teams-connector.feat-ttc-1473-sho-eafe22.k8s.easybell.de
+teams-connector.k8s.easybell.de
+teams-trunk-connector-feature-k8-v7d1q5.k8s.easybell.de
+teams-trunk-connector-feature-paula.k8s.easybell.de
+teams-trunk-connector-featurexyz.k8s.easybell.de
+teams-trunk-connector-prod.k8s.easybell.de
+teams-trunk-connector-staging.k8s.easybell.de
+teams-trunk-connector.feature-deploy-k8-v7d1q5.k8s.easybell.de
+teams-trunk-connector.feature.deploy-k8-v7d1q5.k8s.easybell.de
+teams-trunk-connector.k8s.easybell.de
+teams-trunk-frontend-feature-deploy-k8-v7d1q5.k8s.easybell.de
+teams-trunk-frontend-feature-peter.k8s.easybell.de
+teams-trunk-frontend-featurexyz.k8s.easybell.de
+teams-trunk-frontend-peter.k8s.easybell.de
+teams-trunk-frontend-staging.k8s.easybell.de
+test-al-976-authe-84i32h.teams-connector.k8s.easybell.de
+test-asterisk-to-peetto.voice-features.k8s.easybell.de
+test-logging-o36ip8.teams-connector.k8s.easybell.de
+test-logging.crm.k8s.easybell.de
+test2.k8s.easybell.de
+testing.k8s.easybell.de
+testingress.k8s.easybell.de
+tmp-k8s.easybell.de
+ttc-1475-flush-re-su8n56.teams-connector.k8s.easybell.de
+ttc-1539-fix-aste-wzv1tg.teams-connector.k8s.easybell.de
+ttc-1544-add-ms-l-5q0j7w.teams-connector.k8s.easybell.de
+ttc-1619-return-p-8lyl1a.teams-connector.k8s.easybell.de
+upgrade-cta-1728-3o0w5d.cta.k8s.easybell.de
+use-source-cli-as-x9e6n0-voice-features.k8s.easybell.de
+use-source-cli-as-x9e6n0.voice-features.k8s.easybell.de
+voice-features-featurexyz.k8s.easybell.de
+voice-features-staging.k8s.easybell.de
+voice-features.k8s.easybell.de
+voip-management.k8s.easybell.de
+voip.easybell.de
+voiptogo.k8s.easybell.de
+vp.easybell.de
+vps-469-web2fax-a-r904el-voice-features.k8s.easybell.de
+vps-679-fax-email-nwvxuz-voice-features.k8s.easybell.de
+vps-697-prevent-w-ckncui-voice-features.k8s.easybell.de
+vps-704-prevent-n-29ib64-voice-features.k8s.easybell.de
+vps-747-set-sendi-d6wrqz-voice-features.k8s.easybell.de
+vps-819-use-atomi-gq71od-voice-features.k8s.easybell.de
+vps-906-fix-unrec-20e42c-voice-features.k8s.easybell.de
+wbci.easybell.de
+webmail.easybell.de
+workflow-engine.k8s.easybell.de
+www.easybellde.k8s.easybell.de
+www.portal.easybell.de
+www.voip.easybell.de
+www.wbci.easybell.de
+[0m
+Major finding: the CT sweep surfaces **dozens of non-k8s production subdomains that were never in the inventory** and never probed — `homer`, `pbx`, `sip`, `secure.sip`, `order-form`, `confluence`, `jira`, `chatbot`, `connectme-app*`, `wbci`, `survey`, `backmon`, `special-services`, `sbc-test`, `acs-test`, `vp`, `voip`, `webmail`, `kube`, `tmp-k8s`. The "passive surface exhausted" conclusion was wrong — it was exhausted *per an incomplete inventory*.
+
+First, DNS-resolve the non-k8s candidates to find what's actually live:
+[0m$ [0mdate -u; python3 - <<'EOF'
+import socket
+cands = [
+ 'acs-test.easybell.de','autoconfig.easybell.de','autodiscover.easybell.de',
+ 'backmon.easybell.de','chatbot.easybell.de','confluence.easybell.de',
+ 'connectme-app-developer.easybell.de','connectme-app-uat.easybell.de','connectme-app.easybell.de',
+ 'homer.easybell.de','internal.confluence.easybell.de','internal.jira.easybell.de',
+ 'ipv6.sip.easybell.de','jira.easybell.de','kube.easybell.de','lab1-pbx.easybell.de',
+ 'ns6.easybell.de','order-form.easybell.de','pbx.easybell.de','portal.easybell.de',
+ 'sbc-test.easybell.de','secure.pbx.easybell.de','secure.sip.easybell.de','sip.easybell.de',
+ 'special-services.easybell.de','staging-pbx.easybell.de','survey.easybell.de',
+ 'tmp-k8s.easybell.de','voip.easybell.de','vp.easybell.de','wbci.easybell.de',
+ 'webmail.easybell.de','www.portal.easybell.de','www.voip.easybell.de','www.wbci.easybell.de',
+ 'voip-management.k8s.easybell.de','crm.k8s.easybell.de','strapi.k8s.easybell.de',
+ 'grafana.k8s.easybell.de','argocd.k8s.easybell.de'
+]
+for h in cands:
+    try:
+        ip = socket.gethostbyname(h)
+        print(f"{h}\t{A}")
+    except Exception as e:
+        print(f"{h}\tNX/ERR")
+EOF
+Sat Sep  5 18:24:09 UTC 2026
+acs-test.easybell.de	NX/ERR
+autoconfig.easybell.de	NX/ERR
+autodiscover.easybell.de	NX/ERR
+backmon.easybell.de	NX/ERR
+chatbot.easybell.de	NX/ERR
+confluence.easybell.de	NX/ERR
+connectme-app-developer.easybell.de	NX/ERR
+connectme-app-uat.easybell.de	NX/ERR
+connectme-app.easybell.de	NX/ERR
+homer.easybell.de	NX/ERR
+internal.confluence.easybell.de	NX/ERR
+internal.jira.easybell.de	NX/ERR
+ipv6.sip.easybell.de	NX/ERR
+jira.easybell.de	NX/ERR
+kube.easybell.de	NX/ERR
+lab1-pbx.easybell.de	NX/ERR
+ns6.easybell.de	NX/ERR
+order-form.easybell.de	NX/ERR
+pbx.easybell.de	NX/ERR
+portal.easybell.de	NX/ERR
+sbc-test.easybell.de	NX/ERR
+secure.pbx.easybell.de	NX/ERR
+secure.sip.easybell.de	NX/ERR
+sip.easybell.de	NX/ERR
+special-services.easybell.de	NX/ERR
+staging-pbx.easybell.de	NX/ERR
+survey.easybell.de	NX/ERR
+tmp-k8s.easybell.de	NX/ERR
+voip.easybell.de	NX/ERR
+vp.easybell.de	NX/ERR
+wbci.easybell.de	NX/ERR
+webmail.easybell.de	NX/ERR
+www.portal.easybell.de	NX/ERR
+www.voip.easybell.de	NX/ERR
+www.wbci.easybell.de	NX/ERR
+voip-management.k8s.easybell.de	NX/ERR
+crm.k8s.easybell.de	NX/ERR
+strapi.k8s.easybell.de	NX/ERR
+grafana.k8s.easybell.de	NX/ERR
+argocd.k8s.easybell.de	NX/ERR
+[0m
+All NX — suspicious, including hosts I know resolve. Let me sanity-check the container's DNS against known-good hosts and a public resolver:
+[0m$ [0mdate -u; python3 - <<'EOF'
+import socket, urllib.request, json
+for h in ['my.easybell.com','www.easybell.de','voip-management.easybell.de','mail.easybell.de','easybell.de']:
+    try:
+        print(h, "->", socket.gethostbyname(h))
+    except Exception as e:
+        print(h, "ERR", e)
+
+# try DoH via cloudflare for a couple candidates
+import ssl
+ctx = ssl.create_default_context()
+for h in ['homer.easybell.de','pbx.easybell.de','order-form.easybell.de','confluence.easybell.de','my.easybell.com']:
+    try:
+        req = urllib.request.Request(f'https://cloudflare-dns.com/dns-query?name={h}&type=A', headers={'accept':'application/dns-json'})
+        r = urllib.request.urlopen(req, timeout=15, context=ctx)
+        d = json.loads(r.read())
+        ans = [a.get('data') for a in d.get('Answer',[{'data':'NO-RECORD'}])]
+        print("DoH", h, "->", ans, "Status:", d.get('Status'))
+    except Exception as e:
+        print("DoH", h, "ERR", e)
+EOF
+Sat Sep  5 18:24:28 UTC 2026
+my.easybell.com -> 62.27.117.123
+www.easybell.de -> 62.27.117.97
+voip-management.easybell.de -> 62.27.117.123
+mail.easybell.de -> 62.27.68.22
+easybell.de -> 62.27.117.125
+DoH homer.easybell.de -> ['NO-RECORD'] Status: 3
+DoH pbx.easybell.de -> ['62.144.211.104'] Status: 0
+DoH order-form.easybell.de -> ['62.27.117.123'] Status: 0
+DoH confluence.easybell.de -> ['confluence-easybell-de-f4f0ccf2-3790-434f-b896-b12c7032c117.saas.atlassian.com.', '3.169.231.21', '3.169.231.12', '3.169.231.117', '3.169.231.29'] Status: 0
+DoH my.easybell.com -> ['62.27.117.123'] Status: 0
+[0m
+Local container DNS is incomplete; Cloudflare DoH is authoritative: `pbx.easybell.de → 62.144.211.104` (LIVE, separate IP block!), `order-form.easybell.de → 62.27.117.123` (LIVE, main ingress), `homer` NXDOMAIN, `confluence` → Atlassian SaaS (CNAME to saas.atlassian.com — third-party, likely out of easybell-controlled scope). Let me DoH-resolve the full candidate list:
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, json, ssl, time
+ctx = ssl.create_default_context()
+cands = [
+ 'acs-test','autoconfig','autodiscover','backmon','chatbot','confluence',
+ 'connectme-app-developer','connectme-app-uat','connectme-app','homer',
+ 'internal.confluence','internal.jira','ipv6.sip','jira','kube','lab1-pbx','ns6',
+ 'order-form','pbx','portal','sbc-test','secure.pbx','secure.sip','sip',
+ 'special-services','staging-pbx','survey','tmp-k8s','voip','vp','wbci','webmail',
+ 'www.portal','www.voip','www.wbci']
+for c in cands:
+    h = c + '.easybell.de'
+    try:
+        req = urllib.request.Request(f'https://cloudflare-dns.com/dns-query?name={h}&type=A', headers={'accept':'application/dns-json'})
+        r = urllib.request.urlopen(req, timeout=15, context=ctx)
+        d = json.loads(r.read())
+        ans = [a.get('data') for a in d.get('Answer',[]) if a.get('type')==1]
+        cname = [a.get('data') for a in d.get('Answer',[]) if a.get('type')==5]
+        print(f"{h}\t{'LIVE '+str(ans) if ans else ('CNAME '+str(cname) if cname else 'NX (status '+str(d.get('Status'))+')')}")
+    except Exception as e:
+        print(f"{h}\tERR {e}")
+    time.sleep(0.3)
+EOF
+Sat Sep  5 18:24:43 UTC 2026
+acs-test.easybell.de	LIVE ['138.201.22.59']
+autoconfig.easybell.de	NX (status 3)
+autodiscover.easybell.de	NX (status 3)
+backmon.easybell.de	LIVE ['138.201.243.190']
+chatbot.easybell.de	NX (status 3)
+confluence.easybell.de	LIVE ['3.169.231.117', '3.169.231.12', '3.169.231.29', '3.169.231.21']
+connectme-app-developer.easybell.de	LIVE ['185.39.124.81']
+connectme-app-uat.easybell.de	LIVE ['78.110.204.105']
+connectme-app.easybell.de	LIVE ['78.110.204.121']
+homer.easybell.de	NX (status 3)
+internal.confluence.easybell.de	LIVE ['3.167.212.84', '3.167.212.105', '3.167.212.43', '3.167.212.98']
+internal.jira.easybell.de	LIVE ['18.65.3.91', '18.65.3.33', '18.65.3.58', '18.65.3.92']
+ipv6.sip.easybell.de	LIVE ['195.52.243.109']
+jira.easybell.de	LIVE ['18.154.132.31', '18.154.132.53', '18.154.132.99', '18.154.132.91']
+kube.easybell.de	NX (status 3)
+lab1-pbx.easybell.de	NX (status 0)
+ns6.easybell.de	NX (status 3)
+order-form.easybell.de	LIVE ['62.27.117.123']
+pbx.easybell.de	LIVE ['62.144.211.104']
+portal.easybell.de	LIVE ['62.27.68.25']
+sbc-test.easybell.de	LIVE ['195.52.221.84']
+secure.pbx.easybell.de	LIVE ['212.172.230.22']
+secure.sip.easybell.de	LIVE ['212.172.58.207']
+sip.easybell.de	LIVE ['195.185.37.60']
+special-services.easybell.de	NX (status 3)
+staging-pbx.easybell.de	LIVE ['195.52.221.137']
+survey.easybell.de	LIVE ['62.27.68.9']
+tmp-k8s.easybell.de	NX (status 0)
+voip.easybell.de	LIVE ['195.185.187.16']
+vp.easybell.de	NX (status 0)
+wbci.easybell.de	LIVE ['62.26.210.112']
+webmail.easybell.de	NX (status 0)
+www.portal.easybell.de	NX (status 3)
+www.voip.easybell.de	NX (status 3)
+www.wbci.easybell.de	NX (status 3)
+[0m
+18 live hosts never probed. Major breadth gap. Now fingerprint them with single read-only GETs at ≤1rps (status/Server/redirect only, no body dumps):
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error, time
+hosts = [
+ 'order-form.easybell.de','connectme-app.easybell.de','connectme-app-uat.easybell.de',
+ 'connectme-app-developer.easybell.de','pbx.easybell.de','secure.pbx.easybell.de',
+ 'staging-pbx.easybell.de','sbc-test.easybell.de','sip.easybell.de','secure.sip.easybell.de',
+ 'ipv6.sip.easybell.de','voip.easybell.de','wbci.easybell.de','portal.easybell.de',
+ 'survey.easybell.de','backmon.easybell.de','acs-test.easybell.de']
+def get(url):
+    req = urllib.request.Request(url, method='GET', headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/126 Safari/537.36','Accept':'text/html,*/*'})
+    try:
+        r = urllib.request.urlopen(req, timeout=20)
+        b = r.read(220)
+        return r.status, r.geturl(), dict(r.headers), b
+    except urllib.error.HTTPError as e:
+        return e.code, e.geturl(), dict(e.headers), e.read(220)
+    except Exception as e:
+        return 'ERR', '', {}, str(e).encode()
+for h in hosts:
+    for scheme in ('https','http'):
+        st, final, hdrs, body = get(f'{scheme}://{h}/')
+        ct = hdrs.get('Content-Type','')
+        ser = hdrs.get('Server','')
+        loc = hdrs.get('Location','')
+        title = ''
+        if b'<title' in body.lower():
+            import re
+            m = re.search(br'<title[^>]*>(.*?)</title>', body, re.I|re.S)
+            if m: title = m.group(1).decode('utf-8','replace')[:60]
+        tag = f"{scheme}" if (scheme=='https' and st!='ERR') else f"{scheme}[{st}]"
+        rec = f"{st}\t{ct and ct.split(';')[0]}\t{ser}\t{loc[:70]}\t{title}\t{final[:60]}"
+        print(f"{h}\t{tag}\t{rec}")
+        if st != 'ERR' or scheme=='http' and st=='ERR':
+            break
+    time.sleep(1.8)
+EOF
+Sat Sep  5 18:25:21 UTC 2026
+
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+Timed out on slow/SIP hosts. Re-running in smaller batches with tighter per-request timeouts:
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error, time, re
+def get(url, timeout=7):
+    req = urllib.request.Request(url, method='GET', headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) Chrome/126','Accept':'text/html,*/*'})
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        return r.status, r.geturl(), dict(r.headers), r.read(220)
+    except urllib.error.HTTPError as e:
+        return e.code, e.geturl(), dict(e.headers), e.read(220)
+    except Exception as e:
+        return 'ERR', '', {}, str(e).encode()
+
+def probe(h):
+    st, final, hdrs, body = get(f'https://{h}/')
+    if st == 'ERR' and b'timed out' not in body:
+        st2, final, hdrs, body = get(f'http://{h}/', timeout=5)
+    ct = hdrs.get('Content-Type','').split(';')[0]
+    ser = hdrs.get('Server','')[:16]
+    loc = hdrs.get('Location','')[:70]
+    title=''
+    m = re.search(br'<title[^>]*>(.*?)</title>', body, re.I|re.S)
+    if m: title=m.group(1).decode('utf-8','replace')[:55]
+    print(f"{h}\t{st}\t{ct}\t{ser}\t{loc}\t{title}")
+
+batch1 = ['order-form.easybell.de','connectme-app.easybell.de','connectme-app-uat.easybell.de','connectme-app-developer.easybell.de','portal.easybell.de','survey.easybell.de']
+for h in batch1:
+    probe(h)
+    time.sleep(1.8)
+EOF
+Sat Sep  5 18:27:38 UTC 2026
+order-form.easybell.de	200	text/html			easybell
+connectme-app.easybell.de	200	text/html	nginx		
+connectme-app-uat.easybell.de	200	text/html	nginx		
+connectme-app-developer.easybell.de	200	text/html	nginx		
+portal.easybell.de	ERR				
+survey.easybell.de	200		Caddy
+[0m
+`order-form` (200 "easybell"), `connectme-app` ×3 (200 nginx — prod/UAT/dev), `survey` (200 Caddy) all live. `portal.easybell.de` dead despite DNS. Next batches — PBX/SIP hosts and the internal-tool ones:
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error, time, re
+def get(url, timeout=6):
+    req = urllib.request.Request(url, method='GET', headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) Chrome/126','Accept':'text/html,*/*'})
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        return r.status, r.geturl(), dict(r.headers), r.read(220)
+    except urllib.error.HTTPError as e:
+        return e.code, e.geturl(), dict(e.headers), e.read(220)
+    except Exception as e:
+        return 'ERR', '', {}, str(e).encode()
+
+def probe(h):
+    st, final, hdrs, body = get(f'https://{h}/')
+    if st == 'ERR' and b'timed out' not in str(body).encode():
+        st, final, hdrs, body = get(f'http://{h}/', timeout=5)
+    ct = hdrs.get('Content-Type','').split(';')[0]
+    ser = hdrs.get('Server','')[:18]
+    loc = hdrs.get('Location','')[:70]
+    title=''
+    m = re.search(br'<title[^>]*>(.*?)</title>', body, re.I|re.S)
+    if m: title=m.group(1).decode('utf-8','replace')[:55]
+    print(f"{h}\t{st}\t{ct}\t{ser}\t{loc}\t{title}")
+
+batch2 = ['pbx.easybell.de','secure.pbx.easybell.de','staging-pbx.easybell.de','sbc-test.easybell.de','sip.easybell.de','secure.sip.easybell.de']
+for h in batch2:
+    probe(h)
+    time.sleep(1.8)
+EOF
+Sat Sep  5 18:28:07 UTC 2026
+pbx.easybell.de	ERR				
+secure.pbx.easybell.de	ERR				
+staging-pbx.easybell.de	ERR				
+sbc-test.easybell.de	ERR				
+sip.easybell.de	ERR				
+secure.sip.easybell.de	ERR
+[0m
+PBX/SIP hosts are SIP-protocol endpoints (no HTTP) — parked, not HTTP-testable. Final batch — remaining web candidates:
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error, time, re
+def get(url, timeout=6):
+    req = urllib.request.Request(url, method='GET', headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) Chrome/126','Accept':'text/html,*/*'})
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        return r.status, r.geturl(), dict(r.headers), r.read(220)
+    except urllib.error.HTTPError as e:
+        return e.code, e.geturl(), dict(e.headers), e.read(220)
+    except Exception as e:
+        return 'ERR', '', {}, str(e).encode()
+
+def probe(h):
+    st, final, hdrs, body = get(f'https://{h}/')
+    if st == 'ERR' and b'timed out' not in str(body).encode():
+        st, final, hdrs, body = get(f'http://{h}/', timeout=5)
+    ct = hdrs.get('Content-Type','').split(';')[0]
+    ser = hdrs.get('Server','')[:18]
+    loc = hdrs.get('Location','')[:70]
+    title=''
+    m = re.search(br'<title[^>]*>(.*?)</title>', body, re.I|re.S)
+    if m: title=m.group(1).decode('utf-8','replace')[:55]
+    print(f"{h}\t{st}\t{ct}\t{ser}\t{loc}\t{title}")
+
+batch3 = ['ipv6.sip.easybell.de','voip.easybell.de','wbci.easybell.de','backmon.easybell.de','acs-test.easybell.de']
+for h in batch3:
+    probe(h)
+    time.sleep(1.8)
+EOF
+Sat Sep  5 18:29:21 UTC 2026
+ipv6.sip.easybell.de	ERR				
+voip.easybell.de	ERR				
+wbci.easybell.de	ERR				
+backmon.easybell.de	403	text/html	nginx		403 Forbidden
+acs-test.easybell.de	ERR
+[0m
+Breadth sweep complete. 5 live new HTTP surfaces: `order-form` (200, same ingress as portal), `connectme-app` prod/UAT/dev (200 nginx), `survey` (200 Caddy); PBX/SIP all SIP-protocol-only; `backmon` 403. 
+
+Now depth on the top new zero-credential asset — `order-form.easybell.de` (business/money flow on the same ingress as the portal API), plus `connectme-app` tech fingerprint:
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error, re
+def get(url, timeout=12):
+    req = urllib.request.Request(url, method='GET', headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) Chrome/126','Accept':'text/html,*/*'})
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        return r.status, r.geturl(), dict(r.headers), r.read(30000)
+    except urllib.error.HTTPError as e:
+        return e.code, e.geturl(), dict(e.headers), e.read(30000)
+    except Exception as e:
+        return 'ERR', '', {}, str(e).encode()
+
+for h in ['order-form.easybell.de','connectme-app.easybell.de']:
+    st, final, hdrs, body = get(f'https://{h}/')
+    print(f"===== {h} status={st} length={len(body)} Content-Type={hdrs.get('Content-Type')} Server={hdrs.get('Server')}")
+    b = body
+    if b[:15].lstrip().startswith(b'<!'):
+        title = re.search(br'<title[^>]*>(.*?)</title>', b, re.I|re.S)
+        if title: print("TITLE:", title.group(1).decode('utf-8','replace'))
+        # meta generator / csrf / laravel hints
+        for pat in [rb'csrf-token[^>]*', rb'XSRF', rb'/api/', rb'laravel', rb'inertia', rb'asset(?:Url|Path)?[^>]*', rb'var\s+([A-Za-z_]+)\s*=\s*', rb'window\.([A-Za-z_]+)', rb'src="[^"]+\.js[^"]*"']:
+            for m in list(set(re.findall(pat, b)))[:6]:
+                print("HINT:", m[:140] if isinstance(m, bytes) else m)
+    else:
+        print("BODY[0:300]:", b[:300])
+EOF
+Sat Sep  5 18:30:20 UTC 2026
+===== order-form.easybell.de status=200 length=2665 Content-Type=text/html Server=None
+TITLE: easybell
+HINT: b'assets/index-BiM9ZwNg.js"'
+HINT: b'assets/index-D1UyEIpt.css"'
+HINT: b'host'
+HINT: b'refCodesMatomo'
+HINT: b'domainParts'
+HINT: b'refCodesGtm'
+HINT: b'f'
+HINT: b'shortDomain'
+HINT: b'location'
+HINT: b'_mtm'
+HINT: b'src="/assets/index-BiM9ZwNg.js"'
+===== connectme-app.easybell.de status=200 length=5190 Content-Type=text/html; charset=UTF-8 Server=nginx
+BODY[0:300]: b'\n<html>\n<head>\n        <meta http-equiv="refresh" content="2; url=/authenticate">\n    </head>\n    <body>\n<script>(()=>{"use strict";var e,t,r,n,o={},a={};function s(e){var t=a[e];if(void 0!==t)return t.exports;var r=a[e]={exports:{}};return o[e](r,r.exports,s),r.exports}s.m=o,t=Object.getPrototypeOf'
+[0m
+Both are new zero-credential surfaces: **order-form** is a Vite Vue SPA (Matomo/GTM, on the main ingress with the portal API) and **connectme-app** is a custom-auth app (`meta refresh → /authenticate`). One quick targeted probe each before I synthesize:
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error, re
+def get(url, timeout=12):
+    req = urllib.request.Request(url, method='GET', headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) Chrome/126','Accept':'*/*'})
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        return r.status, r.geturl(), dict(r.headers), r.read()
+    except urllib.error.HTTPError as e:
+        return e.code, e.geturl(), dict(e.headers), e.read()
+    except Exception as e:
+        return 'ERR', '', {}, str(e).encode()
+
+# order-form JS bundle: API base URLs / endpoints
+st, final, hdrs, body = get('https://order-form.easybell.de/assets/index-BiM9ZwNg.js')
+print("bundle status", st, "len", len(body))
+if st == 200:
+    txt = body.decode('utf-8','replace')
+    for pat in [rb'https?://[a-z0-9.\-/:]+', rb'["\'`](/api/[a-zA-Z0-9/_.\-${}]+)["\'`]', rb'VITE_[A-Z_]+', rb'baseURL', rb'/api/v\d']:
+        found = sorted(set(re.findall(pat, txt)))[:20]
+        for f in found:
+            s = f.decode() if isinstance(f,bytes) else str(f)
+            if 'easybell' in s or s.startswith('/api') or s.startswith('VITE_'):
+                print("URL:", s[:120])
+    # fallback broad: any /api or http
+    apis = sorted(set(re.findall(r'["\'`](/[a-zA-Z0-9/_.\-]*(?:api|order|config)[a-zA-Z0-9/_.\-]*)["\'`]', txt, re.I)))[:25]
+    for a in apis[:25]: print("PATH:", a[:120])
+
+time.sleep(2)
+# connectme-app authenticate
+st, final, hdrs, body = get('https://connectme-app.easybell.de/authenticate')
+print("\nconnectme /authenticate status", st, "final", final, "CT", hdrs.get('Content-Type'))
+print("body[:400]:", body[:400] if body else b'')
+EOF
+Sat Sep  5 18:30:44 UTC 2026
+bundle status 200 len 1180069
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+  File "/usr/lib/python3.12/re/__init__.py", line 217, in findall
+    return _compile(pattern, flags).findall(string)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: cannot use a bytes pattern on a string-like object
+[0m
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error, re
+def get(url, timeout=12):
+    req = urllib.request.Request(url, method='GET', headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) Chrome/126','Accept':'*/*'})
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        return r.status, r.geturl(), dict(r.headers), r.read()
+    except urllib.error.HTTPError as e:
+        return e.code, e.geturl(), dict(e.headers), e.read()
+    except Exception as e:
+        return 'ERR', '', {}, str(e).encode()
+
+st, final, hdrs, body = get('https://order-form.easybell.de/assets/index-BiM9ZwNg.js')
+print("bundle status", st, "len", len(body))
+if st == 200:
+    txt = body.decode('utf-8','replace')
+    urls = sorted(set(re.findall(r'https?://[a-zA-Z0-9.\-/:]+', txt)))
+    for u in urls:
+        if any(k in u.lower() for k in ('easybell','api','order','sip','voip','ekp')):
+            print("ABSURL:", u[:140])
+    apis = sorted(set(re.findall(r'["\'`]((?:/api|/order|/graphql)[a-zA-Z0-9/_.\-${}?=&]*)?["\'`]', txt)))
+    for a in apis:
+        if a: print("API:", a[:140])
+    env = sorted(set(re.findall(r'VITE_[A-Z0-9_]+', txt)))
+    for e in env: print("VITE:", e)
+time.sleep(2)
+st, final, hdrs, body = get('https://connectme-app.easybell.de/authenticate')
+print("\nconnectme /authenticate status", st, "final", final, "CT", hdrs.get('Content-Type'))
+print("body[:400]:", (body or b'')[:400])
+EOF
+Sat Sep  5 18:30:51 UTC 2026
+bundle status 200 len 1180069
+ABSURL: https://login.easybell.de
+ABSURL: https://login.easybell.de/relocation/cancel
+ABSURL: https://login.easybell.de/subscription-management
+ABSURL: https://partner.easybell.de
+API: /api/
+API: /api/apc/check
+API: /order
+Traceback (most recent call last):
+  File "<stdin>", line 25, in <module>
+NameError: name 'time' is not defined. Did you forget to import 'time'?
+[0m
+order-form bundle leaks `https://login.easybell.de` flows, `https://partner.easybell.de` (new domain), `/api/` base and `/api/apc/check`. Quick verify of those endpoints + connectme authenticate:
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error, re, time, ssl, json
+def get(url, timeout=10):
+    req = urllib.request.Request(url, method='GET', headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) Chrome/126','Accept':'*/*'})
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        return r.status, r.geturl(), dict(r.headers), r.read(600)
+    except urllib.error.HTTPError as e:
+        return e.code, e.geturl(), dict(e.headers), e.read(600)
+    except Exception as e:
+        return 'ERR', '', {}, str(e).encode()
+
+for u in ['https://order-form.easybell.de/api/apc/check','https://order-form.easybell.de/api/']:
+    st, final, hdrs, body = get(u)
+    ct = hdrs.get('Content-Type','')
+    print(f"{u}\t{st}\t{ct}\t{body[:200]}")
+    time.sleep(2)
+
+st, final, hdrs, body = get('https://connectme-app.easybell.de/authenticate')
+print(f"\nconnectme /authenticate\t{st}\tfinal={final}\tCT={hdrs.get('Content-Type')}")
+print("body:", (body or b'')[:400])
+time.sleep(1)
+ctx = ssl.create_default_context()
+req = urllib.request.Request('https://cloudflare-dns.com/dns-query?name=partner.easybell.de&type=A', headers={'accept':'application/dns-json'})
+d = json.loads(urllib.request.urlopen(req, timeout=15, context=ctx).read())
+print("\npartner.easybell.de:", [a.get('data') for a in d.get('Answer',[]) if a.get('type')==1] or f"status {d.get('Status')}")
+EOF
+Sat Sep  5 18:31:00 UTC 2026
+https://order-form.easybell.de/api/apc/check	405		b''
+https://order-form.easybell.de/api/	200	text/html	b'<!doctype html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <link rel="icon" href="/favicon.webp" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <ti'
+
+connectme /authenticate	200	final=https://keycloak.eu-west-bru-production.dstny.d4sp.com/auth/realms/14630d0a-475d-4c5e-a0d8-901a948577f0/protocol/openid-connect/auth?client_id=coven&response_type=code&redirect_uri=https%3A%2F%2Fconnectme-app.easybell.de%2F%2Flogin-online-session-converged638e2&state=V7grSKNdUOYxbPqptZSDVk.L2F1dGhlbnRpY2F0ZQ%3D%3D	CT=text/html;charset=utf-8
+body: b'<!DOCTYPE html><html><head><script>\n\n\nconst kcContext = {\n    "traceId": "69657e4bc3c09db00665e8e71455a424",\n    "social": {\n        /* class: org.keycloak.forms.login.freemarker.model.IdentityProviderBean */\n        "baseURI": {\n            "path": "\\/auth/",\n            "rawPath": "\\/auth/",\n            "rawSchemeSpecificPart": "\\/auth/?client_id=coven&tab_id=vZVKVU0uqnQ&client_data=eyJydSI6Imh0'
+
+partner.easybell.de: ['62.27.117.123']
+[0m
+Key finds: `order-form /api/apc/check` → **405 (path live, POST-only)** — a real API endpoint; `connectme-app /authenticate` → **external Keycloak OIDC** (dstny IdP, `client_id=coven`, `redirect_uri` to connectme-app with a double-slash anomaly); **`partner.easybell.de → same main ingress 62.27.117.123`**. One final single check on the partner portal:
+[0m$ [0mdate -u; python3 - <<'EOF'
+import urllib.request, urllib.error
+def get(url, timeout=10):
+    req = urllib.request.Request(url, method='GET', headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) Chrome/126','Accept':'text/html,*/*'})
+    try:
+        r = urllib.request.urlopen(req, timeout=timeout)
+        return r.status, r.geturl(), dict(r.headers), r.read(500)
+    except urllib.error.HTTPError as e:
+        return e.code, e.geturl(), dict(e.headers), e.read(500)
+    except Exception as e:
+        return 'ERR', '', {}, str(e).encode()
+st, final, hdrs, body = get('https://partner.easybell.de/')
+title = ''
+import re
+m = re.search(br'<title[^>]*>(.*?)</title>', body, re.I|re.S)
+if m: title = m.group(1).decode('utf-8','replace')[:60]
+print(f"partner.easybell.de\t{st}\tfinal={final}\tCT={hdrs.get('Content-Type','')}\tServer={hdrs.get('Server','')}\tLoc={hdrs.get('Location','')[:60]}\tTitle={title}")
+print("body[:200]:", body[:200])
+EOF
+Sat Sep  5 18:31:22 UTC 2026
+partner.easybell.de	200	final=https://partner.easybell.de/login	CT=text/html; charset=utf-8	Server=	Loc=	Title=
+body[:200]: b'<!DOCTYPE html>\n<html lang="de">\n<head>\n    <meta charset="utf-8">\n    <meta http-equiv="X-UA-Compatible" content="IE=edge">\n    <meta name="viewport" content="width=device-width, initial-scale=1">\n  '
+[0m
+Breadth sweep complete. Recorded evidence supports a major delta. Final structured output:
+
+---
+
+STEP 1 — DELTA
+[NEW] CT sweep (18:23–18:24 UTC) surfaces 18 live A-record subdomains absent from all 4 days of inventory; ~6 never-probed web apps (order-form, connectme-app prod/UAT/dev, partner.easybell.de, survey) + backmon 403.
+[CHANGED] Prior "passive surface exhausted" verdict RETRACTED — exhaustion was relative to an incomplete 7-host seed inventory; fresh zero-credential breadth reopens.
+[NEW] order-form.easybell.de (on main ingress 62.27.117.123, shared with portal/voip-management): Vite/Vue SPA; bundle leaks `/api/` base + live POST endpoint `/api/apc/check` (GET→405, 18:30:44 UTC) + `partner.easybell.de` + login.easybell.de flows.
+[NEW] connectme-app.easybell.de: nginx SPA; `/authenticate` → 200 + OIDC redirect to external Keycloak `dstny.d4sp.com`, `client_id=coven`, `response_type=code`, `redirect_uri=...//login-online-session-converged638e2` (double-slash anomaly). UAT + developer envs live.
+[NEW] partner.easybell.de: 200 → `/login` partner portal on main ingress (18:31:22 UTC).
+[CHANGED] my.easybell.com dotfile line DISPROVEN: `/.env`, `/.git/config`, `/telescope`, `/_ignition/health-check`, `/storage/logs/laravel.log`, `/horizon` all 200 = identical Inertia SPA catch-all shell, no file content (18:21 UTC).
+[CHANGED] voip openapi line closed: `/api/v2/api-docs`, `/api/swagger-ui.html`, `/api/openapi.json`, `/api/swagger-ui/index.html` all nginx HTML 404 (18:22 UTC).
+
+STEP 2 — PRIORITIZE
+[PRIO] order-form.easybell.de,7.8: a7 b9 t7 g9 c4 f10 = 1.75+2.25+1.05+1.35+0.40+1.00
+[PRIO] partner.easybell.de,7.7: a8 b9 t6 g8 c4 f10 = 2.00+2.25+0.90+1.20+0.40+1.00
+[PRIO] connectme-app.easybell.de,7.0: a7 b7 t7 g8 c3 f10 = 1.75+1.75+1.05+1.20+0.30+1.00
+([CHANGED] voip-management/api carried 7.2; my.easybell.com carried 7.6 — unchanged this cycle)
+
+STEP 3 — HYPOTHESES
+[HYP] order-form-unauth-api-surface
+class: MISCONFIG
+asset: order-form.easybell.de/api
+confidence: 45
+reasoning: Vite SPA on shared main ingress; bundle contains API base `/api/` and `/api/apc/check` (APC = number-portability availability check). GET → 405 proves path is live and POST-bound; SPA catch-all returns 200 HTML everywhere. Zero auth gate observed on the app shell; any API method-guess returns 405 (path exists) — direct route discovery is possible.
+evidence_needed: additional live `/api/*` paths beyond apc/check; Allow-method info on apc/check; whether availability-check data is readable without auth.
+verify_steps: PASSIVE — fetch homepage, download remaining JS chunks (read-only); grep `/api/` regex; then single GET (≥6s) of each unique discovered path against order-form; OPTIONS `/api/apc/check` for Allow (established in-program technique). No POST (writes into order/avail flow).
+impact: unauth order/porting/no-portability data + endpoint surface for BOLA → MEDIUM/HIGH.
+testability: PASSIVE
+[HYP] connectme-oidc-redirect-state-flaw
+class: OATH
+asset: connectme-app.easybell.de
+confidence: 42
+reasoning: `/authenticate` (200, 18:30:51 UTC) issues OIDC authorize to external Keycloak (client_id=coven, response_type=code) with redirect_uri `https://connectme-app.easybell.de//login-online-session-converged638e2` — double-slash, fixed-path structural anomaly — and state token `/L2F1dGhlbnRpY2F0ZQ==`. If the callback does not re-validate state/redirect_uri on the in-scope host, OIDC code re-use / redirect confusion chains to session issues on this app.
+evidence_needed: behavior of the in-scope callback `/login-online-session-converged638e2` with tampered/missing state and alternate path; no interaction with the external IdP beyond the observed redirect.
+verify_steps: PASSIVE — single GET `https://connectme-app.easybell.de/login-online-session-converged638e2?state=x&code=y` (dummy params, expect 4xx/5xx not auth); test path variants `/login-online-session-converged638e2/../login` returning app vs 404. Never authenticate against dstny IdP.
+impact: OIDC code theft → session/account compromise on customer app → HIGH.
+testability: PASSIVE
+[HYP] partner-portal-api-leak
+class: MISCONFIG
+asset: partner.easybell.de
+confidence: 40
+reasoning: Live partner portal (200 → `/login`, referenced from order-form bundle, shared ingress). Partner portals commonly proxy order/commission/customer APIs; app fingerprint (Laravel vs Vue) determines the exact passive checks. No auth bypass attempted — enumeration of the public login page's own assets only.
+evidence_needed: framework fingerprint + any client-side `/api/*` or env config in its own assets.
+verify_steps: PASSIVE — GET `https://partner.easybell.de/login`; extract script/css paths; fetch referenced assets (read-only); grep for `/api/`, `VITE_`/env, partner/order endpoints; single GET of each discovered path (≥6s).
+impact: partner/order/commission data exposure → MEDIUM/HIGH.
+testability: PASSIVE
+
+STEP 4 — SELF-CRITIQUE
+[PARKED] my-portal-idor:55 — unchanged, AUTH_HELPED, no creds.
+[PARKED] voip-api-ssrf-to-metadata:<40 — no URL-accepting endpoint; unchanged.
+[PARKED] PBX/SIP HTTP surface (pbx, secure.pbx, staging-pbx, sbc-test, sip, secure.sip, ipv6.sip, voip): SIP-protocol-only, no HTTP; non-HTTP active probing outside passive discipline — parked.
+[PARKED] survey.easybell.de: Caddy survey app, low value, adjacent to rejected known-lib class — parked <40.
+[PARKED] homer/jira/confluence/connectme SaaS-backing others: NXDOMAIN or third-party (Atlassian/AWS Cloud) redirected infra — not easybell-controlled → out.
+[PARKED] portal.easybell.de: A-record present but no HTTP — dead, unchanged.
+[FINAL] voip-cors-cred-exfil-v3,92 — confirmed 7 endpoints, POC-ready, HUMAN report line. Unchanged.
+[FINAL] my-portal-api-proxy-wildcard,78 — secondary exfil path, same HUMAN barrier. Unchanged.
+[FINAL] order-form-unauth-api-surface,45 — live 405 endpoint + chunk-greppable API map, zero-credential.
+[FINAL] connectme-oidc-redirect-state-flaw,42 — fresh OIDC surface with observable structural anomaly.
+[FINAL] partner-portal-api-leak,40 — floor, cheap passive mapping.
+
+STEP 5 — NEXT ACTION
+[NEXT] PROBE: Passive depth on order-form: GET https://order-form.easybell.de/ → extract all referenced JS chunks → grep `/api/` and endpoint strings → single spaced GET (≥6s) of every unique `/api/<path>` route derived (apc/check already confirmed live 405) + OPTIONS https://order-form.easybell.de/api/apc/check for Allow-list. Record method+status+CT only; no POSTs, no body dumps of order data.
+
+STEP 6 — LEARNING
+[LEARN] REJECTED MISCONFIG @ my.easybell.com: Laravel dotfile/debug surface DISPROVEN (18:21 UTC) — /.env, /.git/config, /telescope, /horizon, /_ignition/health-check, /storage/logs/laravel.log all return 200 text/html = Inertia SPA catch-all shell (identical portal page); no file content; catch-all makes naive 200-check a false positive.
+[LEARN] REJECTED MISCONFIG @ voip-management.easybell.de/api: OpenAPI/swagger line closed (18:22 UTC) — /api/v2/api-docs, /api/swagger-ui.html, /api/openapi.json, /api/swagger-ui/index.html (+ /api/v3/api-docs at 16:10) all nginx HTML 404; no springdoc/springfox exposure; passive doc-disclosure surface on voip now fully exhausted.
+[LEARN] ACCEPTED MISCONFIG @ easybell.de: CT sweep (18:24 UTC, crt.sh DoH-verified) shows 18 live A-record subdomains never in inventory; "passive surface exhausted" was inventory-incomplete — order-form, connectme-app(±uat/dev), partner, survey, backmon live; pbx/sip/secure.*/voip/sbc-test SIP-protocol-only; homer NX; jira/confluence = third-party cloud.
+[LEARN] ACCEPTED MISCONFIG @ order-form.easybell.de: Vite SPA bundle (index-BiM9ZwNg.js, 18:30 UTC) leaks /api/ base, live POST-only /api/apc/check (GET→405), partner.easybell.de, login.easybell.de relocation/subscription flows; shares main ingress 62.27.117.123.
+[LEARN] ACCEPTED OATH @ connectme-app.easybell.de: /authenticate → OIDC redirect to external Keycloak (dstny.d4sp.com, client_id=coven, response_type=code) with in-scope redirect_uri carrying double-slash `//login-online-session-converged638e2`; state present; prod+UAT+dev variants.
+
+STEP 7 — RISK
+[RISK] easybell: 70
+reasoning: Up 2 from 68. Rationale: fresh zero-credential breadth (order-form API surface, connectme OIDC, partner portal) reopens passive discovery toward a non-credential HIGH, previously judged exhausted — net upside. Two false lines closed cleanly with evidence (dotfile catch-all, openapi 404). Carried: primary CORS deliverable (92) still HUMAN-gated pending report/Po C; WAF throttle on voip unchanged; auth/lockout excluded; PBX/SIP deemed non-HTTP and parked not tested. Mitigation held throughout: ~45 read-only GET/OPTIONS this cycle at ≤0.6rps, ≥1.8–7s spacing, no POSTs, no customer/order/partner data captured (status+headers+title only), sha256 discipline for any future secret, report only via bugs.olivermaicher.eu.
