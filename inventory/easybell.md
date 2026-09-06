@@ -246,3 +246,5 @@ www.easybell.de
 - CHANGED backmon.easybell.de: nginx blanket 403 (146B, voip ingress family) on /,/metrics,/health,/status,/api,/index.html,/monitor — IP-allowlist deny; closed
 - CHANGED REJECTED OATH @ connectme-app.easybell.de: bare `//login-online-session-converged638e2` returns SPA shell 200 (09:16:21, 19765B) on clean probe; prior "bare // path 404s" were backtick-polluted URLs →
 - CHANGED REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path-normalization bypass surface
+
+## 2026-09-06 20:12:49 UTC
