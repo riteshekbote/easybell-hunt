@@ -4,3 +4,8 @@
   - | Q5 | Novel/unreported? | Likely novel for this program (valid-bugs.md is empty, no prior report) |
   - **Verdict: VALID**
   - | 1 | voip-cors-cred-exfil-v3 | **VALID** | Report to bugs.olivermaicher.eu |
+
+- 3 lead(s) marked VALID at 2026-09-06 17:09:59 UTC
+  - ### Verdict: **VALID**
+  - | voip-cors-cred-exfil-v3 | **VALID** | Credentialed CORS + ACAC:true on 7 authenticated API routes — HIGH impact, provable via OPTIONS |
+  - | my-portal-api-proxy-wildcard | **HOLD** | Standalone wildcard CORS without ACAC:true is informational; only valid as chain amplifier |
