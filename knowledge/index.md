@@ -88,3 +88,4 @@
 - 2026-09-06 NO_DELTA — no new passive probes since 2026-09-05 18:33:33 UTC; all inventory + knowledge base unchanged; hypotheses stable.
 - 2026-09-06 REJECTED OATH @ connectme-app.easybell.de: bare `//login-online-session-converged638e2` returns SPA shell 200 (09:16:21, 19765B) on clean probe; prior "bare // path 404s" recordings were backtick-polluted URLs → no normalization inconsistency in the code-return flow; KB line corrected.
 - 2026-09-06 REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path-normalization bypass surface.
+- 2026-09-06 NO_DELTA — no new passive probes since 2026-09-06 04:48:35 UTC; all inventory + knowledge base unchanged; hypotheses stable.

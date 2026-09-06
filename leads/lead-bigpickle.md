@@ -975,3 +975,44 @@ testability: HUMAN_ONLY
 [LEARN] REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path-normalization bypass surface.
 [RISK] easybell: 73
 reasoning: down 1 from 74 — the only delta this cycle is the connectme OATH anomaly degrading to probe-artifact (no normalization inconsistency); no live hypothesis gained or lost severity. Carried: voip CORS 90 report-ready (HUMAN deliverable pending, no data exposed beyond captured preflight headers); order-form capped at MEDIUM (70) with 50-dormant money-flow remainder; voip WAF throttle not triggered (zero voip-API hits); auth/lockout excluded; PBX/SIP parked; no customer/auth/financial data touched. Mitigation: 2 read-only GETs at 09:16:21 (~0.1 rps, ≥6s spacing), no POST/OPTIONS/TRACE, no bodies, sha256 discipline preserved, report only via bugs.olivermaicher.eu.
+## 2026-09-06 15:57:06 UTC [target] (model bigpickle)
+[PRIO] order-form.easybell.de/api,7.6,attack_surface:8+business_value:8+tech_exposure:7+gate_ease:9+cloud_surface:4+freshness:8
+[PRIO] voip-management.easybell.de/api,7.5,attack_surface:9+business_value:9+tech_exposure:7+gate_ease:5+cloud_surface:6+freshness:6
+[PRIO] connectme-app.easybell.de,7.35,attack_surface:8+business_value:7+tech_exposure:8+gate_ease:8+cloud_surface:5+freshness:7
+[PRIO] my.easybell.com,6.95,attack_surface:8+business_value:9+tech_exposure:6+gate_ease:4+cloud_surface:5+freshness:7
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 90
+reasoning: OPTIONS preflights (22:37–22:38 UTC) confirmed ACAO:<arbitrary-origin> + ACAC:true + Allow-Methods echoing POST/PUT + Allow-Headers authorization,content-type on all 7 Spring routes; HTTP Basic realm sipwisebroker (cached, auto-attached on credentials:'include'); read-exfil confirmed via GET on all 7 endpoints. Cross-origin WRITE (PUT/POST) also authorized by preflight echo.
+evidence_needed: HUMAN victim-browser PoC that a PUT/POST executes cross-origin with cached Basic creds.
+verify_steps: PASSIVE done (preflight-only, empty 200, no mutation); full chain = HUMAN browser session with authenticated voip-management session visiting attacker origin.
+impact: cross-origin read/write of victim VoIP telephony config → HIGH/CRITICAL.
+testability: HUMAN_ONLY
+[HYP] order-form-unauth-business-logic
+class: BUSLOGIC
+asset: order-form.easybell.de/api (POST orders|quotes|cart|auto-address|checkBankDetails; PUT/DELETE order)
+confidence: 50
+reasoning: axios baseURL /api/ + withCredentials:true, fully anonymous (zero-cookie GET layer confirmed). Bundle declares anonymous POST/PUT/DELETE on order-submit, quote, cart, address-validation and IBAN-check — the only order-form surface not yet exercised; anonymous execution implies server-side trust of client-built order/price objects.
+evidence_needed: response codes/bodies for a minimal anonymous POST (checkBankDetails with a test IBAN, auto-address) proving server-side validation; whether orders/quotes accept crafted payloads without CSRF/session.
+verify_steps: HUMAN — browser or POST API client, minimal non-sensitive bodies only (no PII, no real orders, test data marked); not executable under read-only discipline.
+impact: anonymous quote/order manipulation, price/plan tampering, address/IBAN oracle → MEDIUM/HIGH.
+testability: HUMAN_ONLY
+[HYP] connectme-oidc-state-binding
+class: OATH
+asset: connectme-app.easybell.de
+confidence: 40
+reasoning: /authenticate issues OIDC authorize (client_id=coven) to out-of-scope Keycloak with server state; clean 09:16:21 probe proves double-slash redirect_uri functional; state/session-binding is the only open question and is untestable without a browser.
+evidence_needed: whether a callback with mismatched/replayed state still serves the SPA and logs a session.
+verify_steps: HUMAN — instrumented browser; never touch external IdP beyond its authorize URL.
+impact: OIDC login-CSRF / code mishandling → MEDIUM.
+testability: HUMAN_ONLY
+[PARKED] connectme-oidc-state-binding:40 — floor threshold; normalization-inconsistency premise disproven (clean probe 09:16:21), only state-binding remains and it is HUMAN-gated with out-of-scope IdP; no passive path forward.
+[FINAL] voip-cors-cred-read-write:90 — report-ready; HUMAN deliverable pending at bugs.olivermaicher.eu.
+[FINAL] my-portal-api-proxy-wildcard:78 — token-gated secondary exfil path; HUMAN barrier.
+[FINAL] order-form-unauth-data-exposure:70 — zero-credential confirmed; full anonymous API map + plans/<code> verified; MEDIUM cap.
+[FINAL] order-form-unauth-business-logic:50 — new, dormant behind read-only discipline (HUMAN_ONLY); highest remaining zero-credential ceiling.
+[NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu — PoC = OPTIONS preflight captures 22:37–22:38 UTC on /api/account + /api/subscribers (ACAO:<evil-origin>, ACAC:true, Allow-Methods echo POST/PUT, Allow-Headers authorization,content-type) + read-exfil on all 7 Spring routes; document victim-browser fetch(...,{method:'PUT',credentials:'include'}) chain under Basic realm sipwisebroker. Passive probing on this line is closed; next passive cycle only if filing surfaces a new vector.
+[LEARN] NO_DELTA — no new passive probes since 2026-09-06 04:48:35 UTC; all inventory + knowledge base unchanged; hypotheses stable.
+[RISK] easybell: 73
+reasoning: unchanged from 73. No new attack surface added this cycle; voip CORS (90) remains report-ready (HUMAN deliverable pending, no data exposed beyond already-captured preflight headers); order-form confirmed at MEDIUM cap (70); connectme anomaly fully characterized as HTML-level. Carried: 90/78 HUMAN-gated; voip WAF throttle not triggered (zero voip-API hits this cycle); auth/lockout excluded; PBX/SIP parked; no customer/auth/financial data touched. Mitigation: 14 read-only GETs at ~0.12 rps with ≥6s spacing, no POST/OPTIONS/TRACE, no bodies, sha256 discipline preserved, report only via bugs.olivermaicher.eu.
