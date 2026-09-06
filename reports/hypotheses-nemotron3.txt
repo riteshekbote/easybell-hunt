@@ -1,20 +1,16 @@
-## 2026-09-06 00:13:47 UTC [target] (model nemotron3)
-[NEW] order-form.easybell.de/api: Vite SPA bundle (index-BiM9ZwNg.js) leaks `/api/` base path and live POST-only endpoint `/api/apc/check` (GET→405 at 18:30:44 UTC); references partner.easybell.de + login.easybell.de for relocation/subscription flows; shares main ingress 62.27.117.123
-[NEW] connectme-app.easybell.de (prod/uat/dev): nginx SPA; `/authenticate` → 200 + OIDC redirect to external Keycloak `dstny.d4sp.com` (client_id=coven, response_type=code) with in-scope `redirect_uri=https://connectme-app.easybell.de//login-online-session-converged638e2` containing RFC 3986-violating double-slash; state parameter present
-[NEW] partner.easybell.de: 200 → `/login` partner portal on main ingress (shared nginx 62.27.117.123), unprobed surface; Laravel Blade, partnerportal_session cookie, Matomo siteId=2
-[NEW] survey.easybell.de, backmon.easybell.de: live A-records from CT sweep (crt.sh DoH-verified), zero prior coverage
-[CHANGED] my.easybell.com dotfile/debug surface DISPROVEN (18:21 UTC) — `/.env`, `/.git/config`, `/telescope`, `/horizon`, `/_ignition/health-check`, `/storage/logs/laravel.log` all return 200 text/html = identical Inertia SPA catch-all shell; no file content disclosed
-[CHANGED] voip-management.easybell.de/api OpenAPI/swagger line CLOSED (18:22 UTC) — `/api/v2/api-docs`, `/api/v3/api-docs`, `/api/swagger-ui.html`, `/api/openapi.json`, `/api/swagger-ui/index.html` all nginx HTML 404; springdoc/springfox not exposed
-[CHANGED] Prior "passive surface exhausted" verdict RETRACTED — was relative to incomplete 7-host seed; fresh zero-credential breadth reopens via CT sweep (18 live subdomains)
-[CHANGED] `voip-management.k8s.easybell.de` / `k8s.easybell.de` confirmed NXDOMAIN via passive DNS — internal hostname leak from `core.js` is info-disclosure only
-[CHANGED] `my.easybell.com` + `voip-management.easybell.de` share ingress IP 62.27.117.123 (same nginx); "cross-origin" split is host-header-only
+## 2026-09-06 04:46:01 UTC [target] (model nemotron3)
+[NEW] No new live probes since 2026-09-05 18:33:33 UTC (order-form.easybell.de); WAF backoff fully cleared (>10h since last burst)
+[CHANGED] order-form.easybell.de/api hypothesis confidence 78 → unchanged; connectme-oidc-redirect-uri-doubleslash 82 → unchanged; partner-portal-unauth-api-surface 60 → parked awaiting probe
+[CHANGED] voip-management.easybell.de/api CORS credentialed reflection (92) + my.easybell.com proxy wildcard (78) + portal IDOR (55) all AUTH_HELPED, static since 2026-09-04 21:34
+[CHANGED] CT-sweep 18 live subdomains (order-form, connectme-app±uat/dev, partner, survey, backmon) now in inventory; prior "exhausted" verdict retracted
+[CHANGED] my.easybell.com dotfile/debug surface disproven (SPA catch-all); voip OpenAPI/swagger closed (all nginx HTML 404); k8s hostnames NXDOMAIN confirmed
 [PRIO] order-form.easybell.de/api,8.5,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:9+cloud_surface:6+freshness:10
 [PRIO] connectme-app.easybell.de,8.0,attack_surface:8+business_value:8+tech_exposure:8+gate_ease:8+cloud_surface:5+freshness:10
 [PRIO] partner.easybell.de,7.0,attack_surface:7+business_value:8+tech_exposure:6+gate_ease:6+cloud_surface:4+freshness:10
-[PRIO] survey.easybell.de,5.8,attack_surface:6+business_value:6+tech_exposure:5+gate_ease:8+cloud_surface:3+freshness:10
-[PRIO] backmon.easybell.de,5.5,attack_surface:6+business_value:5+tech_exposure:5+gate_ease:8+cloud_surface:3+freshness:10
 [PRIO] voip-management.easybell.de/api,7.3,attack_surface:8+business_value:9+tech_exposure:7+gate_ease:5+cloud_surface:7+freshness:6
 [PRIO] my.easybell.com,7.1,attack_surface:8+business_value:9+tech_exposure:7+gate_ease:4+cloud_surface:5+freshness:7
+[PRIO] survey.easybell.de,5.8,attack_surface:6+business_value:6+tech_exposure:5+gate_ease:8+cloud_surface:3+freshness:10
+[PRIO] backmon.easybell.de,5.5,attack_surface:6+business_value:5+tech_exposure:5+gate_ease:8+cloud_surface:3+freshness:10
 [HYP] order-form-unauth-api-data-exposure
 class: MISCONFIG
 asset: order-form.easybell.de/api

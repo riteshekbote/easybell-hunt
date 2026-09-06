@@ -198,3 +198,13 @@ www.easybell.de
 - CHANGED Prior "passive surface exhausted" verdict RETRACTED — was relative to incomplete 7-host seed; fresh zero-credential breadth reopens via CT sweep (18 live subdomains)
 - CHANGED `voip-management.k8s.easybell.de` / `k8s.easybell.de` confirmed NXDOMAIN via passive DNS — internal hostname leak from `core.js` is info-disclosure only
 - CHANGED `my.easybell.com` + `voip-management.easybell.de` share ingress IP 62.27.117.123 (same nginx); "cross-origin" split is host-header-only
+
+## 2026-09-06 04:48:17 UTC
+- NEW order-form.easybell.de/api: full anonymous API map recovered from 21 Vite chunks (index-BiM9ZwNg.js + 20 lazy): GET {auth,providers,plan-classes,plans/<code>,companies,translations/*} + mutations POST
+- CHANGED order-form anonymous GET surface now fully enumerated + spot-verified; content caps at public catalog data (MEDIUM). The only HIGH-candidate remainder is the anonymous POST business-logic layer (money
+- CHANGED nemotron3 order-form chunk NEXT executed (read-only); the last paved zero-credential passive line is closed.
+- NEW No new live probes since 2026-09-05 18:33:33 UTC (order-form.easybell.de); WAF backoff fully cleared (>10h since last burst)
+- CHANGED order-form.easybell.de/api hypothesis confidence 78 → unchanged; connectme-oidc-redirect-uri-doubleslash 82 → unchanged; partner-portal-unauth-api-surface 60 → parked awaiting probe
+- CHANGED voip-management.easybell.de/api CORS credentialed reflection (92) + my.easybell.com proxy wildcard (78) + portal IDOR (55) all AUTH_HELPED, static since 2026-09-04 21:34
+- CHANGED CT-sweep 18 live subdomains (order-form, connectme-app±uat/dev, partner, survey, backmon) now in inventory; prior "exhausted" verdict retracted
+- CHANGED my.easybell.com dotfile/debug surface disproven (SPA catch-all); voip OpenAPI/swagger closed (all nginx HTML 404); k8s hostnames NXDOMAIN confirmed

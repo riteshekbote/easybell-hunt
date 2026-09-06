@@ -150,3 +150,13 @@ https://order-form.easybell.de/api/apc/check` -> HTTP 404
 https://partner.easybell.de/login` -> 200 len=?
 https://order-form.easybell.de/api/companies?search=<sample -> HTTP 422
 https://connectme-app.easybell.de/login-online-session-converged638e2?state=x&code=y&refresh=1 -> 200 len=?
+
+## 2026-09-06 04:48:35 UTC
+https://order-form.easybell.de/ -> 200 len=2665
+https://order-form.easybell.de/api/apc/check -> HTTP 405
+https://connectme-app.easybell.de//login-online-session-converged638e2` -> HTTP 404
+https://connectme-app.easybell.de//login-online-session-converged638e2@evil.com` -> HTTP 404
+https://connectme-app.easybell.de/authenticate -> 200 len=20205
+https://partner.easybell.de/login -> 200 len=?
+https://order-form.easybell.de/` -> 200 len=2665
+https://order-form.easybell.de/api/apc/check` -> HTTP 404

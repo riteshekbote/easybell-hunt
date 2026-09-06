@@ -838,3 +838,51 @@ testability: PASSIVE
 [LEARN] REJECTED MISCONFIG @ connectme-app.easybell.de: /login-online-session-converged638e2/../login → 404 — nginx traversal-normalizes; earlier 200/404 split is SPA-shell-on-callback-route only, NOT a path-normalization bypass.
 [RISK] easybell: 73
 reasoning: -1 from 74. No new attack surface added — both CT-sweep stragglers (survey, backmon) dispositioned as non-targets, so the "18 never-inventoried subdomains" breadth is now fully resolved and contracting, not expanding. Flagship voip CORS (90) unchanged and report-ready (HUMAN deliverable pending, no data exposed beyond already-captured preflight headers); order-form confirmed at MEDIUM cap; connectme anomaly fully characterized as HTML-level. Carried: 90/78 HUMAN-gated; voip WAF throttle (avatado, none triggered — zero voip-API hits this cycle); auth/lockout excluded; PBX/SIP parked; no customer/auth/financial data touched. Mitigation: 8 read-only GETs at ≤0.33 rps with ≥7s spacing, no POST/OPTIONS/TRACE, no bodies, sha256 discipline preserved, report only via bugs.olivermaicher.eu.
+## 2026-09-06 04:48:06 UTC [target] (model bigpickle)
+[NEW] order-form.easybell.de/api: full anonymous API map recovered from 21 Vite chunks (index-BiM9ZwNg.js + 20 lazy): GET {auth,providers,plan-classes,plans/<code>,companies,translations/*} + mutations POST {orders,quotes,cart,auto-address,checkBankDetails,auth}, PUT/DELETE {order}; this cycle GET /api/plans/SIPD?lang=de → 200 JSON (tariff catalog, 7987B) and GET /api/contract-summary?lang=de → 404 PDF (session-gated).
+[CHANGED] order-form anonymous GET surface now fully enumerated + spot-verified; content caps at public catalog data (MEDIUM). The only HIGH-candidate remainder is the anonymous POST business-logic layer (money-flow endpoints) — mutating, out of read-only discipline.
+[CHANGED] nemotron3 order-form chunk NEXT executed (read-only); the last paved zero-credential passive line is closed.
+[PRIO] order-form.easybell.de/api,7.6,attack_surface:8+business_value:8+tech_exposure:7+gate_ease:9+cloud_surface:4+freshness:8
+[PRIO] voip-management.easybell.de/api,7.5,attack_surface:9+business_value:9+tech_exposure:7+gate_ease:5+cloud_surface:6+freshness:6
+[PRIO] connectme-app.easybell.de,7.4,attack_surface:8+business_value:7+tech_exposure:8+gate_ease:8+cloud_surface:5+freshness:7
+[PRIO] my.easybell.com,7.0,attack_surface:8+business_value:9+tech_exposure:6+gate_ease:4+cloud_surface:5+freshness:7
+[HYP] order-form-unauth-business-logic
+class: BUSLOGIC
+asset: order-form.easybell.de/api (POST orders|quotes|cart|auto-address|checkBankDetails; PUT/DELETE order)
+confidence: 50
+reasoning: axios instance baseURL /api/ + withCredentials:true, fully anonymous (zero-cookie GET layer confirmed). Bundle declares anonymous POST/PUT/DELETE on order-submit, quote, cart, address-validation and IBAN-check endpoints — the only order-form surface not yet exercised. Order/quote/price-logic flows are program deep-hunt HIGH class (business logic on money flows); anonymous execution suggests server-side trust of client-built order objects.
+evidence_needed: response codes/bodies for a minimal anonymous POST (e.g., checkBankDetails with a test IBAN, auto-address) proving whether server-side validation is enforced; whether orders/quotes accept crafted payloads without CSRF/session.
+verify_steps: HUMAN — browser or POST API client, minimal non-sensitive bodies only (no PII, no real orders, test data marked); not executable under read-only discipline.
+impact: anonymous quote/order manipulation, price/plan tampering, address/IBAN oracle → MEDIUM/HIGH.
+testability: HUMAN_ONLY
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 90
+reasoning: unchanged — OPTIONS preflights (22:37–22:38 UTC) ACAO:<arbitrary-origin>+ACAC:true+Allow-Methods echoing POST/PUT+Allow-Headers authorization,content-type on singular+plural routes; HTTP Basic realm sipwisebroker (cached, auto-attached on credentials:'include'); read-exfil confirmed on all 7 Spring routes.
+evidence_needed: HUMAN victim-browser PoC that a PUT/POST executes cross-origin with cached Basic creds.
+verify_steps: PASSIVE done (preflight-only, empty 200, no mutation); full chain = HUMAN browser session.
+impact: cross-origin write/read of victim VoIP telephony config → HIGH/CRITICAL.
+testability: AUTH_HELPED
+[HYP] connectme-oidc-state-binding
+class: OATH
+asset: connectme-app.easybell.de
+confidence: 40
+reasoning: /authenticate issues OIDC authorize (client_id=coven) with server-generated base64 state; in-scope callback returns SPA shell 200 on state+code and +refresh=1 while bare/dot-slash variants 404 → availability confirmed, session-binding untestable without a browser; Keycloak (dstny.d4sp.com) is out-of-scope and redirect_uri is hardcoded, constraining code-theft.
+evidence_needed: whether a callback with mismatched state still meta-refreshes to the double-slash path.
+verify_steps: HUMAN — instrumented browser; never touch external IdP beyond its authorize URL.
+impact: OIDC login-CSRF / code mishandling → MEDIUM.
+testability: HUMAN_ONLY
+[PARKED] partner-portal-api-leak: retired cleanly last cycle (classic Blade login, Sentry DSN only); public-login-panel + password-recovery classes REJECTED.
+[PARKED] my-portal-idor:55 — AUTH_HELPED, no creds.
+[PARKED] voip-ssrf-to-metadata:<40 — no URL-accepting endpoint; PBX/SIP non-HTTP.
+[PARKED] connectme-oidc-return-normalization — absorbed into state-binding; HTML-level, HUMAN-gated.
+[FINAL] voip-cors-cred-read-write,90 — report-ready, HUMAN deliverable pending.
+[FINAL] my-portal-api-proxy-wildcard,78 — token-gated secondary exfil path, HUMAN barrier.
+[FINAL] order-form-unauth-data-exposure,70 — zero-credential confirmed, full map + plans/<code> verified, MEDIUM cap.
+[FINAL] order-form-unauth-business-logic,50 — new, dormant behind read-only discipline (HUMAN_ONLY), highest remaining zero-credential ceiling.
+[NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu — PoC = OPTIONS preflight captures 22:37–22:38 UTC on /api/account + /api/subscribers (ACAO:<evil-origin>, ACAC:true, Allow-Methods echo POST/PUT, Allow-Headers authorization,content-type) + read-exfil on all 7 Spring routes; document victim-browser fetch(...,{method:'PUT',credentials:'include'}) chain under Basic realm sipwisebroker. Passive probing on this line is closed; next passive cycle only if filing surfaces a new vector.
+[LEARN] ACCEPTED MISCONFIG @ order-form.easybell.de/api: chunk audit (index-BiM9ZwNg.js + 20 lazy, 04:47 UTC) maps full anonymous API — GET plans/<code> 200 JSON tariff catalog (SIPD verified, 7987B), contract-summary 404 without session; POST/PUT/DELETE money-flow endpoints (orders, quotes, cart, order, auto-address, checkBankDetails, auth) exist but are mutating → not read-only probeable.
+[LEARN] REJECTED BUSLOGIC @ order-form.easybell.de/api: contract-summary is session-gated (404 PDF pre-session) — no anonymous contract disclosure; line closed.
+[RISK] easybell: 74
+reasoning: +1 from 73. The order-form surface is now provably closed at MEDIUM view-side (plans/<code> verified, contract-summary 404), but the same audit exposed the anonymous POST/PUT/DELETE order-flow endpoints (orders/quotes/cart/auto-address/checkBankDetails) — the only remaining zero-credential HIGH-candidate class (money-flow business logic) in inventory, currently dormant behind read-only discipline and the program's no-data-modification rule. Carried: 90/78 HUMAN-gated; voip WAF throttle not triggered (no voip-API hits this cycle); auth/lockout excluded; PBX/SIP parked; no customer/auth/financial data touched (plan SIPD = public tariff catalog). Mitigation: 14 read-only GETs at ~0.12 rps with ≥6s spacing, no POST/OPTIONS/TRACE, no bodies, sha256 discipline preserved, report only via bugs.olivermaicher.eu.

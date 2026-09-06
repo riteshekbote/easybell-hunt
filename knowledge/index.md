@@ -83,3 +83,5 @@
 - 2026-09-06 ACCEPTED IDOR @ voip-management.easybell.de/api + my.easybell.com: BOLA + portal IDOR remain confirmed-class but credential-gated; no passive vector left to advance them
 - 2026-09-06 REJECTED brute-force/lockout @ auth.easybell.de: program excludes auth-stuffing/brute-force/lockout — still no new information
 - 2026-09-06 REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts
+- 2026-09-06 ACCEPTED MISCONFIG @ order-form.easybell.de/api: chunk audit (index-BiM9ZwNg.js + 20 lazy, 04:47 UTC) maps full anonymous API — GET plans/<code> 200 JSON tariff catalog (SIPD verified, 7987B), contract-summary 404 without session; POST/PUT/DELETE money-flow endpoints (orders, quotes, cart, order, auto-address, checkBankDetails, auth) exist but are mutating → not read-only probeable.
+- 2026-09-06 REJECTED BUSLOGIC @ order-form.easybell.de/api: contract-summary is session-gated (404 PDF pre-session) — no anonymous contract disclosure; line closed.
