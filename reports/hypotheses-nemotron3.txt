@@ -1,12 +1,12 @@
-## 2026-09-06 16:05:50 UTC [target] (model nemotron3)
-[CHANGED] REJECTED OATH @ connectme-app.easybell.de: bare `//login-online-session-converged638e2` returns SPA shell 200 (09:16:21, 19765B) on clean probe; prior "bare // path 404s" recordings were backtick-polluted URLs → no normalization inconsistency in code-return flow
-[CHANGED] REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path-normalization bypass surface
-[CHANGED] No new live probes since 2026-09-06 04:48:35 UTC (order-form chunk audit + connectme/partner spot checks); WAF backoff fully cleared (>4h since last burst, >10h since voip burst)
+## 2026-09-06 18:05:17 UTC [target] (model nemotron3)
+[CHANGED] No new live probes since 2026-09-06 04:48:35 UTC; WAF backoff fully cleared (>10h since voip burst, >4h since order-form burst)
+[CHANGED] voip-management.easybell.de/api CORS credentialed read+write CONFIRMED on all 7 Spring routes (account,accounts,subscriber,subscribers,number,numbers,session) — OPTIONS preflights echo Allow-Methods POST/PUT, Allow-Headers authorization,content-type, ACAC:true, arbitrary Origin
 [CHANGED] order-form.easybell.de/api anonymous GET surface fully enumerated from 21 Vite chunks; tariff catalog verified (GET /api/plans/SIPD 200 7987B), contract-summary session-gated (404); POST/PUT/DELETE money-flow endpoints exist but mutating → read-only discipline blocks
 [CHANGED] partner.easybell.de fingerprint confirmed: Laravel Blade login panel (partnerportal_session cookie, Matomo siteId=2), bundle leaks no /api/* surface (Sentry DSN only) — passive API-leak line closed cleanly
 [CHANGED] survey.easybell.de: Caddy 200-empty sink on /,/admin,/index.php,/login (no CT, CL:0) — abandoned stub vhost; closed
 [CHANGED] backmon.easybell.de: nginx blanket 403 (146B, voip ingress family) on /,/metrics,/health,/status,/api,/index.html,/monitor — IP-allowlist deny; closed
-[CHANGED] voip-management.easybell.de/api: CORS credentialed read+write CONFIRMED on all 7 Spring routes (account,accounts,subscriber,subscribers,number,numbers,session) — OPTIONS preflights echo Allow-Methods POST/PUT, Allow-Headers authorization,content-type, ACAC:true, arbitrary Origin; HTTP Basic realm sipwisebroker auto-attaches cached creds on credentials:'include'
+[CHANGED] REJECTED OATH @ connectme-app.easybell.de: bare `//login-online-session-converged638e2` returns SPA shell 200 (09:16:21, 19765B) on clean probe; prior "bare // path 404s" were backtick-polluted URLs → no normalization inconsistency
+[CHANGED] REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path-normalization bypass surface
 [PRIO] voip-management.easybell.de/api,9.0,attack_surface:10+business_value:9+tech_exposure:10+gate_ease:7+cloud_surface:7+freshness:9
 [PRIO] my.easybell.com,7.8,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:4+cloud_surface:6+freshness:8
 [PRIO] connectme-app.easybell.de,7.4,attack_surface:8+business_value:7+tech_exposure:8+gate_ease:8+cloud_surface:5+freshness:7

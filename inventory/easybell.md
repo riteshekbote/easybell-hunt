@@ -236,3 +236,13 @@ www.easybell.de
 - CHANGED survey.easybell.de: Caddy 200-empty sink on /,/admin,/index.php,/login (no CT, CL:0) — abandoned stub vhost; closed
 - CHANGED backmon.easybell.de: nginx blanket 403 (146B, voip ingress family) on /,/metrics,/health,/status,/api,/index.html,/monitor — IP-allowlist deny; closed
 - CHANGED voip-management.easybell.de/api: CORS credentialed read+write CONFIRMED on all 7 Spring routes (account,accounts,subscriber,subscribers,number,numbers,session) — OPTIONS preflights echo Allow-Methods 
+
+## 2026-09-06 18:05:28 UTC
+- CHANGED No new live probes since 2026-09-06 04:48:35 UTC; WAF backoff fully cleared (>10h since voip burst, >4h since order-form burst)
+- CHANGED voip-management.easybell.de/api CORS credentialed read+write CONFIRMED on all 7 Spring routes (account,accounts,subscriber,subscribers,number,numbers,session) — OPTIONS preflights echo Allow-Methods P
+- CHANGED order-form.easybell.de/api anonymous GET surface fully enumerated from 21 Vite chunks; tariff catalog verified (GET /api/plans/SIPD 200 7987B), contract-summary session-gated (404); POST/PUT/DELETE mo
+- CHANGED partner.easybell.de fingerprint confirmed: Laravel Blade login panel (partnerportal_session cookie, Matomo siteId=2), bundle leaks no /api/* surface (Sentry DSN only) — passive API-leak line closed cl
+- CHANGED survey.easybell.de: Caddy 200-empty sink on /,/admin,/index.php,/login (no CT, CL:0) — abandoned stub vhost; closed
+- CHANGED backmon.easybell.de: nginx blanket 403 (146B, voip ingress family) on /,/metrics,/health,/status,/api,/index.html,/monitor — IP-allowlist deny; closed
+- CHANGED REJECTED OATH @ connectme-app.easybell.de: bare `//login-online-session-converged638e2` returns SPA shell 200 (09:16:21, 19765B) on clean probe; prior "bare // path 404s" were backtick-polluted URLs →
+- CHANGED REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path-normalization bypass surface
