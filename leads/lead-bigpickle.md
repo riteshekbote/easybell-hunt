@@ -745,3 +745,96 @@ testability: PASSIVE
 [LEARN] ACCEPTED OATH @ connectme-app.easybell.de: in-scope OIDC callback 200s with meta-refresh to the double-slash redirect path (+&refresh=1) while bare `//` path 404s → inconsistent normalization in the code-return flow.
 [RISK] easybell: 74
 reasoning: Up 2 from 72. The flagship CORS finding advanced from read-exfil to credentialed cross-origin WRITE (preflight-approved POST/PUT, arbitrary Origin, ACAC:true) — higher severity ceiling on the same HUMAN-gated PoC. order-form residual closed (validated params, no new GET surface) — neutral. partner retired cleanly (classic login panel = REJECTED). Carried: 90/92 mostly HUMAN-gated for full PoC; voip WAF throttle unchanged; auth/lockout excluded; PBX/SIP parked. Mitigation: 10 read-only GET/OPTIONS this cycle at ~0.17rps avg, ≥6s spacing, no POST bodies to live API (preflights only, empty 200 OK), no customer/order data captured (registry/tariff metadata only), sha256 discipline preserved, report only via bugs.olivermaicher.eu.
+## 2026-09-06 00:14:58 UTC [target] (model bigpickle)
+reasoning: unchanged — `/authenticate` issues OIDC authorize to dstny.d4sp.com (client_id=coven) with redirect_uri double-slash `//login-online-session-converged638e2` + base64 state.
+evidence_needed: in-scope callback behavior with tampered/missing state; app vs 404 on path variants.
+verify_steps: PASSIVE — single GET `/login-online-session-converged638e2?state=x&code=y` and variant `/login-online-session-converged638e2/../login` (expect 4xx not auth); never touch dstny IdP.
+impact: OIDC code theft → session/account compromise → HIGH.
+testability: PASSIVE
+[HYP] partner-portal-api-leak
+class: MISCONFIG
+asset: partner.easybell.de
+confidence: 40
+reasoning: unchanged — referenced from order-form bundle + CSP frame-ancestors lists partner.easybell.de/.nl/.fr/.at/.ch; partner portals proxy order/commission data; no framework fingerprint yet.
+evidence_needed: framework fingerprint + any client `/api/*` or env config in its assets.
+verify_steps: PASSIVE — GET `/login`, pull referenced assets, grep for `/api/`+env, single spaced GET of discovered paths.
+impact: partner/order/commission data → MEDIUM/HIGH.
+testability: PASSIVE
+[NEXT] PROBE: Single GET `https://partner.easybell.de/login` → extract script/css asset paths → fetch referenced JS (read-only, ≥6s spacing, ≤1rps) → grep `/api/`, `VITE_`/env, partner/order/commission endpoints → one spaced GET of each unique discovered path. Record method+status+CT only.
+[RISK] easybell: 72
+reasoning: Up 2 from 70. Confirmed NEW zero-credential data-exposure line on order-form (companies/providers/plan-classes all 200 no-auth) adds verified attack surface beyond the HUMAN-gated CORS deliverable (92). However impact caps at MEDIUM (business-registry/tariff data, largely public in origin) and credentialed-CORS misfire there is route-scoped + guest-session. Carried: 92 still needs HUMAN report/PoC; voip WAF throttle unchanged; auth/lockout excluded; PBX/SIP parked. Mitigation: 16 read-only GET/OPTIONS this cycle (one 6-in-parallel static-asset burst), ≥7s spacing on dynamic endpoints, no POSTs, no customer order data captured (registry/tariff metadata only), sha256 discipline preserved, report only via bugs.olivermaicher.eu.
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 90
+reasoning: OPTIONS preflights (22:37:45/22:38:05 UTC) on /api/account (singular) and /api/subscribers (plural) with Origin https://evil.example.at and ACRM POST/PUT + headers authorization,content-type return 200 with ACAO:<origin> + ACAC:true + Allow-Methods echoing POST/PUT + Allow-Headers authorization,content-type. Combined with HTTP Basic realm sipwisebroker (browser-cached, auto-attached on credentials:'include'), an arbitrary origin can drive cross-origin authenticated WRITE requests, not just reads, against a victim's VoIP objects.
+evidence_needed: HUMAN victim-browser PoC confirming a PUT/POST to /api/subscribers (e.g., call-forwarding/voicemail config) executes with cached Basic creds; which Sipwise objects accept the mutating methods cross-origin.
+verify_steps: PASSIVE — done (preflight evidence, empty 200 bodies, no mutation). Full chain = HUMAN browser session.
+impact: cross-origin modification of victim telephony config (forwarding, voicemail, subscriber, number) → HIGH/CRITICAL; read exfil already confirmed on 7 routes.
+testability: PASSIVE (preflight) / AUTH_HELPED (full chain)
+[HYP] order-form-unauth-data-exposure
+class: MISCONFIG
+asset: order-form.easybell.de/api
+confidence: 68
+reasoning: GET {auth,providers,plan-classes,companies,translations/order4_plan_config} all 200 JSON zero-cookie zero-token; SPA axios baseURL /api/ withCredentials; plan-classes whitelist-validates type (422 business/private) and partner_code is inert; companies exposes Crefo registry numbers + business addresses.
+evidence_needed: residual only — whether /api/companies accepts query filters (read-only); otherwise surface fully mapped.
+verify_steps: PASSIVE — done. Optional single GET https://order-form.easybell.de/api/companies?search=<sample> (read-only) to confirm filterability.
+impact: unauth business-registry/tariff/porting-provider metadata → MEDIUM (largely-public origin data).
+testability: PASSIVE
+[HYP] connectme-oidc-return-normalization
+class: OATH
+asset: connectme-app.easybell.de
+confidence: 45
+reasoning: /authenticate issues OIDC authorize to external Keycloak with redirect_uri double-slash `//login-online-session-converged638e2`; in-scope callback with state+code returns 200 meta-refresh to identical double-slash URL +&refresh=1, while direct `//` path 404s → inconsistent path normalization in the code-return flow; state present server-side at authorize.
+evidence_needed: classification of the `refresh=1` variant (SPA shell vs 404) and whether state binds to the session in-scope (browser automation) → HUMAN.
+verify_steps: PASSIVE — single GET https://connectme-app.easybell.de/login-online-session-converged638e2?state=x&code=y&refresh=1 (status+CT only).
+impact: OIDC code/session handling anomaly → MEDIUM (external IdP redirect whitelist already constrains code theft).
+testability: PASSIVE
+[PARKED] partner-portal-api-leak: fingerprint shows classic Laravel Blade login panel (login/reset/language/logout), zero `/api/*` in bundle, public-login-panel + password-recovery classes are REJECTED — retired before probing deeper.
+[PARKED] order-form-unauth-api-surface:45 — superseded by order-form-unauth-data-exposure (68).
+[PARKED] my-portal-idor:55 — AUTH_HELPED, no creds, unchanged.
+[PARKED] voip-ssrf-to-metadata:<40 — no URL-accepting endpoint; PBX/SIP non-HTTP; survey low value; portal.easybell.de dead.
+[FINAL] voip-cors-cred-read-write,90 — v3 (92) merged; read (7 routes) + write (POST/PUT preflight-approved) both confirmed; POC-ready, HUMAN report line.
+[FINAL] my-portal-api-proxy-wildcard,78 — secondary token-gated exfil path, HUMAN barrier.
+[FINAL] order-form-unauth-data-exposure,68 — zero-credential confirmed, MEDIUM cap, surface mapped.
+[FINAL] connectme-oidc-return-normalization,45 — low, HTML-level anomaly only.
+[NEXT] HUMAN: File the voip CORS report at bugs.olivermaicher.eu — primary finding voip-cors-cred-read-write; PoC = both OPTIONS preflight captures (ACAO:<evil-origin>+ACAC:true+Allow-Methods echoing POST/PUT+Allow-Headers authorization,content-type on /api/account and /api/subscribers at 22:37–22:38 UTC) PLUS the confirmed read-exfil surface on all 7 Spring routes; include victim-browser `fetch(...,{method:'PUT',credentials:'include'})` chain (Basic realm sipwisebroker). No further passive probing required on this line.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS preflights authorize credentialed cross-origin WRITE — Allow-Methods echoes any requested method (POST/PUT verified), Allow-Headers authorization,content-type, ACAC:true, arbitrary Origin, on singular + plural routes; CORS issue is read AND write, not mere exfil.
+[LEARN] ACCEPTED MISCONFIG @ partner.easybell.de: Laravel Blade partner portal (partnerportal_session cookie, Matomo siteId=2); app bundle leaks no /api/* surface (Sentry DSN only) → passive partner API-leak line closed cleanly.
+[LEARN] ACCEPTED MISCONFIG @ order-form.easybell.de/api: /api/plan-classes `type` is Laravel `in:`-whitelist validated (422 validation.in for business/private), partner_code inert → parameterized-but-anonymous GET surface; no partner-scope enumeration.
+[LEARN] ACCEPTED OATH @ connectme-app.easybell.de: in-scope OIDC callback 200s with meta-refresh to the double-slash redirect path (+&refresh=1) while bare `//` path 404s → inconsistent normalization in the code-return flow.
+[RISK] easybell: 74
+reasoning: Up 2 from 72. The flagship CORS finding advanced from read-exfil to credentialed cross-origin WRITE (preflight-approved POST/PUT, arbitrary Origin, ACAC:true) — higher severity ceiling on the same HUMAN-gated PoC. order-form residual closed (validated params, no new GET surface) — neutral. partner retired cleanly (classic login panel = REJECTED). Carried: 90/92 mostly HUMAN-gated for full PoC; voip WAF throttle unchanged; auth/lockout excluded; PBX/SIP parked. Mitigation: 10 read-only GET/OPTIONS this cycle at ~0.17rps avg, ≥6s spacing, no POST bodies to live API (preflights only, empty 200 OK), no customer/order data captured (registry/tariff metadata only), sha256 discipline preserved, report only via bugs.olivermaicher.eu.
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 90
+reasoning: unchanged — OPTIONS preflights (22:37–22:38 UTC) show ACAO:<arbitrary-origin> + ACAC:true + Allow-Methods echoing POST/PUT + Allow-Headers authorization,content-type; HTTP Basic realm sipwisebroker auto-attaches cached creds on credentials:'include'; read-exfil confirmed on all 7 Spring routes.
+evidence_needed: HUMAN victim-browser PoC that a PUT/POST executes cross-origin with cached Basic creds.
+verify_steps: PASSIVE done (preflight-only, empty 200, no mutation); full chain = HUMAN browser session.
+impact: cross-origin write/read of victim VoIP telephony config → HIGH/CRITICAL.
+testability: AUTH_HELPED
+[HYP] connectme-oidc-state-binding
+class: OATH
+asset: connectme-app.easybell.de
+confidence: 40
+reasoning: /authenticate issues OIDC authorize (client_id=coven) with server-generated base64 state; in-scope callback serves SPA shell 200 on state+code and state+code+refresh=1 while bare/dot-slash variants 404 → state availability, not binding, is confirmed; session-binding and code-return handling only testable in a browser.
+evidence_needed: whether a callback with mismatched state still meta-refreshes to the double-slash path (OIDC login-CSRF/code-theft class).
+verify_steps: HUMAN — instrumented browser, never touch external dstny.d4sp.com IdP beyond reading its authorize URL.
+impact: OIDC login-CSRF / code mishandling → MEDIUM; constrained by hardcoded redirect_uri.
+testability: HUMAN_ONLY
+[HYP] order-form-unauth-data-exposure
+class: MISCONFIG
+asset: order-form.easybell.de/api
+confidence: 68
+reasoning: unchanged — GET {auth,providers,plan-classes,companies,translations/order4_plan_config} all 200 JSON zero-cookie; plan-classes whitelist-validated; companies previously 422'd on ?search= (validated filter param); surface fully mapped.
+evidence_needed: none residual — closed.
+verify_steps: PASSIVE done.
+impact: unauth business-registry/tariff/porting metadata → MEDIUM (largely-public origin data).
+testability: PASSIVE
+[NEXT] HUMAN: File the voip CORS report at bugs.olivermaicher.eu — primary finding voip-cors-cred-read-write; attached PoC = OPTIONS preflight captures 22:37–22:38 UTC on /api/account and /api/subscribers (Origin https://evil.example.at reflected, ACAC:true, Allow-Methods echoes POST/PUT, Allow-Headers authorization,content-type) PLUS confirmed read-exfil across all 7 Spring routes; document victim-browser `fetch(...,{method:'PUT',credentials:'include'})` chain under HTTP Basic realm sipwisebroker. All passive probes now closed this side; next passive cycle only if report filing reveals a new vector.
+[LEARN] ACCEPTED MISCONFIG @ survey.easybell.de: Caddy 200-empty sink on /, /admin, /index.php, /login (no content-type, CL:0) — abandoned/stub vhost; zero credential-less surface; closed.
+[LEARN] ACCEPTED MISCONFIG @ backmon.easybell.de: nginx blanket 403 (146B, same family as voip ingress) on /, /metrics, /health, /status, /api, /index.html, /monitor — IP-allowlist deny; no content; closed.
+[LEARN] REJECTED MISCONFIG @ connectme-app.easybell.de: /login-online-session-converged638e2/../login → 404 — nginx traversal-normalizes; earlier 200/404 split is SPA-shell-on-callback-route only, NOT a path-normalization bypass.
+[RISK] easybell: 73
+reasoning: -1 from 74. No new attack surface added — both CT-sweep stragglers (survey, backmon) dispositioned as non-targets, so the "18 never-inventoried subdomains" breadth is now fully resolved and contracting, not expanding. Flagship voip CORS (90) unchanged and report-ready (HUMAN deliverable pending, no data exposed beyond already-captured preflight headers); order-form confirmed at MEDIUM cap; connectme anomaly fully characterized as HTML-level. Carried: 90/78 HUMAN-gated; voip WAF throttle (avatado, none triggered — zero voip-API hits this cycle); auth/lockout excluded; PBX/SIP parked; no customer/auth/financial data touched. Mitigation: 8 read-only GETs at ≤0.33 rps with ≥7s spacing, no POST/OPTIONS/TRACE, no bodies, sha256 discipline preserved, report only via bugs.olivermaicher.eu.

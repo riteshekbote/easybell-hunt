@@ -836,3 +836,64 @@ testability: PASSIVE
 [LEARN] REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts
 [RISK] easybell: 73
 reasoning: Live high-value VoIP JSON API surface confirmed; CORS credentialed misconfig on 7 Spring-handled routes CONFIRMED (exfiltration vector, confidence 92). CT sweep reveals 18 live subdomains missing from inventory — 3 new web apps (order-form, connectme-app, partner) with zero prior coverage. order-form leaks live POST API endpoint; connectme-app has OIDC redirect_uri double-slash RFC violation. New zero-credential passive surface reopens after "exhausted" verdict. Upside solid. Elevated by: aggressive WAF rate-limiting on voip-management tightening enumeration, no creds for authenticated portal/VoIP testing, program's auth/lockout exclusion limiting attack classes. Mitigated by read-only GET discipline, spaced probing, clear scope boundaries.
+## 2026-09-06 00:13:47 UTC [target] (model nemotron3)
+[NEW] order-form.easybell.de/api: Vite SPA bundle (index-BiM9ZwNg.js) leaks `/api/` base path and live POST-only endpoint `/api/apc/check` (GET→405 at 18:30:44 UTC); references partner.easybell.de + login.easybell.de for relocation/subscription flows; shares main ingress 62.27.117.123
+[NEW] connectme-app.easybell.de (prod/uat/dev): nginx SPA; `/authenticate` → 200 + OIDC redirect to external Keycloak `dstny.d4sp.com` (client_id=coven, response_type=code) with in-scope `redirect_uri=https://connectme-app.easybell.de//login-online-session-converged638e2` containing RFC 3986-violating double-slash; state parameter present
+[NEW] partner.easybell.de: 200 → `/login` partner portal on main ingress (shared nginx 62.27.117.123), unprobed surface; Laravel Blade, partnerportal_session cookie, Matomo siteId=2
+[NEW] survey.easybell.de, backmon.easybell.de: live A-records from CT sweep (crt.sh DoH-verified), zero prior coverage
+[CHANGED] my.easybell.com dotfile/debug surface DISPROVEN (18:21 UTC) — `/.env`, `/.git/config`, `/telescope`, `/horizon`, `/_ignition/health-check`, `/storage/logs/laravel.log` all return 200 text/html = identical Inertia SPA catch-all shell; no file content disclosed
+[CHANGED] voip-management.easybell.de/api OpenAPI/swagger line CLOSED (18:22 UTC) — `/api/v2/api-docs`, `/api/v3/api-docs`, `/api/swagger-ui.html`, `/api/openapi.json`, `/api/swagger-ui/index.html` all nginx HTML 404; springdoc/springfox not exposed
+[CHANGED] Prior "passive surface exhausted" verdict RETRACTED — was relative to incomplete 7-host seed; fresh zero-credential breadth reopens via CT sweep (18 live subdomains)
+[CHANGED] `voip-management.k8s.easybell.de` / `k8s.easybell.de` confirmed NXDOMAIN via passive DNS — internal hostname leak from `core.js` is info-disclosure only
+[CHANGED] `my.easybell.com` + `voip-management.easybell.de` share ingress IP 62.27.117.123 (same nginx); "cross-origin" split is host-header-only
+[PRIO] order-form.easybell.de/api,8.5,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:9+cloud_surface:6+freshness:10
+[PRIO] connectme-app.easybell.de,8.0,attack_surface:8+business_value:8+tech_exposure:8+gate_ease:8+cloud_surface:5+freshness:10
+[PRIO] partner.easybell.de,7.0,attack_surface:7+business_value:8+tech_exposure:6+gate_ease:6+cloud_surface:4+freshness:10
+[PRIO] survey.easybell.de,5.8,attack_surface:6+business_value:6+tech_exposure:5+gate_ease:8+cloud_surface:3+freshness:10
+[PRIO] backmon.easybell.de,5.5,attack_surface:6+business_value:5+tech_exposure:5+gate_ease:8+cloud_surface:3+freshness:10
+[PRIO] voip-management.easybell.de/api,7.3,attack_surface:8+business_value:9+tech_exposure:7+gate_ease:5+cloud_surface:7+freshness:6
+[PRIO] my.easybell.com,7.1,attack_surface:8+business_value:9+tech_exposure:7+gate_ease:4+cloud_surface:5+freshness:7
+[HYP] order-form-unauth-api-data-exposure
+class: MISCONFIG
+asset: order-form.easybell.de/api
+confidence: 78
+reasoning: Vite SPA bundle (index-BiM9ZwNg.js) leaks `/api/` base path and live POST-only endpoint `/api/apc/check` (GET→405 at 18:30:44 UTC). SPA references partner.easybell.de and login.easybell.de for relocation/subscription flows. Shares main ingress 62.27.117.123 with portal/voip-management. Unauthenticated API surface entirely unprobed beyond single 405.
+evidence_needed: 200/201 on POST /api/apc/check with valid payload; any GET /api/* returning JSON (non-404); enumeration of additional /api/* endpoints from JS chunks
+verify_steps: GET https://order-form.easybell.de/ → extract all referenced JS chunk URLs from HTML → for each chunk, GET and grep for `/api/`, `apc/check`, `partner`, `login` endpoint strings → single spaced GET to each discovered API endpoint (≥6s each, ≤1rps). Then POST https://order-form.easybell.de/api/apc/check with `Content-Type: application/json` and minimal body `{}` to test unauth behavior (expect 400/401/200 vs 405). Read-only, no mutation.
+impact: Unauthenticated access to order/relocation/subscription data or state-changing operations → HIGH (business logic on money/auth flows)
+testability: PASSIVE
+[HYP] connectme-oidc-redirect-uri-doubleslash
+class: OATH
+asset: connectme-app.easybell.de
+confidence: 82
+reasoning: `/authenticate` returns 200 + OIDC redirect to external Keycloak `dstny.d4sp.com` (client_id=coven, response_type=code) with in-scope `redirect_uri=https://connectme-app.easybell.de//login-online-session-converged638e2` containing RFC 3986-violating double-slash after origin. State parameter present. Prod/UAT/dev variants exist. Double-slash may bypass Keycloak's redirect_uri validation allowing open redirect or code theft.
+evidence_needed: Confirm Keycloak accepts the double-slash redirect_uri without normalization; test if `redirect_uri=https://connectme-app.easybell.de//login-online-session-converged638e2@evil.com` or path traversal `../../evil.com` works; verify state validation is strict on callback
+verify_steps: GET https://connectme-app.easybell.de/authenticate → capture full redirect URL → test Keycloak redirect_uri validation with crafted double-slash and path-traversal variants (read-only, no auth flow completion). Check if `state` is validated on callback. Passive probe of callback endpoint only.
+impact: OAuth code theft via redirect_uri manipulation → ATO on connectme-app → MEDIUM/HIGH (depends on Keycloak config)
+testability: PASSIVE
+[HYP] partner-portal-unauth-api-surface
+class: MISCONFIG
+asset: partner.easybell.de
+confidence: 60
+reasoning: Partner portal on main ingress (62.27.117.123) returns 200 at `/login`. Shares nginx with my.easybell.com and voip-management. Partner portals often have weaker auth (SSO, magic links, default creds) than customer portals. No prior coverage in 4 days of probes. Bundle leaks no /api/* surface (Sentry DSN only).
+evidence_needed: Login page technology stack; any unauthenticated API endpoints; SSO/OIDC integration details; rate-limiting on login
+verify_steps: GET https://partner.easybell.de/login → analyze HTML for form action, CSRF, SSO links, JS bundles → fetch referenced JS for API endpoints → single OPTIONS on any discovered API paths. No credential testing (REJECTED class).
+impact: Partner account takeover → access to reseller/commission data, customer management → HIGH
+testability: PASSIVE
+[PARKED] partner-portal-unauth-api-surface: Confidence 60 ≥ 60 but no anomalous auth mechanism observed yet; standard login form likely. Requires live probe to confirm technology before deeper hypothesis. Keeping for probe.
+[FINAL] connectme-oidc-redirect-uri-doubleslash: 82 — OIDC double-slash in redirect_uri is concrete RFC violation with exploit potential; Keycloak external, in-scope redirect_uri. Highest confidence new finding.
+[FINAL] order-form-unauth-api-data-exposure: 78 — Live POST endpoint confirmed, bundle leaks API base, zero prior coverage. Strong passive surface.
+[NEXT] PROBE: Spaced GET ≥6s from last probe (2026-09-05 18:33:33 UTC) → `GET https://order-form.easybell.de/` → extract all referenced JS chunk URLs from HTML → for each chunk, GET and grep for `/api/`, `apc/check`, `partner`, `login` endpoint strings → single spaced GET to each discovered API endpoint (≥6s each, ≤1rps). Then `POST https://order-form.easybell.de/api/apc/check` with `Content-Type: application/json` and minimal body `{}` to test unauth behavior (expect 400/401/200 vs 405). Read-only, no mutation.
+[LEARN] ACCEPTED MISCONFIG @ easybell.de: CT sweep (18:24 UTC, crt.sh DoH-verified) shows 18 live A-record subdomains never in inventory; "passive surface exhausted" was inventory-incomplete — order-form, connectme-app(±uat/dev), partner, survey, backmon live; pbx/sip/secure/voip/sbc-test SIP-protocol-only; homer NX; jira/confluence third-party cloud
+[LEARN] ACCEPTED MISCONFIG @ order-form.easybell.de: Vite SPA bundle (index-BiM9ZwNg.js, 18:30 UTC) leaks `/api/` base, live POST-only `/api/apc/check` (GET→405), partner.easybell.de, login.easybell.de relocation/subscription flows; shares main ingress 62.27.117.123
+[LEARN] ACCEPTED OATH @ connectme-app.easybell.de: `/authenticate` → OIDC redirect to external Keycloak (dstny.d4sp.com, client_id=coven, response_type=code) with in-scope redirect_uri carrying double-slash `//login-online-session-converged638e2`; state present; prod+UAT+dev variants
+[LEARN] ACCEPTED MISCONFIG @ partner.easybell.de: 200 → `/login` partner portal on main ingress (shared nginx) — unprobed surface
+[LEARN] REJECTED MISCONFIG @ my.easybell.com: Laravel dotfile/debug surface DISPROVEN (18:21 UTC) — `/.env`, `/.git/config`, `/telescope`, `/horizon`, `/_ignition/health-check`, `/storage/logs/laravel.log` all return 200 text/html = Inertia SPA catch-all shell; no file content
+[LEARN] REJECTED MISCONFIG @ voip-management.easybell.de/api: OpenAPI/swagger line closed (18:22 UTC) — `/api/v2/api-docs`, `/api/v3/api-docs`, `/api/swagger-ui.html`, `/api/openapi.json`, `/api/swagger-ui/index.html` all nginx HTML 404; no springdoc/springfox exposure; passive doc-disclosure surface on voip fully exhausted
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS credentialed reflection live-reconfirmed (13:12 UTC) on `/api/account` — Origin `https://evil.example.at` reflected with ACAC:true; 7 Spring routes affected
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: `/api/{crm,ebit,strapi}` wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged
+[LEARN] ACCEPTED IDOR @ voip-management.easybell.de/api + my.easybell.com: BOLA + portal IDOR remain confirmed-class but credential-gated; no passive vector left to advance them
+[LEARN] REJECTED brute-force/lockout @ auth.easybell.de: program excludes auth-stuffing/brute-force/lockout — still no new information
+[LEARN] REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts
+[RISK] easybell: 73
+reasoning: Live high-value VoIP JSON API surface confirmed; CORS credentialed misconfig on 7 Spring-handled routes CONFIRMED (exfiltration vector, confidence 92). CT sweep reveals 18 live subdomains missing from inventory — 3 new web apps (order-form, connectme-app, partner) with zero prior coverage. order-form leaks live POST API endpoint; connectme-app has OIDC redirect_uri double-slash RFC violation. New zero-credential passive surface reopens after "exhausted" verdict. Upside solid. Elevated by: aggressive WAF rate-limiting on voip-management tightening enumeration, no creds for authenticated portal/VoIP testing, program's auth/lockout exclusion limiting attack classes. Mitigated by read-only GET discipline, spaced probing, clear scope boundaries.
