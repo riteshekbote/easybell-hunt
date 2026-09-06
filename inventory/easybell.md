@@ -248,3 +248,5 @@ www.easybell.de
 - CHANGED REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path-normalization bypass surface
 
 ## 2026-09-06 20:12:49 UTC
+
+## 2026-09-06 22:10:24 UTC

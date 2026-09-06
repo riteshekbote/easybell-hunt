@@ -90,3 +90,5 @@
 - 2026-09-06 REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path-normalization bypass surface.
 - 2026-09-06 NO_DELTA — no new passive probes since 2026-09-06 04:48:35 UTC; all inventory + knowledge base unchanged; hypotheses stable.
 - 2026-09-06 NO_DELTA — no new passive probes since 2026-09-06 04:48:35 UTC; all inventory + knowledge base unchanged; hypotheses stable; no accept/reject deltas this cycle.
+- 2026-09-06 NO_DELTA — no new passive probes since 2026-09-06 04:48:35 UTC; inventory + knowledge base unchanged; hypotheses stable.
+- 2026-09-06 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: flagship finding re-scored VALID by triage 19:19:02 UTC — formal validate-and-file gate is the only remaining step, not evidence collection.

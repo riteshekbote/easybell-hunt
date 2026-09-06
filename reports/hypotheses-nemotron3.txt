@@ -1,4 +1,4 @@
-## 2026-09-06 20:12:42 UTC [target] (model nemotron3)
+## 2026-09-06 22:09:56 UTC [target] (model nemotron3)
 [PRIO] voip-management.easybell.de/api,9.0,attack_surface:10+business_value:9+tech_exposure:10+gate_ease:7+cloud_surface:7+freshness:9
 [PRIO] my.easybell.com,7.8,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:4+cloud_surface:6+freshness:8
 [PRIO] connectme-app.easybell.de,7.4,attack_surface:8+business_value:7+tech_exposure:8+gate_ease:8+cloud_surface:5+freshness:7
