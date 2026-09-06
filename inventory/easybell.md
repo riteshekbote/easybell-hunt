@@ -208,3 +208,12 @@ www.easybell.de
 - CHANGED voip-management.easybell.de/api CORS credentialed reflection (92) + my.easybell.com proxy wildcard (78) + portal IDOR (55) all AUTH_HELPED, static since 2026-09-04 21:34
 - CHANGED CT-sweep 18 live subdomains (order-form, connectme-app±uat/dev, partner, survey, backmon) now in inventory; prior "exhausted" verdict retracted
 - CHANGED my.easybell.com dotfile/debug surface disproven (SPA catch-all); voip OpenAPI/swagger closed (all nginx HTML 404); k8s hostnames NXDOMAIN confirmed
+
+## 2026-09-06 09:16:14 UTC
+- CHANGED No new live probes since 2026-09-06 04:48:35 UTC (order-form.easybell.de chunk audit + connectme/partner spot checks); WAF backoff fully cleared (>4h since last burst, >10h since voip burst)
+- CHANGED order-form.easybell.de/api anonymous GET surface fully enumerated from 21 Vite chunks; tariff catalog verified (GET /api/plans/SIPD 200 7987B), contract-summary session-gated (404); POST/PUT/DELETE mo
+- CHANGED partner.easybell.de fingerprint confirmed: Laravel Blade login panel (partnerportal_session cookie, Matomo siteId=2), bundle leaks no /api/* surface (Sentry DSN only) — passive API-leak line closed cl
+- CHANGED survey.easybell.de: Caddy 200-empty sink on /,/admin,/index.php,/login (no CT, CL:0) — abandoned stub vhost; closed
+- CHANGED backmon.easybell.de: nginx blanket 403 (146B, voip ingress family) on /,/metrics,/health,/status,/api,/index.html,/monitor — IP-allowlist deny; closed
+- CHANGED connectme-app.easybell.de: OIDC callback at //login-online-session-converged638e2 returns SPA shell 200 on state+code and +refresh=1; bare // path and traversal ../../ 404 — nginx normalizes; inconsis
+- CHANGED voip-management.easybell.de/api: CORS credentialed read+write CONFIRMED on all 7 Spring routes (account,accounts,subscriber,subscribers,number,numbers,session) — OPTIONS preflights echo Allow-Methods 

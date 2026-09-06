@@ -85,3 +85,4 @@
 - 2026-09-06 REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts
 - 2026-09-06 ACCEPTED MISCONFIG @ order-form.easybell.de/api: chunk audit (index-BiM9ZwNg.js + 20 lazy, 04:47 UTC) maps full anonymous API — GET plans/<code> 200 JSON tariff catalog (SIPD verified, 7987B), contract-summary 404 without session; POST/PUT/DELETE money-flow endpoints (orders, quotes, cart, order, auto-address, checkBankDetails, auth) exist but are mutating → not read-only probeable.
 - 2026-09-06 REJECTED BUSLOGIC @ order-form.easybell.de/api: contract-summary is session-gated (404 PDF pre-session) — no anonymous contract disclosure; line closed.
+- 2026-09-06 NO_DELTA — no new passive probes since 2026-09-05 18:33:33 UTC; all inventory + knowledge base unchanged; hypotheses stable.
