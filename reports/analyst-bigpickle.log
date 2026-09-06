@@ -8698,3 +8698,68 @@ testability: AUTH_HELPED
 **STEP 7 — RISK**
 [RISK] easybell: 73
 reasoning: unchanged. High-value validated finding (CORS read+write, 90) remains unfiled — pipeline risk now sits on report submission speed, not discovery. order-form capped MEDIUM (70); connectme fully characterized; all passive zero-credential lines closed; valid-bugs HOLD on proxy-wildcard is correct (chain-only). Carried: 90/78 HUMAN-gated; zero voip-API and zero order-form hits this cycle (WAF untouched); auth/lockout excluded; no customer/auth/financial data captured. Mitigation holds: ≥6s spacing, GET/HEAD/OPTIONS-only passive, no bodies, sha256 discipline, report only via bugs.olivermaicher.eu.
+===== ANALYST bigpickle 2026-09-06 23:59:05 UTC =====
+[0m
+> build · big-pickle
+[0m
+STEP 1 — DELTA:
+- NO_DELTA — no new live probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged; all passive zero-credential lines remain closed.
+- CHANGED — Only open high-value item is unchanged: voip-cors-cred-read-write (90, VALID 19:19:02 UTC triage) still unfiled; pipeline lever is report submission, not discovery.
+
+STEP 2 — PRIORITIZE:
+- [PRIO] order-form.easybell.de/api,7.6,attack_surface:8+business_value:8+tech_exposure:7+gate_ease:9+cloud_surface:4+freshness:8
+- [PRIO] voip-management.easybell.de/api,7.5,attack_surface:9+business_value:9+tech_exposure:7+gate_ease:5+cloud_surface:6+freshness:6
+- [PRIO] connectme-app.easybell.de,7.35,attack_surface:8+business_value:7+tech_exposure:8+gate_ease:8+cloud_surface:5+freshness:7
+- [PRIO] my.easybell.com,6.95,attack_surface:8+business_value:9+tech_exposure:6+gate_ease:4+cloud_surface:5+freshness:7
+
+STEP 3 — HYPOTHESES:
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 90
+reasoning: OPTIONS preflights (22:37–22:38 UTC) confirmed arbitrary-Origin reflection + ACAC:true + Allow-Methods echo POST/PUT + Allow-Headers authorization,content-type on all 7 Spring routes; auth = HTTP Basic realm sipwisebroker; read-exfil via GET confirmed; triage re-scored VALID 19:19:02 UTC. Sole blocker: HUMAN victim-browser PoC.
+evidence_needed: credentialed cross-origin PUT/POST returning readable 200 body with ACAO:evil-origin + ACAC:true.
+verify_steps: PASSIVE complete; full chain = HUMAN browser with cached Basic creds visiting attacker origin running fetch(url,{method:'PUT',credentials:'include'}).
+impact: cross-origin read/write of VoIP telephony config (accounts/numbers/subscribers) of authenticated customer → HIGH/CRITICAL.
+testability: HUMAN_ONLY
+
+[HYP] connectme-uat-dev-misconfig
+class: MISCONFIG
+asset: connectme-app-uat.easybell.de / connectme-app-dev.easybell.de
+confidence: 45
+reasoning: CT sweep confirmed dev/UAT variants live; only /authenticate (OIDC) ever probed on them — dotfile/debug/env/admin surface has zero coverage across all cycles; ACCEPTED prior that dev/staging envs are commonly misconfigured. WAF backoff fully cleared.
+evidence_needed: any non-SPA-shell response (real file content, non-200, framework debug page) on env/dotfile/debug paths of UAT or dev variant.
+verify_steps: PASSIVE, spaced ≥6s: GET https://connectme-app-uat.easybell.de/.env then /.git/config, /admin, /debug, /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php (Laravel RCE probe pattern is mutating — skip; GET only), same set on -dev variant.
+impact: staging env/app-key/config disclosure, potential staging admin surface → MEDIUM/HIGH.
+testability: PASSIVE
+
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 78
+reasoning: three portal proxy endpoints return ACAO:* without ACAC:true; OPTIONS preflight allows POST+Authorization+Content-Type from any origin; cookies not sent cross-origin → token-gated chain amplifier only.
+evidence_needed: authenticated request showing Bearer acceptance at /api/crm + /api/ebit.
+verify_steps: HUMAN — capture portal JS network calls post-auth; then attacker-origin reads with stolen bearer.
+impact: CRM/EBIT/Strapi data leakage via cross-origin → MEDIUM/HIGH.
+testability: AUTH_HELPED
+
+STEP 4 — SELF-CRITIQUE:
+- [PARKED] connectme-oidc-state-binding:40 — floor; HUMAN-gated with out-of-scope external IdP; unchanged.
+- [PARKED] my-portal-idor:55 — auth-gated BOLA; no creds; unchanged.
+- [PARKED] partner-portal-api-leak — retired cleanly; no /api/* in bundle.
+- [FINAL] voip-cors-cred-read-write:90 — VALID per triage, unique unfiled HIGH/CRITICAL; top deliverable.
+- [FINAL] my-portal-api-proxy-wildcard:78 — chain-amplifier only; HOLD.
+- [FINAL] order-form-unauth-data-exposure:70 — zero-credential confirmed, passive line closed.
+- [FINAL] order-form-unauth-business-logic:50 — highest remaining zero-credential ceiling; HUMAN_ONLY; dormant.
+- [NEW] connectme-uat-dev-misconfig:45 — fresh, low-cost, PASSIVE-probeable; not yet run.
+
+STEP 5 — NEXT ACTION:
+- [NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu — (1) Title "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes, arbitrary-Origin reflect + ACAC:true, preflight authorizes cross-origin PUT/POST)". (2) Affected: /api/{account,accounts,subscriber,subscribers,number,numbers,session}. (3) PoC evidence: OPTIONS preflights 22:37–22:38 UTC on /api/account + /api/subscribers (Origin https://evil.example.at → ACAO echo, ACAC:true, Allow-Methods POST/PUT, Allow-Headers authorization,content-type); 401 body = HTTP Basic realm sipwisebroker; read-exfil on all 7 routes. (4) Exploit chain: victim browser with cached Basic creds visits attacker origin → fetch(...,{method:'PUT',credentials:'include'}) passes preflight → server executes WRITE + returns data readable via ACAC:true. (5) Precondition note: customer must have authenticated directly to voip-management in-browser. (6) Remediation: explicit Origin allowlist (my.easybell.com), drop ACAC:true, restrict Allow-Methods. Then, only if filing surfaces a new vector, run the connectme-uat/dev GET probe set (PASSIVE, ≥6s).
+
+STEP 6 — LEARNING:
+- [LEARN] ACCEPTED MISCONFIG @ connectme-app(-uat,-dev).easybell.de: dev/UAT variants live per CT sweep but only /authenticate (OIDC) was ever probed on them — dotfile/debug/env/admin surface on UAT/dev is an unexplored zero-credential line (dev-misconfig prior applies).
+- [LEARN] NO_DELTA — all other inventory + KB entries unchanged this cycle; hypotheses stable.
+
+STEP 7 — RISK:
+- [RISK] easybell: 73
+reasoning: Unchanged. Validated flagship (CORS read+write, 90) remains unfiled — risk concentrated on submission latency, not discovery. order-form capped MEDIUM (70); connectme deep-dive complete; only new item is a 45-confidence UAT/dev passive line (cheap, within discipline if run). Carried: 90/78 HUMAN-gated; zero voip/order-form live requests this cycle (WAF untouched); auth/lockout excluded; no customer/auth/financial data captured; sha256 discipline preserved; report only via bugs.olivermaicher.eu.
