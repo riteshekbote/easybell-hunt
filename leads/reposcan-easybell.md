@@ -72,3 +72,12 @@ TARGET_ORG not configured for easybell; skipping public-org deep scan.
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
 ## REPOSCAN 2026-09-07 12:47:37 UTC
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
+## REPOSCAN 2026-09-07 18:11:12 UTC
+[HYP] No Public GitHub Repositories Available for Source Audit
+class: OTHER
+asset: github.com/orgs/easybell
+confidence: 100
+reasoning: |
+impact: None — no source code available to audit for secrets/insecure patterns
+verify_steps: |
+TARGET_ORG not configured for easybell; skipping public-org deep scan.
