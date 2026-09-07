@@ -105,3 +105,6 @@
 - 2026-09-07 REJECTED OATH @ connectme-app.easybell.de: bare `//login-online-session-converged638e2` returns SPA shell 200 (09:16:21, 19765B) on clean probe; prior "bare // path 404s" recordings were backtick-polluted URLs → no normalization inconsistency in the code-return flow; KB line corrected.
 - 2026-09-07 REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path-normalization bypass surface.
 - 2026-09-07 NO_DELTA — no new passive probes since 2026-09-06 04:48:35 UTC; inventory + knowledge base unchanged; hypotheses stable; no accept/reject deltas this cycle.
+- 2026-09-07 REJECTED MISCONFIG @ connectme-app-uat.easybell.de: 18:52 run's "closed and rejected on both sub-lines" has no KB REJECTED entry — claim discarded as unverified state pollution; line reopened pending one GET.
+- 2026-09-07 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~36h filing latency is the only rising program risk; all other classes static (NO_DELTA).
+- 2026-09-07 NO_DELTA — no live probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged; no accept/reject deltas this cycle beyond state-inconsistency correction.

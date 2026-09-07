@@ -262,3 +262,6 @@ www.easybell.de
 ## 2026-09-07 18:54:03 UTC
 
 ## 2026-09-07 21:53:36 UTC
+
+## 2026-09-07 23:54:26 UTC
+- CHANGED connectme-uat/dev state inconsistency: 2026-09-07 18:52 lead claims the UAT/dev dotfile line was "closed and rejected on both sub-lines" — but no matching REJECTED entry exists in the KB tail (all ent

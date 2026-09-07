@@ -1427,3 +1427,44 @@ testability: HUMAN_ONLY
 [LEARN] NO_DELTA — no new passive probes since 2026-09-06 04:48:35 UTC; inventory + knowledge base unchanged; hypotheses stable; no accept/reject deltas this cycle.
 [RISK] easybell: 74
 reasoning: +1 from prior 73. Validated high-value finding (CORS read+write, 90) remains unfiled for ~31h — submission latency is the only rising risk. UAT/dev dotfile line (45) is the last cheap advancing passive line but unprobed since lead creation. No live requests since 2026-09-06 04:48:35 UTC (WAF untouched), auth/lockout excluded, no customer/auth/financial data captured (all bodies confirmed SPA shell HTML), sha256 discipline preserved, report only via bugs.olivermaicher.eu.
+## 2026-09-07 23:54:16 UTC [target] (model bigpickle)
+[CHANGED] connectme-uat/dev state inconsistency: 2026-09-07 18:52 lead claims the UAT/dev dotfile line was "closed and rejected on both sub-lines" — but no matching REJECTED entry exists in the KB tail (all entries accept/reject other lines only). 21:52 lead re-lists the same hypothesis at 45 as [PARKED]+active. Treated as OPEN, not closed.
+[PRIO] connectme-app-uat.easybell.de,6.75,attack_surface=7,business_value=6,tech_exposure=5,gate_ease=9,cloud_surface=5,freshness=9
+[PRIO] order-form.easybell.de/api,5.80,attack_surface=6,business_value=7,tech_exposure=5,gate_ease=7,cloud_surface=5,freshness=2
+[PRIO] voip-management.easybell.de/api,5.65,attack_surface=7,business_value=8,tech_exposure=5,gate_ease=3,cloud_surface=6,freshness=1
+[HYP] connectme-uat-dev-misconfig
+class: MISCONFIG
+asset: connectme-app-uat.easybell.de / connectme-app-dev.easybell.de
+confidence: 45
+reasoning: CT sweep confirmed UAT/dev OIDC variants live since 09-05; only /authenticate ever probed on them; zero dotfile/env/debug coverage recorded in KB across all days; ACCEPTED prior that dev/staging envs commonly misconfigured; WAF backoff cleared >40h. 18:52 "closed and rejected" claim is absent from KB — no evidence of a prior probe; line reopened.
+evidence_needed: non-SPA-shell response (real file bytes, framework debug page, non-200) on env/dotfile/debug paths.
+verify_steps: single GET https://connectme-app-uat.easybell.de/.env (≥6s spacing, no auth headers); expect SPA shell 200 (~19.7KB) or real content; if real → follow with /.git/config and /debug on-host, then same set on connectme-app-dev.easybell.de.
+impact: staging env/app-key/config disclosure, potential UAT admin/OIDC surface → MEDIUM/HIGH.
+testability: PASSIVE
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 90
+reasoning: OPTIONS preflights 22:37–22:38 UTC: arbitrary-Origin ACAO reflect + ACAC:true + Allow-Methods echo (POST/PUT verified) + Allow-Headers authorization,content-type on all 7 Spring routes; GET read-exfil confirmed; auth = HTTP Basic realm sipwisebroker; triage re-scored VALID 19:19:02 UTC; sole blocker = HUMAN victim-browser PoC + formal filing.
+evidence_needed: credentialed cross-origin PUT/POST returning readable 200 with ACAO:evil + ACAC:true (or filed-report acceptance).
+verify_steps: PASSIVE evidence complete; chain = HUMAN browser with cached Basic creds for realm → fetch({method:'PUT',credentials:'include'}) passes preflight → WRITE executes + response readable via ACAC:true.
+impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) → HIGH/CRITICAL.
+testability: HUMAN_ONLY
+[HYP] order-form-unauth-business-logic
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps GET {auth,providers,plan-classes,plans/<code>,companies,translations/*} + POST/PUT/DELETE mutations (orders, quotes, cart, order, auto-address, checkBankDetails); tariff GET verified (SIPD 200 7987B); contract-summary 404 pre-session; money-flow mutations session-gated → needs account.
+evidence_needed: authenticated session trace showing a price/plan/contract validation flaw.
+verify_steps: HUMAN — register session on order-form, exercise POST order/quote/cart flow, compare server-side state vs client claims.
+impact: order manipulation / pricing bypass → MEDIUM/HIGH.
+testability: HUMAN_ONLY
+[PARKED] connectme-uat-dev-misconfig:45 — survives only as probe-pending; one GET settles it; if SPA shell → drop <40 and close. Prior "closed" claim flagged as unverified record inconsistency, not fact.
+[PARKED] order-form-unauth-business-logic:50 — highest zero-credential ceiling but HUMAN_ONLY; dormant.
+[FINAL] voip-cors-cred-read-write:90 — VALID per triage, report-ready, unique unfiled HIGH/CRITICAL. Top deliverable; filing at bugs.olivermaicher.eu is the only remaining gate, not evidence.
+[NEXT] PROBE: single GET https://connectme-app-uat.easybell.de/.env (≥6s spacing from any prior request; capture status+content-type+body size; no auth headers). 200 text/html SPA shell → condemn line, record REJECTED. Real content/non-200 → escalate hypothesis to ≥60 and continue with /.git/config. (HUMAN filing of voip-cors-cred-read-write remains the outstanding top deliverable — tracked, not repeated.)
+[LEARN] REJECTED MISCONFIG @ connectme-app-uat.easybell.de: 18:52 run's "closed and rejected on both sub-lines" has no KB REJECTED entry — claim discarded as unverified state pollution; line reopened pending one GET.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~36h filing latency is the only rising program risk; all other classes static (NO_DELTA).
+[LEARN] NO_DELTA — no live probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged; no accept/reject deltas this cycle beyond state-inconsistency correction.
+[RISK] easybell: 75
+reasoning: +1 from 74. Only deltas: continued submission latency (~36h since VALID re-score 19:19:02 09-06) and an unverified duplicate-run state claim on the UAT/dev line (net zero evidence). Discovery saturated; exactly one cheap GET pending to close or advance the last passive line. Compliance posture unchanged: GET-only, ≤1rps, ≥6s spacing, no auth/mutating/customer/financial data touched, brute-force/lockout excluded by program, sha256 discipline, report only via bugs.olivermaicher.eu.
