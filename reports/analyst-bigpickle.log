@@ -8957,3 +8957,82 @@ testability: PASSIVE
 
 [RISK] easybell: 73
 reasoning: Unchanged. Validated high-value finding (CORS read+write, 90) remains unfiled for 27.7h — pipeline risk is report submission latency, not discovery. order-form capped MEDIUM (70); connectme fully characterized; only one cheap passive line (UAT/dev, 45) still advancing. Carried: 90/78 HUMAN-gated; zero live requests this cycle (WAF untouched since 2026-09-06); auth/lockout excluded; no customer/auth/financial data captured; sha256 discipline preserved; report only via bugs.olivermaicher.eu.
+===== ANALYST bigpickle 2026-09-07 18:54:03 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mls /home/runner/work/easybell-hunt/easybell-hunt/art/ 2>/dev/null || echo "no art dir"
+no art dir
+[0m
+[0m$ [0mcurl -s -o /dev/null -w "%{http_code} %{size_download}B %{content_type}" --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" https://connectme-app-uat.easybell.de/.env
+404 284179B text/html; charset=UTF-8
+[0m
+[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" https://connectme-app-uat.easybell.de/.env 2>/dev/null | head -c 500
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="description" content="ConnectMe" />
+        <title>Login Page - ConnectMe</title>
+        <style data-styled="active" data-styled-version="5.3.5" data-savepage-sheetrules="">
+            .eWbylv {
+                transform: rotate(-180deg);
+            }
+            .kfixnq {
+[0m
+SPA shell at `/.env` (404 status, 284KB HTML catch-all). Let me probe `.git/config` and the root.
+[0m$ [0mcurl -s -o /dev/null -w "%{http_code} %{size_download}B %{content_type}" --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" https://connectme-app-uat.easybell.de/.git/config
+404 284179B text/html; charset=UTF-8
+[0m
+[0m$ [0mcurl -s -o /dev/null -w "%{http_code} %{size_download}B %{content_type}" --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" https://connectme-app-uat.easybell.de/
+200 5190B text/html; charset=UTF-8
+[0m
+Root returns 200 with 5.2KB entry HTML. Both `.env` and `.git/config` return 404 with 284KB SPA shell — same catch-all pattern as `my.easybell.com`. Not a disclosure. Let me check the dev variant.
+[0m$ [0msleep 6 && curl -s -o /dev/null -w "%{http_code} %{size_download}B %{content_type}" --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" https://connectme-app-dev.easybell.de/.env
+000 0B
+[0m
+[0m$ [0mcurl -s -o /dev/null -w "%{http_code} %{size_download}B %{content_type} %{time_total}s" --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" https://connectme-app-dev.easybell.de/ 2>&1; echo; dig +short connectme-app-dev.easybell.de A 2>/dev/null
+000 0B  0.127694s
+[0m
+[0m$ [0mdig +short connectme-app-dev.easybell.de A 2>/dev/null; echo "---"; dig +short connectme-app-uat.easybell.de A 2>/dev/null
+---
+connectme-converge.eu-west-bru-staging.dstny.d4sp.com.
+staging-1.lb.eu-west-bru.dstny.d4sp.com.
+78.110.204.105
+[0m
+UAT is CNAME'd to DSTNY staging LB (78.110.204.105); dev variant is NXDOMAIN (dead). All dotfile probes on UAT return the 284KB SPA catch-all shell — no file content. Hypothesis rejected on both counts.
+
+STEP 1 — DELTA:
+- [NEW] connectme-app-uat.easybell.de = CNAME → connectme-converge.eu-west-bru-staging.dstny.d4sp.com → staging-1.lb... → 78.110.204.105 (external DSTNY staging, not easybell infra)
+- [NEW] connectme-app-dev.easybell.de: NXDOMAIN — dead host, never probed previously
+- [NEW] UAT `/.env` + `/.git/config` → 404 status, 284KB ConnectMe SPA shell (`.env` body starts `<html lang="en">…Login Page - ConnectMe`); `/` → 200 5.2KB entry HTML — identical catch-all pattern to `my.easybell.com`; no file content
+- [CHANGED] connectme-uat-dev-misconfig (45) DISPROVEN on both sub-lines: UAT = SPA catch-all, dev = dead. Last zero-credential passive line closed.
+
+STEP 2 — PRIORITIZE:
+- [PRIO] voip-management.easybell.de/api,6.80,attack_surface=7,business_value=9,tech_exposure=5,gate_ease=4,cloud_surface=2,freshness=9 (unchanged top deliverable)
+- [PRIO] order-form.easybell.de/api,5.80,attack_surface=6,business_value=7,tech_exposure=5,gate_ease=7,cloud_surface=5,freshness=2
+- [PRIO] my.easybell.com/api,5.65,attack_surface=6,business_value=8,tech_exposure=4,gate_ease=5,cloud_surface=5,freshness=3
+
+STEP 3 — HYPOTHESES: No new passive surface remains. Active leads are unchanged:
+- [HYP] voip-cors-cred-read-write — MISCONFIG @ voip-management.easybell.de/api, conf 90 — unchanged, HUMAN_ONLY (file report)
+- [HYP] my-portal-api-proxy-wildcard — MISCONFIG @ my.easybell.com/api/{crm,ebit,strapi}, conf 78 — unchanged, HUMAN_ONLY
+- [HYP] order-form-unauth-business-logic — BUSLOGIC @ order-form.easybell.de/api, conf 50 — unchanged, HUMAN_ONLY
+
+STEP 4 — SELF-CRITIQUE:
+- [PARKED] connectme-uat-dev-misconfig:45 → REJECTED. UAT dotfile paths are SPA catch-all (404+shell, zero content); dev host NXDOMAIN. Neither sub-hypothesis survives — removed.
+- [FINAL] voip-cors-cred-read-write:90 — VALID per triage, report-ready, unfiled ~31h. **Top deliverable.**
+- [FINAL] my-portal-api-proxy-wildcard:78 — chain-amplifier, HUMAN gate.
+- [FINAL] order-form-unauth-business-logic:50 — HUMAN_ONLY, dormant.
+
+STEP 5 — NEXT ACTION:
+- [NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu — title "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes, ACAO reflect + ACAC:true, preflight authorizes cross-origin POST/PUT)"; affected /api/{account,accounts,subscriber,subscribers,number,numbers,session}; evidence = 22:37–22:38 UTC OPTIONS captures (Origin https://evil.example.at → ACAO reflect + ACAC:true, Allow-Methods echo, Allow-Headers authorization,content-type, 401 Basic realm sipwisebroker); chain = victim with cached Basic creds visits attacker origin → fetch PUT credentials:'include' → preflight passes → server executes WRITE + readable via ACAC:true; precondition = in-browser Basic auth to voip-management; remediation = explicit ACAO allowlist of my.easybell.com, drop ACAC:true, restrict Allow-Methods. All 7 passive surfaces at voip management now exhausted; probe ceiling reached.
+
+STEP 6 — LEARNING:
+- [LEARN] REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `/.env`, `/.git/config` → 404 + 284KB ConnectMe SPA catch-all shell (HTML, no file content); root `/` → 200 entry HTML — same catch-all as my.easybell.com; dotfile disclosure disproven.
+- [LEARN] REJECTED MISCONFIG @ connectme-app-dev.easybell.de: NXDOMAIN/no A record — host dead; dev-variant misconfig hypothesis closed.
+- [LEARN] ACCEPTED OATH @ connectme-app-uat.easybell.de: CNAME → dstny staging LB (78.110.204.105); UAT hosted on external DSTNY staging (connectme-converge.eu-west-bru-staging.dstny.d4sp.com) — not easybell's own k8s.
+
+STEP 7 — RISK:
+- [RISK] easybell: 74
+reasoning: +1 from prior 73. The last cheap passive line (UAT/dev dotfiles) is now closed and rejected on both sub-lines — discovery pipeline fully satuated, only HUMAN deliverable remains. Voip CORS 90 validated but unfiled ~31h — submission latency is the only rising risk. No live requests beyond 5 GET probes (WAF untouched, <=0.2 rps), auth/lockout excluded, no customer/auth/financial data captured (all bodies confirmed SPA shell HTML), no secrets in knowledge base.
