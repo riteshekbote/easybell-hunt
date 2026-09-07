@@ -1262,3 +1262,45 @@ verify_steps: HUMAN — capture portal JS network calls post-auth; then attacker
 impact: CRM/EBIT/Strapi data leakage via cross-origin → MEDIUM/HIGH.
 testability: AUTH_HELPED
 reasoning: Unchanged. Validated flagship (CORS read+write, 90) remains unfiled — risk concentrated on submission latency, not discovery. order-form capped MEDIUM (70); connectme deep-dive complete; only new item is a 45-confidence UAT/dev passive line (cheap, within discipline if run). Carried: 90/78 HUMAN-gated; zero voip/order-form live requests this cycle (WAF untouched); auth/lockout excluded; no customer/auth/financial data captured; sha256 discipline preserved; report only via bugs.olivermaicher.eu.
+## 2026-09-07 03:18:57 UTC [target] (model bigpickle)
+[PRIO] connectme-app-uat/dev.easybell.de,6.75,attack_surface=7,business_value=6,tech_exposure=5,gate_ease=9,cloud_surface=5,freshness=9
+[PRIO] order-form.easybell.de/api,5.80,attack_surface=6,business_value=7,tech_exposure=5,gate_ease=7,cloud_surface=5,freshness=2
+[PRIO] my.easybell.com/api,5.65,attack_surface=6,business_value=8,tech_exposure=4,gate_ease=5,cloud_surface=5,freshness=3
+[HYP] connectme-uat-dev-misconfig
+class: MISCONFIG
+asset: connectme-app-uat.easybell.de / connectme-app-dev.easybell.de
+confidence: 45
+reasoning: CT sweep confirmed dev/UAT variants live; only /authenticate (OIDC) ever probed on them; dotfile/debug/env surface has zero coverage across all 4 days; ACCEPTED prior that dev/staging envs commonly misconfigured; WAF backoff fully cleared (>10h since last burst).
+evidence_needed: any non-SPA-shell response (real file content, non-200, framework debug page) on env/dotfile/debug paths of UAT or dev variant.
+verify_steps: PASSIVE, spaced ≥6s: GET https://connectme-app-uat.easybell.de/.env then /.git/config, /admin, /debug; same set on connectme-app-dev.easybell.de.
+impact: staging env/app-key/config disclosure, potential staging admin surface → MEDIUM/HIGH.
+testability: PASSIVE
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 90
+reasoning: OPTIONS preflights (22:37–22:38 UTC) confirmed arbitrary-Origin reflection + ACAC:true + Allow-Methods echo POST/PUT + Allow-Headers authorization,content-type on all 7 Spring routes; auth = HTTP Basic realm sipwisebroker; read-exfil via GET confirmed; triage re-scored VALID 19:19:02 UTC. Sole blocker: HUMAN victim-browser PoC + formal filing.
+evidence_needed: credentialed cross-origin PUT/POST returning readable 200 body with ACAO:evil-origin + ACAC:true.
+verify_steps: PASSIVE complete; full chain = HUMAN browser with cached Basic creds visiting attacker origin running fetch(url,{method:'PUT',credentials:'include'}).
+impact: cross-origin read/write of VoIP telephony config (accounts/numbers/subscribers) of authenticated customer → HIGH/CRITICAL.
+testability: HUMAN_ONLY
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 78
+reasoning: three portal proxy endpoints return ACAO:* without ACAC:true; OPTIONS preflight allows POST+Authorization+Content-Type from any origin; cookies not sent cross-origin → token-gated chain amplifier only.
+evidence_needed: authenticated request showing Bearer acceptance at /api/crm + /api/ebit.
+verify_steps: HUMAN — capture portal JS network calls post-auth; then attacker-origin reads with stolen bearer.
+impact: CRM/EBIT/Strapi data leakage via cross-origin → MEDIUM/HIGH.
+testability: AUTH_HELPED
+[PARKED] connectme-uat-dev-misconfig:45 — below 50 but above 40 parking floor; PASSIVE testability; only advancing zero-credential line; cheap probes (GET-only, spaced ≥6s). **Survives.**
+[FINAL] voip-cors-cred-read-write:90 — VALID per triage, report-ready, unique unfiled HIGH/CRITICAL. **Top deliverable. File at bugs.olivermaicher.eu.**
+[FINAL] my-portal-api-proxy-wildcard:78 — chain-amplifier only; HUMAN barrier; HOLD.
+[FINAL] order-form-unauth-business-logic:50 — highest remaining zero-credential ceiling; HUMAN_ONLY; dormant.
+[FINAL] connectme-uat-dev-misconfig:45 — cheapest advancing passive line; probe now.
+[NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu — fields: (1) Title "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes, ACAO reflect + ACAC:true, preflight authorizes cross-origin PUT/POST)". (2) Affected: /api/{account,accounts,subscriber,subscribers,number,numbers,session}. (3) PoC evidence: OPTIONS preflight captures 22:37–22:38 UTC on /api/account + /api/subscribers (Origin https://evil.example.at → ACAO reflect + ACAC:true, Allow-Methods echo POST/PUT, Allow-Headers authorization,content-type); 401 body = HTTP Basic realm sipwisebroker; read-exfil on all 7 routes. (4) Exploit chain: victim browser with cached Basic creds for realm visits attacker origin → fetch(...,{method:'PUT',credentials:'include'}) passes preflight → server executes WRITE + returns data readable via ACAC:true. (5) Precondition note: customer must have authenticated directly to voip-management in-browser (Basic cache). (6) Remediation: replace dynamic ACAO reflection with explicit allowlist of my.easybell.com; drop ACAC:true; restrict Allow-Methods. No further passive probing on this line until filing surfaces a new vector.
+[NEXT] PROBE: GET https://connectme-app-uat.easybell.de/.env (spaced ≥6s, GET/HEAD/OPTIONS only) — zero-credential dotfile probe on never-tested UAT variant; follow with /.git/config on same host, then same set on connectme-app-dev.easybell.de.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: flagship finding re-scored VALID by triage 19:19:02 UTC — formal validate-and-file gate is the only remaining step, not evidence collection.
+[LEARN] NO_DELTA — no new passive probes since 2026-09-06 04:48:35 UTC; inventory + knowledge base unchanged; hypotheses stable.
+[RISK] easybell: 73
+reasoning: Unchanged. High-value validated finding (CORS read+write, 90) remains unfiled — pipeline risk now sits on report submission speed, not discovery. order-form capped MEDIUM (70); connectme fully characterized; all passive zero-credential lines closed except one cheap UAT/dev probe (45). Carried: 90/78 HUMAN-gated; zero voip-API and zero order-form hits this cycle (WAF untouched); auth/lockout excluded; no customer/auth/financial data captured. Mitigation holds: ≥6s spacing, GET/HEAD/OPTIONS-only passive, no bodies, sha256 discipline, report only via bugs.olivermaicher.eu.
