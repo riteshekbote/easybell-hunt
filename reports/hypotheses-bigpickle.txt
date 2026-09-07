@@ -1,4 +1,4 @@
-## 2026-09-07 08:28:07 UTC [target] (model bigpickle)
+## 2026-09-07 14:25:48 UTC [target] (model bigpickle)
 [PRIO] connectme-app-uat.easybell.de,6.75,attack_surface=7,business_value=6,tech_exposure=5,gate_ease=9,cloud_surface=5,freshness=9
 [PRIO] order-form.easybell.de/api,5.80,attack_surface=6,business_value=7,tech_exposure=5,gate_ease=7,cloud_surface=5,freshness=2
 [PRIO] my.easybell.com/api,5.65,attack_surface=6,business_value=8,tech_exposure=4,gate_ease=5,cloud_surface=5,freshness=3

@@ -476,3 +476,8 @@
 - LEARN: REJECTED BUSLOGIC @ order-form.easybell.de/api: contract-summary is session-gated (404 PDF pre-session) — no anonymous contract disclosure; line closed.
 - LEARN: REJECTED OATH @ connectme-app.easybell.de: bare `//login-online-session-converged638e2` returns SPA shell 200 (09:16:21, 19765B) on clean probe; prior "bare // 
 - LEARN: REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path
+
+## RANKED HYPOTHESES 2026-09-07 14:28:32 UTC
+- [90] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_bigpickle.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu — fields: (1) Title "Credentialed CORS read+write on voip-management.easybell.de/api (7 Sp
+- LEARN: NO_DELTA — no new passive probes since 2026-09-06 04:48:35 UTC; inventory + knowledge base unchanged; hypotheses stable; no accept/reject deltas this cycle.
