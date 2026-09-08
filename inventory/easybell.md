@@ -269,3 +269,13 @@ www.easybell.de
 ## 2026-09-08 02:34:12 UTC
 - CHANGED connectme-app-uat.easybell.de: `.env` → 404 (284KB custom error HTML, not SPA shell); `.git/config` → 404 (same 284KB); root = 200 (5KB SPA). No dotfile/debug disclosure — line closed.
 - CHANGED connectme-app-dev.easybell.de: DNS does not resolve (curl error 6). Not externally reachable — line closed.
+
+## 2026-09-08 07:34:36 UTC
+- NEW connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
+- NEW connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
+- CHANGED voip-management.easybell.de/api: Credentialed CORS read+write (90) remains sole unfiled HIGH; ~36h+ filing latency only rising program risk
+- CHANGED No new passive probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged beyond connectme-uat/dev closure
+- NEW connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
+- NEW connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
+- CHANGED voip-management.easybell.de/api: Credentialed CORS read+write (90) remains sole unfiled HIGH; ~36h+ filing latency only rising program risk
+- CHANGED No new passive probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged beyond connectme-uat/dev closure

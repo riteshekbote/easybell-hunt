@@ -548,3 +548,22 @@
 - LEARN: REJECTED BUSLOGIC @ order-form.easybell.de/api: contract-summary is session-gated (404 PDF pre-session) — no anonymous contract disclosure; line closed.
 - LEARN: REJECTED OATH @ connectme-app.easybell.de: bare `//login-online-session-converged638e2` returns SPA shell 200 (09:16:21, 19765B) on clean probe; prior "bare // 
 - LEARN: REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path
+
+## RANKED HYPOTHESES 2026-09-08 07:34:36 UTC
+- [90] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu.
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu — Title: "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains sole unique unfiled HIGH/CRITICAL; ~37h filing latency is only r
+- LEARN: NO_DELTA — no live probes since 2026-09-08 02:34:17 UTC; inventory + KB unchanged; all passive lines closed.
+- LEARN: REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` both return 404 (284KB custom error HTML, NOT SPA shell — different size from root 
+- LEARN: REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS does not resolve (curl error 6,
+- LEARN: REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS does not resolve (curl error 6, NXDOMAIN). Host not externally reachable — line closed.
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~36h+ filing latency is the only r
+- LEARN: NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable.
+- LEARN: REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS does not resolve (curl error 6, NXDOMAIN). Host not externally reachable — line closed.
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~36h+ filing latency is the only r
+- LEARN: NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable.
+- LEARN: REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` both return 404 (284KB custom error HTML, NOT SPA shell — different size from root 
+- LEARN: REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS does not resolve (curl error 6, NXDOMAIN). Host not externally reachable — line closed.
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~36h+ filing latency is the only r
+- LEARN: NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable.

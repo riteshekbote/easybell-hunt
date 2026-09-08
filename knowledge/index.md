@@ -122,3 +122,5 @@
 - 2026-09-08 REJECTED BUSLOGIC @ order-form.easybell.de/api: contract-summary is session-gated (404 PDF pre-session) — no anonymous contract disclosure; line closed.
 - 2026-09-08 REJECTED OATH @ connectme-app.easybell.de: bare `//login-online-session-converged638e2` returns SPA shell 200 (09:16:21, 19765B) on clean probe; prior "bare // path 404s" recordings were backtick-polluted URLs → no normalization inconsistency in the code-return flow; KB line corrected.
 - 2026-09-08 REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path-normalization bypass surface.
+- 2026-09-08 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains sole unique unfiled HIGH/CRITICAL; ~37h filing latency is only rising program risk.
+- 2026-09-08 NO_DELTA — no live probes since 2026-09-08 02:34:17 UTC; inventory + KB unchanged; all passive lines closed.

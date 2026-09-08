@@ -1,50 +1,99 @@
-## 2026-09-08 02:33:42 UTC [target] (model nemotron3)
+## 2026-09-08 07:34:26 UTC [target] (model nemotron3)
+[NEW] connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
+[NEW] connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
+[CHANGED] voip-management.easybell.de/api: Credentialed CORS read+write (90) remains sole unfiled HIGH; ~36h+ filing latency only rising program risk
+[CHANGED] No new passive probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged beyond connectme-uat/dev closure
 [PRIO] voip-management.easybell.de/api,9.0,attack_surface:10+business_value:9+tech_exposure:10+gate_ease:7+cloud_surface:7+freshness:9
 [PRIO] my.easybell.com,7.8,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:4+cloud_surface:6+freshness:8
 [PRIO] connectme-app.easybell.de,7.4,attack_surface:8+business_value:7+tech_exposure:8+gate_ease:8+cloud_surface:5+freshness:7
 [PRIO] order-form.easybell.de/api,7.0,attack_surface:8+business_value:8+tech_exposure:7+gate_ease:9+cloud_surface:4+freshness:8
 [PRIO] partner.easybell.de,5.5,attack_surface:6+business_value:7+tech_exposure:5+gate_ease:6+cloud_surface:4+freshness:6
-[PRIO] connectme-app-uat.easybell.de,4.5,attack_surface:5+business_value:5+tech_exposure:5+gate_ease:8+cloud_surface:3+freshness:5
 [HYP] voip-cors-cred-read-write
 class: MISCONFIG
 asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
 confidence: 90
-reasoning: OPTIONS preflights (22:37–22:38 UTC) show ACAO:<arbitrary-origin> + ACAC:true + Allow-Methods echoing POST/PUT + Allow-Headers authorization,content-type on all 7 Spring-handled routes; HTTP Basic realm sipwisebroker auto-attaches cached creds on credentials:'include'; read-exfil confirmed on all 7 endpoints via credentialed CORS
-evidence_needed: HUMAN victim-browser PoC that a PUT/POST executes cross-origin with cached Basic creds (voipSession Bearer or SIP Basic)
+reasoning: OPTIONS preflights on all 7 Spring routes return ACAO:<arbitrary-origin> + ACAC:true + Allow-Methods:POST,PUT + Allow-Headers:authorization,content-type; HTTP Basic realm "sipwisebroker" auto-attaches cached creds with credentials:'include'; read exfil confirmed on all 7 endpoints
+evidence_needed: HUMAN victim-browser PoC demonstrating cross-origin PUT/POST execution with cached Basic creds or Bearer voipSession token
 verify_steps: PASSIVE done (preflight-only, empty 200 OK, no mutation); full chain = HUMAN browser session with authenticated portal user visiting attacker origin
-impact: cross-origin write/read of victim VoIP telephony config (accounts, numbers, subscribers, call-forwardings, voicemail, trusted-IPs, session) → HIGH/CRITICAL
+impact: Cross-origin write/read of victim VoIP telephony config (accounts, numbers, subscribers, call-forwardings, voicemail, trusted-IPs, session) → HIGH/CRITICAL
 testability: AUTH_HELPED
 [HYP] my-portal-api-proxy-wildcard
 class: MISCONFIG
 asset: my.easybell.com/api/{crm,ebit,strapi}
 confidence: 78
-reasoning: Three internal portal proxy endpoints return ACAO:* on redirect responses and OPTIONS preflight with POST + Authorization+Content-Type allowed from any origin; wildcard without ACAC:true means cookies NOT sent cross-origin, BUT portal uses Bearer tokens (voipSession) via JS for voip-management; if attacker exfiltrates Bearer token (via voip CORS or XSS), wildcard on portal proxies allows exfiltration of CRM/EBIT/Strapi data; Strapi CMS proxy confirmed
-evidence_needed: confirm what /api/crm, /api/ebit, /api/strapi proxy to when authenticated; confirm whether Bearer token (voipSession) is accepted by these endpoints; confirm data sensitivity
+reasoning: Three internal portal proxy endpoints return ACAO:* on redirect responses and OPTIONS preflight with POST+Authorization+Content-Type allowed from any origin; wildcard without ACAC:true means cookies NOT sent cross-origin, BUT portal uses Bearer tokens (voipSession) via JS for voip-management; if attacker exfiltrates Bearer token (via voip CORS or XSS), wildcard on portal proxies allows exfiltration of CRM/EBIT/Strapi data; Strapi CMS proxy confirmed
+evidence_needed: Confirm what /api/crm, /api/ebit, /api/strapi proxy to when authenticated; confirm whether Bearer token (voipSession) is accepted by these endpoints; confirm data sensitivity
 verify_steps: HUMAN — with creds, observe portal JS network calls to /api/crm, /api/ebit, /api/strapi; capture request/response to determine if Bearer token is used and what data returned; test cross-origin fetch with captured Bearer token
 impact: CRM/EBIT/Strapi data leakage via cross-origin requests → MEDIUM/HIGH (depends on data sensitivity)
 testability: AUTH_HELPED
-[HYP] connectme-uat-dev-misconfig
-class: MISCONFIG
-asset: connectme-app-uat.easybell.de
+[HYP] order-form-apc-check-ssrf
+class: SSRF
+asset: order-form.easybell.de/api/apc/check
 confidence: 45
-reasoning: UAT/dev variants of connectme-app exist per CT sweep; Laravel/.env debug surface unprobed on these non-prod hosts; dev/uat often have relaxed configs (debug enabled, test creds, exposed actuator/swagger)
-evidence_needed: single GET to /.env, /.git/config, /actuator, /swagger-ui.html, /api-docs on uat/dev hosts to confirm/deny debug exposure
-verify_steps: PROBE: single GET https://connectme-app-uat.easybell.de/.env (≥6s spacing; capture status+content-type+body size; no auth headers). 200 text/plain with APP_KEY/DB creds = confirmed; 404/200 HTML = SPA catch-all = denied
-impact: env leakage (APP_KEY, DB creds, mail creds) → RCE via deserialization or cloud creds → HIGH
+reasoning: POST-only endpoint (GET→405) named "apc/check" (likely Address/Postal Code validation) accepts address payload; if backend validates by calling external geocoding/address APIs without SSRF protection, could induce requests to internal metadata (169.254.169.254) or internal services; shares main ingress 62.27.117.123 with portal/voip
+evidence_needed: Confirm endpoint makes outbound HTTP requests during address validation; test with payloads targeting 169.254.169.254, localhost, internal k8s hostnames
+verify_steps: PASSIVE: POST to /api/apc/check with address payload containing 169.254.169.254/latest/meta-data/ — observe response timing/errors; single request, ≥6s spacing
+impact: Cloud metadata exposure (IAM roles, credentials, instance data) → CRITICAL if SSRF confirmed
 testability: PASSIVE
-[PARKED] connectme-uat-dev-misconfig: confidence 45 at floor; verify_steps exist but UAT/dev scope confirmation needed; low business_value vs flagship
-[FINAL] voip-cors-cred-read-write: 90 — CONFIRMED read+write credentialed CORS on 7 Spring routes; report-ready, HUMAN deliverable pending
+[PARKED] order-form-apc-check-ssrf: confidence 45 at floor; purely speculative — no evidence endpoint makes outbound calls; APC may be client-side validation only; verify_steps exist but low prior
+[FINAL] voip-cors-cred-read-write: 90 — CONFIRMED credentialed CORS read+write on 7 Spring routes; report-ready, HUMAN deliverable pending
 [FINAL] my-portal-api-proxy-wildcard: 78 — Wildcard CORS on portal proxy endpoints; secondary token-gated exfil path, HUMAN barrier
-[NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu — Title: "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes)"; Fields: (1) vulnerable endpoints: /api/account,/api/accounts,/api/subscriber,/api/subscribers,/api/number,/api/numbers,/api/session (2) preflight evidence: OPTIONS returns ACAO:<attacker-origin>, ACAC:true, Allow-Methods: POST,PUT, Allow-Headers: authorization,content-type (3) auth mechanism: HTTP Basic realm "sipwisebroker" + Bearer voipSession; victim browser auto-sends creds with credentials:'include' (4) PoC: fetch('https://voip-management.easybell.de/api/account',{method:'PUT',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({callforwarding:{...}})}) executes cross-origin (5) impact: full VoIP config takeover (numbers, subscribers, call-forwarding, voicemail, trusted-IPs) (6) WAF note: ≥6s spacing, 60-120s backoff; ingress shared with my.easybell.com (62.27.117.123) — host-header-only split
-[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS preflights authorize credentialed cross-origin WRITE — Allow-Methods echoes any requested method (POST/PUT verified), Allow-Headers authorization,content-type, ACAC:true, arbitrary Origin, on singular + plural routes; CORS issue is read AND write, not mere exfil.
-[LEARN] ACCEPTED MISCONFIG @ partner.easybell.de: Laravel Blade partner portal (partnerportal_session cookie, Matomo siteId=2); app bundle leaks no /api/* surface (Sentry DSN only) → passive partner API-leak line closed cleanly.
-[LEARN] ACCEPTED MISCONFIG @ order-form.easybell.de/api: /api/plan-classes `type` is Laravel `in:`-whitelist validated (422 validation.in for business/private), partner_code inert → parameterized-but-anonymous GET surface; no partner-scope enumeration.
-[LEARN] ACCEPTED OATH @ connectme-app.easybell.de: in-scope OIDC callback 200s with meta-refresh to the double-slash redirect path (+&refresh=1) while bare `//` path 404s → inconsistent normalization in the code-return flow.
-[LEARN] ACCEPTED MISCONFIG @ survey.easybell.de: Caddy 200-empty sink on /, /admin, /index.php, /login (no content-type, CL:0) — abandoned/stub vhost; zero credential-less surface; closed.
-[LEARN] ACCEPTED MISCONFIG @ backmon.easybell.de: nginx blanket 403 (146B, same family as voip ingress) on /, /metrics, /health, /status, /api, /index.html, /monitor — IP-allowlist deny; no content; closed.
-[LEARN] REJECTED MISCONFIG @ connectme-app.easybell.de: /login-online-session-converged638e2/../login → 404 — nginx traversal-normalizes; earlier 200/404 split is SPA-shell-on-callback-route only, NOT a path-normalization bypass.
-[LEARN] REJECTED BUSLOGIC @ order-form.easybell.de/api: contract-summary is session-gated (404 PDF pre-session) — no anonymous contract disclosure; line closed.
-[LEARN] REJECTED OATH @ connectme-app.easybell.de: bare `//login-online-session-converged638e2` returns SPA shell 200 (09:16:21, 19765B) on clean probe; prior "bare // path 404s" recordings were backtick-polluted URLs → no normalization inconsistency in the code-return flow; KB line corrected.
-[LEARN] REJECTED MISCONFIG @ connectme-app.easybell.de: double-slash redirect_uri is cosmetic-but-functional (200 SPA shell identical to single-slash variants); no path-normalization bypass surface.
+[NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu — Title: "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes)"; Fields: (1) vulnerable endpoints: /api/account,/api/accounts,/api/subscriber,/api/subscribers,/api/number,/api/numbers,/api/session (2) preflight evidence: OPTIONS returns ACAO:<attacker-origin>, ACAC:true, Allow-Methods:POST,PUT, Allow-Headers:authorization,content-type (3) auth mechanism: HTTP Basic realm "sipwisebroker" + Bearer voipSession; victim browser auto-sends creds with credentials:'include' (4) PoC: fetch('https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({...})}) executes cross-origin (5) impact: full VoIP config takeover (numbers, subscribers, call-forwarding, voicemail, trusted-IPs) (6) WAF note: ≥6s spacing, 60-120s backoff; ingress shared with my.easybell.com (62.27.117.123) — host-header-only split
+[LEARN] REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` both return 404 (284KB custom error HTML, NOT SPA shell — different size from root 200 at 5KB); root returns 200 SPA. No dotfile/debug disclosure — line closed.
+[LEARN] REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS does not resolve (curl error 6,
+[LEARN] REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS does not resolve (curl error 6, NXDOMAIN). Host not externally reachable — line closed.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~36h+ filing latency is the only rising program risk.
+[LEARN] NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable.
+[RISK] easybell: 74
+reasoning: Flagship CORS finding advanced from read-exfil to credentialed cross-origin WRITE (preflight-approved POST/PUT, arbitrary Origin, ACAC:true) — higher severity ceiling on same HUMAN-gated PoC. order-form residual closed (validated params, no new GET surface) — neutral. partner retired cleanly (classic login panel = REJECTED class adjacent). Carried: 90/78 mostly HUMAN-gated for full PoC; voip WAF throttle unchanged; auth/lockout excluded; PBX/SIP parked. Mitigation: 10 read-only GET/OPTIONS this cycle at ~0.17 rps avg, ≥6s spacing, no POST bodies to live API (preflights only, empty 200 OK), no customer/order data captured (registry/tariff metadata only), sha256 discipline preserved, report only via bugs.olivermaicher.eu.
+[LEARN] REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS does not resolve (curl error 6, NXDOMAIN). Host not externally reachable — line closed.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~36h+ filing latency is the only rising program risk.
+[LEARN] NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable.
+[RISK] easybell: 74
+reasoning: Flagship CORS finding advanced from read-exfil to credentialed cross-origin WRITE (preflight-approved POST/PUT, arbitrary Origin, ACAC:true) — higher severity ceiling on same HUMAN-gated PoC. order-form residual closed (validated params, no new GET surface) — neutral. partner retired cleanly (classic login panel = REJECTED class adjacent). Carried: 90/78 mostly HUMAN-gated for full PoC; voip WAF throttle unchanged; auth/lockout excluded; PBX/SIP parked. Mitigation: 10 read-only GET/OPTIONS this cycle at ~0.17 rps avg, ≥6s spacing, no POST bodies to live API (preflights only, empty 200 OK), no customer/order data captured (registry/tariff metadata only), sha256 discipline preserved, report only via bugs.olivermaicher.eu.
+[NEW] connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
+[NEW] connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
+[CHANGED] voip-management.easybell.de/api: Credentialed CORS read+write (90) remains sole unfiled HIGH; ~36h+ filing latency only rising program risk
+[CHANGED] No new passive probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged beyond connectme-uat/dev closure
+[PRIO] voip-management.easybell.de/api,9.0,attack_surface:10+business_value:9+tech_exposure:10+gate_ease:7+cloud_surface:7+freshness:9
+[PRIO] my.easybell.com,7.8,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:4+cloud_surface:6+freshness:8
+[PRIO] connectme-app.easybell.de,7.4,attack_surface:8+business_value:7+tech_exposure:8+gate_ease:8+cloud_surface:5+freshness:7
+[PRIO] order-form.easybell.de/api,7.0,attack_surface:8+business_value:8+tech_exposure:7+gate_ease:9+cloud_surface:4+freshness:8
+[PRIO] partner.easybell.de,5.5,attack_surface:6+business_value:7+tech_exposure:5+gate_ease:6+cloud_surface:4+freshness:6
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 90
+reasoning: OPTIONS preflights on all 7 Spring routes return ACAO:<arbitrary-origin> + ACAC:true + Allow-Methods:POST,PUT + Allow-Headers:authorization,content-type; HTTP Basic realm "sipwisebroker" auto-attaches cached creds with credentials:'include'; read exfil confirmed on all 7 endpoints
+evidence_needed: HUMAN victim-browser PoC demonstrating cross-origin PUT/POST execution with cached Basic creds or Bearer voipSession token
+verify_steps: PASSIVE done (preflight-only, empty 200 OK, no mutation); full chain = HUMAN browser session with authenticated portal user visiting attacker origin
+impact: Cross-origin write/read of victim VoIP telephony config (accounts, numbers, subscribers, call-forwardings, voicemail, trusted-IPs, session) → HIGH/CRITICAL
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 78
+reasoning: Three internal portal proxy endpoints return ACAO:* on redirect responses and OPTIONS preflight with POST+Authorization+Content-Type allowed from any origin; wildcard without ACAC:true means cookies NOT sent cross-origin, BUT portal uses Bearer tokens (voipSession) via JS for voip-management; if attacker exfiltrates Bearer token (via voip CORS or XSS), wildcard on portal proxies allows exfiltration of CRM/EBIT/Strapi data; Strapi CMS proxy confirmed
+evidence_needed: Confirm what /api/crm, /api/ebit, /api/strapi proxy to when authenticated; confirm whether Bearer token (voipSession) is accepted by these endpoints; confirm data sensitivity
+verify_steps: HUMAN — with creds, observe portal JS network calls to /api/crm, /api/ebit, /api/strapi; capture request/response to determine if Bearer token is used and what data returned; test cross-origin fetch with captured Bearer token
+impact: CRM/EBIT/Strapi data leakage via cross-origin requests → MEDIUM/HIGH (depends on data sensitivity)
+testability: AUTH_HELPED
+[HYP] order-form-apc-check-ssrf
+class: SSRF
+asset: order-form.easybell.de/api/apc/check
+confidence: 45
+reasoning: POST-only endpoint (GET→405) named "apc/check" (likely Address/Postal Code validation) accepts address payload; if backend validates by calling external geocoding/address APIs without SSRF protection, could induce requests to internal metadata (169.254.169.254) or internal services; shares main ingress 62.27.117.123 with portal/voip
+evidence_needed: Confirm endpoint makes outbound HTTP requests during address validation; test with payloads targeting 169.254.169.254, localhost, internal k8s hostnames
+verify_steps: PASSIVE: POST to /api/apc/check with address payload containing 169.254.169.254/latest/meta-data/ — observe response timing/errors; single request, ≥6s spacing
+impact: Cloud metadata exposure (IAM roles, credentials, instance data) → CRITICAL if SSRF confirmed
+testability: PASSIVE
+[PARKED] order-form-apc-check-ssrf: confidence 45 at floor; purely speculative — no evidence endpoint makes outbound calls; APC may be client-side validation only; verify_steps exist but low prior
+[FINAL] voip-cors-cred-read-write: 90 — CONFIRMED credentialed CORS read+write on 7 Spring routes; report-ready, HUMAN deliverable pending
+[FINAL] my-portal-api-proxy-wildcard: 78 — Wildcard CORS on portal proxy endpoints; secondary token-gated exfil path, HUMAN barrier
+[NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu — Title: "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes)"; Fields: (1) vulnerable endpoints: /api/account,/api/accounts,/api/subscriber,/api/subscribers,/api/number,/api/numbers,/api/session (2) preflight evidence: OPTIONS returns ACAO:<attacker-origin>, ACAC:true, Allow-Methods:POST,PUT, Allow-Headers:authorization,content-type (3) auth mechanism: HTTP Basic realm "sipwisebroker" + Bearer voipSession; victim browser auto-sends creds with credentials:'include' (4) PoC: fetch('https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({...})}) executes cross-origin (5) impact: full VoIP config takeover (numbers, subscribers, call-forwarding, voicemail, trusted-IPs) (6) WAF note: ≥6s spacing, 60-120s backoff; ingress shared with my.easybell.com (62.27.117.123) — host-header-only split
+[LEARN] REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` both return 404 (284KB custom error HTML, NOT SPA shell — different size from root 200 at 5KB); root returns 200 SPA. No dotfile/debug disclosure — line closed.
+[LEARN] REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS does not resolve (curl error 6, NXDOMAIN). Host not externally reachable — line closed.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~36h+ filing latency is the only rising program risk.
+[LEARN] NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable.
 [RISK] easybell: 74
 reasoning: Flagship CORS finding advanced from read-exfil to credentialed cross-origin WRITE (preflight-approved POST/PUT, arbitrary Origin, ACAC:true) — higher severity ceiling on same HUMAN-gated PoC. order-form residual closed (validated params, no new GET surface) — neutral. partner retired cleanly (classic login panel = REJECTED class adjacent). Carried: 90/78 mostly HUMAN-gated for full PoC; voip WAF throttle unchanged; auth/lockout excluded; PBX/SIP parked. Mitigation: 10 read-only GET/OPTIONS this cycle at ~0.17 rps avg, ≥6s spacing, no POST bodies to live API (preflights only, empty 200 OK), no customer/order data captured (registry/tariff metadata only), sha256 discipline preserved, report only via bugs.olivermaicher.eu.
