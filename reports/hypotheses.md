@@ -601,3 +601,16 @@
 - LEARN: REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS does not resolve (curl error 6, NXDOMAIN). Host not externally reachable — line closed.
 - LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~38h filing latency is the only ri
 - LEARN: NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable.
+
+## RANKED HYPOTHESES 2026-09-08 22:18:05 UTC
+- [92] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_bigpickle.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu NOW (finding reconfirmed live 22:16:53 UTC 09-08). Title: "Credentialed CORS read+write on
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu — Title: "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 22:16:53 UTC 09-08 on /api/account (ACAO evil-origin + ACAC:
+- LEARN: REJECTED MISCONFIG @ login.easybell.de: `?redirect=&next=&url=` not echoed; 302 → /login sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.
+- LEARN: REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
+- LEARN: REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
+- LEARN: REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` both return 404 (284KB custom error HTML, NOT SPA shell — different size from root 
+- LEARN: REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS does not resolve (curl error 6, NXDOMAIN). Host not externally reachable — line closed.
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~38h filing latency is the only ri
+- LEARN: NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable.

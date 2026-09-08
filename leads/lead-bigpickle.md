@@ -1641,3 +1641,24 @@ testability: HUMAN_ONLY
 [LEARN] NO_DELTA — no live probes since 2026-09-08 02:34:17 UTC; inventory + KB unchanged; all passive lines closed.
 [RISK] easybell: 78
 reasoning: +1 from 77. Filing latency now ~38h+ since triage VALID re-score at 19:19:02 UTC 09-06. Discovery phase genuinely complete — all passive surface exhausted, all remaining hypotheses HUMAN-gated. Sole active risk vector = submission latency on validated [90] CORS finding. Compliance unchanged: GET-only, ≤1rps, ≥6s spacing, no auth/mutating/customer/financial data, brute-force/lockout excluded, sha256 discipline, report via bugs.olivermaicher.eu only.
+## 2026-09-08 22:17:20 UTC [target] (model bigpickle)
+[NEW] voip-management.easybell.de/api: live reconfirm 22:16:53 UTC 09-08 — OPTIONS /api/account returns 200, `ACAO: https://evil.example.at` + `ACAC: true` + `Allow-Methods: PUT` + `Allow-Headers: authorization,content-type`. Credentialed CORS read+write STILL LIVE; evidence fresh for same-day filing.
+[CHANGED] login.easybell.de: `?redirect=&next=&url=` params NOT echoed in 302 (→ https://login.easybell.de/login); Laravel XSRF-TOKEN+ekp_session cookie family identical to my.easybell.com. No open-redirect / OAuth-code-theft chain surface; line closed.
+[PRIO] voip-management.easybell.de/api,8.4,attack_surface=9+business_value=9+tech_exposure=8+gate_ease=3+cloud_surface=6+freshness=8 (reconfirmed live today, filing-blocked)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 92
+reasoning: OPTIONS 22:16:53 UTC 09-08 on /api/account reconfirms arbitrary-Origin ACAO echo + ACAC:true + Allow-Methods echo of PUT + Allow-Headers authorization,content-type; matches prior captures 09-04/09-05; triage re-scored VALID 19:19:02 UTC 09-06; auth = HTTP Basic realm sipwisebroker + Bearer voipSession; exploit chain unchanged.
+evidence_needed: nothing more — evidence complete; only filed-report acceptance pending.
+verify_steps: PASSIVE done (fresh OPTIONS above); chain = HUMAN browser with cached Basic creds -> fetch({method:'PUT',credentials:'include'}) -> preflight passes -> WRITE executes + response readable via ACAC:true.
+impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) without victim awareness -> HIGH/CRITICAL.
+testability: HUMAN_ONLY
+[PARKED] order-form-api-residual:50 — HUMAN_ONLY; POST /api/apc/check session-gated; dormant.
+[PARKED] portal-proxy-wildcard-chain:55 — token-gated; no standalone HIGH without voip chain.
+[FINAL] voip-cors-cred-read-write:92 — reconfirmed live 22:16:53 UTC 09-08; VALID per triage; unique unfiled HIGH/CRITICAL; evidence fresh for same-day filing.
+[NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu NOW (finding reconfirmed live 22:16:53 UTC 09-08). Title: "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes)". Add the 22:16:53 UTC OPTIONS capture (ACAO:https://evil.example.at + ACAC:true + Allow-Methods:PUT + Allow-Headers:authorization,content-type) as newest evidence; attack chain fetch({method:'PUT',credentials:'include'}) on attacker origin; impact = full customer VoIP config exfiltration + modification.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 22:16:53 UTC 09-08 on /api/account (ACAO evil-origin + ACAC:true + Allow-Methods:PUT) — finding still exploitable ~3 days post-discovery, ~51h post-triage-VALID; evidence freshness secured for immediate filing.
+[LEARN] REJECTED MISCONFIG @ login.easybell.de: `?redirect=&next=&url=` not echoed; 302 → /login sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.com); no open redirect, no OAuth code-theft chain via login passthrough; line closed cleanly.
+[RISK] easybell: 80
+reasoning: +2 from 78. Fresh reconfirm 22:16:53 UTC 09-08 proves the validated HIGH is still exploitable while unfiled (~51h since triage VALID). Discovery phase complete — every passive line closed (login open-redirect now also eliminated). Sole and growing risk = submission latency on the flagship finding; each unfiled hour raises fix-probability for another team. Compliance unchanged: OPTIONS/GET only, single spaced request, no auth/mutating/customer/financial data, brute-force/lockout excluded, sha256 discipline, report via bugs.olivermaicher.eu only.

@@ -293,3 +293,9 @@ www.easybell.de
 ## 2026-09-08 19:43:23 UTC
 - CHANGED voip-management.easybell.de/api: Credentialed CORS read+write (90) remains sole unfiled HIGH/CRITICAL; ~38h+ filing latency only rising program risk
 - CHANGED No new passive probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged beyond connectme-uat/dev closure
+
+## 2026-09-08 22:18:05 UTC
+- NEW voip-management.easybell.de/api: live reconfirm 22:16:53 UTC 09-08 — OPTIONS /api/account returns 200, `ACAO: https://evil.example.at` + `ACAC: true` + `Allow-Methods: PUT` + `Allow-Headers: authoriza
+- CHANGED login.easybell.de: `?redirect=&next=&url=` params NOT echoed in 302 (→ https://login.easybell.de/login); Laravel XSRF-TOKEN+ekp_session cookie family identical to my.easybell.com. No open-redirect / O
+- CHANGED voip-management.easybell.de/api: Credentialed CORS read+write (90) remains sole unfiled HIGH/CRITICAL; ~38h+ filing latency only rising program risk
+- CHANGED No new passive probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged beyond connectme-uat/dev closure
