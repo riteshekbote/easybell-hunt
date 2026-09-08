@@ -1,7 +1,5 @@
-## 2026-09-08 12:18:18 UTC [target] (model bigpickle)
+## 2026-09-08 16:43:11 UTC [target] (model bigpickle)
 [PRIO] voip-management.easybell.de/api,8.4,attack_surface=9+business_value=9+tech_exposure=8+gate_ease=3+cloud_surface=6+freshness=8
-[PRIO] order-form.easybell.de/api,5.8,attack_surface=6+business_value=7+tech_exposure=5+gate_ease=7+cloud_surface=5+freshness=2
-[PRIO] my.easybell.com,5.5,attack_surface=7+business_value=8+tech_exposure=5+gate_ease=3+cloud_surface=6+freshness=1
 [HYP] voip-cors-cred-read-write
 class: MISCONFIG
 asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
@@ -32,7 +30,8 @@ testability: HUMAN_ONLY
 [PARKED] order-form-api-residual:50 — HUMAN_ONLY; POST /api/apc/check purpose unclear; no standalone anonymous disclosure without session; dormant line.
 [PARKED] portal-proxy-wildcard-chain:55 — secondary exfil path only viable after voip CORS chain exfiltrates Bearer token; no standalone HIGH impact.
 [FINAL] voip-cors-cred-read-write:90 — VALID per triage 19:19:02 UTC 09-06; evidence complete; unique unfiled HIGH/CRITICAL. Top deliverable. Sole blocker = human report filing.
+[NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu — Title: "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes)" — PoC = OPTIONS preflight captures 22:37-22:38 UTC 09-04 on /api/account + /api/subscribers (ACAO:evil-origin + ACAC:true + Allow-Methods:POST,PUT + Allow-Headers:authorization,content-type); attack chain: victim browser on attacker-controlled origin -> fetch({method:'PUT',credentials:'include'}) -> cross-origin write executes + response readable; impact = full customer VoIP config exfiltration + modification without victim awareness.
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains sole unique unfiled HIGH/CRITICAL; ~37h+ filing latency is only rising program risk.
 [LEARN] NO_DELTA — no live probes since 2026-09-08 02:34:17 UTC; inventory + KB unchanged; all passive lines closed.
 [RISK] easybell: 78
-reasoning: +1 from 77. Filing latency now ~37h since triage VALID re-score at 19:19:02 UTC 09-06. Discovery phase genuinely complete — all passive surface exhausted, all remaining hypotheses HUMAN-gated. Sole active risk vector = submission latency on validated [90] CORS finding. Compliance unchanged: GET-only, ≤1rps, ≥6s spacing, no auth/mutating/customer/financial data, brute-force/lockout excluded, sha256 discipline, report via bugs.olivermaicher.eu only.
+reasoning: +1 from 77. Filing latency now ~37h+ since triage VALID re-score at 19:19:02 UTC 09-06. Discovery phase genuinely complete — all passive surface exhausted, all remaining hypotheses HUMAN-gated. Sole active risk vector = submission latency on validated [90] CORS finding. Compliance unchanged: GET-only, ≤1rps, ≥6s spacing, no auth/mutating/customer/financial data, brute-force/lockout excluded, sha256 discipline, report via bugs.olivermaicher.eu only.

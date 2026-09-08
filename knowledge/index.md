@@ -126,3 +126,4 @@
 - 2026-09-08 NO_DELTA — no live probes since 2026-09-08 02:34:17 UTC; inventory + KB unchanged; all passive lines closed.
 - 2026-09-08 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains sole unique unfiled HIGH/CRITICAL; ~37h+ filing latency is only rising program risk.
 - 2026-09-08 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~37h filing latency is the only rising program risk.
+- 2026-09-08 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~38h filing latency is the only rising program risk.

@@ -285,3 +285,7 @@ www.easybell.de
 - NEW connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
 - CHANGED voip-management.easybell.de/api: Credentialed CORS read+write (90) remains sole unfiled HIGH; ~37h filing latency only rising program risk
 - CHANGED No new passive probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged beyond connectme-uat/dev closure
+
+## 2026-09-08 16:46:18 UTC
+- CHANGED voip-management.easybell.de/api: Credentialed CORS read+write (90) remains sole unfiled HIGH; ~38h filing latency only rising program risk
+- CHANGED No new passive probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged beyond connectme-uat/dev closure
