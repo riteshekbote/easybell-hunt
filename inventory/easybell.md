@@ -265,3 +265,7 @@ www.easybell.de
 
 ## 2026-09-07 23:54:26 UTC
 - CHANGED connectme-uat/dev state inconsistency: 2026-09-07 18:52 lead claims the UAT/dev dotfile line was "closed and rejected on both sub-lines" — but no matching REJECTED entry exists in the KB tail (all ent
+
+## 2026-09-08 02:34:12 UTC
+- CHANGED connectme-app-uat.easybell.de: `.env` → 404 (284KB custom error HTML, not SPA shell); `.git/config` → 404 (same 284KB); root = 200 (5KB SPA). No dotfile/debug disclosure — line closed.
+- CHANGED connectme-app-dev.easybell.de: DNS does not resolve (curl error 6). Not externally reachable — line closed.

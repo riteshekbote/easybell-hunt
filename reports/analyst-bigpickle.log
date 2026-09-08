@@ -9158,3 +9158,66 @@ STEP 6 — LEARNING
 STEP 7 — RISK
 [RISK] easybell: 75
 reasoning: +1 from 74. Only deltas: continued submission latency (~36h since VALID re-score 19:19:02 09-06) and an unverified duplicate-run state claim on the UAT/dev line (net zero evidence). Discovery saturated; exactly one cheap GET pending to close or advance the last passive line. Compliance posture unchanged: GET-only, ≤1rps, ≥6s spacing, no auth/mutating/customer/financial data touched, brute-force/lockout excluded by program, sha256 discipline, report only via bugs.olivermaicher.eu.
+===== ANALYST bigpickle 2026-09-08 02:34:12 UTC =====
+[0m
+> build · big-pickle
+[0m
+I'll analyze the current state and execute the passive probe to close or advance the last active line.
+[0m$ [0mcurl -sS -o /tmp/opencode/uat_env.txt -w "HTTP:%{http_code} SIZE:%{size_download} CT:%{content_type}\n" --max-time 20 "https://connectme-app-uat.easybell.de/.env" 
+HTTP:404 SIZE:284179 CT:text/html; charset=UTF-8
+[0m
+A 404 (not the SPA shell 200). Let me check what this 404 is — could be real nginx 404 or a framework page. Let me examine and probe the sibling paths carefully with spacing.
+[0m$ [0msleep 7; curl -sS -o /tmp/opencode/uat_git.txt -w "git_config HTTP:%{http_code} SIZE:%{size_download} CT:%{content_type}\n" --max-time 20 "https://connectme-app-uat.easybell.de/.git/config"
+git_config HTTP:404 SIZE:284179 CT:text/html; charset=UTF-8
+[0m
+Identical 284179B HTML on both — that's a SPA catch-all 404 (not real file disclosure). Let me compare against a known 200 route and then close the dev subdomain too.
+[0m$ [0msleep 7; curl -sS -o /tmp/opencode/uat_root.txt -w "uat_root HTTP:%{http_code} SIZE:%{size_download} CT:%{content_type}\n" --max-time 20 "https://connectme-app-uat.easybell.de/"
+uat_root HTTP:200 SIZE:5190 CT:text/html; charset=UTF-8
+[0m
+Root = 200 (5190B) vs `.env`/`.git/config` = 404 (284179B custom error page). Real 404, not a catch-all SPA. Dotfile paths are properly blocked. Let me verify dev variant and check a few more paths to be thorough.
+[0m$ [0msleep 7; curl -sS -o /tmp/opencode/dev_env.txt -w "dev_env HTTP:%{http_code} SIZE:%{size_download} CT:%{content_type}\n" --max-time 20 "https://connectme-app-dev.easybell.de/.env"
+curl: (6) Could not resolve host: connectme-app-dev.easybell.de
+dev_env HTTP:000 SIZE:0 CT:
+[0m
+[0m$ [0mls /home/runner/work/easybell-hunt/easybell-hunt/art/
+ls: cannot access '/home/runner/work/easybell-hunt/easybell-hunt/art/': No such file or directory
+[0m
+Dev doesn't resolve. Both UAT dotfile paths return 404 (not a catch-all — different size from root 200). Line is closed.
+
+Now let me update the leads file with findings:
+**STEP 1 — DELTA**
+[CHANGED] connectme-app-uat.easybell.de: `.env` → 404 (284KB custom error HTML, not SPA shell); `.git/config` → 404 (same 284KB); root = 200 (5KB SPA). No dotfile/debug disclosure — line closed.
+[CHANGED] connectme-app-dev.easybell.de: DNS does not resolve (curl error 6). Not externally reachable — line closed.
+[NO_DELTA] All other inventory/KB/leads unchanged since 2026-09-07 23:54:26 UTC.
+
+**STEP 2 — PRIORITIZE**
+No new assets warrant scoring. Existing ranked assets unchanged.
+
+**STEP 3 — HYPOTHESES**
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 90
+reasoning: OPTIONS preflights 22:37–22:38 UTC: arbitrary-Origin ACAO reflect + ACAC:true + Allow-Methods echo (POST/PUT verified) + Allow-Headers authorization,content-type on all 7 Spring routes; GET read-exfil confirmed; auth = HTTP Basic realm sipwisebroker; triage re-scored VALID 19:19:02 UTC; sole blocker = HUMAN victim-browser PoC + formal filing.
+evidence_needed: credentialed cross-origin PUT/POST returning readable 200 with ACAO:evil + ACAC:true (or filed-report acceptance).
+verify_steps: PASSIVE evidence complete; chain = HUMAN browser with cached Basic creds for realm → fetch({method:'PUT',credentials:'include'}) passes preflight → WRITE executes + response readable via ACAC:true.
+impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) → HIGH/CRITICAL.
+testability: HUMAN_ONLY
+
+**STEP 4 — SELF-CRITIQUE**
+[FINAL] voip-cors-cred-read-write:90 — VALID per triage, report-ready, unique unfiled HIGH/CRITICAL. Top deliverable.
+[PARKED→CLOSED] connectme-uat-dev-misconfig:45 → DROP to 0. UAT `.env`/`.git/config` both 404 (real error page, not SPA shell); dev host NXDOMAIN. Both sub-lines empirically closed. No disclosure.
+[PARKED→CLOSED] order-form-unauth-business-logic:50 — HUMAN_ONLY, dormant, no new evidence; stays parked.
+
+**STEP 5 — NEXT ACTION**
+[HUMAN] File voip-cors-cred-read-write report at bugs.olivermaicher.eu — fields: (1) Title "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes, ACAO reflect + ACAC:true, preflight authorizes cross-origin PUT/POST)". (2) Affected: /api/{account,accounts,subscriber,subscribers,number,numbers,session}. (3) PoC evidence: OPTIONS preflight captures 22:37–22:38 UTC on /api/account + /api/subscribers (Origin https://evil.example.at → ACAO reflect + ACAC:true, Allow-Methods echo POST/PUT, Allow-Headers authorization,content-type); 401 body = HTTP Basic realm sipwisebroker; read-exfil on all 7 routes. (4) Exploit chain: victim browser with cached Basic creds for realm visits attacker origin → fetch(...,{method:'PUT',credentials:'include'}) passes preflight → server executes WRITE + returns data readable via ACAC:true. (5) Precondition note: customer must have authenticated directly to voip-management in-browser (Basic cache). (6) Remediation: replace dynamic ACAO reflection with explicit allowlist of my.easybell.com; drop ACAC:true; restrict Allow-Methods.
+
+**STEP 6 — LEARN**
+[LEARN] REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` both return 404 (284KB custom error HTML, NOT SPA shell — different size from root 200 at 5KB); root returns 200 SPA. No dotfile/debug disclosure — line closed.
+[LEARN] REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS does not resolve (curl error 6, NXDOMAIN). Host not externally reachable — line closed.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~36h+ filing latency is the only rising program risk.
+[LEARN] NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable.
+
+**STEP 7 — RISK**
+[RISK] easybell: 76
+reasoning: +1 from 75. Two cheap passive lines now closed (connectme-uat `.env`/`.git/config` 404; dev NXDOMAIN) — net zero evidence but discovery phase genuinely complete. The sole remaining deliverable is the validated [90] CORS finding at voip-management, unfiled ~36h+. Submission latency is the only rising risk vector. Compliance posture unchanged: GET-only, ≤1rps, ≥6s spacing, no auth/mutating/customer/financial data touched, brute-force/lockout excluded by program, sha256 discipline, report only via bugs.olivermaicher.eu. No outbound PII captured across entire engagement.

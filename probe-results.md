@@ -201,3 +201,7 @@ https://connectme-app-uat.easybell.de/.env -> HTTP 404
 
 ## 2026-09-07 23:54:29 UTC
 https://connectme-app-uat.easybell.de/.env -> HTTP 404
+
+## 2026-09-08 02:34:17 UTC
+https://connectme-app-uat.easybell.de/.env -> HTTP 404
+https://voip-management.easybell.de/api/account',{method:'PUT',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404

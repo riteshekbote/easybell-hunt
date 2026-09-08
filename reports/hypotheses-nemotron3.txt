@@ -1,9 +1,10 @@
-## 2026-09-07 23:53:51 UTC [target] (model nemotron3)
+## 2026-09-08 02:33:42 UTC [target] (model nemotron3)
 [PRIO] voip-management.easybell.de/api,9.0,attack_surface:10+business_value:9+tech_exposure:10+gate_ease:7+cloud_surface:7+freshness:9
 [PRIO] my.easybell.com,7.8,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:4+cloud_surface:6+freshness:8
 [PRIO] connectme-app.easybell.de,7.4,attack_surface:8+business_value:7+tech_exposure:8+gate_ease:8+cloud_surface:5+freshness:7
 [PRIO] order-form.easybell.de/api,7.0,attack_surface:8+business_value:8+tech_exposure:7+gate_ease:9+cloud_surface:4+freshness:8
 [PRIO] partner.easybell.de,5.5,attack_surface:6+business_value:7+tech_exposure:5+gate_ease:6+cloud_surface:4+freshness:6
+[PRIO] connectme-app-uat.easybell.de,4.5,attack_surface:5+business_value:5+tech_exposure:5+gate_ease:8+cloud_surface:3+freshness:5
 [HYP] voip-cors-cred-read-write
 class: MISCONFIG
 asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
@@ -22,23 +23,19 @@ evidence_needed: confirm what /api/crm, /api/ebit, /api/strapi proxy to when aut
 verify_steps: HUMAN — with creds, observe portal JS network calls to /api/crm, /api/ebit, /api/strapi; capture request/response to determine if Bearer token is used and what data returned; test cross-origin fetch with captured Bearer token
 impact: CRM/EBIT/Strapi data leakage via cross-origin requests → MEDIUM/HIGH (depends on data sensitivity)
 testability: AUTH_HELPED
-[HYP] order-form-anon-business-logic
-class: BUSLOGIC
-asset: order-form.easybell.de/api (orders, quotes, cart, auto-address, checkBankDetails, auth)
-confidence: 50
-reasoning: 21 Vite chunks map full anonymous API — GET surface enumerated and verified (tariff catalog 200, contract-summary 404 pre-session); POST/PUT/DELETE money-flow endpoints exist but are mutating; read-only discipline blocks passive verification; anonymous parameter validation on plan-classes (Laravel in: whitelist) suggests business logic may be reachable pre-auth
-evidence_needed: determine if any mutation endpoint accepts harmless test payload (e.g., idempotent quote request) without side effects; verify auth requirement boundaries
-verify_steps: PASSIVE — OPTIONS preflights on mutation endpoints to confirm CORS/Allow-Methods; HUMAN_ONLY — craft minimal non-mutating test body (e.g., quote with test tariff) only if explicitly authorized
-impact: anonymous order/quote/cart manipulation → potential pricing abuse, fraud, or PII leakage → MEDIUM/HIGH
-testability: HUMAN_ONLY
-[PARKED] voip-api-v2-bola-discovery: Confidence 55; no live v2 endpoint discovered after 22 v1 + 10 v2 probes; speculative without confirmed live v2 resource; no verify_steps without live target
-[PARKED] my-portal-idor: Confidence 55; customerId in Matomo, auth-gated object endpoints confirmed, but no auth context to verify object-level authorization; AUTH_HELPED blocker
-[PARKED] connectme-oidc-state-binding: Confidence 40 at floor; OIDC state availability confirmed but session-binding untestable without browser + external IdP (out-of-scope Keycloak); hardcoded redirect_uri constrains code-theft; HUMAN_ONLY testability
-[PARKED] order-form-unauth-business-logic: Confidence 50; anonymous POST/PUT/DELETE on orders/quotes/cart/auto-address/checkBankDetails exist but are mutating money-flow endpoints — read-only discipline blocks; HUMAN_ONLY, requires non-sensitive test bodies only
+[HYP] connectme-uat-dev-misconfig
+class: MISCONFIG
+asset: connectme-app-uat.easybell.de
+confidence: 45
+reasoning: UAT/dev variants of connectme-app exist per CT sweep; Laravel/.env debug surface unprobed on these non-prod hosts; dev/uat often have relaxed configs (debug enabled, test creds, exposed actuator/swagger)
+evidence_needed: single GET to /.env, /.git/config, /actuator, /swagger-ui.html, /api-docs on uat/dev hosts to confirm/deny debug exposure
+verify_steps: PROBE: single GET https://connectme-app-uat.easybell.de/.env (≥6s spacing; capture status+content-type+body size; no auth headers). 200 text/plain with APP_KEY/DB creds = confirmed; 404/200 HTML = SPA catch-all = denied
+impact: env leakage (APP_KEY, DB creds, mail creds) → RCE via deserialization or cloud creds → HIGH
+testability: PASSIVE
+[PARKED] connectme-uat-dev-misconfig: confidence 45 at floor; verify_steps exist but UAT/dev scope confirmation needed; low business_value vs flagship
 [FINAL] voip-cors-cred-read-write: 90 — CONFIRMED read+write credentialed CORS on 7 Spring routes; report-ready, HUMAN deliverable pending
 [FINAL] my-portal-api-proxy-wildcard: 78 — Wildcard CORS on portal proxy endpoints; secondary token-gated exfil path, HUMAN barrier
-[FINAL] order-form-anon-business-logic: 50 — Anonymous mutation surface mapped; passive enumeration complete; HUMAN_ONLY for safe verification
-[NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu — primary finding: credentialed cross-origin READ + WRITE on 7 Spring-handled routes at voip-management.easybell.de/api; PoC = OPTIONS preflight captures 22:37–22:38 UTC on /api/account and /api/subscribers (ACAO:<evil-origin>, ACAC:true, Allow-Methods echoes POST/PUT, Allow-Headers authorization,content-type) + confirmed read-exfil across all 7 Spring routes; document victim-browser fetch(...,{method:'PUT',credentials:'include'}) chain under HTTP Basic realm sipwisebroker.
+[NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu — Title: "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes)"; Fields: (1) vulnerable endpoints: /api/account,/api/accounts,/api/subscriber,/api/subscribers,/api/number,/api/numbers,/api/session (2) preflight evidence: OPTIONS returns ACAO:<attacker-origin>, ACAC:true, Allow-Methods: POST,PUT, Allow-Headers: authorization,content-type (3) auth mechanism: HTTP Basic realm "sipwisebroker" + Bearer voipSession; victim browser auto-sends creds with credentials:'include' (4) PoC: fetch('https://voip-management.easybell.de/api/account',{method:'PUT',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({callforwarding:{...}})}) executes cross-origin (5) impact: full VoIP config takeover (numbers, subscribers, call-forwarding, voicemail, trusted-IPs) (6) WAF note: ≥6s spacing, 60-120s backoff; ingress shared with my.easybell.com (62.27.117.123) — host-header-only split
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: CORS preflights authorize credentialed cross-origin WRITE — Allow-Methods echoes any requested method (POST/PUT verified), Allow-Headers authorization,content-type, ACAC:true, arbitrary Origin, on singular + plural routes; CORS issue is read AND write, not mere exfil.
 [LEARN] ACCEPTED MISCONFIG @ partner.easybell.de: Laravel Blade partner portal (partnerportal_session cookie, Matomo siteId=2); app bundle leaks no /api/* surface (Sentry DSN only) → passive partner API-leak line closed cleanly.
 [LEARN] ACCEPTED MISCONFIG @ order-form.easybell.de/api: /api/plan-classes `type` is Laravel `in:`-whitelist validated (422 validation.in for business/private), partner_code inert → parameterized-but-anonymous GET surface; no partner-scope enumeration.

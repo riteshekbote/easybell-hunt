@@ -1468,3 +1468,22 @@ testability: HUMAN_ONLY
 [LEARN] NO_DELTA — no live probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged; no accept/reject deltas this cycle beyond state-inconsistency correction.
 [RISK] easybell: 75
 reasoning: +1 from 74. Only deltas: continued submission latency (~36h since VALID re-score 19:19:02 09-06) and an unverified duplicate-run state claim on the UAT/dev line (net zero evidence). Discovery saturated; exactly one cheap GET pending to close or advance the last passive line. Compliance posture unchanged: GET-only, ≤1rps, ≥6s spacing, no auth/mutating/customer/financial data touched, brute-force/lockout excluded by program, sha256 discipline, report only via bugs.olivermaicher.eu.
+## 2026-09-08 02:34:00 UTC [target] (model bigpickle)
+[CHANGED] connectme-app-uat.easybell.de: `.env` → 404 (284KB custom error HTML, not SPA shell); `.git/config` → 404 (same 284KB); root = 200 (5KB SPA). No dotfile/debug disclosure — line closed.
+[CHANGED] connectme-app-dev.easybell.de: DNS does not resolve (curl error 6). Not externally reachable — line closed.
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 90
+reasoning: OPTIONS preflights 22:37–22:38 UTC: arbitrary-Origin ACAO reflect + ACAC:true + Allow-Methods echo (POST/PUT verified) + Allow-Headers authorization,content-type on all 7 Spring routes; GET read-exfil confirmed; auth = HTTP Basic realm sipwisebroker; triage re-scored VALID 19:19:02 UTC; sole blocker = HUMAN victim-browser PoC + formal filing.
+evidence_needed: credentialed cross-origin PUT/POST returning readable 200 with ACAO:evil + ACAC:true (or filed-report acceptance).
+verify_steps: PASSIVE evidence complete; chain = HUMAN browser with cached Basic creds for realm → fetch({method:'PUT',credentials:'include'}) passes preflight → WRITE executes + response readable via ACAC:true.
+impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) → HIGH/CRITICAL.
+testability: HUMAN_ONLY
+[FINAL] voip-cors-cred-read-write:90 — VALID per triage, report-ready, unique unfiled HIGH/CRITICAL. Top deliverable.
+[LEARN] REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` both return 404 (284KB custom error HTML, NOT SPA shell — different size from root 200 at 5KB); root returns 200 SPA. No dotfile/debug disclosure — line closed.
+[LEARN] REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS does not resolve (curl error 6, NXDOMAIN). Host not externally reachable — line closed.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write (90) remains the sole unique unfiled HIGH; ~36h+ filing latency is the only rising program risk.
+[LEARN] NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable.
+[RISK] easybell: 76
+reasoning: +1 from 75. Two cheap passive lines now closed (connectme-uat `.env`/`.git/config` 404; dev NXDOMAIN) — net zero evidence but discovery phase genuinely complete. The sole remaining deliverable is the validated [90] CORS finding at voip-management, unfiled ~36h+. Submission latency is the only rising risk vector. Compliance posture unchanged: GET-only, ≤1rps, ≥6s spacing, no auth/mutating/customer/financial data touched, brute-force/lockout excluded by program, sha256 discipline, report only via bugs.olivermaicher.eu. No outbound PII captured across entire engagement.
