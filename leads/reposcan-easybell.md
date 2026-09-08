@@ -85,3 +85,12 @@ TARGET_ORG not configured for easybell; skipping public-org deep scan.
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
 ## REPOSCAN 2026-09-07 23:46:04 UTC
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
+## REPOSCAN 2026-09-08 03:55:30 UTC
+[HYP] No In-Scope Source Code on GitHub
+class: OTHER
+asset: github.com/easybell-gmbh
+confidence: 100
+reasoning: All 17 public repos are forks of open-source PHP/Laravel packages, not original easybell application code. No easybell-specific secrets, credentials, or configuration found. The program scope explicitly lists github_orgs: "none-configured".
+impact: None — no proprietary source available for audit
+verify_steps: N/A — confirmed via GitHub API (org repos endpoint) + shallow clone + regex sweep of all 17 repos
+TARGET_ORG not configured for easybell; skipping public-org deep scan.
