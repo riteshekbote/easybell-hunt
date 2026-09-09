@@ -1,4 +1,4 @@
-## 2026-09-09 17:31:00 UTC [target] (model nemotron3)
+## 2026-09-09 20:01:18 UTC [target] (model nemotron3)
 [PRIO] voip-management.easybell.de/api,9.2,attack_surface:10+business_value:9+tech_exposure:10+gate_ease:7+cloud_surface:7+freshness:10
 [PRIO] my.easybell.com,7.8,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:4+cloud_surface:6+freshness:8
 [PRIO] order-form.easybell.de/api,7.0,attack_surface:8+business_value:8+tech_exposure:7+gate_ease:9+cloud_surface:4+freshness:8

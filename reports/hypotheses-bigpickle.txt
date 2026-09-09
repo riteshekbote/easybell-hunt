@@ -1,4 +1,4 @@
-## 2026-09-09 17:30:12 UTC [target] (model bigpickle)
+## 2026-09-09 20:00:35 UTC [target] (model bigpickle)
 [PRIO] voip-management.easybell.de/api,9.2,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:7+cloud_surface:6+freshness:9
 [PRIO] my.easybell.com/api,5.0,attack_surface:6+business_value:7+tech_exposure:6+gate_ease:4+cloud_surface:4+freshness:3
 [PRIO] order-form.easybell.de/api,4.5,attack_surface:5+business_value:5+tech_exposure:5+gate_ease:7+cloud_surface:4+freshness:3
@@ -32,7 +32,7 @@ testability: HUMAN_ONLY
 [PARKED] order-form-anonymous-api: confidence 50, all high-value paths session-gated, no passive escalation possible → parked until authenticated session available.
 [PARKED] portal-proxy-wildcard: confidence 55, depends on voip CORS chain completing first → parked until flagship filed + exploited.
 [FINAL] voip-cors-cred-read-write: confidence 92, triage VALID, evidence complete, 3x reconfirmed. Ready for immediate filing.
-[NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu NOW
+[NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu NOW — platform confirmed live (200, 0.11s). Risk is 85 and rising with every hour of filing latency (~56h post-triage-VALID). No further passive evidence collection possible or needed. Two secondary leads parked until this is filed.
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 04:53:30 UTC 09-09 — 3rd independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~4 days post-discovery, ~53h post-triage-VALID.
 [LEARN] NO_DELTA — no new passive probes since 04:53:30 UTC 09-09; inventory + KB unchanged; all passive lines closed; filing latency is the only rising program risk.
-[RISK] easybell: 85 — Sole unique unfiled HIGH/CRITICAL finding; ~54h filing latency is the only rising program risk; discovery phase complete; all passive lines closed; report submission is the bottleneck. Risk does NOT decrease until report is filed.
+[RISK] easybell: 85 — Sole unique unfiled HIGH/CRITICAL finding; ~56h filing latency is the only rising program risk; discovery phase complete; all passive lines closed; report submission is the bottleneck. Risk does NOT decrease until report is filed.

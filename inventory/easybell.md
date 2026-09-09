@@ -323,3 +323,5 @@ www.easybell.de
 - CHANGED login.easybell.de: `?redirect=&next=&url=` not echoed in 302; sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.com); no open redirect/OAuth code-theft — line closed cleanly
 
 ## 2026-09-09 17:31:12 UTC
+
+## 2026-09-09 20:01:27 UTC
