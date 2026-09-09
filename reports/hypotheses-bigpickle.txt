@@ -1,31 +1,32 @@
-## 2026-09-09 09:21:27 UTC [target] (model bigpickle)
-[CHANGED] voip-management.easybell.de/api: fresh OPTIONS capture at 04:53:30 UTC 09-09 reconfirms live CORS (ACAO evil-origin + ACAC:true + Allow-Methods:PUT) — 3rd independent reconfirmation since discovery.
+## 2026-09-09 13:53:38 UTC [target] (model bigpickle)
+[CHANGED] voip-management.easybell.de/api: fresh OPTIONS capture at 04:53:30 UTC 09-09 reconfirms live CORS (ACAO evil-origin + ACAC:true + Allow-Methods:PUT) — 3rd independent reconfirmation since discovery; ~4.5h since last probe, no new probes, no KB delta.
+[PRIO] voip-management.easybell.de/api,9.2,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:7+cloud_surface:6+freshness:9
 [HYP] voip-cors-cred-read-write
 class: MISCONFIG
 asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
 confidence: 92
-reasoning: OPTIONS /api/account 04:53:30 UTC 09-09 echoes ACAO:https://evil.example.at + ACAC:true + Allow-Methods:PUT + Allow-Headers:authorization,content-type; 3rd independent reconfirmation; auth=HTTP Basic realm sipwisebroker + Bearer voipSession; triage VALID 19:19:02 UTC 09-06.
+reasoning: OPTIONS /api/account 04:53:30 UTC 09-09 echoes `ACAO: https://evil.example.at` + `ACAC: true` + `Allow-Methods: PUT` + `Allow-Headers: authorization,content-type`; matches 09-04/09-05/09-08/09-09 captures; auth = HTTP Basic realm sipwisebroker + Bearer voipSession; triage VALID 19:19:02 UTC 09-06; 3rd independent reconfirmation.
 evidence_needed: filed-report acceptance at bugs.olivermaicher.eu only
-verify_steps: PASSIVE done (fresh OPTIONS on file); live chain = HUMAN browser with cached Basic creds → fetch({method:'PUT',credentials:'include'}) → preflight passes → WRITE executes + response readable via ACAC:true
-impact: cross-origin read+write of customer VoIP config without victim awareness → HIGH/CRITICAL
+verify_steps: PASSIVE done (OPTIONS above); live chain = HUMAN browser with cached Basic creds -> fetch({method:'PUT',credentials:'include'}) -> preflight passes -> WRITE executes + response readable via ACAC:true
+impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) without victim awareness -> HIGH/CRITICAL
 testability: HUMAN_ONLY
 [HYP] order-form-anonymous-api
 class: BUSLOGIC
 asset: order-form.easybell.de/api
 confidence: 50
-reasoning: 21-chunk Vite audit maps full anonymous API; tariff catalog 200; contract-summary session-gated; mutations session-gated; POST /api/apc/check purpose unclear.
+reasoning: 21-chunk Vite audit maps full anonymous API; GET tariff catalog 200; contract-summary 404 pre-session; mutations session-gated; POST /api/apc/check POST-only accepts arbitrary body, purpose unclear.
 evidence_needed: authenticated session trace or anonymous POST returning customer-scoped data
 verify_steps: HUMAN — registered order/quote session; anonymous POST /api/apc/check empty body
-impact: order manipulation / pricing bypass → MEDIUM/HIGH
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH
 testability: HUMAN_ONLY
 [HYP] portal-proxy-wildcard
 class: MISCONFIG
 asset: my.easybell.com/api/{crm,ebit,strapi}
 confidence: 55
-reasoning: ACAO:* without ACAC:true on portal proxies; POST+Authorization accepted from any origin; standalone impact requires prior Bearer theft via voip CORS chain.
+reasoning: ACAO:* without ACAC:true on portal proxies; POST+Authorization accepted from any origin (preflight 200); standalone impact requires prior Bearer theft via voip CORS chain.
 evidence_needed: proxy target backend + Bearer format acceptance from stolen token
 verify_steps: HUMAN — portal JS network capture for Bearer format; cross-origin POST with stolen bearer
-impact: CRM/EBIT/Strapi data leakage → MEDIUM/HIGH (secondary)
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary)
 testability: HUMAN_ONLY
 [PARKED] order-form-anonymous-api: confidence 50, all high-value paths session-gated, no passive escalation possible → parked until authenticated session available.
 [PARKED] portal-proxy-wildcard: confidence 55, depends on voip CORS chain completing first → parked until flagship filed + exploited.

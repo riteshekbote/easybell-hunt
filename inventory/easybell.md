@@ -314,3 +314,10 @@ www.easybell.de
 
 ## 2026-09-09 09:22:44 UTC
 - CHANGED voip-management.easybell.de/api: fresh OPTIONS capture at 04:53:30 UTC 09-09 reconfirms live CORS (ACAO evil-origin + ACAC:true + Allow-Methods:PUT) — 3rd independent reconfirmation since discovery.
+
+## 2026-09-09 13:55:04 UTC
+- CHANGED voip-management.easybell.de/api: fresh OPTIONS capture at 04:53:30 UTC 09-09 reconfirms live CORS (ACAO evil-origin + ACAC:true + Allow-Methods:PUT) — 3rd independent reconfirmation since discovery; ~
+- CHANGED voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 3rd time at 04:53:30 UTC 09-09 (OPTIONS /api/account → ACAO:evil-origin + ACAC:true + Allow-Methods:PUT) — finding persis
+- CHANGED connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
+- CHANGED connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
+- CHANGED login.easybell.de: `?redirect=&next=&url=` not echoed in 302; sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.com); no open redirect/OAuth code-theft — line closed cleanly
