@@ -1885,3 +1885,31 @@ testability: HUMAN_ONLY
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 04:53:30 UTC 09-09 — 3rd independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~4 days post-discovery, ~53h post-triage-VALID.
 [LEARN] NO_DELTA — no new passive probes since 04:53:30 UTC 09-09; inventory + KB unchanged; all passive lines closed; filing latency is the only rising program risk.
 [RISK] easybell: 85 — Sole unique unfiled HIGH/CRITICAL finding; ~56h filing latency is the only rising program risk; discovery phase complete; all passive lines closed; report submission is the bottleneck. Risk does NOT decrease until report is filed.
+## 2026-09-09 22:24:45 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 92
+reasoning: OPTIONS /api/account 04:53:30 UTC 09-09 echoes ACAO https://evil.example.at + ACAC:true + Allow-Methods:PUT + Allow-Headers:authorization,content-type; matches 09-04/05/08/09 captures; auth HTTP Basic realm sipwisebroker + Bearer voipSession; triage VALID 19:19:02 09-06; 3rd reconfirmation. Preflight authorizes credentialed cross-origin WRITE on all 7 Spring routes.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu only
+verify_steps: PASSIVE complete; live chain = HUMAN browser with cached Basic creds → fetch({method:'PUT',credentials:'include'}) → preflight passes → WRITE executes + readable via ACAC:true
+impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) without victim awareness -> HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] order-form-anonymous-api
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps full anonymous API; GET plans/<code> 200 tariff catalog; contract-summary 404 pre-session; POST/PUT/DELETE money-flow endpoints session-gated; POST /api/apc/check accepts arbitrary body, purpose unclear.
+evidence_needed: authenticated session trace or anonymous POST returning customer-scoped data
+verify_steps: HUMAN — registered order/quote session; anonymous POST /api/apc/check empty body
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH
+testability: HUMAN_ONLY
+[HYP] portal-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 55
+reasoning: ACAO:* without ACAC:true on portal proxies; POST+Authorization accepted from any origin (preflight 200); standalone impact requires prior Bearer theft via voip CORS chain.
+evidence_needed: proxy target backend + Bearer format acceptance from stolen token
+verify_steps: HUMAN — portal JS network capture for Bearer format; cross-origin POST with stolen bearer
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary)
+testability: HUMAN_ONLY

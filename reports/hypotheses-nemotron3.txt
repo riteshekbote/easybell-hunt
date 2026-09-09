@@ -1,4 +1,5 @@
-## 2026-09-09 20:01:18 UTC [target] (model nemotron3)
+## 2026-09-09 22:25:29 UTC [target] (model nemotron3)
+[CHANGED] voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 3rd time at 2026-09-09 04:53:30 UTC (OPTIONS /api/account → ACAO:evil-origin + ACAC:true + Allow-Methods:PUT) — finding persists ~4 days post-discovery, ~53h post-triage-VALID
 [PRIO] voip-management.easybell.de/api,9.2,attack_surface:10+business_value:9+tech_exposure:10+gate_ease:7+cloud_surface:7+freshness:10
 [PRIO] my.easybell.com,7.8,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:4+cloud_surface:6+freshness:8
 [PRIO] order-form.easybell.de/api,7.0,attack_surface:8+business_value:8+tech_exposure:7+gate_ease:9+cloud_surface:4+freshness:8
@@ -8,15 +9,7 @@ asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|
 confidence: 92
 reasoning: OPTIONS preflights on all 7 Spring routes return ACAO:<arbitrary-origin> + ACAC:true + Allow-Methods:POST,PUT + Allow-Headers:authorization,content-type; HTTP Basic realm "sipwisebroker" auto-attaches cached creds with credentials:'include'; read exfil confirmed on all 7 endpoints; live reconfirmed 3× (22:16:53 09-08, 04:53:30 09-09, 13:12 09-05)
 evidence_needed: HUMAN victim-browser PoC demonstrating cross-origin PUT/POST execution with cached Basic creds or Bearer voipSession token
-verify_steps: PASSIVE done (preflight-only, empty 200 OK, no mutation); full chain = HUMAN browser session with authenticated portal user visiting attacker origin
-impact: Cross-origin write/read of victim VoIP telephony config (accounts, numbers, subscribers, call-forwardings, voicemail, trusted-IPs, session) → HIGH/CRITICAL
-testability: HUMAN_ONLY
-[HYP] my-portal-api-proxy-wildcard
-class: MISCONFIG
-asset: my.easybell.com/api/{crm,ebit,strapi}
-confidence: 78
-reasoning: Three internal portal proxy endpoints return ACAO:* on redirect responses and OPTIONS preflight with POST+Authorization+Content-Type allowed from any origin; wildcard without ACAC:true means cookies NOT sent cross-origin, BUT portal uses Bearer tokens (voipSession) via JS for voip-management; if attacker exfiltrates Bearer token (via voip CORS or XSS), wildcard on portal proxies allows exfiltration of CRM/EBIT/Strapi data; Strapi CMS proxy confirmed
-evidence_needed: Confirm what /api/crm, /api/ebit, /api/strapi proxy to when authenticated; confirm whether Bearer token (voipSession) is accepted by these endpoints; confirm data sensitivity
+verify_steps: PASSIVE done (preflight-only, empty 200 OK, no mutation); full chain = HUMAN br[0m
 verify_steps: HUMAN — with creds, observe portal JS network calls to /api/crm, /api/ebit, /api/strapi; capture request/response to determine if Bearer token is used and what data returned; test cross-origin fetch with captured Bearer token
 impact: CRM/EBIT/Strapi data leakage via cross-origin requests → MEDIUM/HIGH (depends on data sensitivity)
 testability: AUTH_HELPED

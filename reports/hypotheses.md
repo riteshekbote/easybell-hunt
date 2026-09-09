@@ -681,3 +681,13 @@
 - LEARN: REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
 - LEARN: REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
 - LEARN: NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable
+
+## RANKED HYPOTHESES 2026-09-09 22:25:39 UTC
+- [92] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu NOW (finding reconfirmed live 2026-09-09 04:53:30 UTC — 3rd independent capture). Title: "
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 04:53:30 UTC 09-09 — 3rd independent capture proving persist
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 2026-09-08 22:16:53 UTC on /api/account (ACAO evil-origin + 
+- LEARN: REJECTED MISCONFIG @ login.easybell.de: `?redirect=&next=&url=` not echoed; 302 → /login sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.
+- LEARN: REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
+- LEARN: REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
+- LEARN: NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable
