@@ -321,3 +321,5 @@ www.easybell.de
 - CHANGED connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
 - CHANGED connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
 - CHANGED login.easybell.de: `?redirect=&next=&url=` not echoed in 302; sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.com); no open redirect/OAuth code-theft — line closed cleanly
+
+## 2026-09-09 17:31:12 UTC

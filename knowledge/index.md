@@ -138,3 +138,4 @@
 - 2026-09-09 REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
 - 2026-09-09 NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable
 - 2026-09-09 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 04:53:30 UTC 09-09 — 3rd independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~4 days post-discovery, ~53h post-triage-VALID.
+- 2026-09-09 NO_DELTA — no new passive probes since 04:53:30 UTC 09-09; inventory + KB unchanged; all passive lines closed; filing latency is the only rising program risk.

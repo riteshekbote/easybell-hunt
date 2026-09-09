@@ -10491,3 +10491,130 @@ testability: HUMAN_ONLY
 [NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu NOW
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 04:53:30 UTC 09-09 — 3rd independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~4 days post-discovery, ~53h post-triage-VALID.
 [RISK] easybell: **85** — Sole unique unfiled HIGH/CRITICAL finding; 53h+ filing latency is the only rising risk; discovery phase complete; all passive lines closed; report submission is the bottleneck.
+===== ANALYST bigpickle 2026-09-09 17:31:12 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m• [0mScan project repo structure[90m Explore Agent[0m
+[0m✓ [0mScan project repo structure[90m Explore Agent[0m
+[0m→ [0mRead reports/valid-bugs.md
+[0m→ [0mRead leads/lead-bigpickle.md
+[0m→ [0mRead knowledge/index.md
+[0m→ [0mRead scope.yml
+Now I have the full picture. Here is my 8-step analysis:
+
+---
+
+## STEP 1 — DELTA
+
+**NO_DELTA** — no new live probes since 2026-09-09 04:53:30 UTC (~9h ago); inventory + KB unchanged; all passive lines closed; filing latency now ~54h post-triage-VALID.
+
+---
+
+## STEP 2 — PRIORITIZE
+
+```
+[PRIO] voip-management.easybell.de/api,9.2,attack_surface:9+business_value:9+tech_exposure:8+gate_ease:7+cloud_surface:6+freshness:9
+[PRIO] my.easybell.com/api,5.0,attack_surface:6+business_value:7+tech_exposure:6+gate_ease:4+cloud_surface:4+freshness:3
+[PRIO] order-form.easybell.de/api,4.5,attack_surface:5+business_value:5+tech_exposure:5+gate_ease:7+cloud_surface:4+freshness:3
+```
+
+---
+
+## STEP 3 — HYPOTHESES
+
+```
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 92
+reasoning: OPTIONS /api/account 04:53:30 UTC 09-09 echoes ACAO: https://evil.example.at + ACAC: true + Allow-Methods: PUT + Allow-Headers: authorization,content-type; matches 09-04/09-05/09-08/09-09 captures; auth = HTTP Basic realm sipwisebroker + Bearer voipSession; triage VALID 19:19:02 UTC 09-06; 3rd independent reconfirmation. CORS preflight authorizes credentialed cross-origin WRITE on all 7 Spring routes.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu only
+verify_steps: PASSIVE done (OPTIONS above); live chain = HUMAN browser with cached Basic creds -> fetch({method:'PUT',credentials:'include'}) -> preflight passes -> WRITE executes + response readable via ACAC:true
+impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) without victim awareness -> HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] order-form-anonymous-api
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps full anonymous API; GET tariff catalog 200; contract-summary 404 pre-session; mutations session-gated; POST /api/apc/check POST-only accepts arbitrary body, purpose unclear.
+evidence_needed: authenticated session trace or anonymous POST returning customer-scoped data
+verify_steps: HUMAN — registered order/quote session; anonymous POST /api/apc/check empty body
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH
+testability: HUMAN_ONLY
+[HYP] portal-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 55
+reasoning: ACAO:* without ACAC:true on portal proxies; POST+Authorization accepted from any origin (preflight 200); standalone impact requires prior Bearer theft via voip CORS chain.
+evidence_needed: proxy target backend + Bearer format acceptance from stolen token
+verify_steps: HUMAN — portal JS network capture for Bearer format; cross-origin POST with stolen bearer
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary)
+testability: HUMAN_ONLY
+```
+
+---
+
+## STEP 4 — SELF-CRITIQUE
+
+```
+[PARKED] order-form-anonymous-api: confidence 50, all high-value paths session-gated, no passive escalation possible → parked until authenticated session available.
+[PARKED] portal-proxy-wildcard: confidence 55, depends on voip CORS chain completing first → parked until flagship filed + exploited.
+[FINAL] voip-cors-cred-read-write: confidence 92, triage VALID, evidence complete, 3x reconfirmed. Ready for immediate filing.
+```
+
+---
+
+## STEP 5 — NEXT ACTION
+
+```
+[NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu NOW
+```
+
+**Report template (ready for copy-paste):**
+
+| Field | Value |
+|---|---|
+| **Title** | Credentialed CORS Misconfiguration Enables Cross-Origin Read+Write of Customer VoIP Data |
+| **Severity** | HIGH |
+| **Asset** | `voip-management.easybell.de/api` |
+| **Affected routes** | `/api/account`, `/api/accounts`, `/api/subscriber`, `/api/subscribers`, `/api/number`, `/api/numbers`, `/api/session` (all 7 Spring-handled routes) |
+| **Summary** | All 7 Spring-handled API routes behind `voip-management.easybell.de` return `Access-Control-Allow-Origin: <arbitrary attacker-controlled origin>` with `Access-Control-Allow-Credentials: true` on both preflight OPTIONS and actual requests. Preflight also echoes any requested method (`PUT`, `POST` verified) and `authorization,content-type` headers. This allows any malicious website to make credentialed cross-origin requests on behalf of an authenticated user's browser, reading and writing customer VoIP account/number/subscriber configuration data without the user's knowledge. |
+| **PoC** | See OPTIONS capture below |
+| **Impact** | An attacker-controlled page can: (1) **read** full VoIP account/number/subscriber data via GET with `credentials:'include'`, (2) **modify** VoIP configuration via PUT/POST with `credentials:'include'` — all without any user interaction beyond visiting the attacker page while holding cached Basic auth or a voipSession token. |
+| **Remediation** | Set `Access-Control-Allow-Origin` to a strict allowlist (e.g., only `https://my.easybell.com`), and remove `Access-Control-Allow-Credentials: true` unless credentialed cross-origin access is explicitly required. |
+
+**Evidence — OPTIONS preflight capture (2026-09-09 04:53:30 UTC):**
+
+```
+OPTIONS /api/account HTTP/1.1
+Host: voip-management.easybell.de
+Origin: https://evil.example.at
+Access-Control-Request-Method: PUT
+Access-Control-Request-Headers: authorization,content-type
+
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: https://evil.example.at
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Methods: PUT
+Access-Control-Allow-Headers: authorization,content-type
+```
+
+Reconfirmed 3× independent captures: 2026-09-04, 2026-09-08 22:16:53 UTC, 2026-09-09 04:53:30 UTC.
+
+---
+
+## STEP 6 — LEARNING
+
+```
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 04:53:30 UTC 09-09 — 3rd independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~4 days post-discovery, ~53h post-triage-VALID.
+[LEARN] NO_DELTA — no new passive probes since 04:53:30 UTC 09-09; inventory + KB unchanged; all passive lines closed; filing latency is the only rising program risk.
+```
+
+---
+
+## STEP 7 — RISK
+
+```
+[RISK] easybell: 85 — Sole unique unfiled HIGH/CRITICAL finding; ~54h filing latency is the only rising program risk; discovery phase complete; all passive lines closed; report submission is the bottleneck. Risk does NOT decrease until report is filed.
+```
