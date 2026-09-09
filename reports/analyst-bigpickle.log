@@ -9729,3 +9729,526 @@ STEP 6 — LEARNING:
 STEP 7 — RISK:
 - [RISK] easybell: 80
 reasoning: Unchanged from 22:18. Fresh 22:16:53 UTC reconfirm proves the validated HIGH remains exploitable while unfiled (~51h since triage VALID). Discovery phase complete — every passive line closed. Sole and rising risk = submission latency on the flagship finding; each unfilled hour raises fix-probability. Compliance unchanged: OPTIONS/GET only, spaced single requests, no auth/mutating/customer/financial data, brute-force/lockout excluded, sha256 discipline, report via bugs.olivermaicher.eu only.
+===== ANALYST bigpickle 2026-09-09 04:56:38 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mdate -u '+%Y-%m-%d %H:%M:%S UTC' && ls -la && ls -la art 2>/dev/null; ls -la inventory 2>/dev/null; ls -la *.yml *.md 2>/dev/null
+2026-09-09 04:53:00 UTC
+total 260
+drwxr-xr-x 12 runner runner  4096 Sep  9 04:52 .
+drwxr-xr-x  3 runner runner  4096 Sep  9 04:52 ..
+drwxr-xr-x  7 runner runner  4096 Sep  9 04:52 .git
+drwxr-xr-x  3 runner runner  4096 Sep  9 04:52 .github
+-rw-r--r--  1 runner runner  1756 Sep  9 04:52 README.md
+-rw-r--r--  1 runner runner    32 Sep  9 04:52 analyst-out.txt
+-rw-r--r--  1 runner runner 84561 Sep  9 04:52 analyst-prompt.txt
+-rw-r--r--  1 runner runner 80754 Sep  9 04:52 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 inventory
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 leads
+-rw-r--r--  1 runner runner  9864 Sep  9 04:52 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 reports
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep  9 04:52 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 scripts
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 triage
+total 44
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner  4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner 36333 Sep  9 04:52 easybell.md
+-rw-r--r-- 1 runner runner 1756 Sep  9 04:52 README.md
+-rw-r--r-- 1 runner runner 9864 Sep  9 04:52 probe-results.md
+-rw-r--r-- 1 runner runner 3220 Sep  9 04:52 scope.yml
+[0m
+[0m$ [0mcat state_bigpickle.json state_nemotron3.json 2>/dev/null; echo ---; ls -la leads knowledge triage reports; echo ---; tail -c 2000 analyst-out.txt
+{"phase": "POC", "target": "api"}{"phase": "POC", "target": "api"}---
+knowledge:
+total 40
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner  4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner 30136 Sep  9 04:52 index.md
+
+leads:
+total 560
+drwxr-xr-x  2 runner runner   4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner   4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner 218685 Sep  9 04:52 lead-bigpickle.md
+-rw-r--r--  1 runner runner   2091 Sep  9 04:52 lead-laguna.md
+-rw-r--r--  1 runner runner   2050 Sep  9 04:52 lead-ling3.md
+-rw-r--r--  1 runner runner   2132 Sep  9 04:52 lead-longcat.md
+-rw-r--r--  1 runner runner     18 Sep  9 04:52 lead-mimo.md
+-rw-r--r--  1 runner runner 318699 Sep  9 04:52 lead-nemotron3.md
+-rw-r--r--  1 runner runner   6079 Sep  9 04:52 reposcan-easybell.md
+
+reports:
+total 1456
+drwxr-xr-x  2 runner runner   4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner   4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner 854572 Sep  9 04:52 analyst-bigpickle.log
+-rw-r--r--  1 runner runner   8897 Sep  9 04:52 analyst-laguna.log
+-rw-r--r--  1 runner runner   8856 Sep  9 04:52 analyst-ling3.log
+-rw-r--r--  1 runner runner   8938 Sep  9 04:52 analyst-longcat.log
+-rw-r--r--  1 runner runner 507373 Sep  9 04:52 analyst-nemotron3.log
+-rw-r--r--  1 runner runner   2577 Sep  9 04:52 hypotheses-bigpickle.txt
+-rw-r--r--  1 runner runner     51 Sep  9 04:52 hypotheses-laguna.txt
+-rw-r--r--  1 runner runner     50 Sep  9 04:52 hypotheses-ling3.txt
+-rw-r--r--  1 runner runner     52 Sep  9 04:52 hypotheses-longcat.txt
+-rw-r--r--  1 runner runner   7917 Sep  9 04:52 hypotheses-nemotron3.txt
+-rw-r--r--  1 runner runner  85654 Sep  9 04:52 hypotheses.md
+-rw-r--r--  1 runner runner   1005 Sep  9 04:52 valid-bugs.md
+
+triage:
+total 196
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner  4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner     0 Sep  9 04:52 .gitkeep
+-rw-r--r--  1 runner runner   851 Sep  9 04:52 run-2026-09-02-21-59.md
+-rw-r--r--  1 runner runner   184 Sep  9 04:52 run-2026-09-03-00-06.md
+-rw-r--r--  1 runner runner   290 Sep  9 04:52 run-2026-09-03-04-45.md
+-rw-r--r--  1 runner runner   538 Sep  9 04:52 run-2026-09-03-09-37.md
+-rw-r--r--  1 runner runner  1027 Sep  9 04:52 run-2026-09-03-13-56.md
+-rw-r--r--  1 runner runner  1473 Sep  9 04:52 run-2026-09-03-17-47.md
+-rw-r--r--  1 runner runner   173 Sep  9 04:52 run-2026-09-03-20-54.md
+-rw-r--r--  1 runner runner   250 Sep  9 04:52 run-2026-09-03-23-11.md
+-rw-r--r--  1 runner runner   263 Sep  9 04:52 run-2026-09-04-01-05.md
+-rw-r--r--  1 runner runner   157 Sep  9 04:52 run-2026-09-04-06-02.md
+-rw-r--r--  1 runner runner   153 Sep  9 04:52 run-2026-09-04-11-29.md
+-rw-r--r--  1 runner runner   208 Sep  9 04:52 run-2026-09-04-15-06.md
+-rw-r--r--  1 runner runner   319 Sep  9 04:52 run-2026-09-04-18-29.md
+-rw-r--r--  1 runner runner   195 Sep  9 04:52 run-2026-09-04-21-03.md
+-rw-r--r--  1 runner runner   478 Sep  9 04:52 run-2026-09-04-23-05.md
+-rw-r--r--  1 runner runner   168 Sep  9 04:52 run-2026-09-05-01-06.md
+-rw-r--r--  1 runner runner 11550 Sep  9 04:52 run-2026-09-05-05-54.md
+-rw-r--r--  1 runner runner   225 Sep  9 04:52 run-2026-09-05-10-27.md
+-rw-r--r--  1 runner runner   143 Sep  9 04:52 run-2026-09-05-13-32.md
+-rw-r--r--  1 runner runner   273 Sep  9 04:52 run-2026-09-05-16-16.md
+-rw-r--r--  1 runner runner   154 Sep  9 04:52 run-2026-09-05-18-25.md
+-rw-r--r--  1 runner runner   157 Sep  9 04:52 run-2026-09-05-20-44.md
+-rw-r--r--  1 runner runner   189 Sep  9 04:52 run-2026-09-05-22-46.md
+-rw-r--r--  1 runner runner   280 Sep  9 04:52 run-2026-09-06-00-48.md
+-rw-r--r--  1 runner runner   263 Sep  9 04:52 run-2026-09-06-05-45.md
+-rw-r--r--  1 runner runner   200 Sep  9 04:52 run-2026-09-06-10-46.md
+-rw-r--r--  1 runner runner   237 Sep  9 04:52 run-2026-09-06-14-05.md
+-rw-r--r--  1 runner runner  7735 Sep  9 04:52 run-2026-09-06-17-09.md
+-rw-r--r--  1 runner runner  1818 Sep  9 04:52 run-2026-09-06-19-19.md
+-rw-r--r--  1 runner runner   426 Sep  9 04:52 run-2026-09-06-21-30.md
+-rw-r--r--  1 runner runner   177 Sep  9 04:52 run-2026-09-06-23-09.md
+-rw-r--r--  1 runner runner   141 Sep  9 04:52 run-2026-09-07-01-07.md
+-rw-r--r--  1 runner runner   184 Sep  9 04:52 run-2026-09-07-06-12.md
+-rw-r--r--  1 runner runner   186 Sep  9 04:52 run-2026-09-07-12-47.md
+-rw-r--r--  1 runner runner   193 Sep  9 04:52 run-2026-09-07-18-12.md
+-rw-r--r--  1 runner runner   151 Sep  9 04:52 run-2026-09-07-21-36.md
+-rw-r--r--  1 runner runner   186 Sep  9 04:52 run-2026-09-07-23-47.md
+-rw-r--r--  1 runner runner   282 Sep  9 04:52 run-2026-09-08-04-19.md
+-rw-r--r--  1 runner runner   975 Sep  9 04:52 run-2026-09-08-08-57.md
+-rw-r--r--  1 runner runner   143 Sep  9 04:52 run-2026-09-08-13-30.md
+-rw-r--r--  1 runner runner   210 Sep  9 04:52 run-2026-09-08-17-32.md
+-rw-r--r--  1 runner runner   268 Sep  9 04:52 run-2026-09-08-20-19.md
+-rw-r--r--  1 runner runner   178 Sep  9 04:52 run-2026-09-08-22-47.md
+-rw-r--r--  1 runner runner   208 Sep  9 04:52 run-2026-09-09-01-10.md
+---
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mdate -u '+%Y-%m-%d %H:%M:%S UTC' && ls -la && ls -la art 2>/dev/null; ls -la inventory 2>/dev/null; ls -la *.yml *.md 2>/dev/null
+2026-09-09 04:53:00 UTC
+total 260
+drwxr-xr-x 12 runner runner  4096 Sep  9 04:52 .
+drwxr-xr-x  3 runner runner  4096 Sep  9 04:52 ..
+drwxr-xr-x  7 runner runner  4096 Sep  9 04:52 .git
+drwxr-xr-x  3 runner runner  4096 Sep  9 04:52 .github
+-rw-r--r--  1 runner runner  1756 Sep  9 04:52 README.md
+-rw-r--r--  1 runner runner    32 Sep  9 04:52 analyst-out.txt
+-rw-r--r--  1 runner runner 84561 Sep  9 04:52 analyst-prompt.txt
+-rw-r--r--  1 runner runner 80754 Sep  9 04:52 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 inventory
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 leads
+-rw-r--r--  1 runner runner  9864 Sep  9 04:52 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 reports
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep  9 04:52 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 scripts
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 triage
+total 44
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner  4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner 36333 Sep  9 04:52 easybell.md
+-rw-r--r-- 1 runner runner 1756 Sep  9 04:52 README.md
+-rw-r--r-- 1 runner runner 9864 Sep  9 04:52 probe-results.md
+-rw-r--r-- 1 runner runner 3220 Sep  9 04:52 scope.yml
+[0m
+[0m
+[0m$ [0mcat triage/run-2026-09-09-01-10.md triage/run-2026-09-08-22-47.md 2>/dev/null; echo ===VALID===; cat reports/valid-bugs.md; echo ===HYP===; cat reports/hypotheses-bigpickle.txt; echo ===OUT===; cat analyst-out.txt
+===== TRIAGE 2026-09-09 01:10:33 UTC =====
+[0m
+> build · mimo-v2.5-free
+[0m
+The `LEADS:` section is empty. There are no leads to evaluate.
+
+Please provide the probe results / leads you want me to triage.
+
+===== TRIAGE 2026-09-08 22:47:51 UTC =====
+[0m
+> build · mimo-v2.5-free
+[0m
+No leads provided. Please paste the probe results you want validated against the 7-Question Gate.
+===VALID===
+# Validated findings (running count 0)
+
+- 3 lead(s) marked VALID at 2026-09-05 05:54:14 UTC
+  - | Q5 | Novel/unreported? | Likely novel for this program (valid-bugs.md is empty, no prior report) |
+  - **Verdict: VALID**
+  - | 1 | voip-cors-cred-exfil-v3 | **VALID** | Report to bugs.olivermaicher.eu |
+
+- 3 lead(s) marked VALID at 2026-09-06 17:09:59 UTC
+  - ### Verdict: **VALID**
+  - | voip-cors-cred-exfil-v3 | **VALID** | Credentialed CORS + ACAC:true on 7 authenticated API routes — HIGH impact, provable via OPTIONS |
+  - | my-portal-api-proxy-wildcard | **HOLD** | Standalone wildcard CORS without ACAC:true is informational; only valid as chain amplifier |
+
+- 2 lead(s) marked VALID at 2026-09-06 19:19:02 UTC
+  - | voip-cors-cred-exfil-v3 | **VALID** | Credentialed CORS + ACAC:true on 7 authenticated API routes — HIGH impact, provable via OPTIONS |
+  - | my-portal-api-proxy-wildcard | **HOLD** | Standalone wildcard CORS without ACAC:true is informational; only valid as chain amplifier |
+===HYP===
+## 2026-09-09 00:19:28 UTC [target] (model bigpickle)
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 92
+reasoning: OPTIONS /api/account 22:16:53 UTC 09-08 echo `ACAO: https://evil.example.at` + `ACAC: true` + `Allow-Methods: PUT` + `Allow-Headers: authorization,content-type`; matches 09-04/09-05 captures; auth = HTTP Basic realm sipwisebroker + Bearer voipSession; triage VALID 19:19:02 UTC 09-06.
+evidence_needed: only filed-report acceptance at bugs.olivermaicher.eu — evidence collection complete.
+verify_steps: PASSIVE done (fresh OPTIONS capture on file); live chain = HUMAN browser with cached Basic creds -> fetch({method:'PUT',credentials:'include'}) -> preflight passes -> WRITE executes + response readable via ACAC:true.
+impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) without victim awareness -> HIGH/CRITICAL.
+testability: HUMAN_ONLY
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps full anonymous API; GET tariff catalog 200; contract-summary 404 pre-session; mutations session-gated; POST /api/apc/check POST-only accepts arbitrary body, purpose unclear.
+evidence_needed: authenticated session trace or anonymous POST returning customer-scoped data.
+verify_steps: HUMAN — registered order/quote session; anonymous POST /api/apc/check empty body.
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH.
+testability: HUMAN_ONLY
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 55
+reasoning: ACAO:* without ACAC:true on portal proxies; POST+Authorization accepted from any origin (preflight 200); standalone impact requires prior Bearer theft via voip CORS chain.
+evidence_needed: proxy target backend + Bearer format acceptance from stolen token.
+verify_steps: HUMAN — portal JS network capture for Bearer format; cross-origin POST with stolen bearer.
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary).
+testability: HUMAN_ONLY
+reasoning: Unchanged from 22:18. Fresh 22:16:53 UTC reconfirm proves the validated HIGH remains exploitable while unfiled (~51h since triage VALID). Discovery phase complete — every passive line closed. Sole and rising risk = submission latency on the flagship finding; each unfilled hour raises fix-probability. Compliance unchanged: OPTIONS/GET only, spaced single requests, no auth/mutating/customer/financial data, brute-force/lockout excluded, sha256 discipline, report via bugs.olivermaicher.eu only.
+===OUT===
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mdate -u '+%Y-%m-%d %H:%M:%S UTC' && ls -la && ls -la art 2>/dev/null; ls -la inventory 2>/dev/null; ls -la *.yml *.md 2>/dev/null
+2026-09-09 04:53:00 UTC
+total 260
+drwxr-xr-x 12 runner runner  4096 Sep  9 04:52 .
+drwxr-xr-x  3 runner runner  4096 Sep  9 04:52 ..
+drwxr-xr-x  7 runner runner  4096 Sep  9 04:52 .git
+drwxr-xr-x  3 runner runner  4096 Sep  9 04:52 .github
+-rw-r--r--  1 runner runner  1756 Sep  9 04:52 README.md
+-rw-r--r--  1 runner runner    32 Sep  9 04:52 analyst-out.txt
+-rw-r--r--  1 runner runner 84561 Sep  9 04:52 analyst-prompt.txt
+-rw-r--r--  1 runner runner 80754 Sep  9 04:52 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 inventory
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 leads
+-rw-r--r--  1 runner runner  9864 Sep  9 04:52 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 reports
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep  9 04:52 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 scripts
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 triage
+total 44
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner  4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner 36333 Sep  9 04:52 easybell.md
+-rw-r--r-- 1 runner runner 1756 Sep  9 04:52 README.md
+-rw-r--r-- 1 runner runner 9864 Sep  9 04:52 probe-results.md
+-rw-r--r-- 1 runner runner 3220 Sep  9 04:52 scope.yml
+[0m
+[0m$ [0mcat state_bigpickle.json state_nemotron3.json 2>/dev/null; echo ---; ls -la leads knowledge triage reports; echo ---; tail -c 2000 analyst-out.txt
+{"phase": "POC", "target": "api"}{"phase": "POC", "target": "api"}---
+knowledge:
+total 40
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner  4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner 30136 Sep  9 04:52 index.md
+
+leads:
+total 560
+drwxr-xr-x  2 runner runner   4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner   4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner 218685 Sep  9 04:52 lead-bigpickle.md
+-rw-r--r--  1 runner runner   2091 Sep  9 04:52 lead-laguna.md
+-rw-r--r--  1 runner runner   2050 Sep  9 04:52 lead-ling3.md
+-rw-r--r--  1 runner runner   2132 Sep  9 04:52 lead-longcat.md
+-rw-r--r--  1 runner runner     18 Sep  9 04:52 lead-mimo.md
+-rw-r--r--  1 runner runner 318699 Sep  9 04:52 lead-nemotron3.md
+-rw-r--r--  1 runner runner   6079 Sep  9 04:52 reposcan-easybell.md
+
+reports:
+total 1456
+drwxr-xr-x  2 runner runner   4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner   4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner 854572 Sep  9 04:52 analyst-bigpickle.log
+-rw-r--r--  1 runner runner   8897 Sep  9 04:52 analyst-laguna.log
+-rw-r--r--  1 runner runner   8856 Sep  9 04:52 analyst-ling3.log
+-rw-r--r--  1 runner runner   8938 Sep  9 04:52 analyst-longcat.log
+-rw-r--r--  1 runner runner 507373 Sep  9 04:52 analyst-nemotron3.log
+-rw-r--r--  1 runner runner   2577 Sep  9 04:52 hypotheses-bigpickle.txt
+-rw-r--r--  1 runner runner     51 Sep  9 04:52 hypotheses-laguna.txt
+-rw-r--r--  1 runner runner     50 Sep  9 04:52 hypotheses-ling3.txt
+-rw-r--r--  1 runner runner     52 Sep  9 04:52 hypotheses-longcat.txt
+-rw-r--r--  1 runner runner   7917 Sep  9 04:52 hypotheses-nemotron3.txt
+-rw-r--r--  1 runner runner  85654 Sep  9 04:52 hypotheses.md
+-rw-r--r--  1 runner runner   1005 Sep  9 04:52 valid-bugs.md
+
+triage:
+total 196
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner  4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner     0 Sep  9 04:52 .gitkeep
+-rw-r--r--  1 runner runner   851 Sep  9 04:52 run-2026-09-02-21-59.md
+-rw-r--r--  1 runner runner   184 Sep  9 04:52 run-2026-09-03-00-06.md
+-rw-r--r--  1 runner runner   290 Sep  9 04:52 run-2026-09-03-04-45.md
+-rw-r--r--  1 runner runner   538 Sep  9 04:52 run-2026-09-03-09-37.md
+-rw-r--r--  1 runner runner  1027 Sep  9 04:52 run-2026-09-03-13-56.md
+-rw-r--r--  1 runner runner  1473 Sep  9 04:52 run-2026-09-03-17-47.md
+-rw-r--r--  1 runner runner   173 Sep  9 04:52 run-2026-09-03-20-54.md
+-rw-r--r--  1 runner runner   250 Sep  9 04:52 run-2026-09-03-23-11.md
+-rw-r--r--  1 runner runner   263 Sep  9 04:52 run-2026-09-04-01-05.md
+-rw-r--r--  1 runner runner   157 Sep  9 04:52 run-2026-09-04-06-02.md
+-rw-r--r--  1 runner runner   153 Sep  9 04:52 run-2026-09-04-11-29.md
+-rw-r--r--  1 runner runner   208 Sep  9 04:52 run-2026-09-04-15-06.md
+-rw-r--r--  1 runner runner   319 Sep  9 04:52 run-2026-09-04-18-29.md
+-rw-r--r--  1 runner runner   195 Sep  9 04:52 run-2026-09-04-21-03.md
+-rw-r--r--  1 runner runner   478 Sep  9 04:52 run-2026-09-04-23-05.md
+-rw-r--r--  1 runner runner   168 Sep  9 04:52 run-2026-09-05-01-06.md
+-rw-r--r--  1 runner runner 11550 Sep  9 04:52 run-2026-09-05-05-54.md
+-rw-r--r--  1 runner runner   225 Sep  9 04:52 run-2026-09-05-10-27.md
+-rw-r--r--  1 runner runner   143 Sep  9 04:52 run-2026-09-05-13-32.md
+-rw-r--r--  1 runner runner   273 Sep  9 04:52 run-2026-09-05-16-16.md
+-rw-r--r--  1 runner runner   154 Sep  9 04:52 run-2026-09-05-18-25.md
+-rw-r--r--  1 runner runner   157 Sep  9 04:52 run-2026-09-05-20-44.md
+-rw-r--r--  1 runner runner   189 Sep  9 04:52 run-2026-09-05-22-46.md
+-rw-r--r--  1 runner runner   280 Sep  9 04:52 run-2026-09-06-00-48.md
+-rw-r--r--  1 runner runner   263 Sep  9 04:52 run-2026-09-06-05-45.md
+-rw-r--r--  1 runner runner   200 Sep  9 04:52 run-2026-09-06-10-46.md
+-rw-r--r--  1 runner runner   237 Sep  9 04:52 run-2026-09-06-14-05.md
+-rw-r--r--  1 runner runner  7735 Sep  9 04:52 run-2026-09-06-17-09.md
+-rw-r--r--  1 runner runner  1818 Sep  9 04:52 run-2026-09-06-19-19.md
+-rw-r--r--  1 runner runner   426 Sep  9 04:52 run-2026-09-06-21-30.md
+-rw-r--r--  1 runner runner   177 Sep  9 04:52 run-2026-09-06-23-09.md
+-rw-r--r--  1 runner runner   141 Sep  9 04:52 run-2026-09-07-01-07.md
+-rw-r--r--  1 runner runner   184 Sep  9 04:52 run-2026-09-07-06-12.md
+-rw-r--r--  1 runner runner   186 Sep  9 04:52 run-2026-09-07-12-47.md
+-rw-r--r--  1 runner runner   193 Sep  9 04:52 run-2026-09-07-18-12.md
+-rw-r--r--  1 runner runner   151 Sep  9 04:52 run-2026-09-07-21-36.md
+-rw-r--r--  1 runner runner   186 Sep  9 04:52 run-2026-09-07-23-47.md
+-rw-r--r--  1 runner runner   282 Sep  9 04:52 run-2026-09-08-04-19.md
+-rw-r--r--  1 runner runner   975 Sep  9 04:52 run-2026-09-08-08-57.md
+-rw-r--r--  1 runner runner   143 Sep  9 04:52 run-2026-09-08-13-30.md
+-rw-r--r--  1 runner runner   210 Sep  9 04:52 run-2026-09-08-17-32.md
+-rw-r--r--  1 runner runner   268 Sep  9 04:52 run-2026-09-08-20-19.md
+-rw-r--r--  1 runner runner   178 Sep  9 04:52 run-2026-09-08-22-47.md
+-rw-r--r--  1 runner runner   208 Sep  9 04:52 run-2026-09-09-01-10.md
+---
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mdate -u '+%Y-%m-%d %H:%M:%S UTC' && ls -la && ls -la art 2>/dev/null; ls -la inventory 2>/dev/null; ls -la *.yml *.md 2>/dev/null
+2026-09-09 04:53:00 UTC
+total 260
+drwxr-xr-x 12 runner runner  4096 Sep  9 04:52 .
+drwxr-xr-x  3 runner runner  4096 Sep  9 04:52 ..
+drwxr-xr-x  7 runner runner  4096 Sep  9 04:52 .git
+drwxr-xr-x  3 runner runner  4096 Sep  9 04:52 .github
+-rw-r--r--  1 runner runner  1756 Sep  9 04:52 README.md
+-rw-r--r--  1 runner runner    32 Sep  9 04:52 analyst-out.txt
+-rw-r--r--  1 runner runner 84561 Sep  9 04:52 analyst-prompt.txt
+-rw-r--r--  1 runner runner 80754 Sep  9 04:52 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 inventory
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 leads
+-rw-r--r--  1 runner runner  9864 Sep  9 04:52 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 reports
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep  9 04:52 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 scripts
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep  9 04:52 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 triage
+total 44
+drwxr-xr-x  2 runner runner  4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner  4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner 36333 Sep  9 04:52 easybell.md
+-rw-r--r-- 1 runner runner 1756 Sep  9 04:52 README.md
+-rw-r--r-- 1 runner runner 9864 Sep  9 04:52 probe-results.md
+-rw-r--r-- 1 runner runner 3220 Sep  9 04:52 scope.yml
+[0m
+[0m
+[0m
+[0m$ [0mgit log --oneline -5 2>/dev/null; echo ---; ls -la reports/ | cat; echo ---; grep -c "bugs.olivermaicher.eu" reports/hypotheses*.txt 2>/dev/null; echo ---; head -40 probe-results.md
+e8032ab reposcan 2026-09-09-01-11
+---
+total 1456
+drwxr-xr-x  2 runner runner   4096 Sep  9 04:52 .
+drwxr-xr-x 12 runner runner   4096 Sep  9 04:52 ..
+-rw-r--r--  1 runner runner 854572 Sep  9 04:52 analyst-bigpickle.log
+-rw-r--r--  1 runner runner   8897 Sep  9 04:52 analyst-laguna.log
+-rw-r--r--  1 runner runner   8856 Sep  9 04:52 analyst-ling3.log
+-rw-r--r--  1 runner runner   8938 Sep  9 04:52 analyst-longcat.log
+-rw-r--r--  1 runner runner 507373 Sep  9 04:52 analyst-nemotron3.log
+-rw-r--r--  1 runner runner   2577 Sep  9 04:52 hypotheses-bigpickle.txt
+-rw-r--r--  1 runner runner     51 Sep  9 04:52 hypotheses-laguna.txt
+-rw-r--r--  1 runner runner     50 Sep  9 04:52 hypotheses-ling3.txt
+-rw-r--r--  1 runner runner     52 Sep  9 04:52 hypotheses-longcat.txt
+-rw-r--r--  1 runner runner   7917 Sep  9 04:52 hypotheses-nemotron3.txt
+-rw-r--r--  1 runner runner  85654 Sep  9 04:52 hypotheses.md
+-rw-r--r--  1 runner runner   1005 Sep  9 04:52 valid-bugs.md
+---
+reports/hypotheses-bigpickle.txt:2
+reports/hypotheses-laguna.txt:0
+reports/hypotheses-ling3.txt:0
+reports/hypotheses-longcat.txt:0
+reports/hypotheses-nemotron3.txt:2
+---
+
+## 2026-09-02 21:54:05 UTC
+
+
+## 2026-09-02 23:47:09 UTC
+
+
+## 2026-09-03 02:32:15 UTC
+
+
+## 2026-09-03 07:23:53 UTC
+
+
+## 2026-09-03 12:16:38 UTC
+
+
+## 2026-09-03 16:50:49 UTC
+https://dev.easybell.de/ -> ERR <urlopen error timed out>
+https://dev.easybell.de/api/ -> ERR <urlopen error timed out>
+https://dev.easybell.de/admin/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/api/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/account -> ERR <urlopen error timed out>
+https://auth.easybell.de/.well-known/openid-configuration -> HTTP 404
+https://auth.easybell.de/.well-known/oauth-authorization-server -> HTTP 404
+https://auth.easybell.de/jwks -> HTTP 404
+https://auth.easybell.de/ -> HTTP 404
+
+## 2026-09-03 19:45:43 UTC
+https://voip-management.easybell.de/api/v2/account/ -> HTTP 404
+https://voip-management.easybell.de/api/ -> HTTP 404
+https://mail.easybell.de/rcm/?_task=login -> 200 len=?
+https://voip-management.easybell.de/api/account -> HTTP 404
+
+## 2026-09-03 22:00:15 UTC
+https://dev.easybell.de/ -> ERR <urlopen error timed out>
+https://dev.easybell.de/api/ -> ERR <urlopen error timed out>
+https://dev.easybell.de/admin/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/api/ -> ERR <urlopen error timed out>
+[0m
+State clear: no new artifacts since the 00:19 UTC cycle, flagship still VALID/unfiled, last live probe was 22:16:53 UTC 09-08. Running one fresh OPTIONS reconfirm on the flagship endpoint to secure same-day (09-09) evidence before filing.
+[0m$ [0mcurl -s -o /dev/null -m 20 -D - -X OPTIONS 'https://voip-management.easybell.de/api/account' -H 'Origin: https://evil.example.at' -H 'Access-Control-Request-Method: PUT' -H 'Access-Control-Request-Headers: authorization,content-type' | head -30
+HTTP/2 200 
+date: Wed, 09 Sep 2026 04:53:30 GMT
+content-length: 0
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.example.at
+access-control-allow-methods: PUT
+access-control-allow-headers: authorization,content-type
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+Same-day reconfirm captured: `ACAO: https://evil.example.at` + `ACAC: true` + `Allow-Methods: PUT` + `Allow-Headers: authorization,content-type` — flagship still LIVE at 04:53:30 UTC 09-09.
+
+STEP 1 — DELTA
+- [NEW] voip-management.easybell.de/api: fresh live reconfirm 04:53:30 UTC 09-09 on `/api/account` — arbitrary-Origin ACAO echo + ACAC:true + Allow-Methods:PUT still present; finding exploitable ~4 days post-discovery, ~57h post-triage-VALID; same-day evidence now on file for immediate filing.
+- [CHANGED] NO_DELTA elsewhere — no new probes/artifacts since 09-09 00:19:28 UTC; valid-bugs.md still lists flagship VALID and unfiled; all other passive lines closed (login, connectme-uat/dev, survey, backmon, order-form catalog, actuator/swagger, k8s hostname).
+
+STEP 2 — PRIORITIZE
+- [PRIO] voip-management.easybell.de/api,8.7,attack_surface=9+business_value=9+tech_exposure=8+gate_ease=3+cloud_surface=6+freshness=10 (reconfirmed live 04:53:30 UTC today, filing-blocked)
+
+STEP 3 — HYPOTHESES
+- [HYP] voip-cors-cred-read-write
+```
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 92
+reasoning: OPTIONS /api/account 04:53:30 UTC 09-09 echoes `ACAO: https://evil.example.at` + `ACAC: true` + `Allow-Methods: PUT` + `Allow-Headers: authorization,content-type`; matches 09-04/09-05/09-08 captures; auth = HTTP Basic realm sipwisebroker + Bearer voipSession; triage VALID 19:19:02 UTC 09-06.
+evidence_needed: only filed-report acceptance at bugs.olivermaicher.eu — evidence collection complete, same-day freshness on file.
+verify_steps: PASSIVE done (OPTIONS above); live chain = HUMAN browser with cached Basic creds -> fetch({method:'PUT',credentials:'include'}) -> preflight passes -> WRITE executes + response readable via ACAC:true.
+impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) without victim awareness -> HIGH/CRITICAL.
+testability: HUMAN_ONLY
+```
+- [HYP] order-form-api-residual
+```
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps full anonymous API; GET tariff catalog 200; contract-summary 404 pre-session; mutations session-gated; POST /api/apc/check POST-only accepts arbitrary body, purpose unclear.
+evidence_needed: authenticated session trace or anonymous POST returning customer-scoped data.
+verify_steps: HUMAN — registered order/quote session; anonymous POST /api/apc/check empty body.
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH.
+testability: HUMAN_ONLY
+```
+- [HYP] portal-proxy-wildcard-chain
+```
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 55
+reasoning: ACAO:* without ACAC:true on portal proxies; POST+Authorization accepted from any origin (preflight 200); standalone impact requires prior Bearer theft via voip CORS chain.
+evidence_needed: proxy target backend + Bearer format acceptance from stolen token.
+verify_steps: HUMAN — portal JS network capture for Bearer format; cross-origin POST with stolen bearer.
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary).
+testability: HUMAN_ONLY
+```
+
+STEP 4 — SELF-CRITIQUE
+- [PARKED] order-form-api-residual:50 — HUMAN_ONLY, session-gated, dormant.
+- [PARKED] portal-proxy-wildcard-chain:55 — token-gated secondary, no standalone HIGH.
+- [FINAL] voip-cors-cred-read-write:92 — reconfirmed live 04:53:30 UTC 09-09, VALID per triage, unique unfiled HIGH/CRITICAL; sole remaining blocker is submission.
+
+STEP 5 — NEXT ACTION
+- [NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu NOW — Title: "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes)". Lead with the 04:53:30 UTC 09-09 OPTIONS /api/account capture (ACAO:https://evil.example.at + ACAC:true + Allow-Methods:PUT + Allow-Headers:authorization,content-type) as newest evidence; attack chain `fetch({method:'PUT',credentials:'include'})` from attacker origin; impact = full customer VoIP config exfiltration + modification without victim awareness.
+
+STEP 6 — LEARNING
+- [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 2026-09-09 04:53:30 UTC on /api/account (ACAO evil-origin + ACAC:true + Allow-Methods:PUT) — ~57h post-triage-VALID; same-day evidence secured for immediate filing.
+- [LEARN] NO_DELTA — no other state/inventory changes; all passive lines remain closed; flagship filing is the only active risk.
+
+STEP 7 — RISK
+- [RISK] easybell: 82 (+2 from 80). Same-day 09-09 reconfirm proves the validated HIGH is still exploitable while unfiled (~57h since triage VALID 19:19:02 UTC 09-06); discovery phase complete, every passive line closed — sole and growing risk is submission latency on the flagship finding. Compliance unchanged: one spaced OPTIONS, no auth/mutating/customer/financial data, brute-force/lockout excluded, sha256 discipline, report via bugs.olivermaicher.eu only.

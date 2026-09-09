@@ -1,6 +1,6 @@
-## 2026-09-09 00:21:22 UTC [target] (model nemotron3)
-[CHANGED] voip-management.easybell.de/api: Credentialed CORS read+write (90) reconfirmed LIVE 2026-09-08 22:16:53 UTC on `/api/account` (ACAO:evil-origin + ACAC:true + Allow-Methods:PUT) — finding still exploitable ~3 days post-discovery, ~51h post-triage-VALID; evidence freshness secured for immediate filing
-[CHANGED] login.easybell.de: `?redirect=&next=&url=` params NOT echoed in 302 (→ /login); sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.com); no open redirect / OAuth code-theft chain — line closed cleanly
+## 2026-09-09 04:56:28 UTC [target] (model nemotron3)
+[CHANGED] voip-management.easybell.de/api: Credentialed CORS read+write reconfirmed LIVE 2026-09-08 22:16:53 UTC on `/api/account` (ACAO:evil-origin + ACAC:true + Allow-Methods:PUT) — finding exploitable ~3 days post-discovery, ~51h post-triage-VALID
+[CHANGED] login.easybell.de: `?redirect=&next=&url=` params NOT echoed in 302; sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.com); no open redirect / OAuth code-theft chain — line closed
 [CHANGED] connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
 [CHANGED] connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
 [PRIO] voip-management.easybell.de/api,9.2,attack_surface:10+business_value:9+tech_exposure:10+gate_ease:7+cloud_surface:7+freshness:10
