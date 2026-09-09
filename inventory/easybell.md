@@ -299,3 +299,9 @@ www.easybell.de
 - CHANGED login.easybell.de: `?redirect=&next=&url=` params NOT echoed in 302 (→ https://login.easybell.de/login); Laravel XSRF-TOKEN+ekp_session cookie family identical to my.easybell.com. No open-redirect / O
 - CHANGED voip-management.easybell.de/api: Credentialed CORS read+write (90) remains sole unfiled HIGH/CRITICAL; ~38h+ filing latency only rising program risk
 - CHANGED No new passive probes since 2026-09-06 04:48:35 UTC; inventory + KB unchanged beyond connectme-uat/dev closure
+
+## 2026-09-09 00:21:33 UTC
+- CHANGED voip-management.easybell.de/api: Credentialed CORS read+write (90) reconfirmed LIVE 2026-09-08 22:16:53 UTC on `/api/account` (ACAO:evil-origin + ACAC:true + Allow-Methods:PUT) — finding still exploit
+- CHANGED login.easybell.de: `?redirect=&next=&url=` params NOT echoed in 302 (→ /login); sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.com); no open redirect / OAuth code-theft chain —
+- CHANGED connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
+- CHANGED connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed

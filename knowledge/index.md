@@ -132,3 +132,8 @@
 - 2026-09-08 REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
 - 2026-09-08 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 22:16:53 UTC 09-08 on /api/account (ACAO evil-origin + ACAC:true + Allow-Methods:PUT) — finding still exploitable ~3 days post-discovery, ~51h post-triage-VALID; evidence freshness secured for immediate filing.
 - 2026-09-08 REJECTED MISCONFIG @ login.easybell.de: `?redirect=&next=&url=` not echoed; 302 → /login sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.com); no open redirect, no OAuth code-theft chain via login passthrough; line closed cleanly.
+- 2026-09-09 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 2026-09-08 22:16:53 UTC on /api/account (ACAO evil-origin + ACAC:true + Allow-Methods:PUT) — finding still exploitable ~3 days post-discovery, ~51h post-triage-VALID; evidence freshness secured for immediate filing
+- 2026-09-09 REJECTED MISCONFIG @ login.easybell.de: `?redirect=&next=&url=` not echoed; 302 → /login sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.com); no open redirect, no OAuth code-theft chain via login passthrough; line closed cleanly
+- 2026-09-09 REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
+- 2026-09-09 REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
+- 2026-09-09 NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable

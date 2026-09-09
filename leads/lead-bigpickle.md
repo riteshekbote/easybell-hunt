@@ -1662,3 +1662,29 @@ testability: HUMAN_ONLY
 [LEARN] REJECTED MISCONFIG @ login.easybell.de: `?redirect=&next=&url=` not echoed; 302 → /login sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.com); no open redirect, no OAuth code-theft chain via login passthrough; line closed cleanly.
 [RISK] easybell: 80
 reasoning: +2 from 78. Fresh reconfirm 22:16:53 UTC 09-08 proves the validated HIGH is still exploitable while unfiled (~51h since triage VALID). Discovery phase complete — every passive line closed (login open-redirect now also eliminated). Sole and growing risk = submission latency on the flagship finding; each unfiled hour raises fix-probability for another team. Compliance unchanged: OPTIONS/GET only, single spaced request, no auth/mutating/customer/financial data, brute-force/lockout excluded, sha256 discipline, report via bugs.olivermaicher.eu only.
+## 2026-09-09 00:19:28 UTC [target] (model bigpickle)
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 92
+reasoning: OPTIONS /api/account 22:16:53 UTC 09-08 echo `ACAO: https://evil.example.at` + `ACAC: true` + `Allow-Methods: PUT` + `Allow-Headers: authorization,content-type`; matches 09-04/09-05 captures; auth = HTTP Basic realm sipwisebroker + Bearer voipSession; triage VALID 19:19:02 UTC 09-06.
+evidence_needed: only filed-report acceptance at bugs.olivermaicher.eu — evidence collection complete.
+verify_steps: PASSIVE done (fresh OPTIONS capture on file); live chain = HUMAN browser with cached Basic creds -> fetch({method:'PUT',credentials:'include'}) -> preflight passes -> WRITE executes + response readable via ACAC:true.
+impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) without victim awareness -> HIGH/CRITICAL.
+testability: HUMAN_ONLY
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps full anonymous API; GET tariff catalog 200; contract-summary 404 pre-session; mutations session-gated; POST /api/apc/check POST-only accepts arbitrary body, purpose unclear.
+evidence_needed: authenticated session trace or anonymous POST returning customer-scoped data.
+verify_steps: HUMAN — registered order/quote session; anonymous POST /api/apc/check empty body.
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH.
+testability: HUMAN_ONLY
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 55
+reasoning: ACAO:* without ACAC:true on portal proxies; POST+Authorization accepted from any origin (preflight 200); standalone impact requires prior Bearer theft via voip CORS chain.
+evidence_needed: proxy target backend + Bearer format acceptance from stolen token.
+verify_steps: HUMAN — portal JS network capture for Bearer format; cross-origin POST with stolen bearer.
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary).
+testability: HUMAN_ONLY
+reasoning: Unchanged from 22:18. Fresh 22:16:53 UTC reconfirm proves the validated HIGH remains exploitable while unfiled (~51h since triage VALID). Discovery phase complete — every passive line closed. Sole and rising risk = submission latency on the flagship finding; each unfilled hour raises fix-probability. Compliance unchanged: OPTIONS/GET only, spaced single requests, no auth/mutating/customer/financial data, brute-force/lockout excluded, sha256 discipline, report via bugs.olivermaicher.eu only.
