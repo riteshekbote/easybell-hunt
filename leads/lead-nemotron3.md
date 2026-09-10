@@ -2417,3 +2417,42 @@ testability: AUTH_HELPED
 [LEARN] NO_DELTA — inventory + KB unchanged since 05:16:47 UTC 09-10; all passive lines closed; filing latency is the only rising program risk
 [RISK] easybell: 85
 reasoning: Flagship CORS finding (95) reconfirmed live at 09:48:02 UTC 09-10 (6th capture) — credentialed cross-origin WRITE (preflight-approved POST/PUT, arbitrary Origin, ACAC:true) on 7 Spring routes backed by Sipwise NGCP; ~82.5h filing latency since triage-VALID is sole program risk. my-portal-proxy-wildcard (78) and my-portal-bola-proxied-voip (78) remain AUTH_HELPED. order-form SSRF (45) parked speculative. All other surfaces closed (connectme dotfiles, dev/uat DNS, survey/backmon stubs, partner login panel, voip actuator/openapi, my.easybell.com dotfiles). Carried: 95/78 mostly HUMAN-gated; voip WAF throttle unchanged (≥6s/60-120s); auth/lockout excluded; PBX/SIP parked. Mitigation: read-only GET/OPTIONS only, ≥6s spacing, no POST bodies to live API, no customer data captured, sha256 discipline, report only via bugs.olivermaicher.eu.
+## 2026-09-10 17:49:12 UTC [target] (model nemotron3)
+[PRIO] voip-management.easybell.de/api,9.5,attack_surface=10 business_value=10 tech_exposure=9 gate_ease=10 cloud_surface=8 freshness=10
+[PRIO] my.easybell.com,7.9,attack_surface=8 business_value=9 tech_exposure=8 gate_ease=3 cloud_surface=7 freshness=9
+[PRIO] order-form.easybell.de/api,5.8,attack_surface=6 business_value=6 tech_exposure=5 gate_ease=10 cloud_surface=6 freshness=7
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: 6 independent OPTIONS captures (09-04 12:29, 09-05 13:12, 09-08 22:16, 09-09 04:53, 09-10 05:16, 09-10 09:48) confirm ACAO:<attacker-origin> + ACAC:true + Allow-Methods:POST,PUT + Allow-Headers:authorization,content-type on all 7 Spring routes; HTTP Basic realm "sipwisebroker" + Bearer voipSession auto-sent with credentials:'include'
+evidence_needed: HUMAN victim-browser PoC demonstrating cross-origin PUT/POST execution with cached Basic creds or Bearer voipSession token
+verify_steps: PASSIVE done (preflight-only, empty 200 OK, no mutation); full chain = HUMAN browser with cached creds
+impact: Full VoIP config takeover (numbers, subscribers, call-forwarding, voicemail, trusted-IPs) → CRITICAL
+testability: HUMAN_ONLY
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management.easybell.de/api)
+confidence: 78
+reasoning: Portal proxies accounts/subscribers/numbers/account/subscriber/number/session via axios with Bearer voipSession; customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; BOLA surface confirmed pending auth
+evidence_needed: Authenticated session showing cross-customer object access via proxied VoIP routes
+verify_steps: HUMAN — login to my.easybell.com, capture voipSession token, test cross-customer ID access on proxied /api/accounts/{id}, /api/subscribers/{id}, /api/numbers/{id}
+impact: Cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 78
+reasoning: Three internal portal proxy endpoints return ACAO:* on redirect responses and OPTIONS preflight with POST+Authorization+Content-Type allowed from any origin; wildcard without ACAC:true means cookies NOT sent cross-origin, BUT portal uses Bearer tokens (voipSession) via JS for voip-management; if attacker exfiltrates Bearer token (via voip CORS or XSS), wildcard on portal proxies allows exfiltration of CRM/EBIT/Strapi data; Strapi CMS proxy confirmed
+evidence_needed: Confirm what /api/crm, /api/ebit, /api/strapi proxy to when authenticated; confirm whether Bearer token (voipSession) is accepted by these endpoints; confirm data sensitivity
+verify_steps: HUMAN — with creds, observe portal JS network calls to /api/crm, /api/ebit, /api/strapi; capture request/response to determine if Bearer token is used and what data returned; test cross-origin fetch with captured Bearer token
+impact: CRM/EBIT/Strapi data leakage via cross-origin requests → MEDIUM/HIGH (depends on data sensitivity)
+testability: AUTH_HELPED
+[PARKED] order-form-apc-check-ssrf: confidence 45 at floor; purely speculative — no evidence endpoint makes outbound calls; APC may be client-side validation only; verify_steps exist but low prior
+[FINAL] voip-cors-cred-read-write: 95 — CONFIRMED credentialed CORS read+write on 7 Spring routes; report-ready, HUMAN deliverable pending, live reconfirmed 6× including 2026-09-10 09:48:02 UTC
+[FINAL] my-portal-bola-proxied-voip: 78 — Portal IDOR via proxied VoIP routes; AUTH_HELPED barrier, top candidate pending auth
+[FINAL] my-portal-api-proxy-wildcard: 78 — Wildcard CORS on portal proxy endpoints (/api/crm,/api/ebit,/api/strapi); secondary token-gated exfil path, AUTH_HELPED
+[NEXT] HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu NOW. Evidence: 6 independent OPTIONS captures spanning 6 days (09-04 12:29, 09-05 13:12, 09-08 22:16, 09-09 04:53, 09-10 05:16, 09-10 09:48). Title: "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes)"; Fields: (1) vulnerable endpoints: /api/account,/api/accounts,/api/subscriber,/api/subscribers,/api/number,/api/numbers,/api/session (2) preflight evidence: OPTIONS returns ACAO:<attacker-origin>, ACAC:true, Allow-Methods:POST,PUT, Allow-Headers:authorization,content-type (3) auth mechanism: HTTP Basic realm "sipwisebroker" + Bearer voipSession; victim browser auto-sends creds with credentials:'include' (4) PoC: fetch('https://voip-manage[0m← [0mWrite analyst-out.txt
+[LEARN] NO_DELTA — inventory + KB unchanged since 05:16:47 UTC 09-10; all passive lines closed; filing latency is the only rising program risk
+[RISK] easybell: 85
+reasoning: Flagship CORS finding (95) reconfirmed live at 09:48:02 UTC 09-10 (6th capture) — credentialed cross-origin WRITE (preflight-approved POST/PUT, arbitrary Origin, ACAC:true) on 7 Spring routes backed by Sipwise NGCP; ~82.5h filing latency since triage-VALID is sole program risk. my-portal-proxy-wildcard (78) and my-portal-bola-proxied-voip (78) remain AUTH_HELPED. order-form SSRF (45) parked speculative. All other surfaces closed (connectme dotfiles, dev/uat DNS, survey/backmon stubs, partner login panel, voip actuator/openapi, my.easybell.com dotfiles). Carried: 95/78 mostly HUMAN-gated; voip WAF throttle unchanged (≥6s/60-120s); auth/lockout excluded; PBX/SIP parked. Mitigation: read-only GET/OPTIONS only, ≥6s spacing, no POST bodies to live API, no customer data captured, sha256 discipline, report only via bugs.olivermaicher.eu.
