@@ -139,3 +139,9 @@
 - 2026-09-09 NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable
 - 2026-09-09 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 04:53:30 UTC 09-09 — 3rd independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~4 days post-discovery, ~53h post-triage-VALID.
 - 2026-09-09 NO_DELTA — no new passive probes since 04:53:30 UTC 09-09; inventory + KB unchanged; all passive lines closed; filing latency is the only rising program risk.
+- 2026-09-10 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 04:53:30 UTC 09-09 — 3rd independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~4 days post-discovery, ~53h post-triage-VALID
+- 2026-09-10 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 2026-09-08 22:16:53 UTC on /api/account (ACAO evil-origin + ACAC:true + Allow-Methods:PUT) — finding still exploitable ~3 days post-discovery, ~51h post-triage-VALID; evidence freshness secured for immediate filing
+- 2026-09-10 REJECTED MISCONFIG @ login.easybell.de: `?redirect=&next=&url=` not echoed; 302 → /login sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.com); no open redirect, no OAuth code-theft chain via login passthrough; line closed cleanly
+- 2026-09-10 REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
+- 2026-09-10 REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
+- 2026-09-10 NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable

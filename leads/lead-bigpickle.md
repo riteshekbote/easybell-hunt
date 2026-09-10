@@ -1913,3 +1913,13 @@ evidence_needed: proxy target backend + Bearer format acceptance from stolen tok
 verify_steps: HUMAN — portal JS network capture for Bearer format; cross-origin POST with stolen bearer
 impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary)
 testability: HUMAN_ONLY
+## 2026-09-10 00:36:59 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 93
+reasoning: OPTIONS /api/account 00:33:21 UTC 09-10 echoes ACAO https://evil.example.at + ACAC:true + Allow-Methods:PUT + Allow-Headers:authorization,content-type; byte-identical to 09-04/05/08/09 captures; HTTP Basic realm sipwisebroker + Bearer voipSession; triage VALID 19:19:02 UTC 09-06; 4th independent reconfirmation; credentials:true reflection authorizes credentialed cross-origin WRITE on all 7 Spring routes.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu only
+verify_steps: PASSIVE complete (fresh OPTIONS above); live chain = HUMAN browser with cached Basic creds → fetch({method:'PUT',credentials:'include'}) → preflight passes → WRITE executes, response readable via ACAC:true
+impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) without victim awareness -> HIGH/CRITICAL
+testability: HUMAN_ONLY
