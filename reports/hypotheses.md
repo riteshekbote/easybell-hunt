@@ -705,3 +705,11 @@
 ## RANKED HYPOTHESES 2026-09-10 05:16:47 UTC
 - [94] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_bigpickle.txt)
 - NEXT(hypotheses-bigpickle.txt): HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu NOW. Evidence: 5 OPTIONS captures (09-04 12:29, 09-05 13:12, 09-08 22:16, 09-09 04:53, 09-10 05:1
+
+## RANKED HYPOTHESES 2026-09-10 09:52:18 UTC
+- [95] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_bigpickle.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu NOW. Evidence: 6 independent OPTIONS captures spanning 6 days (09-04 12:29, 09-05 13:12, 0
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu NOW (finding reconfirmed live 2026-09-10 05:16:47 UTC — 4th independent capture). Title: "
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 09:48:02 UTC 09-10 — 6th independent capture proving persist
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 05:16:47 UTC 09-10 — 4th independent capture proving persist
+- LEARN: NO_DELTA — inventory + KB unchanged since 05:16:47 UTC 09-10; all passive lines closed; filing latency is the only rising program risk
