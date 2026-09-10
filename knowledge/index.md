@@ -148,3 +148,4 @@
 - 2026-09-10 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 09:48:02 UTC 09-10 — 6th independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~5.9 days post-discovery, ~82.5h post-triage-VALID.
 - 2026-09-10 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 05:16:47 UTC 09-10 — 4th independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~5 days post-discovery, ~57h post-triage-VALID
 - 2026-09-10 NO_DELTA — inventory + KB unchanged since 05:16:47 UTC 09-10; all passive lines closed; filing latency is the only rising program risk
+- 2026-09-10 NO_DELTA — no new passive probes since 2026-09-10 09:48:02 UTC; inventory + KB unchanged; all passive lines closed; filing latency is the only rising program risk.
