@@ -2057,3 +2057,32 @@ testability: HUMAN_ONLY
 [LEARN] NO_DELTA — no new passive probes since 2026-09-10 09:48:02 UTC; inventory + KB unchanged; all passive lines closed; filing latency is the only rising program risk.
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 09:48:02 UTC 09-10 — 6th independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~5.9 days post-discovery, ~82.5h post-triage-VALID.
 [RISK] easybell: 90 — Sole unique unfiled HIGH/CRITICAL finding at ~83h post-triage-VALID (5.9 days post-discovery). 6 independent live captures secured across 6 consecutive days. All passive evidence gates met. Bug tracker confirmed reachable. Risk does NOT decrease before filing — it increases with every hour of delay. Only remaining action: human report submission at bugs.olivermaicher.eu.
+## 2026-09-10 20:01:37 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: OPTIONS preflight on all 7 Spring routes reflects arbitrary Origin verbatim with ACAC:true, Allow-Methods echoing PUT/POST, Allow-Headers authorization/content-type. HTTP Basic realm sipwisebroker + Bearer voipSession dual auth. 6 independent captures (09-04 12:29, 09-05 13:12, 09-08 22:16, 09-09 04:53, 09-10 05:12, 09-10 09:48 UTC) — persistent >5.9 days. Triage VALID 09-06 19:19.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu — collection complete.
+verify_steps: HUMAN — browser holding cached Basic (sipwisebroker) creds for voip-management origin executes fetch('https://voip-management.easybell.de/api/account',{credentials:'include'}) from attacker origin; preflight passes, response readable.
+impact: cross-origin credentialed read+write of customer VoIP config (accounts/numbers/subscribers: SIP creds, routing, subscriber data) from any attacker page visited by an authenticated user -> HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] order-form-anonymous-api
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps full anonymous API; GET plans/<code> returns public tariff catalog only; contract-summary 404 pre-session; POST/PUT/DELETE money-flow endpoints session-gated.
+evidence_needed: anonymous request returning customer-scoped data
+verify_steps: HUMAN — registered session trace; anonymous POST /api/apc/check with empty body
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH
+testability: HUMAN_ONLY
+[HYP] portal-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 55
+reasoning: ACAO:* without ACAC:true on portal proxies; POST+Authorization accepted cross-origin (preflight 204/200); standalone impact requires prior Bearer theft via the voip CORS chain.
+evidence_needed: proxy backend accept of stolen Bearer
+verify_steps: HUMAN — portal JS network capture of Bearer format; cross-origin POST with stolen token
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary)
+testability: HUMAN_ONLY
+[NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu NOW with this ready-to-submit body:

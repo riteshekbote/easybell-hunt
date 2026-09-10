@@ -11577,3 +11577,67 @@ testability: HUMAN_ONLY
 
 **STEP 7 — RISK**
 [RISK] easybell: 90 — Sole unique unfiled HIGH/CRITICAL finding at ~83h post-triage-VALID (5.9 days post-discovery). 6 independent live captures secured across 6 consecutive days. All passive evidence gates met. Bug tracker confirmed reachable. Risk does NOT decrease before filing — it increases with every hour of delay. Only remaining action: human report submission at bugs.olivermaicher.eu.
+===== ANALYST bigpickle 2026-09-10 20:02:33 UTC =====
+[0m
+> build · big-pickle
+[0m
+## STEP 1 — DELTA
+- NO_DELTA: no new probes since 2026-09-10 09:48:02 UTC; inventory + KB unchanged.
+- CHANGED: filing latency now ~94.5h post-triage-VALID (09-06 19:19) / ~149h post-discovery (09-04 12:29); evidence gates all met (6 byte-consistent captures across 6 days).
+
+## STEP 2 — PRIORITIZE
+- [PRIO] voip-management.easybell.de/api, 96, attack_surface=10 business_value=9 tech_exposure=8 gate_ease=3 cloud_surface=2 freshness=10 — sole unfiled HIGH/CRITICAL; risk monotonic.
+
+## STEP 3 — HYPOTHESES
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: OPTIONS preflight on all 7 Spring routes reflects arbitrary Origin verbatim with ACAC:true, Allow-Methods echoing PUT/POST, Allow-Headers authorization/content-type. HTTP Basic realm sipwisebroker + Bearer voipSession dual auth. 6 independent captures (09-04 12:29, 09-05 13:12, 09-08 22:16, 09-09 04:53, 09-10 05:12, 09-10 09:48 UTC) — persistent >5.9 days. Triage VALID 09-06 19:19.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu — collection complete.
+verify_steps: HUMAN — browser holding cached Basic (sipwisebroker) creds for voip-management origin executes fetch('https://voip-management.easybell.de/api/account',{credentials:'include'}) from attacker origin; preflight passes, response readable.
+impact: cross-origin credentialed read+write of customer VoIP config (accounts/numbers/subscribers: SIP creds, routing, subscriber data) from any attacker page visited by an authenticated user -> HIGH/CRITICAL
+testability: HUMAN_ONLY
+
+[HYP] order-form-anonymous-api
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps full anonymous API; GET plans/<code> returns public tariff catalog only; contract-summary 404 pre-session; POST/PUT/DELETE money-flow endpoints session-gated.
+evidence_needed: anonymous request returning customer-scoped data
+verify_steps: HUMAN — registered session trace; anonymous POST /api/apc/check with empty body
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH
+testability: HUMAN_ONLY
+
+[HYP] portal-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 55
+reasoning: ACAO:* without ACAC:true on portal proxies; POST+Authorization accepted cross-origin (preflight 204/200); standalone impact requires prior Bearer theft via the voip CORS chain.
+evidence_needed: proxy backend accept of stolen Bearer
+verify_steps: HUMAN — portal JS network capture of Bearer format; cross-origin POST with stolen token
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary)
+testability: HUMAN_ONLY
+
+## STEP 4 — SELF-CRITIQUE
+- [PARKED] order-form-anonymous-api: no anonymous customer-scoped data proven; all anonymous GETs are public catalog; blocked on HUMAN session. Drop to 40.
+- [PARKED] portal-proxy-wildcard: secondary chain only; no token in hand; blocked on HUMAN capture. Drop to 45.
+- [FINAL] voip-cors-cred-read-write: 95, 6 independent captures, triage VALID, sole unfiled HIGH/CRITICAL, survival score maximum.
+
+## STEP 5 — NEXT ACTION
+[NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu NOW with this ready-to-submit body:
+- Title: "CORS Misconfiguration Allows Credentialed Cross-Origin Read+Write of Customer VoIP Configuration (Reflection of Arbitrary Origin with Access-Control-Allow-Credentials: true)"
+- Asset: voip-management.easybell.de/api/{account,accounts,subscriber,subscribers,number,numbers,session} (nginx → Spring /api/v2/ rewrite; Sipwise NGCP backend)
+- Severity: HIGH (CVSS ~8.6: AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N)
+- Summary: 7 Spring-handled routes reflect any Origin verbatim in ACAO together with ACAC:true and echo requested methods (incl. PUT/POST) + authorization/content-type headers. Any hostile web page visited by a logged-in portal user can issue credentialed cross-origin fetch() against the customer VoIP API and read/write accounts/numbers/subscribers.
+- Auth scheme: HTTP Basic realm `sipwisebroker` + Bearer `voipSession` (stored/cached in browser for the origin).
+- Reproduction (per capture): `OPTIONS /api/account` with `Origin: https://evil.example.at`, `Access-Control-Request-Method: PUT`, `Access-Control-Request-Headers: authorization,content-type` → 200 with `Access-Control-Allow-Origin: https://evil.example.at`, `Access-Control-Allow-Credentials: true`, `Allow-Methods: PUT`, `Allow-Headers: authorization,content-type`.
+- Evidence: 6 independent captures spanning 09-04 12:29, 09-05 13:12, 09-08 22:16, 09-09 04:53, 09-10 05:12, 09-10 09:48 UTC; identical response set; persistent >6 days; portal+API share ingress 62.27.117.123 but differ by host header → cross-origin from browser SOP perspective.
+- Impact: cross-origin read/write → SIP credentials, subscriber/routing config disclosure and modification for any active portal session; no victim interaction beyond visiting attacker page.
+- Remediation: replace origin reflection with strict allowlist; never pair ACAO-with-reflection and ACAC:true; set `Vary: Origin`; scope Allow-Methods/Allow-Headers to required values.
+
+## STEP 6 — LEARNING
+- [LEARN] NO_DELTA — no new passive probes since 2026-09-10 09:48:02 UTC; inventory + KB unchanged; all passive lines closed; no accept/reject deltas this cycle.
+
+## STEP 7 — RISK
+- [RISK] easybell: 91 — Sole unique unfiled HIGH at ~94.5h post-triage-VALID (~149h post-discovery). 6 independent live captures; every evidence gate met; tracker reachable. Risk increases monotonically until submission; the only remaining dependency is human action at bugs.olivermaicher.eu.
