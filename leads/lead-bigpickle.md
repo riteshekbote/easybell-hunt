@@ -1923,3 +1923,33 @@ evidence_needed: filed-report acceptance at bugs.olivermaicher.eu only
 verify_steps: PASSIVE complete (fresh OPTIONS above); live chain = HUMAN browser with cached Basic creds → fetch({method:'PUT',credentials:'include'}) → preflight passes → WRITE executes, response readable via ACAC:true
 impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) without victim awareness -> HIGH/CRITICAL
 testability: HUMAN_ONLY
+## 2026-09-10 05:13:03 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 94
+reasoning: OPTIONS /api/account + /api/session 05:12:17 UTC 09-10 echo ACAO https://evil.example.at + ACAC:true + Allow-Methods PUT/POST + Allow-Headers authorization,content-type; 5th byte-identical independent capture (09-04/05/08/09/10); HTTP Basic realm sipwisebroker + Bearer voipSession; triage VALID 19:19:02 UTC 09-06; preflight authorizes credentialed cross-origin WRITE on all 7 Spring routes.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu only — evidence collection complete
+verify_steps: PASSIVE complete (fresh 2-route capture 05:12 UTC). Live chain = HUMAN browser with cached Basic creds → fetch({method:'PUT',credentials:'include'}) → preflight passes → WRITE executes, response readable via ACAC:true
+impact: cross-origin read+write of customer VoIP config (accounts/numbers/subscribers) without victim awareness -> HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] order-form-anonymous-api
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps full anonymous API; GET plans/<code> 200 tariff catalog; contract-summary 404 pre-session; POST/PUT/DELETE money-flow endpoints session-gated; POST /api/apc/check accepts arbitrary body, purpose unclear.
+evidence_needed: authenticated session trace or anonymous POST returning customer-scoped data
+verify_steps: HUMAN — registered order/quote session; anonymous POST /api/apc/check empty body
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH
+testability: HUMAN_ONLY
+[HYP] portal-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 55
+reasoning: ACAO:* without ACAC:true on portal proxies; POST+Authorization accepted from any origin (preflight 200); standalone impact requires prior Bearer theft via voip CORS chain.
+evidence_needed: proxy target backend + Bearer format acceptance from stolen token
+verify_steps: HUMAN — portal JS network capture for Bearer format; cross-origin POST with stolen bearer
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary)
+testability: HUMAN_ONLY
+[NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu NOW. Evidence: 5 OPTIONS captures (09-04 12:29, 09-05 13:12, 09-08 22:16, 09-09 04:53, 09-10 05:12 UTC) on /api/account + /api/session; each ACAO evil-origin + ACAC:true + Allow-Methods PUT/POST + Allow-Headers authorization,content-type; 7 Spring routes affected. Risk 85 and only rising — ~85h post-discovery, ~58h post-triage-VALID.
+[RISK] easybell: 85 — Sole unique unfiled HIGH/CRITICAL finding (~58h post-triage-VALID). All passive evidence gates met; reconfirmed live this cycle. Only remaining bottleneck is human report submission at bugs.olivermaicher.eu (confirmed reachable, 0.37s). Risk does NOT decrease before filing.

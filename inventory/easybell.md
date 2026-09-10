@@ -330,3 +330,5 @@ www.easybell.de
 - CHANGED voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 3rd time at 2026-09-09 04:53:30 UTC (OPTIONS /api/account → ACAO:evil-origin + ACAC:true + Allow-Methods:PUT) — finding p
 
 ## 2026-09-10 00:37:11 UTC
+
+## 2026-09-10 05:16:47 UTC

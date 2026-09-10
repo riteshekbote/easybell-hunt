@@ -701,3 +701,7 @@
 - LEARN: REJECTED MISCONFIG @ connectme-app-uat.easybell.de: `.env` and `.git/config` return 404 (284KB custom error HTML, not SPA shell) — dotfile/debug line closed
 - LEARN: REJECTED MISCONFIG @ connectme-app-dev.easybell.de: DNS NXDOMAIN — not externally reachable, line closed
 - LEARN: NO_DELTA — inventory + KB unchanged beyond connectme-uat/dev closure; all other hypotheses stable
+
+## RANKED HYPOTHESES 2026-09-10 05:16:47 UTC
+- [94] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_bigpickle.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu NOW. Evidence: 5 OPTIONS captures (09-04 12:29, 09-05 13:12, 09-08 22:16, 09-09 04:53, 09-10 05:1
