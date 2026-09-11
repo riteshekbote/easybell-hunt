@@ -288,3 +288,6 @@ https://voip-management.easybell.de/api/account',{credentials:'include',method:'
 
 ## 2026-09-11 20:09:01 UTC
 https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-11 22:39:04 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404

@@ -1,10 +1,10 @@
-## 2026-09-11 20:08:47 UTC [target] (model nemotron3)
-[NEW] voip-management.easybell.de/api: Credentialed CORS read+write reconfirmed LIVE 2026-09-11 20:03:43 UTC on all 7 Spring routes (account, accounts, subscriber, subscribers, number, numbers, session) — 7th independent capture across 7 days; ACAO:attacker-origin + ACAC:true + Allow-Methods:POST,PUT + Allow-Headers:authorization,content-type
+## 2026-09-11 22:38:53 UTC [target] (model nemotron3)
+[NEW] voip-management.easybell.de/api: 7th independent CORS capture 2026-09-11 20:03:43 UTC on all 7 Spring routes (account, accounts, subscriber, subscribers, number, numbers, session) — ACAO:attacker-origin + ACAC:true + Allow-Methods:POST,PUT + Allow-Headers:authorization,content-type
 [NEW] my.easybell.com/api/{crm,ebit,strapi}: Wildcard CORS (ACAO:*) with POST+Authorization+Content-Type allowed from any origin reconfirmed LIVE 2026-09-11 20:07:30 UTC — 3 proxy endpoints, no ACAC:true (cookie-less), Bearer-token-gated exfil path
 [CHANGED] Filing latency for flagship CORS finding now ~126h post-triage-VALID (since 2026-09-06 19:19) / ~10.1 days post-discovery; evidence gates fully satisfied (7 captures + live tracker); only risk is reporting delay
-[PRIO] voip-management.easybell.de/api,9.70,attack_surface=10 business_value=10 tech_exposure=9 gate_ease=10 cloud_surface=8 freshness=10
-[PRIO] my.easybell.com,7.55,attack_surface=8 business_value=9 tech_exposure=8 gate_ease=3 cloud_surface=7 freshness=9
-[PRIO] my.easybell.com/api/{crm,ebit,strapi},6.80,attack_surface=7 business_value=7 tech_exposure=6 gate_ease=8 cloud_surface=6 freshness=8
+[PRIO] voip-management.easybell.de/api,9.65,attack_surface=10 business_value=10 tech_exposure=9 gate_ease=10 cloud_surface=8 freshness=10
+[PRIO] my.easybell.com,7.50,attack_surface=8 business_value=9 tech_exposure=8 gate_ease=3 cloud_surface=7 freshness=9
+[PRIO] my.easybell.com/api/{crm,ebit,strapi},7.00,attack_surface=7 business_value=7 tech_exposure=6 gate_ease=8 cloud_surface=6 freshness=8
 [PRIO] order-form.easybell.de/api,6.55,attack_surface=6 business_value=6 tech_exposure=5 gate_ease=10 cloud_surface=6 freshness=7
 [HYP] voip-cors-cred-read-write
 class: MISCONFIG

@@ -801,3 +801,14 @@
 - LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~126h post-triage-VALID / ~10.1 days post-discovery; 7 captures + r
 - LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_
 - LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk
+
+## RANKED HYPOTHESES 2026-09-11 22:39:03 UTC
+- [95] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: FILE `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19) at bugs.olivermaicher.eu NOW with the ready-to-submit body — evidence complete (7 ca
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19) at bugs.olivermaicher.eu NOW — evidence is complete, do NOT run further probes. Subm
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: 7th live capture 20:03:43 UTC reconfirms credentialed CORS read+write across all 7 Spring routes at ~126h 
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: the 20:03 re-probe (against standing do-not-reprobe directive) yielded no delta — reconfirmation has zero 
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true reconfirmed 20:07:30 UTC — secondary token-gated exfil line u
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~126h post-triage-VALID / ~10.1 days post-discovery; 7 captures + r
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_
+- LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk
