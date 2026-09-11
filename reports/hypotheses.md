@@ -794,3 +794,10 @@
 - NEXT(hypotheses-nemotron3.txt): HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu NOW. Evidence: 6 independent OPTIONS captures spanning 6 days (09-04 12:29, 09-05 13:12, 0
 - LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~120h post-triage-VALID / ~9.8 days post-discovery; 6 captures + re
 - LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk
+
+## RANKED HYPOTHESES 2026-09-11 20:08:59 UTC
+- [95] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19) at bugs.olivermaicher.eu NOW — evidence is complete, do NOT run further probes. Subm
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~126h post-triage-VALID / ~10.1 days post-discovery; 7 captures + r
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_
+- LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk

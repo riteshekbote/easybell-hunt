@@ -2407,3 +2407,31 @@ impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
 testability: AUTH_HELPED
 [NEXT] HUMAN: File `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19) at bugs.olivermaicher.eu NOW — evidence is complete, do NOT run further probes. Submit body:
 [RISK] easybell: 93 — sole unique HIGH/CRITICAL (credentialed CORS read+write on 7 live Spring VoIP routes) class-validated 09-06 19:19 but unfiled at ~118h; each elapsed hour is uncompensated exposure of live customer VoIP config. Risk trajectory is a pure function of filing delay; rediscovery eventually elevates impact perception but never reduces it. No probe or reconfirmation changes this — only the bugs.olivermaicher.eu submission does.
+## 2026-09-11 20:01:44 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: OPTIONS on all 7 Spring routes reflects arbitrary Origin verbatim with ACAC:true; Allow-Methods echoes POST/PUT; Allow-Headers authorization,content-type; dual auth HTTP Basic + Bearer voipSession; 6 independent captures spanning 09-04→09-10 UTC; triage VALID 09-06 19:19; zero counter-evidence
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu ONLY
+verify_steps: HUMAN — submit ready body; do NOT re-run OPTIONS reconfirmation (valueless, WAF-rate-limited)
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, call-forwarding, voicemail, routing) from any page an authenticated admin visits → HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management.easybell.de/api)
+confidence: 78
+reasoning: customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; axios attaches Bearer voipSession; BOLA class confirmed but credential-gated — unchanged since 09-04 21:34
+evidence_needed: authenticated session showing cross-customer object access on proxied /api/accounts/{id}, /api/subscribers/{id}, /api/numbers/{id}
+verify_steps: HUMAN — login, capture voipSession, enumerate neighbor object IDs on proxied plural routes
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true on 3 proxy endpoints; standalone informational (no cross-origin cookie transmission); only exploitable after Bearer theft which is unproven + credential-gated → chain dependency caps confidence
+evidence_needed: portal JS capture showing Bearer voipSession accepted by /api/{crm,ebit,strapi}
+verify_steps: HUMAN — authenticated network trace of portal calls to the 3 proxies
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
