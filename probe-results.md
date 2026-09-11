@@ -265,3 +265,7 @@ https://voip-management.easybell.de/api/account',{credentials:'include' -> HTTP 
 ## 2026-09-10 22:39:12 UTC
 https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
 https://voip-management.easybell.de/api/account',{credentials:'include',method:'GET' -> HTTP 404
+
+## 2026-09-11 00:32:48 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+https://voip-management.easybell.de/api/account',{credentials:'include',method:'GET' -> HTTP 404
