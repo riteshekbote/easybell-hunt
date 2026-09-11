@@ -13,3 +13,7 @@
 - 2 lead(s) marked VALID at 2026-09-06 19:19:02 UTC
   - | voip-cors-cred-exfil-v3 | **VALID** | Credentialed CORS + ACAC:true on 7 authenticated API routes — HIGH impact, provable via OPTIONS |
   - | my-portal-api-proxy-wildcard | **HOLD** | Standalone wildcard CORS without ACAC:true is informational; only valid as chain amplifier |
+
+- 2 lead(s) marked VALID at 2026-09-11 19:54:18 UTC
+  - **Verdict: VALID**
+  - | 1 | voip-management CORS (7 routes, read+write) | **VALID** | 8.1 | File at bugs.olivermaicher.eu |
