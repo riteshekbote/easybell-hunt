@@ -777,3 +777,13 @@
 - LEARN: NO_DELTA — inventory + KB unchanged since 05:16:47 UTC 09-10; all passive lines closed; filing latency is the only rising program risk
 - LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~114h post-triage-VALID / ~9.6 days post-discovery; 6 captures + re
 - LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; no new passive probes this cycle (05:10 UTC 09-11); flagship finding remains exploitable + un
+
+## RANKED HYPOTHESES 2026-09-11 14:01:54 UTC
+- [95] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu NOW — do NOT run further reconfirmation probes (valueless). Ready-to-submit body:
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File voip-cors-cred-read-write report at bugs.olivermaicher.eu NOW. Evidence: 6 independent OPTIONS captures spanning 6 days (09-04 12:29, 09-05 13:12, 0
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~120h post-triage-VALID / ~9.8 days post-discovery; 6 captures + re
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 09:48:02 UTC 09-10 — 6th independent capture proving persist
+- LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~114h post-triage-VALID / ~9.6 days post-discovery; 6 captures + re
+- LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; no new passive probes this cycle (05:10 UTC 09-11); flagship finding remains exploitable + un
