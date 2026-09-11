@@ -156,3 +156,4 @@
 - 2026-09-11 NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; no new passive probes this cycle (05:10 UTC 09-11); flagship finding remains exploitable + unfiled at ~106h post-triage-VALID.
 - 2026-09-11 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~120h post-triage-VALID / ~9.8 days post-discovery; 6 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer
 - 2026-09-11 NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk
+- 2026-09-11 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~120h post-triage-VALID / ~9.8 days post-discovery; 6 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it

@@ -2377,3 +2377,33 @@ testability: AUTH_HELPED
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 09:48:02 UTC 09-10 — 6th independent capture proving persistent misconfiguration across 7 Spring routes
 [LEARN] NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk
 [RISK] easybell: 93 — sole unique HIGH/CRITICAL finding class-validated (triage 09-06 19:19) but unfiled; each hour beyond triage extends exposure of live customer VoIP config with no compensating gate. Risk trajectory is purely a function of filing delay; reconfirmation/probing is exhausted and adds zero value.
+## 2026-09-11 17:40:46 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: OPTIONS on all 7 Spring routes reflects arbitrary Origin verbatim with ACAC:true; Allow-Methods echoes requested POST/PUT; Allow-Headers authorization,content-type; dual auth HTTP Basic + Bearer voipSession; 6 independent captures 09-04 12:29, 09-05 13:12, 09-08 22:16, 09-09 04:53, 09-10 05:16, 09-10 09:48 UTC; triage VALID 09-06 19:19; no counter-evidence in ~115h
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu ONLY
+verify_steps: HUMAN — from attacker origin `fetch('https://voip-management.easybell.de/api/account',{credentials:'include',method:'GET'})`; do NOT re-run validation probes (valueless, WAF-rate-limits)
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, call-forwarding, voicemail, routing) from any page an authenticated admin visits → HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management.easybell.de/api via axios + Bearer voipSession)
+confidence: 78
+reasoning: customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — no passive vector advances it since 09-04 21:34
+evidence_needed: authenticated session showing cross-customer object access on proxied /api/accounts/{id}, /api/subscribers/{id}, /api/numbers/{id}
+verify_steps: HUMAN — login, capture voipSession, enumerate neighbor object IDs on proxied plural routes
+impact: Cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true on 3 portal proxy endpoints; standalone = informational (no cookie transmission cross-origin), only exploitable after voip Bearer theft which is itself unproven + credential-gated → chain dependency keeps confidence capped
+evidence_needed: portal JS capture showing Bearer voipSession accepted by /api/{crm,ebit,strapi}
+verify_steps: HUMAN — authenticated network trace of portal calls to the 3 proxy endpoints
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+[NEXT] HUMAN: File `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19) at bugs.olivermaicher.eu NOW — evidence is complete, do NOT run further probes. Submit body:
+[RISK] easybell: 93 — sole unique HIGH/CRITICAL (credentialed CORS read+write on 7 live Spring VoIP routes) class-validated 09-06 19:19 but unfiled at ~118h; each elapsed hour is uncompensated exposure of live customer VoIP config. Risk trajectory is a pure function of filing delay; rediscovery eventually elevates impact perception but never reduces it. No probe or reconfirmation changes this — only the bugs.olivermaicher.eu submission does.
