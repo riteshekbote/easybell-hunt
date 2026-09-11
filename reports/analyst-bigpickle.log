@@ -11752,3 +11752,329 @@ STEP 6 — LEARNING
 
 STEP 7 — RISK
 [RISK] easybell: 92 — the single unique HIGH/CRITICAL finding remains class-validated but unfiled; every hour past 09-06 19:19 triage increases exposure of live customer VoIP config with no compensating gate. Risk trajectory is purely a function of filing delay; probing is exhausted.
+===== ANALYST bigpickle 2026-09-11 05:11:59 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mls -la && ls -la inventory/ art/ 2>/dev/null; ls -lt *.txt 2>/dev/null | head -20
+total 268
+drwxr-xr-x 12 runner runner  4096 Sep 11 05:10 .
+drwxr-xr-x  3 runner runner  4096 Sep 11 05:10 ..
+drwxr-xr-x  7 runner runner  4096 Sep 11 05:10 .git
+drwxr-xr-x  3 runner runner  4096 Sep 11 05:10 .github
+-rw-r--r--  1 runner runner  1756 Sep 11 05:10 README.md
+-rw-r--r--  1 runner runner    32 Sep 11 05:10 analyst-out.txt
+-rw-r--r--  1 runner runner 89015 Sep 11 05:10 analyst-prompt.txt
+-rw-r--r--  1 runner runner 85208 Sep 11 05:10 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 inventory
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 leads
+-rw-r--r--  1 runner runner 12240 Sep 11 05:10 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 reports
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep 11 05:10 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 scripts
+-rw-r--r--  1 runner runner    33 Sep 11 05:10 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep 11 05:10 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep 11 05:10 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep 11 05:10 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep 11 05:10 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep 11 05:10 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 triage
+inventory/:
+total 48
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 .
+drwxr-xr-x 12 runner runner  4096 Sep 11 05:10 ..
+-rw-r--r--  1 runner runner 38880 Sep 11 05:10 easybell.md
+-rw-r--r-- 1 runner runner    32 Sep 11 05:10 analyst-out.txt
+-rw-r--r-- 1 runner runner 89015 Sep 11 05:10 analyst-prompt.txt
+-rw-r--r-- 1 runner runner 85208 Sep 11 05:10 ctx.txt
+[0m
+[0m$ [0mgit log --oneline -10; echo "---"; cat state_bigpickle.json; echo; cat analyst-out.txt; echo; ls -la leads/ knowledge/ triage/ reports/
+f913fb7 triage 2026-09-11-04-27
+---
+{"phase": "POC", "target": "api"}
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mls -la && ls -la inventory/ art/ 2>/dev/null; ls -lt *.txt 2>/dev/null | head -20
+total 268
+drwxr-xr-x 12 runner runner  4096 Sep 11 05:10 .
+drwxr-xr-x  3 runner runner  4096 Sep 11 05:10 ..
+drwxr-xr-x  7 runner runner  4096 Sep 11 05:10 .git
+drwxr-xr-x  3 runner runner  4096 Sep 11 05:10 .github
+-rw-r--r--  1 runner runner  1756 Sep 11 05:10 README.md
+-rw-r--r--  1 runner runner    32 Sep 11 05:10 analyst-out.txt
+-rw-r--r--  1 runner runner 89015 Sep 11 05:10 analyst-prompt.txt
+-rw-r--r--  1 runner runner 85208 Sep 11 05:10 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 inventory
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 leads
+-rw-r--r--  1 runner runner 12240 Sep 11 05:10 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 reports
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep 11 05:10 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 scripts
+-rw-r--r--  1 runner runner    33 Sep 11 05:10 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep 11 05:10 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep 11 05:10 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep 11 05:10 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep 11 05:10 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep 11 05:10 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 triage
+inventory/:
+total 48
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 .
+drwxr-xr-x 12 runner runner  4096 Sep 11 05:10 ..
+-rw-r--r--  1 runner runner 38880 Sep 11 05:10 easybell.md
+-rw-r--r-- 1 runner runner    32 Sep 11 05:10 analyst-out.txt
+-rw-r--r-- 1 runner runner 89015 Sep 11 05:10 analyst-prompt.txt
+-rw-r--r-- 1 runner runner 85208 Sep 11 05:10 ctx.txt
+[0m
+
+knowledge/:
+total 44
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 .
+drwxr-xr-x 12 runner runner  4096 Sep 11 05:10 ..
+-rw-r--r--  1 runner runner 33812 Sep 11 05:10 index.md
+
+leads/:
+total 700
+drwxr-xr-x  2 runner runner   4096 Sep 11 05:10 .
+drwxr-xr-x 12 runner runner   4096 Sep 11 05:10 ..
+-rw-r--r--  1 runner runner 266522 Sep 11 05:10 lead-bigpickle.md
+-rw-r--r--  1 runner runner   2805 Sep 11 05:10 lead-laguna.md
+-rw-r--r--  1 runner runner   2750 Sep 11 05:10 lead-ling3.md
+-rw-r--r--  1 runner runner   2860 Sep 11 05:10 lead-longcat.md
+-rw-r--r--  1 runner runner     18 Sep 11 05:10 lead-mimo.md
+-rw-r--r--  1 runner runner 411608 Sep 11 05:10 lead-nemotron3.md
+-rw-r--r--  1 runner runner   7577 Sep 11 05:10 reposcan-easybell.md
+
+reports/:
+total 1712
+drwxr-xr-x  2 runner runner   4096 Sep 11 05:10 .
+drwxr-xr-x 12 runner runner   4096 Sep 11 05:10 ..
+-rw-r--r--  1 runner runner 984090 Sep 11 05:10 analyst-bigpickle.log
+-rw-r--r--  1 runner runner  11935 Sep 11 05:10 analyst-laguna.log
+-rw-r--r--  1 runner runner  11880 Sep 11 05:10 analyst-ling3.log
+-rw-r--r--  1 runner runner  11990 Sep 11 05:10 analyst-longcat.log
+-rw-r--r--  1 runner runner 617253 Sep 11 05:10 analyst-nemotron3.log
+-rw-r--r--  1 runner runner   3804 Sep 11 05:10 hypotheses-bigpickle.txt
+-rw-r--r--  1 runner runner     51 Sep 11 05:10 hypotheses-laguna.txt
+-rw-r--r--  1 runner runner     50 Sep 11 05:10 hypotheses-ling3.txt
+-rw-r--r--  1 runner runner     52 Sep 11 05:10 hypotheses-longcat.txt
+-rw-r--r--  1 runner runner   6485 Sep 11 05:10 hypotheses-nemotron3.txt
+-rw-r--r--  1 runner runner 102500 Sep 11 05:10 hypotheses.md
+-rw-r--r--  1 runner runner   1005 Sep 11 05:10 valid-bugs.md
+
+triage/:
+total 252
+drwxr-xr-x  2 runner runner  4096 Sep 11 05:10 .
+drwxr-xr-x 12 runner runner  4096 Sep 11 05:10 ..
+-rw-r--r--  1 runner runner     0 Sep 11 05:10 .gitkeep
+-rw-r--r--  1 runner runner   851 Sep 11 05:10 run-2026-09-02-21-59.md
+-rw-r--r--  1 runner runner   184 Sep 11 05:10 run-2026-09-03-00-06.md
+-rw-r--r--  1 runner runner   290 Sep 11 05:10 run-2026-09-03-04-45.md
+-rw-r--r--  1 runner runner   538 Sep 11 05:10 run-2026-09-03-09-37.md
+-rw-r--r--  1 runner runner  1027 Sep 11 05:10 run-2026-09-03-13-56.md
+-rw-r--r--  1 runner runner  1473 Sep 11 05:10 run-2026-09-03-17-47.md
+-rw-r--r--  1 runner runner   173 Sep 11 05:10 run-2026-09-03-20-54.md
+-rw-r--r--  1 runner runner   250 Sep 11 05:10 run-2026-09-03-23-11.md
+-rw-r--r--  1 runner runner   263 Sep 11 05:10 run-2026-09-04-01-05.md
+-rw-r--r--  1 runner runner   157 Sep 11 05:10 run-2026-09-04-06-02.md
+-rw-r--r--  1 runner runner   153 Sep 11 05:10 run-2026-09-04-11-29.md
+-rw-r--r--  1 runner runner   208 Sep 11 05:10 run-2026-09-04-15-06.md
+-rw-r--r--  1 runner runner   319 Sep 11 05:10 run-2026-09-04-18-29.md
+-rw-r--r--  1 runner runner   195 Sep 11 05:10 run-2026-09-04-21-03.md
+-rw-r--r--  1 runner runner   478 Sep 11 05:10 run-2026-09-04-23-05.md
+-rw-r--r--  1 runner runner   168 Sep 11 05:10 run-2026-09-05-01-06.md
+-rw-r--r--  1 runner runner 11550 Sep 11 05:10 run-2026-09-05-05-54.md
+-rw-r--r--  1 runner runner   225 Sep 11 05:10 run-2026-09-05-10-27.md
+-rw-r--r--  1 runner runner   143 Sep 11 05:10 run-2026-09-05-13-32.md
+-rw-r--r--  1 runner runner   273 Sep 11 05:10 run-2026-09-05-16-16.md
+-rw-r--r--  1 runner runner   154 Sep 11 05:10 run-2026-09-05-18-25.md
+-rw-r--r--  1 runner runner   157 Sep 11 05:10 run-2026-09-05-20-44.md
+-rw-r--r--  1 runner runner   189 Sep 11 05:10 run-2026-09-05-22-46.md
+-rw-r--r--  1 runner runner   280 Sep 11 05:10 run-2026-09-06-00-48.md
+-rw-r--r--  1 runner runner   263 Sep 11 05:10 run-2026-09-06-05-45.md
+-rw-r--r--  1 runner runner   200 Sep 11 05:10 run-2026-09-06-10-46.md
+-rw-r--r--  1 runner runner   237 Sep 11 05:10 run-2026-09-06-14-05.md
+-rw-r--r--  1 runner runner  7735 Sep 11 05:10 run-2026-09-06-17-09.md
+-rw-r--r--  1 runner runner  1818 Sep 11 05:10 run-2026-09-06-19-19.md
+-rw-r--r--  1 runner runner   426 Sep 11 05:10 run-2026-09-06-21-30.md
+-rw-r--r--  1 runner runner   177 Sep 11 05:10 run-2026-09-06-23-09.md
+-rw-r--r--  1 runner runner   141 Sep 11 05:10 run-2026-09-07-01-07.md
+-rw-r--r--  1 runner runner   184 Sep 11 05:10 run-2026-09-07-06-12.md
+-rw-r--r--  1 runner runner   186 Sep 11 05:10 run-2026-09-07-12-47.md
+-rw-r--r--  1 runner runner   193 Sep 11 05:10 run-2026-09-07-18-12.md
+-rw-r--r--  1 runner runner   151 Sep 11 05:10 run-2026-09-07-21-36.md
+-rw-r--r--  1 runner runner   186 Sep 11 05:10 run-2026-09-07-23-47.md
+-rw-r--r--  1 runner runner   282 Sep 11 05:10 run-2026-09-08-04-19.md
+-rw-r--r--  1 runner runner   975 Sep 11 05:10 run-2026-09-08-08-57.md
+-rw-r--r--  1 runner runner   143 Sep 11 05:10 run-2026-09-08-13-30.md
+-rw-r--r--  1 runner runner   210 Sep 11 05:10 run-2026-09-08-17-32.md
+-rw-r--r--  1 runner runner   268 Sep 11 05:10 run-2026-09-08-20-19.md
+-rw-r--r--  1 runner runner   178 Sep 11 05:10 run-2026-09-08-22-47.md
+-rw-r--r--  1 runner runner   208 Sep 11 05:10 run-2026-09-09-01-10.md
+-rw-r--r--  1 runner runner   290 Sep 11 05:10 run-2026-09-09-06-06.md
+-rw-r--r--  1 runner runner  1191 Sep 11 05:10 run-2026-09-09-11-37.md
+-rw-r--r--  1 runner runner   450 Sep 11 05:10 run-2026-09-09-15-19.md
+-rw-r--r--  1 runner runner   152 Sep 11 05:10 run-2026-09-09-18-45.md
+-rw-r--r--  1 runner runner   191 Sep 11 05:10 run-2026-09-09-21-37.md
+-rw-r--r--  1 runner runner   217 Sep 11 05:10 run-2026-09-09-23-34.md
+-rw-r--r--  1 runner runner   141 Sep 11 05:10 run-2026-09-10-01-29.md
+-rw-r--r--  1 runner runner   148 Sep 11 05:10 run-2026-09-10-06-41.md
+-rw-r--r--  1 runner runner   147 Sep 11 05:10 run-2026-09-10-11-51.md
+-rw-r--r--  1 runner runner   230 Sep 11 05:10 run-2026-09-10-16-17.md
+-rw-r--r--  1 runner runner   159 Sep 11 05:10 run-2026-09-10-19-11.md
+-rw-r--r--  1 runner runner   183 Sep 11 05:10 run-2026-09-10-21-42.md
+-rw-r--r--  1 runner runner   179 Sep 11 05:10 run-2026-09-10-23-57.md
+-rw-r--r--  1 runner runner   265 Sep 11 05:10 run-2026-09-11-04-27.md
+[0m
+[0m$ [0mcat triage/run-2026-09-11-04-27.md; echo "=== hypotheses-bigpickle ==="; cat reports/hypotheses-bigpickle.txt; echo "=== valid-bugs ==="; cat reports/valid-bugs.md
+===== TRIAGE 2026-09-11 04:27:13 UTC =====
+[0m
+> build · mimo-v2.5-free
+[0m
+I need the actual leads to validate. Your message ends with "LEADS:" but no leads were provided. Please share the specific findings/URLs you want validated against the 7-Question Gate.
+=== hypotheses-bigpickle ===
+## 2026-09-11 00:32:01 UTC [target] (model bigpickle)
+[PRIO] voip-management.easybell.de/api, 7.4, cors-cred-read-write — surface=8, value=9, tech=7(Spring/CORS), gate=4(credential-gated), cloud=5, fresh=10. Only HIGH/CRITICAL class with full evidence set; zero residual passive work.
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: OPTIONS on all 7 Spring routes reflects arbitrary Origin + ACAC:true, Allow-Methods echoes PUT/POST, Allow-Headers authorization/content-type. Dual auth HTTP Basic realm sipwisebroker + Bearer voipSession. 6 independent captures 09-04→09-10. Triage VALID 09-06 19:19. No counter-evidence; reconfirmation collection complete and every further capture valueless.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu only.
+verify_steps: HUMAN — from attacker origin, fetch('https://voip-management.easybell.de/api/account',{credentials:'include',method:'GET'}); preflight passes, response readable.
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, routing, subscriber data) from any attacker page visited by authenticated admin -> HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] order-form-anonymous-api
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps anonymous API; GET plans/<code> = public tariff only; contract-summary 404 pre-session; money-flow mutations session-gated. No anonymous customer-scoped response ever observed.
+evidence_needed: anonymous request returning customer-scoped data
+verify_steps: HUMAN — registered-session trace; anonymous POST /api/apc/check empty body
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH
+testability: HUMAN_ONLY
+[HYP] portal-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 55
+reasoning: ACAO:* without ACAC:true; POST+Authorization accepted cross-origin; standalone impact requires Bearer theft via voip CORS chain.
+evidence_needed: proxy target acceptance of stolen Bearer
+verify_steps: HUMAN — portal JS network capture of Bearer format; cross-origin POST with stolen token
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary)
+testability: HUMAN_ONLY
+[PARKED] order-form-anonymous-api: 50, stationary across all cycles, HUMAN_ONLY with no creds available; no passive advance possible.
+[PARKED] portal-proxy-wildcard: 55, dependency (Bearer theft) unproven and credential-gated; secondary-chain only.
+[FINAL] voip-cors-cred-read-write (95) — sole survivor; evidence complete, triage VALID, filing is the only gate.
+[NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu NOW. Evidence: 6 independent OPTIONS captures (09-04 12:29, 09-05 13:12, 09-08 22:16:53, 09-09 04:53:30, 09-10 05:12, 09-10 09:48:02 UTC) on /api/account + /api/session; each returns ACAO:<arbitrary Origin> + ACAC:true + Allow-Methods echoing PUT + Allow-Headers authorization,content-type across 7 Spring routes; dual auth Basic(sipwisebroker)/Bearer(voipSession); HIGH/CRITICAL cross-origin credentialed read+write. Do NOT run further reconfirmation probes — valueless.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~114h post-triage-VALID / ~9.6 days post-discovery; 6 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it.
+[RISK] easybell: 92 — the single unique HIGH/CRITICAL finding remains class-validated but unfiled; every hour past 09-06 19:19 triage increases exposure of live customer VoIP config with no compensating gate. Risk trajectory is purely a function of filing delay; probing is exhausted.
+=== valid-bugs ===
+# Validated findings (running count 0)
+
+- 3 lead(s) marked VALID at 2026-09-05 05:54:14 UTC
+  - | Q5 | Novel/unreported? | Likely novel for this program (valid-bugs.md is empty, no prior report) |
+  - **Verdict: VALID**
+  - | 1 | voip-cors-cred-exfil-v3 | **VALID** | Report to bugs.olivermaicher.eu |
+
+- 3 lead(s) marked VALID at 2026-09-06 17:09:59 UTC
+  - ### Verdict: **VALID**
+  - | voip-cors-cred-exfil-v3 | **VALID** | Credentialed CORS + ACAC:true on 7 authenticated API routes — HIGH impact, provable via OPTIONS |
+  - | my-portal-api-proxy-wildcard | **HOLD** | Standalone wildcard CORS without ACAC:true is informational; only valid as chain amplifier |
+
+- 2 lead(s) marked VALID at 2026-09-06 19:19:02 UTC
+  - | voip-cors-cred-exfil-v3 | **VALID** | Credentialed CORS + ACAC:true on 7 authenticated API routes — HIGH impact, provable via OPTIONS |
+  - | my-portal-api-proxy-wildcard | **HOLD** | Standalone wildcard CORS without ACAC:true is informational; only valid as chain amplifier |
+[0m
+[0m$ [0mtail -25 inventory/easybell.md; echo "=== KB tail ==="; tail -8 knowledge/index.md
+- CHANGED login.easybell.de: `?redirect=&next=&url=` not echoed in 302; sets Laravel XSRF-TOKEN+ekp_session (same cookie family as my.easybell.com); no open redirect/OAuth code-theft — line closed cleanly
+
+## 2026-09-09 17:31:12 UTC
+
+## 2026-09-09 20:01:27 UTC
+
+## 2026-09-09 22:25:39 UTC
+- CHANGED voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 3rd time at 2026-09-09 04:53:30 UTC (OPTIONS /api/account → ACAO:evil-origin + ACAC:true + Allow-Methods:PUT) — finding p
+
+## 2026-09-10 00:37:11 UTC
+
+## 2026-09-10 05:16:47 UTC
+
+## 2026-09-10 09:52:18 UTC
+- NEW 2026-09-10 09:49:42 UTC — No new passive probes since 2026-09-10 05:16:47 UTC; inventory + KB unchanged; all passive lines closed; filing latency only rising program risk.
+
+## 2026-09-10 14:01:48 UTC
+
+## 2026-09-10 17:49:21 UTC
+
+## 2026-09-10 20:02:33 UTC
+
+## 2026-09-10 22:39:09 UTC
+
+## 2026-09-11 00:32:44 UTC
+=== KB tail ===
+- 2026-09-10 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 09:48:02 UTC 09-10 — 6th independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~5.9 days post-discovery, ~82.5h post-triage-VALID.
+- 2026-09-10 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 05:16:47 UTC 09-10 — 4th independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~5 days post-discovery, ~57h post-triage-VALID
+- 2026-09-10 NO_DELTA — inventory + KB unchanged since 05:16:47 UTC 09-10; all passive lines closed; filing latency is the only rising program risk
+- 2026-09-10 NO_DELTA — no new passive probes since 2026-09-10 09:48:02 UTC; inventory + KB unchanged; all passive lines closed; filing latency is the only rising program risk.
+- 2026-09-11 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~114h post-triage-VALID / ~9.6 days post-discovery; 6 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it.
+- 2026-09-11 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 09:48:02 UTC 09-10 — 6th independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~5.9 days post-discovery, ~82.5h post-triage-VALID
+- 2026-09-11 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS read+write reconfirmed LIVE 05:16:47 UTC 09-10 — 4th independent capture proving persistent misconfiguration across 7 Spring routes; finding exploitable ~5 days post-discovery, ~57h post-triage-VALID
+- 2026-09-11 NO_DELTA — inventory + KB unchanged since 05:16:47 UTC 09-10; all passive lines closed; filing latency is the only rising program risk
+[0m
+CONFIRMED NO_DELTA — no live probes since 2026-09-10 09:48:02 UTC; inventory/KB tails identical to 00:32:44 cycle; triage 04:27 was a pipeline no-op (mimo model error, no leads processed). All passive lines remain closed; flagship finding unfiled.
+
+== STEP 1 — DELTA ==
+NO_DELTA — no new probes since 09-10 09:48:02; inventory + KB unchanged; sole delta is elapsed time: flagship finding now ~106h+ post-triage-VALID (~6.7d post first CORS capture) and still unfiled.
+
+== STEP 2 — PRIORITIZE ==
+[PRIO] voip-management.easybell.de/api, 7.4, cors-cred-read-write — surface=8, value=9, tech=7(Spring/CORS), gate=4(credential-gated), cloud=5, fresh=10. Same 7 Spring routes, 6 independent captures 09-04→09-10; only HIGH/CRITICAL in program with complete evidence set. Zero residual passive work on all other assets (order-form, partner, connectme, survey, backmon all closed).
+
+== STEP 3 — HYPOTHESES ==
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: OPTIONS on all 7 Spring routes reflects arbitrary Origin verbatim + ACAC:true; Allow-Methods echoes PUT/POST (read AND write); Allow-Headers authorization/content-type. Dual auth: HTTP Basic realm sipwisebroker + Bearer voipSession. 6 independent captures spanning 09-04→09-10; triage VALID 09-06 19:19. No counter-evidence in any cycle. Evidence collection complete; each further capture is valueless.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu only.
+verify_steps: HUMAN — from attacker origin, fetch('https://voip-management.easybell.de/api/account',{credentials:'include',method:'GET'}); preflight passes (ACAC:true), response readable by victim browser.
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, routing, subscriber data) from any attacker page an authenticated admin visits -> HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] order-form-anonymous-api
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps full anonymous API; GET plans/<code> returns public tariff catalog only; contract-summary 404 pre-session; money-flow mutations session-gated. No anonymous customer-scoped response observed across all cycles.
+evidence_needed: anonymous request returning customer-scoped data
+verify_steps: HUMAN — registered-session trace; anonymous POST /api/apc/check empty body
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH
+testability: HUMAN_ONLY
+[HYP] portal-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 55
+reasoning: ACAO:* without ACAC:true on portal proxy layer; POST+Authorization accepted cross-origin (preflight 200). Standalone impact requires prior Bearer theft via the voip CORS chain; unproven dependency.
+evidence_needed: proxy target acceptance of stolen Bearer
+verify_steps: HUMAN — portal JS network capture of Bearer format; cross-origin POST with stolen token
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary)
+testability: HUMAN_ONLY
+
+== STEP 4 — SELF-CRITIQUE ==
+[PARKED] order-form-anonymous-api: 50, stationary all cycles, HUMAN_ONLY, no creds; no passive advance possible.
+[PARKED] portal-proxy-wildcard: 55, chain dependency (Bearer theft) unproven + credential-gated; secondary only.
+[FINAL] voip-cors-cred-read-write (95) — sole survivor; evidence complete, triage VALID, filing is the only gate.
+
+== STEP 5 — NEXT ACTION ==
+[NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu NOW — do NOT run further reconfirmation probes (valueless, risk-free-of-gain). Evidence for submission: 6 independent OPTIONS captures (09-04 12:29, 09-05 13:12, 09-08 22:16:53, 09-09 04:53:30, 09-10 05:12, 09-10 09:48:02 UTC) on /api/account + /api/session, each returning ACAO:<arbitrary Origin> + ACAC:true + Allow-Methods echoing PUT + Allow-Headers authorization,content-type across the 7 Spring routes; dual auth Basic(sipwisebroker)/Bearer(voipSession); evidence gates met (6 captures + reachable tracker).
+
+== STEP 6 — LEARNING ==
+[LEARN] NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; no new passive probes this cycle (05:10 UTC 09-11); flagship finding remains exploitable + unfiled at ~106h post-triage-VALID.
+
+== STEP 7 — RISK ==
+[RISK] easybell: 93 — sole unique HIGH/CRITICAL finding class-validated but unfiled; each hour beyond 09-06 19:19 triage extends exposure of live customer VoIP config with no compensating gate. Risk trajectory is purely a function of filing delay; probing is exhausted and reconfirmation adds nothing.

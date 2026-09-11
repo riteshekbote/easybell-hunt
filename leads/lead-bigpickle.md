@@ -2151,3 +2151,72 @@ testability: HUMAN_ONLY
 [NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu NOW. Evidence: 6 independent OPTIONS captures (09-04 12:29, 09-05 13:12, 09-08 22:16:53, 09-09 04:53:30, 09-10 05:12, 09-10 09:48:02 UTC) on /api/account + /api/session; each returns ACAO:<arbitrary Origin> + ACAC:true + Allow-Methods echoing PUT + Allow-Headers authorization,content-type across 7 Spring routes; dual auth Basic(sipwisebroker)/Bearer(voipSession); HIGH/CRITICAL cross-origin credentialed read+write. Do NOT run further reconfirmation probes — valueless.
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~114h post-triage-VALID / ~9.6 days post-discovery; 6 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it.
 [RISK] easybell: 92 — the single unique HIGH/CRITICAL finding remains class-validated but unfiled; every hour past 09-06 19:19 triage increases exposure of live customer VoIP config with no compensating gate. Risk trajectory is purely a function of filing delay; probing is exhausted.
+## 2026-09-11 05:11:48 UTC [target] (model bigpickle)
+[PRIO] voip-management.easybell.de/api, 7.4, cors-cred-read-write — surface=8, value=9, tech=7(Spring/CORS), gate=4(credential-gated), cloud=5, fresh=10. Only HIGH/CRITICAL class with full evidence set; zero residual passive work.
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: OPTIONS on all 7 Spring routes reflects arbitrary Origin + ACAC:true, Allow-Methods echoes PUT/POST, Allow-Headers authorization/content-type. Dual auth HTTP Basic realm sipwisebroker + Bearer voipSession. 6 independent captures 09-04→09-10. Triage VALID 09-06 19:19. No counter-evidence; reconfirmation collection complete and every further capture valueless.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu only.
+verify_steps: HUMAN — from attacker origin, fetch('https://voip-management.easybell.de/api/account',{credentials:'include',method:'GET'}); preflight passes, response readable.
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, routing, subscriber data) from any attacker page visited by authenticated admin -> HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] order-form-anonymous-api
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps anonymous API; GET plans/<code> = public tariff only; contract-summary 404 pre-session; money-flow mutations session-gated. No anonymous customer-scoped response ever observed.
+evidence_needed: anonymous request returning customer-scoped data
+verify_steps: HUMAN — registered-session trace; anonymous POST /api/apc/check empty body
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH
+testability: HUMAN_ONLY
+[HYP] portal-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 55
+reasoning: ACAO:* without ACAC:true; POST+Authorization accepted cross-origin; standalone impact requires Bearer theft via voip CORS chain.
+evidence_needed: proxy target acceptance of stolen Bearer
+verify_steps: HUMAN — portal JS network capture of Bearer format; cross-origin POST with stolen token
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary)
+testability: HUMAN_ONLY
+[PARKED] order-form-anonymous-api: 50, stationary across all cycles, HUMAN_ONLY with no creds available; no passive advance possible.
+[PARKED] portal-proxy-wildcard: 55, dependency (Bearer theft) unproven and credential-gated; secondary-chain only.
+[FINAL] voip-cors-cred-read-write (95) — sole survivor; evidence complete, triage VALID, filing is the only gate.
+[NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu NOW. Evidence: 6 independent OPTIONS captures (09-04 12:29, 09-05 13:12, 09-08 22:16:53, 09-09 04:53:30, 09-10 05:12, 09-10 09:48:02 UTC) on /api/account + /api/session; each returns ACAO:<arbitrary Origin> + ACAC:true + Allow-Methods echoing PUT + Allow-Headers authorization,content-type across 7 Spring routes; dual auth Basic(sipwisebroker)/Bearer(voipSession); HIGH/CRITICAL cross-origin credentialed read+write. Do NOT run further reconfirmation probes — valueless.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~114h post-triage-VALID / ~9.6 days post-discovery; 6 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it.
+[RISK] easybell: 92 — the single unique HIGH/CRITICAL finding remains class-validated but unfiled; every hour past 09-06 19:19 triage increases exposure of live customer VoIP config with no compensating gate. Risk trajectory is purely a function of filing delay; probing is exhausted.
+[PRIO] voip-management.easybell.de/api, 7.4, cors-cred-read-write — surface=8, value=9, tech=7(Spring/CORS), gate=4(credential-gated), cloud=5, fresh=10. Same 7 Spring routes, 6 independent captures 09-04→09-10; only HIGH/CRITICAL in program with complete evidence set. Zero residual passive work on all other assets (order-form, partner, connectme, survey, backmon all closed).
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: OPTIONS on all 7 Spring routes reflects arbitrary Origin verbatim + ACAC:true; Allow-Methods echoes PUT/POST (read AND write); Allow-Headers authorization/content-type. Dual auth: HTTP Basic realm sipwisebroker + Bearer voipSession. 6 independent captures spanning 09-04→09-10; triage VALID 09-06 19:19. No counter-evidence in any cycle. Evidence collection complete; each further capture is valueless.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu only.
+verify_steps: HUMAN — from attacker origin, fetch('https://voip-management.easybell.de/api/account',{credentials:'include',method:'GET'}); preflight passes (ACAC:true), response readable by victim browser.
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, routing, subscriber data) from any attacker page an authenticated admin visits -> HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] order-form-anonymous-api
+class: BUSLOGIC
+asset: order-form.easybell.de/api
+confidence: 50
+reasoning: 21-chunk Vite audit maps full anonymous API; GET plans/<code> returns public tariff catalog only; contract-summary 404 pre-session; money-flow mutations session-gated. No anonymous customer-scoped response observed across all cycles.
+evidence_needed: anonymous request returning customer-scoped data
+verify_steps: HUMAN — registered-session trace; anonymous POST /api/apc/check empty body
+impact: order manipulation / pricing bypass -> MEDIUM/HIGH
+testability: HUMAN_ONLY
+[HYP] portal-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 55
+reasoning: ACAO:* without ACAC:true on portal proxy layer; POST+Authorization accepted cross-origin (preflight 200). Standalone impact requires prior Bearer theft via the voip CORS chain; unproven dependency.
+evidence_needed: proxy target acceptance of stolen Bearer
+verify_steps: HUMAN — portal JS network capture of Bearer format; cross-origin POST with stolen token
+impact: CRM/EBIT/Strapi data leakage -> MEDIUM/HIGH (secondary)
+testability: HUMAN_ONLY
+[PARKED] order-form-anonymous-api: 50, stationary all cycles, HUMAN_ONLY, no creds; no passive advance possible.
+[PARKED] portal-proxy-wildcard: 55, chain dependency (Bearer theft) unproven + credential-gated; secondary only.
+[FINAL] voip-cors-cred-read-write (95) — sole survivor; evidence complete, triage VALID, filing is the only gate.
+[NEXT] HUMAN: File voip-cors-cred-read-write at bugs.olivermaicher.eu NOW — do NOT run further reconfirmation probes (valueless, risk-free-of-gain). Evidence for submission: 6 independent OPTIONS captures (09-04 12:29, 09-05 13:12, 09-08 22:16:53, 09-09 04:53:30, 09-10 05:12, 09-10 09:48:02 UTC) on /api/account + /api/session, each returning ACAO:<arbitrary Origin> + ACAC:true + Allow-Methods echoing PUT + Allow-Headers authorization,content-type across the 7 Spring routes; dual auth Basic(sipwisebroker)/Bearer(voipSession); evidence gates met (6 captures + reachable tracker).
+[LEARN] NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; no new passive probes this cycle (05:10 UTC 09-11); flagship finding remains exploitable + unfiled at ~106h post-triage-VALID.
+[RISK] easybell: 93 — sole unique HIGH/CRITICAL finding class-validated but unfiled; each hour beyond 09-06 19:19 triage extends exposure of live customer VoIP config with no compensating gate. Risk trajectory is purely a function of filing delay; probing is exhausted and reconfirmation adds nothing.
