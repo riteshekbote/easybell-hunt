@@ -13182,3 +13182,113 @@ STEP 6 — LEARNING
 
 STEP 7 — RISK
 [RISK] easybell: 93 — sole unique HIGH/CRITICAL unchanged at ~126h post-triage-VALID / ~10.1 days post-discovery; 7 captures and a reachable tracker satisfy every evidence gate. Risk trajectory is a pure function of filing delay; every probe executed instead of filing adds nothing and risks WAF noise on the live ingress. Only the bugs.olivermaicher.eu submission reduces risk.
+===== ANALYST bigpickle 2026-09-12 00:38:46 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mdate -u +"%Y-%m-%d %H:%M:%S UTC" && ls -la art/ 2>/dev/null | tail -20
+2026-09-12 00:36:54 UTC
+[0m
+[0m✱ [0mGlob "**/*.md"[90m 77 matches[0m
+[0m
+[0m$ [0mls -la reports/ knowledge/ leads/ && echo "---HYPO (tail)---" && ls -t leads/* hypotheses* 2>/dev/null | head -5
+knowledge/:
+total 44
+drwxr-xr-x  2 runner runner  4096 Sep 12 00:36 .
+drwxr-xr-x 12 runner runner  4096 Sep 12 00:36 ..
+-rw-r--r--  1 runner runner 35918 Sep 12 00:36 index.md
+
+leads/:
+total 776
+drwxr-xr-x  2 runner runner   4096 Sep 12 00:36 .
+drwxr-xr-x 12 runner runner   4096 Sep 12 00:36 ..
+-rw-r--r--  1 runner runner 304367 Sep 12 00:36 lead-bigpickle.md
+-rw-r--r--  1 runner runner   3111 Sep 12 00:36 lead-laguna.md
+-rw-r--r--  1 runner runner   3050 Sep 12 00:36 lead-ling3.md
+-rw-r--r--  1 runner runner   3172 Sep 12 00:36 lead-longcat.md
+-rw-r--r--  1 runner runner     18 Sep 12 00:36 lead-mimo.md
+-rw-r--r--  1 runner runner 450633 Sep 12 00:36 lead-nemotron3.md
+-rw-r--r--  1 runner runner   8112 Sep 12 00:36 reposcan-easybell.md
+
+reports/:
+total 1876
+drwxr-xr-x  2 runner runner    4096 Sep 12 00:36 .
+drwxr-xr-x 12 runner runner    4096 Sep 12 00:36 ..
+-rw-r--r--  1 runner runner 1088486 Sep 12 00:36 analyst-bigpickle.log
+-rw-r--r--  1 runner runner   13237 Sep 12 00:36 analyst-laguna.log
+-rw-r--r--  1 runner runner   13176 Sep 12 00:36 analyst-ling3.log
+-rw-r--r--  1 runner runner   13298 Sep 12 00:36 analyst-longcat.log
+-rw-r--r--  1 runner runner  663446 Sep 12 00:36 analyst-nemotron3.log
+-rw-r--r--  1 runner runner    4919 Sep 12 00:36 hypotheses-bigpickle.txt
+-rw-r--r--  1 runner runner      51 Sep 12 00:36 hypotheses-laguna.txt
+-rw-r--r--  1 runner runner      50 Sep 12 00:36 hypotheses-ling3.txt
+-rw-r--r--  1 runner runner      52 Sep 12 00:36 hypotheses-longcat.txt
+-rw-r--r--  1 runner runner    7117 Sep 12 00:36 hypotheses-nemotron3.txt
+-rw-r--r--  1 runner runner  109981 Sep 12 00:36 hypotheses.md
+-rw-r--r--  1 runner runner    1187 Sep 12 00:36 valid-bugs.md
+---HYPO (tail)---
+leads/lead-bigpickle.md
+leads/lead-laguna.md
+leads/lead-ling3.md
+leads/lead-longcat.md
+leads/lead-mimo.md
+[0m
+[0m$ [0mgit log --oneline -5 2>/dev/null; echo "---"; git status --short 2>/dev/null | head -20
+986b2f3 hunt cycle 2026-09-11-22-39
+---
+?? analyst-out.txt
+?? analyst-prompt.txt
+?? ctx.txt
+[0m
+[0m→ [0mRead reports/hypotheses-bigpickle.txt
+[0m→ [0mRead reports/valid-bugs.md
+STEP 1 — DELTA
+- NO_DELTA — no live probes since 2026-09-11 20:03:43 UTC (voip CORS) / 20:07:30 UTC (my proxy wildcard); inventory + KB + last-leads unchanged through 09-11 22:39 cycles.
+- [CHANGED] voip-management.easybell.de/api: flagship finding remains exploitable + UNFILED at ~125h post-triage-VALID (09-06 19:19) / ~7.5 days post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only non-static variable.
+
+STEP 2 — PRIORITIZE
+- [PRIO] voip-management.easybell.de/api,6.35,attack_surface=9|business_value=10|tech_exposure=7|gate_ease=3|cloud_surface=0|freshness=1
+- [PRIO] my.easybell.com,5.85,attack_surface=7|business_value=10|tech_exposure=8|gate_ease=2|cloud_surface=0|freshness=1
+
+STEP 3 — HYPOTHESES
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: OPTIONS on all 7 Spring routes reflects arbitrary Origin verbatim with ACAC:true; Allow-Methods echoes POST/PUT; Allow-Headers authorization,content-type; dual auth HTTP Basic + Bearer voipSession; 7 independent captures 09-04→09-11 UTC (latest 20:03:43); triage VALID 09-06 19:19; zero counter-evidence, still live+unfiled at ~125h
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu ONLY
+verify_steps: HUMAN — submit ready body at bugs.olivermaicher.eu; do NOT re-run OPTIONS reconfirmation (valueless, WAF-rate-limited)
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, call-forwarding, voicemail, routing) from any page an authenticated admin visits → HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management.easybell.de/api via axios + Bearer voipSession)
+confidence: 78
+reasoning: customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — unchanged since 09-04 21:34
+evidence_needed: authenticated session showing cross-customer object access on proxied /api/accounts/{id}, /api/subscribers/{id}, /api/numbers/{id}
+verify_steps: HUMAN — login, capture voipSession, enumerate neighbor object IDs on proxied plural routes
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true on 3 proxy endpoints; standalone informational (no cookie transmission cross-origin); only exploitable after Bearer theft, itself unproven + credential-gated → chain caps confidence; reconfirmed live 20:07:30 09-11
+evidence_needed: portal JS capture showing Bearer voipSession accepted by /api/{crm,ebit,strapi}
+verify_steps: HUMAN — authenticated network trace of portal calls to the 3 proxy endpoints
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+
+STEP 4 — SELF-CRITIQUE
+- [PARKED] my-portal-api-proxy-wildcard (60): chain-dependent; non-credentialed standalone value approaches zero; no new evidence.
+- [PARKED] my-portal-bola-proxied-voip (78): credential-gated since 09-04; no passive vector; retained for post-login only.
+- [FINAL] voip-cors-cred-read-write (95): triage-VALID, 7 captures, all evidence gates satisfied, zero open verification steps — single fileable finding; no new hypothesis survives critique.
+
+STEP 5 — NEXT ACTION
+- [NEXT] HUMAN: FILE `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19, CVSS 8.1) at bugs.olivermaicher.eu NOW with the ready-to-submit body — evidence complete (7 captures + reachable tracker); standing directive holds: no further probes, none advance the finding.
+
+STEP 6 — LEARNING
+- [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: flagship finding still exploitable + unfiled at ~125h post-triage-VALID / ~7.5 days post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it.
+
+STEP 7 — RISK
+- [RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~125h post-triage-VALID; every evidence gate met (~8 candidate capture timestamps + live tracker) yet unfiled for ~8 analyst cycles of identical NEXT. Risk is now a pure function of filing delay; each cycle that ends without a bugs.olivermaicher.eu submission converts validated finding value into exposure. Any probe instead of filing adds zero delta and risks WAF noise on the live ingress.
