@@ -1,18 +1,18 @@
-## 2026-09-12 00:37:25 UTC [target] (model bigpickle)
+## 2026-09-12 04:59:14 UTC [target] (model bigpickle)
 [HYP] voip-cors-cred-read-write
 class: MISCONFIG
 asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
 confidence: 95
-reasoning: OPTIONS on all 7 Spring routes reflects arbitrary Origin verbatim with ACAC:true; Allow-Methods echoes POST/PUT; Allow-Headers authorization,content-type; dual auth HTTP Basic + Bearer voipSession; 7 independent captures 09-04→09-11 UTC (latest 20:03:43); triage VALID 09-06 19:19; zero counter-evidence, still live+unfiled at ~125h
-evidence_needed: filed-report acceptance at bugs.olivermaicher.eu ONLY
-verify_steps: HUMAN — submit ready body at bugs.olivermaicher.eu; do NOT re-run OPTIONS reconfirmation (valueless, WAF-rate-limited)
+reasoning: OPTIONS reflects arbitrary Origin verbatim with ACAC:true on all 7 Spring routes; Allow-Methods echoes POST/PUT so preflights authorize credentialed cross-origin WRITE; Allow-Headers authorization,content-type; dual auth HTTP Basic + Bearer voipSession; 7 independent captures 09-04→09-11 (latest 20:03:43); triage VALID 09-06 19:19; zero counter-evidence in ~10.1+ days; persistent + exploitable + unfiled.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu ONLY — every evidence gate already satisfied (7 captures + reachable tracker).
+verify_steps: HUMAN — submit ready-to-file body at bugs.olivermaicher.eu; do NOT re-run OPTIONS reconfirmation (valueless, WAF-rate-limited, standing directive).
 impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, call-forwarding, voicemail, routing) from any page an authenticated admin visits → HIGH/CRITICAL
 testability: HUMAN_ONLY
 [HYP] my-portal-bola-proxied-voip
 class: IDOR
 asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management.easybell.de/api via axios + Bearer voipSession)
 confidence: 78
-reasoning: customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — unchanged since 09-04 21:34
+reasoning: customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — unchanged since 09-04 21:34; no passive vector advances it.
 evidence_needed: authenticated session showing cross-customer object access on proxied /api/accounts/{id}, /api/subscribers/{id}, /api/numbers/{id}
 verify_steps: HUMAN — login, capture voipSession, enumerate neighbor object IDs on proxied plural routes
 impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
@@ -21,7 +21,7 @@ testability: AUTH_HELPED
 class: MISCONFIG
 asset: my.easybell.com/api/{crm,ebit,strapi}
 confidence: 60
-reasoning: ACAO:* without ACAC:true on 3 proxy endpoints; standalone informational (no cookie transmission cross-origin); only exploitable after Bearer theft, itself unproven + credential-gated → chain caps confidence; reconfirmed live 20:07:30 09-11
+reasoning: ACAO:* without ACAC:true on 3 proxy endpoints (reconfirmed 20:07:30 09-11); standalone informational (no cookie cross-origin); only chain-exploitable after voip Bearer theft, itself unproven + credential-gated → chain caps confidence.
 evidence_needed: portal JS capture showing Bearer voipSession accepted by /api/{crm,ebit,strapi}
 verify_steps: HUMAN — authenticated network trace of portal calls to the 3 proxy endpoints
 impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
