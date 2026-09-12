@@ -374,3 +374,8 @@ www.easybell.de
 ## 2026-09-12 09:08:19 UTC
 
 ## 2026-09-12 12:54:57 UTC
+
+## 2026-09-12 16:04:25 UTC
+- CHANGED Filing latency for flagship `voip-cors-cred-read-write` now ~134h post-triage-VALID (since 2026-09-06 19:19) / ~10.2 days post-discovery — evidence gates fully satisfied (7 independent OPTIONS capture
+- CHANGED No new passive probes since 2026-09-10 09:48:02 UTC; inventory + KB unchanged; all passive lines closed
+- CHANGED `my-portal-api-proxy-wildcard` and `my-portal-bola-proxied-voip` remain AUTH_HELPED barriers — no forward motion without human creds
