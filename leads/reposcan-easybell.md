@@ -163,3 +163,17 @@ TARGET_ORG not configured for easybell; skipping public-org deep scan.
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
 ## REPOSCAN 2026-09-12 05:03:49 UTC
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
+## REPOSCAN 2026-09-12 09:31:34 UTC
+class: SECRET
+asset: `easybell-gmbh/collision/tests/LaravelApp/.env:7`
+confidence: 30
+reasoning: File contains `APP_KEY=base64:IquyT8ji6DMPqygLc19MXORzrU7SkS5+tLZxyY5Fh1Y=` — a real base64-encoded 32-byte Laravel application key. However, this is in the `tests/LaravelApp/` directory of a fork of `nunomaduro/collision` (a well-known Laravel error handler package). The `.env` file is a standard test fixture inherited from the upstream repo. The `APP_DEBUG=true` and placeholder DB creds are also present but are default upstream values.
+impact: LOW — test fixture only, inherited from upstream, not easybell-specific
+verify_steps: Check if `https://github.com/nunomaduro/collision/blob/main/tests/LaravelApp/.env` contains the identical APP_KEY (likely yes). If identical, it's upstream-originated and not a real leak. If unique to easybell, rotate immediately.
+class: MISCONFIG
+asset: `easybell-gmbh/laravel-redirect/phpunit.xml:23`
+confidence: 25
+reasoning: `<env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>` is set in the PHPUnit config. This is a well-known Laravel test/default key used across many packages (this is the `laravel-redirect` fork). It's only injected during test runs via phpunit.xml's `<php>` block and is not a production credential.
+impact: LOW — test-only configuration, standard Laravel test key pattern
+verify_steps: Confirm this same key appears in the upstream `mattkingshaw/laravel-redirect` phpunit.xml. If unique to easybell, still low risk as it's test-only.
+TARGET_ORG not configured for easybell; skipping public-org deep scan.
