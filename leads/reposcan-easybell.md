@@ -177,3 +177,5 @@ reasoning: `<env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>` is s
 impact: LOW — test-only configuration, standard Laravel test key pattern
 verify_steps: Confirm this same key appears in the upstream `mattkingshaw/laravel-redirect` phpunit.xml. If unique to easybell, still low risk as it's test-only.
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
+## REPOSCAN 2026-09-12 13:09:04 UTC
+TARGET_ORG not configured for easybell; skipping public-org deep scan.
