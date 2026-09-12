@@ -185,3 +185,19 @@ TARGET_ORG not configured for easybell; skipping public-org deep scan.
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
 ## REPOSCAN 2026-09-12 21:19:19 UTC
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
+## REPOSCAN 2026-09-12 23:08:59 UTC
+[HYP] Committed .env with encoded Laravel APP_KEY
+class: SECRET
+asset: collision/tests/LaravelApp/.env (line 7)
+confidence: 65
+reasoning: .env file is git-tracked (not in .gitignore) and contains APP_KEY=base64:IquyT8ji6DMPqygLc19MXORzrU7SkS5+tLZxyY5Fh1Y=. This is a real base64-encoded 32-byte key (Laravel 5.x format). While this is a test fixture for the collision package (fork of nunomaduro/collision), the key could be copy-pasted into production apps. The .gitignore at collision/tests/LaravelApp/.gitignore explicitly does NOT exclude .env. Impact is mitigated because (a) this is a test-only Laravel skeleton, (b) the key is likely auto-generated for test purposes, and (c) no other env vars contain real credentials.
+impact: low
+verify_steps: 1. Check if any easybell production .env uses this same APP_KEY value. 2. Confirm the collision test suite is only run in CI (not deployed). 3. Add .env to .gitignore in collision/tests/LaravelApp/.
+[HYP] Debug dump() left in test code
+class: OTHER
+asset: laravel-deepl/tests/Feature/TranslatorServiceTest.php:85
+confidence: 40
+reasoning: Contains dd(config('laravel-deepl.enable_on_the_fly_translation'), ...) — a Laravel debug-and-die call. While this is in a test file and won't execute in production, dd() in committed code is a code smell and could mask test failures. Not a direct security issue.
+impact: low
+verify_steps: 1. Confirm this is not called in CI test runs (dd() would halt execution and fail the test). 2. Replace with proper assertions if needed.
+TARGET_ORG not configured for easybell; skipping public-org deep scan.
