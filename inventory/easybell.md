@@ -384,3 +384,5 @@ www.easybell.de
 
 ## 2026-09-12 20:41:49 UTC
 - CHANGED filing latency only: `voip-cors-cred-read-write` now ~134h+ post-triage-VALID / ~10.2+ days post-discovery; 7 captures; no counter-evidence.
+
+## 2026-09-12 22:33:21 UTC
