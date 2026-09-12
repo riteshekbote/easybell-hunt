@@ -851,3 +851,12 @@
 - LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~134h post-triage-VALID / ~10.2 days post-discovery; 7 captures + r
 - LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_
 - LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk
+
+## RANKED HYPOTHESES 2026-09-12 18:08:43 UTC
+- [95] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: FILE `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19, 7 independent captures, ~134h+ unfiled) at bugs.olivermaicher.eu NOW with the ready-
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19, 7 captures, ~134h unfiled) at bugs.olivermaicher.eu NOW — evidence is complete, do N
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~134h+ post-triage-VALID / ~10.2+ days post-discovery; 7 captures +
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~134h post-triage-VALID / ~10.2 days post-discovery; 7 captures + r
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_
+- LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk

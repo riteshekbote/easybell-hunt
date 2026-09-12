@@ -1,4 +1,7 @@
-## 2026-09-12 15:57:49 UTC [target] (model bigpickle)
+## 2026-09-12 18:08:35 UTC [target] (model bigpickle)
+[PRIO] voip-management.easybell.de/api,9.2,attack_surface:9 business_value:9 tech_exposure:8 gate_ease:5(WAF) cloud_surface:4 freshness:8 — flagship finding, evidence-complete, filing-only
+[PRIO] my.easybell.com,6.5,attack_surface:8 business_value:9 tech_exposure:7 gate_ease:3 cloud_surface:3 freshness:4 — BOLA + proxy-wildcard AUTH_HELPED, unchanged
+[PRIO] order-form.easybell.de,5.5,attack_surface:5 business_value:6 tech_exposure:5 gate_ease:8 cloud_surface:2 freshness:4 — MEDIUM-cap anonymous GET surface, no HIGH remainder
 [HYP] voip-cors-cred-read-write
 class: MISCONFIG
 asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
@@ -26,6 +29,9 @@ evidence_needed: portal JS capture showing Bearer voipSession accepted by the 3 
 verify_steps: HUMAN — authenticated network trace of portal calls to the proxies
 impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
 testability: AUTH_HELPED
-[NEXT] HUMAN: FILE `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19, 7 captures, ~134h+ unfiled) at bugs.olivermaicher.eu NOW with the ready-to-submit body. No probes — evidence complete, risk resolves only on submission.
+[FINAL] voip-cors-cred-read-write: 95 — 7 independent captures, triage-VALID, evidence complete, persistent across 10.2+ days. HUMAN filing gate only.
+[FINAL] my-portal-bola-proxied-voip: 78 — AUTH_HELPED, credible class but credential-gated; no passive vector advances it.
+[FINAL] my-portal-api-proxy-wildcard: 60 — informational standalone, only chain-exploitable; below HIGH threshold standalone.
+[NEXT] HUMAN: FILE `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19, 7 independent captures, ~134h+ unfiled) at bugs.olivermaicher.eu NOW with the ready-to-submit body. No probes — evidence complete, risk resolves only on submission. Do NOT re-run OPTIONS reconfirmation (valueless, WAF noise, standing directive).
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~134h+ post-triage-VALID / ~10.2+ days post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it, and further probes add only WAF noise (standing directive respected, zero probes run this cycle).
-[RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~134h+ post-triage-VALID / ~10.2+ days post-discovery; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay; further probes add nothing and risk WAF noise. Only the bugs.olivermaicher.eu submission reduces risk.
+[RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~134h+ post-triage-VALID / ~10.2+ days post-discovery; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay; every probe instead of filing adds nothing and risks WAF noise on the live ingress. Only the bugs.olivermaicher.eu submission reduces risk.
