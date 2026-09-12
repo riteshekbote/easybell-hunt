@@ -381,3 +381,6 @@ www.easybell.de
 - CHANGED `my-portal-api-proxy-wildcard` and `my-portal-bola-proxied-voip` remain AUTH_HELPED barriers — no forward motion without human creds
 
 ## 2026-09-12 18:08:43 UTC
+
+## 2026-09-12 20:41:49 UTC
+- CHANGED filing latency only: `voip-cors-cred-read-write` now ~134h+ post-triage-VALID / ~10.2+ days post-discovery; 7 captures; no counter-evidence.
