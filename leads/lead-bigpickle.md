@@ -2997,3 +2997,75 @@ testability: AUTH_HELPED
 [LEARN] ACCEPTED (triage) INVALID @ order-form.easybell.de, my.easybell.com, connectme-app.easybell.de: order-form anonymous API surface, k8s hostname leak, and OIDC double-slash confirmed dispensable — consistent with prior REJECTED entries; no counter-evidence to the three live hypotheses.
 [LEARN] NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence.
 [RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~168h post-triage-VALID / ~9.9d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay (~25h since the recorded "filing NOW" action with no submission yet); only the bugs.olivermaicher.eu submission reduces it.
+## 2026-09-13 22:00:35 UTC [target] (model bigpickle)
+testability: HUMAN_ONLY
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management /api via axios + Bearer voipSession)
+confidence: 78
+reasoning: customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — unchanged since 09-04 21:34.
+evidence_needed: authenticated cross-customer object access on proxied /api/accounts/{id}, /api/subscribers/{id}, /api/numbers/{id}
+verify_steps: HUMAN — login, capture voipSession, enumerate neighbor IDs on proxied plural routes.
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true on 3 proxy endpoints (reconfirmed 09-11 20:07:30); standalone informational; triage verdict HOLD — chain amplifier only; exploitable only after voip Bearer theft (unproven + credential-gated).
+evidence_needed: portal JS capture showing Bearer voipSession accepted by the 3 proxy endpoints
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+[PARKED] my-portal-bola-proxied-voip (78): AUTH_HELPED barrier — no credential-less vector; unverified until authenticated neighbor-ID enumeration.
+[PARKED] my-portal-api-proxy-wildcard (60): triage HOLD; informational standalone, token-gated chain only; not independently fileable.
+[FINAL] voip-cors-cred-read-write (95) — evidence complete, 3x triage-VALID, only filing pending; unchanged.
+[FINAL] my-portal-bola-proxied-voip (78) — retained, gated on human creds.
+[FINAL] my-portal-api-proxy-wildcard (60) — retained as chain-amplifier for the #1 report; not standalone.
+[NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-13 19:19:58, 7 independent captures, ~168h unfiled) at bugs.olivermaicher.eu NOW — include the proxy-wildcard finding as the explicit chain amplifier in the same report; evidence is complete; do NOT re-run any OPTIONS reconfirmation.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: 3rd triage cycle (09-13 19:19:58) re-affirms VALID + file-now; finding still exploitable + unfiled at ~168h post-triage-VALID / ~9.9d post-discovery; filing latency is the only risk producer — no probe advances it.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary); unchanged, AUTH_HELPED.
+[LEARN] ACCEPTED (triage) INVALID @ order-form.easybell.de, my.easybell.com, connectme-app.easybell.de: order-form anonymous API surface, k8s hostname leak, and OIDC double-slash confirmed dispensable — consistent with prior REJECTED entries; no counter-evidence to the three live hypotheses.
+[LEARN] NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence.
+[RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~168h post-triage-VALID / ~9.9d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay (~25h since the recorded "filing NOW" action with no submission yet); only the bugs.olivermaicher.eu submission reduces it.
+[LEARN] NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; no live probes this cycle (standing do-not-reprobe directive respected); all passive lines closed; sole state change is filing-latency growth (~170h).
+[PRIO] voip-management.easybell.de/api,9.15,attack_surface=9/business=9/tech=8/gate=1/cloud=3/fresh=2
+[PRIO] my.easybell.com,5.70,attack_surface=8/business=8/tech=7/gate=1/cloud=3/fresh=2
+[PRIO] my.easybell.com/api/{crm,ebit,strapi},4.60,attack_surface=6/business=6/tech=6/gate=2/cloud=2/fresh=2
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: 7 independent OPTIONS captures 09-04→09-11; arbitrary Origin reflected with ACAO + ACAC:true; Allow-Methods echoes POST/PUT; Allow-Headers authorization,content-type on all 7 Spring routes; Basic realm sipwisebroker + Bearer voipSession auto-sent with credentials:'include'; 3rd triage cycle VALID 09-13 19:19:58 (CVSS 6.1); exploitable at ~170h post-triage-VALID; zero counter-evidence.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu ONLY — all capture gates satisfied.
+verify_steps: HUMAN — submit ready-to-file body at bugs.olivermaicher.eu; do NOT re-run OPTIONS reconfirmation (valueless, WAF, standing directive).
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding, voicemail) from any authenticated admin page → HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management /api via axios + Bearer voipSession)
+confidence: 78
+reasoning: customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — unchanged since 09-04 21:34.
+evidence_needed: authenticated cross-customer object access on proxied /api/accounts/{id}, /api/subscribers/{id}, /api/numbers/{id}
+verify_steps: HUMAN — login, capture voipSession, enumerate neighbor IDs on proxied plural routes.
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true on 3 proxy endpoints (reconfirmed 09-11 20:07:30); standalone informational; triage verdict HOLD — chain amplifier only; exploitable only after voip Bearer theft (unproven + credential-gated).
+evidence_needed: portal JS capture showing Bearer voipSession accepted by the 3 proxy endpoints
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+[PARKED] my-portal-bola-proxied-voip (78): AUTH_HELPED barrier — no credential-less vector; unverified until authenticated neighbor-ID enumeration.
+[PARKED] my-portal-api-proxy-wildcard (60): triage HOLD; informational standalone, token-gated chain only; not independently fileable.
+[FINAL] voip-cors-cred-read-write (95) — evidence complete, 3x triage-VALID, only filing pending; unchanged.
+[FINAL] my-portal-bola-proxied-voip (78) — retained, gated on human creds.
+[FINAL] my-portal-api-proxy-wildcard (60) — retained as chain-amplifier for the #1 report; not standalone.
+[NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-13 19:19:58, 7 independent captures, ~170h unfiled) at bugs.olivermaicher.eu NOW — include the proxy-wildcard finding as the explicit chain amplifier in the same report; evidence is complete; do NOT re-run any OPTIONS reconfirmation.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~170h post-triage-VALID / ~10d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no probe advances it.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary); unchanged, AUTH_HELPED.
+[LEARN] NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
+[RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~170h post-triage-VALID / ~10d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay (~25h+ since the recorded "filing NOW" action with no submission yet); only the bugs.olivermaicher.eu submission reduces it.

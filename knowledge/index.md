@@ -180,3 +180,6 @@
 - 2026-09-13 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary); unchanged, AUTH_HELPED.
 - 2026-09-13 ACCEPTED (triage) INVALID @ order-form.easybell.de, my.easybell.com, connectme-app.easybell.de: order-form anonymous API surface, k8s hostname leak, and OIDC double-slash confirmed dispensable — consistent with prior REJECTED entries; no counter-evidence to the three live hypotheses.
 - 2026-09-13 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence.
+- 2026-09-13 NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; no live probes this cycle (standing do-not-reprobe directive respected); all passive lines closed; sole state change is filing-latency growth (~170h).
+- 2026-09-13 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~170h post-triage-VALID / ~10d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no probe advances it.
+- 2026-09-13 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
