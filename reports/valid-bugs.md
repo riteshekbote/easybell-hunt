@@ -23,3 +23,7 @@
   - **Verdict: VALID**
   - | Q7 | Would reasonable triager accept? | **No as standalone** — wildcard CORS without ACAC:true on Bearer-only endpoints is informational; only valid as chain amplifier with Finding 1 |
   - | 1 | voip-cors-cred-read-write | **VALID** | 8.1 | File at bugs.olivermaicher.eu |
+
+- 2 lead(s) marked VALID at 2026-09-13 19:19:58 UTC
+  - **Verdict: VALID**
+  - | 1 | CORS credentialed reflection (7 routes) | **VALID** | 6.1 |
