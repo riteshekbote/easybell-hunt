@@ -17,3 +17,9 @@
 - 2 lead(s) marked VALID at 2026-09-11 19:54:18 UTC
   - **Verdict: VALID**
   - | 1 | voip-management CORS (7 routes, read+write) | **VALID** | 8.1 | File at bugs.olivermaicher.eu |
+
+- 4 lead(s) marked VALID at 2026-09-13 06:49:16 UTC
+  - | Q5 | Novel/unreported? | **Yes** — valid-bugs.md shows no prior report filed; finding persists across 10+ days |
+  - **Verdict: VALID**
+  - | Q7 | Would reasonable triager accept? | **No as standalone** — wildcard CORS without ACAC:true on Bearer-only endpoints is informational; only valid as chain amplifier with Finding 1 |
+  - | 1 | voip-cors-cred-read-write | **VALID** | 8.1 | File at bugs.olivermaicher.eu |
