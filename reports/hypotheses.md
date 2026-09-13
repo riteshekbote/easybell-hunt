@@ -925,3 +925,21 @@
 - LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~159h post-triage-VALID / ~9d post-discovery; 7 captures + reachabl
 - LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_
 - LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; all three hypotheses stable with zero counter-evidence
+
+## RANKED HYPOTHESES 2026-09-13 19:45:40 UTC
+- [95] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: submit `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19, 7 independent captures, ~159h unfiled) at bugs.olivermaicher.eu NOW using the read
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19, 7 independent captures, ~159h unfiled) at bugs.olivermaicher.eu NOW using the ready-
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~159h post-triage-VALID / ~9d post-discovery; 7 captures + reachabl
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_
+- LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; all three hypotheses stable with zero counter-evidence.
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~159h post-triage-VALID / ~9d post-discovery; 7 captures + reachabl
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_
+- LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; all three hypotheses stable with zero counter-evidence
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: 3rd triage cycle (09-13 19:19:58) re-affirms VALID + file-now; finding still exploitable + unfiled at ~168
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary);
+- LEARN: ACCEPTED (triage) INVALID @ order-form.easybell.de, my.easybell.com, connectme-app.easybell.de: order-form anonymous API surface, k8s hostname leak, and OIDC do
+- LEARN: NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence.
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~159h post-triage-VALID / ~9d post-discovery; 7 captures + reachabl
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_
+- LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; all three hypotheses stable with zero counter-evidence
