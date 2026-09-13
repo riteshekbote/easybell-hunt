@@ -13730,3 +13730,8 @@ STEP 6 — LEARNING
 
 STEP 7 — RISK
 - [RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~140h+ post-triage-VALID / ~10.3+ days post-discovery; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay; every probe instead of filing adds nothing and risks WAF noise on the live ingress. Only the bugs.olivermaicher.eu submission reduces risk.
+===== ANALYST bigpickle 2026-09-13 00:17:51 UTC =====
+[0m
+> build · big-pickle
+[0m
+[91m[1mError: [0mError from provider (Console): Upstream request failed: [invalid_request_error] Unrecognized request argument supplied: prompt_cache_key

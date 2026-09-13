@@ -2729,3 +2729,4 @@ evidence_needed: portal JS capture showing Bearer voipSession accepted by the 3 
 verify_steps: HUMAN — authenticated network trace of portal calls to the proxies.
 impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
 testability: AUTH_HELPED
+## 2026-09-13 00:15:19 UTC [target] (model bigpickle)
