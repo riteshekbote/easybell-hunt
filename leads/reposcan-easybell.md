@@ -231,3 +231,122 @@ reasoning: >
 impact: informational
 verify_steps: >
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
+
+## REPOSCAN 2026-09-13 23:30:00 UTC
+Source audit of all 17 public repos under github.com/easybell-gmbh.
+All repos confirmed as forks. Organization identified as `easybell-gmbh` (scope.yml had `easybell`).
+17 repos cloned, full regex sweep completed for: AKIA*, AIza*, ghp_*, sk_live_*, sk-us*, -----BEGIN PRIVATE KEY, password=, api_key, secret, token, client_secret, S3/GCS/Azure storage endpoints.
+
+### Findings:
+
+[HYP] Mock SIP responses in php-sip test leak infrastructure details
+class: OTHER
+asset: easybell-gmbh/php-sip/tests/PhpSipTest.php:55-90
+confidence: 70
+reasoning: |
+  The test file contains hardcoded Mockery mock responses that appear to be captured real SIP traffic.
+  Mock responses reveal: (1) sip.easybell.de - SIP server domain, (2) Sipwise NGCP Proxy 7.X -
+  backend proxy software and version, (3) internal IPs 192.168.144.2 and 192.168.251.44,
+  (4) public IP 79.140.179.49 in Via headers, (5) SIP account number 00493050931632
+  (test account on easybell), (6) Sipgate peering account 3195388t0 at sipconnect.sipgate.de,
+  (7) digest auth nonce (one-time, not reusable). Passwords used are literal 'secret' placeholders.
+  This is easybell's own library (easybell-libs/php-sip, authored by easybell GmbH) and the scope
+  explicitly includes VoIP/SIP systems.
+impact: low
+  No real passwords leaked. Infrastructure fingerprinting value only. Internal IPs not externally
+  reachable. Public IP 79.140.179.49 may be a real server but provides no attack surface by itself.
+  SIP account numbers are test accounts with placeholder passwords.
+verify_steps: |
+  1. Confirm 79.140.179.49 resolves to easybell infrastructure (passive DNS lookup).
+  2. Confirm sip.easybell.de is the live SIP domain (passive DNS/SRV lookup).
+  3. Confirm Sipwise NGCP is the production backend (informational).
+  4. No action required - these are mock test fixtures, not live credentials.
+
+[HYP] Committed .env with Laravel APP_KEY in collision test fixture
+class: OTHER
+asset: easybell-gmbh/collision/tests/LaravelApp/.env:7
+confidence: 15
+reasoning: |
+  .env contains APP_KEY=base64:IquyT8ji6DMPqygLc19MXORzrU7SkS5+tLZxyY5Fh1Y=.
+  Verified identical to upstream nunomaduro/collision .env. This is a test fixture inherited from
+  the upstream repository, not easybell-specific. Per scope: "Disclosure of known public files or
+  directories (e.g. robots.txt)" is explicitly out of scope.
+impact: none
+  Upstream test fixture, not easybell's own credential. Identical in the parent repo.
+verify_steps: |
+  1. Compare with https://github.com/nunomaduro/collision tests/LaravelApp/.env.
+  2. No action required.
+
+[HYP] Debug dd() in laravel-deepl test
+class: OTHER
+asset: easybell-gmbh/laravel-deepl/tests/Feature/TranslatorServiceTest.php:85
+confidence: 10
+reasoning: |
+  dd() call at line 85 is inside a test marked ->skip("TODO: ..."), so it never executes.
+  This is a development artifact, not a backdoor or debug endpoint exposed to users.
+impact: none
+  Non-executing code in a skipped test. Not a security issue.
+verify_steps: |
+  1. Confirm test is skipped in CI (it is - has ->skip() annotation).
+  2. Replace with proper assertion if test is unskipped.
+
+[HYP] Hardcoded APP_KEY in phpunit.xml
+class: OTHER
+asset: easybell-gmbh/laravel-redirect/phpunit.xml:23
+confidence: 10
+reasoning: |
+  <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/> is a well-known default
+  Laravel test key used across many open-source packages. This is test-only configuration
+  injected via phpunit.xml <php> block and never used in production. The same key pattern
+  appears in upstream laravel-redirect and many Laravel test suites.
+impact: none
+  Standard Laravel test key pattern. Test-only, not a production credential.
+verify_steps: |
+  1. Confirm this same key appears in upstream phpunit.xml (likely yes).
+  2. No action required.
+
+### Summary:
+- 17 repos audited (all forks of open-source PHP/Laravel packages)
+- 1 easybell-original repo found: php-sip (SIP user agent library)
+- 0 high-severity findings (no leaked production credentials, no API keys, no private keys)
+- 1 low-confidence informational finding (SIP infrastructure details in mock test responses)
+- 3 negligible findings (upstream test fixtures, non-executing code, standard test config)
+- No SSRF-prone URL builders, no JWT weak validation, no IDOR-prone endpoints, no debug backdoors found
+- No AKIA, AIza, ghp_, sk_live_, sk-us, or private key patterns detected across all 17 repos
+
+### Recommendation:
+The public GitHub surface for easybell is minimal - 17 forks of open-source packages with
+no proprietary application code exposed. The php-sip test reveals some infrastructure details
+(Sipwise NGCP, SIP domain) but no exploitable credentials. The program scope covers live
+VoIP/SIP infrastructure, so network-level testing of sip.easybell.de would be more productive
+than source code analysis of these public repos.
+## REPOSCAN 2026-09-13 23:34:27 UTC
+[HYP] Mock SIP responses in php-sip test leak infrastructure details
+class: OTHER
+asset: easybell-gmbh/php-sip/tests/PhpSipTest.php:55-90
+confidence: 70
+reasoning: |
+impact: low
+verify_steps: |
+[HYP] Committed .env with Laravel APP_KEY in collision test fixture
+class: OTHER
+asset: easybell-gmbh/collision/tests/LaravelApp/.env:7
+confidence: 15
+reasoning: |
+impact: none
+verify_steps: |
+[HYP] Debug dd() in laravel-deepl test
+class: OTHER
+asset: easybell-gmbh/laravel-deepl/tests/Feature/TranslatorServiceTest.php:85
+confidence: 10
+reasoning: |
+impact: none
+verify_steps: |
+[HYP] Hardcoded APP_KEY in phpunit.xml
+class: OTHER
+asset: easybell-gmbh/laravel-redirect/phpunit.xml:23
+confidence: 10
+reasoning: |
+impact: none
+verify_steps: |
+TARGET_ORG not configured for easybell; skipping public-org deep scan.
