@@ -211,3 +211,23 @@ TARGET_ORG not configured for easybell; skipping public-org deep scan.
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
 ## REPOSCAN 2026-09-13 18:59:40 UTC
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
+## REPOSCAN 2026-09-13 21:26:27 UTC
+class: MISCONFIG
+asset: easybell-gmbh/php-sip/tests/PhpSipTest.php
+confidence: 65
+reasoning: >
+impact: low
+verify_steps: >
+class: OTHER
+asset: easybell-gmbh/laravel-redirect/phpunit.xml
+confidence: 20
+reasoning: >
+impact: informational
+verify_steps: >
+class: OTHER
+asset: easybell-gmbh/collision/tests/LaravelApp/.env
+confidence: 20
+reasoning: >
+impact: informational
+verify_steps: >
+TARGET_ORG not configured for easybell; skipping public-org deep scan.
