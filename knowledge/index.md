@@ -172,3 +172,6 @@
 - 2026-09-13 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~134h+ post-triage-VALID / ~10.2+ days post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it
 - 2026-09-13 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_HELPED
 - 2026-09-13 NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk
+- 2026-09-13 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~159h post-triage-VALID / ~9d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no probe advances it.
+- 2026-09-13 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_HELPED.
+- 2026-09-13 NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; all three hypotheses stable with zero counter-evidence.
