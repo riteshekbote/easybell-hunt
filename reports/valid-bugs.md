@@ -27,3 +27,8 @@
 - 2 lead(s) marked VALID at 2026-09-13 19:19:58 UTC
   - **Verdict: VALID**
   - | 1 | CORS credentialed reflection (7 routes) | **VALID** | 6.1 |
+
+- 3 lead(s) marked VALID at 2026-09-14 07:52:29 UTC
+  - **Verdict: VALID**
+  - | Q3 Impact | No — 405 is a valid response indicating the endpoint exists but doesn't accept GET |
+  - | voip-cors-cred-exfil-v2 | **VALID** | 6.5 |
