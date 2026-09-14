@@ -370,3 +370,12 @@ verify_steps: |
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
 ## REPOSCAN 2026-09-14 14:15:29 UTC
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
+## REPOSCAN 2026-09-14 19:38:49 UTC
+[HYP] No findings — clean scan
+class: N/A
+asset: easybell-gmbh/* (17 public repos)
+confidence: 95
+reasoning: Exhaustive grep of all 17 repos + 5 third-party refs for AKIA, AIza, ghp_, sk_live_, BEGIN PRIVATE, password=, api_key, secret, token, client_secret, S3/GCS/Azure, .env, hardcoded URLs, JWT, IDOR, SSRF patterns. All custom commits are functional patches with no embedded secrets. Config files use env() with empty defaults.
+impact: None
+verify_steps: Re-run `rg -rn "AKIA[A-Z0-9]{16}|AIza[A-Za-z0-9_-]{35}|ghp_[A-Za-z0-9]{36}|sk_live_[A-Za-z0-9]{24,}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY" /tmp/opencode/repos/` to confirm clean scan.
+TARGET_ORG not configured for easybell; skipping public-org deep scan.
