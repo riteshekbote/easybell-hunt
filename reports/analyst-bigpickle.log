@@ -14544,3 +14544,466 @@ STEP 6 — LEARNING:
 
 STEP 7 — RISK:
 [RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~170h post-triage-VALID / ~10d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay (~25h+ since the recorded "filing NOW" action with no submission yet); only the bugs.olivermaicher.eu submission reduces it.
+===== ANALYST bigpickle 2026-09-14 00:05:28 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mdate -u +"%Y-%m-%d %H:%M:%S UTC"; git -C /home/runner/work/easybell-hunt/easybell-hunt log --oneline -5 2>/dev/null; echo "---"; git -C /home/runner/work/easybell-hunt/easybell-hunt status --short 2>/dev/null | head -20
+2026-09-14 00:02:29 UTC
+8f1013d reposcan 2026-09-13-23-34
+---
+?? analyst-out.txt
+?? analyst-prompt.txt
+?? ctx.txt
+[0m
+[0m$ [0mls -la /home/runner/work/easybell-hunt/easybell-hunt/; echo "---"; ls /home/runner/work/easybell-hunt/easybell-hunt/art/ 2>/dev/null; echo "---"; ls /home/runner/work/easybell-hunt/easybell-hunt/inventory/ 2>/dev/null
+total 296
+drwxr-xr-x 12 runner runner  4096 Sep 14 00:02 .
+drwxr-xr-x  3 runner runner  4096 Sep 14 00:02 ..
+drwxr-xr-x  7 runner runner  4096 Sep 14 00:02 .git
+drwxr-xr-x  3 runner runner  4096 Sep 14 00:02 .github
+-rw-r--r--  1 runner runner  1756 Sep 14 00:02 README.md
+-rw-r--r--  1 runner runner   381 Sep 14 00:02 analyst-out.txt
+-rw-r--r--  1 runner runner 99942 Sep 14 00:02 analyst-prompt.txt
+-rw-r--r--  1 runner runner 96135 Sep 14 00:02 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 inventory
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 leads
+-rw-r--r--  1 runner runner 16198 Sep 14 00:02 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 reports
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep 14 00:02 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 scripts
+-rw-r--r--  1 runner runner    33 Sep 14 00:02 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep 14 00:02 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep 14 00:02 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep 14 00:02 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep 14 00:02 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep 14 00:02 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 triage
+---
+---
+easybell.md
+[0m
+[0m$ [0mcd /home/runner/work/easybell-hunt/easybell-hunt; echo "=== state_bigpickle.json ==="; cat state_bigpickle.json; echo; echo "=== analyst-out.txt ==="; cat analyst-out.txt; echo; echo "=== ls leads knowledge triage reports ==="; ls leads/ knowledge/ triage/ reports/ 2>/dev/null; echo "=== ls recon-notes scripts ==="; ls recon-notes/ scripts/ 2>/dev/null
+=== state_bigpickle.json ===
+{"phase": "POC", "target": "api"}
+=== analyst-out.txt ===
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mdate -u +"%Y-%m-%d %H:%M:%S UTC"; git -C /home/runner/work/easybell-hunt/easybell-hunt log --oneline -5 2>/dev/null; echo "---"; git -C /home/runner/work/easybell-hunt/easybell-hunt status --short 2>/dev/null | head -20
+2026-09-14 00:02:29 UTC
+8f1013d reposcan 2026-09-13-23-34
+---
+?? analyst-out.txt
+?? analyst-prompt.txt
+?? ctx.txt
+[0m
+[0m$ [0mls -la /home/runner/work/easybell-hunt/easybell-hunt/; echo "---"; ls /home/runner/work/easybell-hunt/easybell-hunt/art/ 2>/dev/null; echo "---"; ls /home/runner/work/easybell-hunt/easybell-hunt/inventory/ 2>/dev/null
+total 296
+drwxr-xr-x 12 runner runner  4096 Sep 14 00:02 .
+drwxr-xr-x  3 runner runner  4096 Sep 14 00:02 ..
+drwxr-xr-x  7 runner runner  4096 Sep 14 00:02 .git
+drwxr-xr-x  3 runner runner  4096 Sep 14 00:02 .github
+-rw-r--r--  1 runner runner  1756 Sep 14 00:02 README.md
+-rw-r--r--  1 runner runner   381 Sep 14 00:02 analyst-out.txt
+-rw-r--r--  1 runner runner 99942 Sep 14 00:02 analyst-prompt.txt
+-rw-r--r--  1 runner runner 96135 Sep 14 00:02 ctx.txt
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 inventory
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 knowledge
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 leads
+-rw-r--r--  1 runner runner 16198 Sep 14 00:02 probe-results.md
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 recon-notes
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 reports
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 reposcan-raw
+-rw-r--r--  1 runner runner  3220 Sep 14 00:02 scope.yml
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 scripts
+-rw-r--r--  1 runner runner    33 Sep 14 00:02 state_bigpickle.json
+-rw-r--r--  1 runner runner    33 Sep 14 00:02 state_laguna.json
+-rw-r--r--  1 runner runner    33 Sep 14 00:02 state_ling3.json
+-rw-r--r--  1 runner runner    33 Sep 14 00:02 state_longcat.json
+-rw-r--r--  1 runner runner    33 Sep 14 00:02 state_mimo.json
+-rw-r--r--  1 runner runner    33 Sep 14 00:02 state_nemotron3.json
+drwxr-xr-x  2 runner runner  4096 Sep 14 00:02 triage
+---
+---
+easybell.md
+[0m
+
+=== ls leads knowledge triage reports ===
+knowledge/:
+index.md
+
+leads/:
+lead-bigpickle.md
+lead-laguna.md
+lead-ling3.md
+lead-longcat.md
+lead-mimo.md
+lead-nemotron3.md
+reposcan-easybell.md
+
+reports/:
+analyst-bigpickle.log
+analyst-laguna.log
+analyst-ling3.log
+analyst-longcat.log
+analyst-nemotron3.log
+hypotheses-bigpickle.txt
+hypotheses-laguna.txt
+hypotheses-ling3.txt
+hypotheses-longcat.txt
+hypotheses-nemotron3.txt
+hypotheses.md
+valid-bugs.md
+
+triage/:
+run-2026-09-02-21-59.md
+run-2026-09-03-00-06.md
+run-2026-09-03-04-45.md
+run-2026-09-03-09-37.md
+run-2026-09-03-13-56.md
+run-2026-09-03-17-47.md
+run-2026-09-03-20-54.md
+run-2026-09-03-23-11.md
+run-2026-09-04-01-05.md
+run-2026-09-04-06-02.md
+run-2026-09-04-11-29.md
+run-2026-09-04-15-06.md
+run-2026-09-04-18-29.md
+run-2026-09-04-21-03.md
+run-2026-09-04-23-05.md
+run-2026-09-05-01-06.md
+run-2026-09-05-05-54.md
+run-2026-09-05-10-27.md
+run-2026-09-05-13-32.md
+run-2026-09-05-16-16.md
+run-2026-09-05-18-25.md
+run-2026-09-05-20-44.md
+run-2026-09-05-22-46.md
+run-2026-09-06-00-48.md
+run-2026-09-06-05-45.md
+run-2026-09-06-10-46.md
+run-2026-09-06-14-05.md
+run-2026-09-06-17-09.md
+run-2026-09-06-19-19.md
+run-2026-09-06-21-30.md
+run-2026-09-06-23-09.md
+run-2026-09-07-01-07.md
+run-2026-09-07-06-12.md
+run-2026-09-07-12-47.md
+run-2026-09-07-18-12.md
+run-2026-09-07-21-36.md
+run-2026-09-07-23-47.md
+run-2026-09-08-04-19.md
+run-2026-09-08-08-57.md
+run-2026-09-08-13-30.md
+run-2026-09-08-17-32.md
+run-2026-09-08-20-19.md
+run-2026-09-08-22-47.md
+run-2026-09-09-01-10.md
+run-2026-09-09-06-06.md
+run-2026-09-09-11-37.md
+run-2026-09-09-15-19.md
+run-2026-09-09-18-45.md
+run-2026-09-09-21-37.md
+run-2026-09-09-23-34.md
+run-2026-09-10-01-29.md
+run-2026-09-10-06-41.md
+run-2026-09-10-11-51.md
+run-2026-09-10-16-17.md
+run-2026-09-10-19-11.md
+run-2026-09-10-21-42.md
+run-2026-09-10-23-57.md
+run-2026-09-11-04-27.md
+run-2026-09-11-09-14.md
+run-2026-09-11-13-40.md
+run-2026-09-11-17-17.md
+run-2026-09-11-19-54.md
+run-2026-09-11-22-26.md
+run-2026-09-12-00-39.md
+run-2026-09-12-05-07.md
+run-2026-09-12-09-28.md
+run-2026-09-12-13-09.md
+run-2026-09-12-16-25.md
+run-2026-09-12-18-47.md
+run-2026-09-12-21-21.md
+run-2026-09-12-23-22.md
+run-2026-09-13-01-26.md
+run-2026-09-13-06-49.md
+run-2026-09-13-12-40.md
+run-2026-09-13-16-55.md
+run-2026-09-13-19-19.md
+run-2026-09-13-21-30.md
+run-2026-09-13-23-31.md
+=== ls recon-notes scripts ===
+recon-notes/:
+DEDICATED-DEEP.md
+
+scripts/:
+sync-issues.py
+[0m
+[0m$ [0mcd /home/runner/work/easybell-hunt/easybell-hunt; tail -30 probe-results.md; echo "=== last commit files ==="; git show --stat --oneline HEAD | head -30
+## 2026-09-12 18:08:45 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-12 20:41:50 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-12 22:33:23 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-13 00:17:53 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-13 04:54:25 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-13 09:57:33 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-13 14:06:20 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-13 17:28:42 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-13 19:45:42 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-13 22:02:00 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+=== last commit files ===
+8f1013d reposcan 2026-09-13-23-34
+ .github/workflows/hunt.yml        |   250 +
+ .github/workflows/reposcan.yml    |   109 +
+ .github/workflows/sync-issues.yml |    44 +
+ .github/workflows/triage.yml      |   138 +
+ README.md                         |    34 +
+ inventory/easybell.md             |   402 +
+ knowledge/index.md                |   185 +
+ leads/lead-bigpickle.md           |  3071 ++++++++
+ leads/lead-laguna.md              |    76 +
+ leads/lead-ling3.md               |    76 +
+ leads/lead-longcat.md             |    76 +
+ leads/lead-mimo.md                |     1 +
+ leads/lead-nemotron3.md           |  3435 +++++++++
+ leads/reposcan-easybell.md        |   352 +
+ probe-results.md                  |   338 +
+ recon-notes/DEDICATED-DEEP.md     |    21 +
+ reports/analyst-bigpickle.log     | 14546 ++++++++++++++++++++++++++++++++++++
+ reports/analyst-laguna.log        |   608 ++
+ reports/analyst-ling3.log         |   608 ++
+ reports/analyst-longcat.log       |   608 ++
+ reports/analyst-nemotron3.log     |  7021 +++++++++++++++++
+ reports/hypotheses-bigpickle.txt  |    72 +
+ reports/hypotheses-laguna.txt     |     1 +
+ reports/hypotheses-ling3.txt      |     1 +
+ reports/hypotheses-longcat.txt    |     1 +
+ reports/hypotheses-nemotron3.txt  |    40 +
+ reports/hypotheses.md             |   962 +++
+ reports/valid-bugs.md             |    29 +
+ reposcan-raw/summary.txt          |     1 +
+[0m
+[0m$ [0mcd /home/runner/work/easybell-hunt/easybell-hunt; tail -40 triage/run-2026-09-13-23-31.md 2>/dev/null; echo "=== valid-bugs.md ==="; cat reports/valid-bugs.md
+===== TRIAGE 2026-09-13 23:31:52 UTC =====
+[0m
+> build · mimo-v2.5-free
+[0m
+No leads provided. Please paste the probe results/leads you want evaluated against the 7-Question Gate.
+=== valid-bugs.md ===
+# Validated findings (running count 0)
+
+- 3 lead(s) marked VALID at 2026-09-05 05:54:14 UTC
+  - | Q5 | Novel/unreported? | Likely novel for this program (valid-bugs.md is empty, no prior report) |
+  - **Verdict: VALID**
+  - | 1 | voip-cors-cred-exfil-v3 | **VALID** | Report to bugs.olivermaicher.eu |
+
+- 3 lead(s) marked VALID at 2026-09-06 17:09:59 UTC
+  - ### Verdict: **VALID**
+  - | voip-cors-cred-exfil-v3 | **VALID** | Credentialed CORS + ACAC:true on 7 authenticated API routes — HIGH impact, provable via OPTIONS |
+  - | my-portal-api-proxy-wildcard | **HOLD** | Standalone wildcard CORS without ACAC:true is informational; only valid as chain amplifier |
+
+- 2 lead(s) marked VALID at 2026-09-06 19:19:02 UTC
+  - | voip-cors-cred-exfil-v3 | **VALID** | Credentialed CORS + ACAC:true on 7 authenticated API routes — HIGH impact, provable via OPTIONS |
+  - | my-portal-api-proxy-wildcard | **HOLD** | Standalone wildcard CORS without ACAC:true is informational; only valid as chain amplifier |
+
+- 2 lead(s) marked VALID at 2026-09-11 19:54:18 UTC
+  - **Verdict: VALID**
+  - | 1 | voip-management CORS (7 routes, read+write) | **VALID** | 8.1 | File at bugs.olivermaicher.eu |
+
+- 4 lead(s) marked VALID at 2026-09-13 06:49:16 UTC
+  - | Q5 | Novel/unreported? | **Yes** — valid-bugs.md shows no prior report filed; finding persists across 10+ days |
+  - **Verdict: VALID**
+  - | Q7 | Would reasonable triager accept? | **No as standalone** — wildcard CORS without ACAC:true on Bearer-only endpoints is informational; only valid as chain amplifier with Finding 1 |
+  - | 1 | voip-cors-cred-read-write | **VALID** | 8.1 | File at bugs.olivermaicher.eu |
+
+- 2 lead(s) marked VALID at 2026-09-13 19:19:58 UTC
+  - **Verdict: VALID**
+  - | 1 | CORS credentialed reflection (7 routes) | **VALID** | 6.1 |
+[0m
+[0m$ [0mcd /home/runner/work/easybell-hunt/easybell-hunt; tail -25 knowledge/index.md; echo "=== hypotheses-bigpickle head ==="; head -20 reports/hypotheses-bigpickle.txt
+- 2026-09-11 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_HELPED
+- 2026-09-11 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: 7th live capture 20:03:43 UTC reconfirms credentialed CORS read+write across all 7 Spring routes at ~126h post-triage-VALID / ~10.1 days post-discovery; persistence reconfirmed, zero counter-evidence.
+- 2026-09-11 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: the 20:03 re-probe (against standing do-not-reprobe directive) yielded no delta — reconfirmation has zero analytical value beyond freshness; filing is the only remaining action, not evidence.
+- 2026-09-11 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true reconfirmed 20:07:30 UTC — secondary token-gated exfil line unchanged, AUTH_HELPED.
+- 2026-09-12 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~126h post-triage-VALID / ~10.1 days post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it
+- 2026-09-12 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_HELPED
+- 2026-09-12 NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk
+- 2026-09-12 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~134h post-triage-VALID / ~10.2 days post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it, and further probes add only WAF noise (standing directive respected, zero probes run this cycle).
+- 2026-09-12 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~134h+ post-triage-VALID / ~10.2+ days post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it, and further probes add only WAF noise (standing directive respected, zero probes run this cycle).
+- 2026-09-12 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_HELPED.
+- 2026-09-12 NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed.
+- 2026-09-13 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~134h+ post-triage-VALID / ~10.2+ days post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it
+- 2026-09-13 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_HELPED
+- 2026-09-13 NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk
+- 2026-09-13 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~159h post-triage-VALID / ~9d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no probe advances it.
+- 2026-09-13 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true remains secondary (token-gated) exfil path — unchanged, AUTH_HELPED.
+- 2026-09-13 NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; all three hypotheses stable with zero counter-evidence.
+- 2026-09-13 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~159h post-triage-VALID / ~9d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it
+- 2026-09-13 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: 3rd triage cycle (09-13 19:19:58) re-affirms VALID + file-now; finding still exploitable + unfiled at ~168h post-triage-VALID / ~9.9d post-discovery; filing latency is the only risk producer — no probe advances it.
+- 2026-09-13 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary); unchanged, AUTH_HELPED.
+- 2026-09-13 ACCEPTED (triage) INVALID @ order-form.easybell.de, my.easybell.com, connectme-app.easybell.de: order-form anonymous API surface, k8s hostname leak, and OIDC double-slash confirmed dispensable — consistent with prior REJECTED entries; no counter-evidence to the three live hypotheses.
+- 2026-09-13 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence.
+- 2026-09-13 NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; no live probes this cycle (standing do-not-reprobe directive respected); all passive lines closed; sole state change is filing-latency growth (~170h).
+- 2026-09-13 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~170h post-triage-VALID / ~10d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no probe advances it.
+- 2026-09-13 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
+=== hypotheses-bigpickle head ===
+## 2026-09-13 22:00:35 UTC [target] (model bigpickle)
+testability: HUMAN_ONLY
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management /api via axios + Bearer voipSession)
+confidence: 78
+reasoning: customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — unchanged since 09-04 21:34.
+evidence_needed: authenticated cross-customer object access on proxied /api/accounts/{id}, /api/subscribers/{id}, /api/numbers/{id}
+verify_steps: HUMAN — login, capture voipSession, enumerate neighbor IDs on proxied plural routes.
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true on 3 proxy endpoints (reconfirmed 09-11 20:07:30); standalone informational; triage verdict HOLD — chain amplifier only; exploitable only after voip Bearer theft (unproven + credential-gated).
+evidence_needed: portal JS capture showing Bearer voipSession accepted by the 3 proxy endpoints
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+[0m
+[0m$ [0mcd /home/runner/work/easybell-hunt/easybell-hunt; tail -60 leads/lead-bigpickle.md
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true on 3 proxy endpoints (reconfirmed 09-11 20:07:30); standalone informational; triage verdict HOLD — chain amplifier only; exploitable only after voip Bearer theft (unproven + credential-gated).
+evidence_needed: portal JS capture showing Bearer voipSession accepted by the 3 proxy endpoints
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+[PARKED] my-portal-bola-proxied-voip (78): AUTH_HELPED barrier — no credential-less vector; unverified until authenticated neighbor-ID enumeration.
+[PARKED] my-portal-api-proxy-wildcard (60): triage HOLD; informational standalone, token-gated chain only; not independently fileable.
+[FINAL] voip-cors-cred-read-write (95) — evidence complete, 3x triage-VALID, only filing pending; unchanged.
+[FINAL] my-portal-bola-proxied-voip (78) — retained, gated on human creds.
+[FINAL] my-portal-api-proxy-wildcard (60) — retained as chain-amplifier for the #1 report; not standalone.
+[NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-13 19:19:58, 7 independent captures, ~168h unfiled) at bugs.olivermaicher.eu NOW — include the proxy-wildcard finding as the explicit chain amplifier in the same report; evidence is complete; do NOT re-run any OPTIONS reconfirmation.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: 3rd triage cycle (09-13 19:19:58) re-affirms VALID + file-now; finding still exploitable + unfiled at ~168h post-triage-VALID / ~9.9d post-discovery; filing latency is the only risk producer — no probe advances it.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary); unchanged, AUTH_HELPED.
+[LEARN] ACCEPTED (triage) INVALID @ order-form.easybell.de, my.easybell.com, connectme-app.easybell.de: order-form anonymous API surface, k8s hostname leak, and OIDC double-slash confirmed dispensable — consistent with prior REJECTED entries; no counter-evidence to the three live hypotheses.
+[LEARN] NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence.
+[RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~168h post-triage-VALID / ~9.9d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay (~25h since the recorded "filing NOW" action with no submission yet); only the bugs.olivermaicher.eu submission reduces it.
+[LEARN] NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; no live probes this cycle (standing do-not-reprobe directive respected); all passive lines closed; sole state change is filing-latency growth (~170h).
+[PRIO] voip-management.easybell.de/api,9.15,attack_surface=9/business=9/tech=8/gate=1/cloud=3/fresh=2
+[PRIO] my.easybell.com,5.70,attack_surface=8/business=8/tech=7/gate=1/cloud=3/fresh=2
+[PRIO] my.easybell.com/api/{crm,ebit,strapi},4.60,attack_surface=6/business=6/tech=6/gate=2/cloud=2/fresh=2
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: 7 independent OPTIONS captures 09-04→09-11; arbitrary Origin reflected with ACAO + ACAC:true; Allow-Methods echoes POST/PUT; Allow-Headers authorization,content-type on all 7 Spring routes; Basic realm sipwisebroker + Bearer voipSession auto-sent with credentials:'include'; 3rd triage cycle VALID 09-13 19:19:58 (CVSS 6.1); exploitable at ~170h post-triage-VALID; zero counter-evidence.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu ONLY — all capture gates satisfied.
+verify_steps: HUMAN — submit ready-to-file body at bugs.olivermaicher.eu; do NOT re-run OPTIONS reconfirmation (valueless, WAF, standing directive).
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding, voicemail) from any authenticated admin page → HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management /api via axios + Bearer voipSession)
+confidence: 78
+reasoning: customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — unchanged since 09-04 21:34.
+evidence_needed: authenticated cross-customer object access on proxied /api/accounts/{id}, /api/subscribers/{id}, /api/numbers/{id}
+verify_steps: HUMAN — login, capture voipSession, enumerate neighbor IDs on proxied plural routes.
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true on 3 proxy endpoints (reconfirmed 09-11 20:07:30); standalone informational; triage verdict HOLD — chain amplifier only; exploitable only after voip Bearer theft (unproven + credential-gated).
+evidence_needed: portal JS capture showing Bearer voipSession accepted by the 3 proxy endpoints
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+[PARKED] my-portal-bola-proxied-voip (78): AUTH_HELPED barrier — no credential-less vector; unverified until authenticated neighbor-ID enumeration.
+[PARKED] my-portal-api-proxy-wildcard (60): triage HOLD; informational standalone, token-gated chain only; not independently fileable.
+[FINAL] voip-cors-cred-read-write (95) — evidence complete, 3x triage-VALID, only filing pending; unchanged.
+[FINAL] my-portal-bola-proxied-voip (78) — retained, gated on human creds.
+[FINAL] my-portal-api-proxy-wildcard (60) — retained as chain-amplifier for the #1 report; not standalone.
+[NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-13 19:19:58, 7 independent captures, ~170h unfiled) at bugs.olivermaicher.eu NOW — include the proxy-wildcard finding as the explicit chain amplifier in the same report; evidence is complete; do NOT re-run any OPTIONS reconfirmation.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~170h post-triage-VALID / ~10d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no probe advances it.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary); unchanged, AUTH_HELPED.
+[LEARN] NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
+[RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~170h post-triage-VALID / ~10d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay (~25h+ since the recorded "filing NOW" action with no submission yet); only the bugs.olivermaicher.eu submission reduces it.
+[0m
+STEP 1 — DELTA
+- NO_DELTA — inventory + KB unchanged since 2026-09-13 22:01:59 UTC; zero live probes this cycle (standing do-not-reprobe directive respected); sole state change is filing-latency growth for `voip-cors-cred-read-write` (~172h post-triage-VALID 09-06 19:19 / ~10.4d post-discovery), still unfiled at bugs.olivermaicher.eu.
+
+STEP 2 — PRIORITIZE
+- [PRIO] voip-management.easybell.de/api,9.15,attack_surface=9/business=9/tech=8/gate=1/cloud=3/fresh=2
+- [PRIO] my.easybell.com,5.70,attack_surface=8/business=8/tech=7/gate=1/cloud=3/fresh=2
+- [PRIO] my.easybell.com/api/{crm,ebit,strapi},4.60,attack_surface=6/business=6/tech=6/gate=2/cloud=2/fresh=2
+
+STEP 3 — HYPOTHESES
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: 7 independent OPTIONS captures 09-04→09-11; arbitrary Origin reflected with ACAO + ACAC:true; Allow-Methods echoes POST/PUT; Allow-Headers authorization,content-type on all 7 Spring routes; Basic realm sipwisebroker + Bearer voipSession auto-sent with credentials:'include'; 3rd triage cycle VALID 09-13 19:19:58 (CVSS 6.1); exploitable ~172h post-triage-VALID; zero counter-evidence; NOT filed.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu ONLY — all capture gates satisfied.
+verify_steps: HUMAN — submit ready-to-file body at bugs.olivermaicher.eu; do NOT re-run OPTIONS reconfirmation (valueless, WAF, standing directive).
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding, voicemail) from any authenticated admin page → HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management /api via axios + Bearer voipSession)
+confidence: 78
+reasoning: customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — unchanged since 09-04 21:34.
+evidence_needed: authenticated cross-customer object access on proxied /api/accounts/{id}, /api/subscribers/{id}, /api/numbers/{id}
+verify_steps: HUMAN — login, capture voipSession, enumerate neighbor IDs on proxied plural routes.
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true on 3 proxy endpoints (reconfirmed 09-11 20:07:30); standalone informational; triage verdict HOLD — chain amplifier only; exploitable only after voip Bearer theft (unproven + credential-gated).
+evidence_needed: portal JS capture showing Bearer voipSession accepted by the 3 proxy endpoints
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+
+STEP 4 — SELF-CRITIQUE
+- [PARKED] my-portal-bola-proxied-voip (78): AUTH_HELPED barrier — no credential-less vector; unverified until authenticated neighbor-ID enumeration.
+- [PARKED] my-portal-api-proxy-wildcard (60): triage HOLD; informational standalone, token-gated chain only; not independently fileable.
+- [FINAL] voip-cors-cred-read-write (95) — evidence complete, 3x triage-VALID, only filing pending; unchanged.
+- [FINAL] my-portal-bola-proxied-voip (78) — retained, gated on human creds.
+- [FINAL] my-portal-api-proxy-wildcard (60) — retained as chain-amplifier for the #1 report; not standalone.
+
+STEP 5 — NEXT ACTION
+- [NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-13 19:19:58, 7 independent captures, ~172h unfiled) at bugs.olivermaicher.eu NOW — include the proxy-wildcard finding as the explicit chain amplifier in the same report; evidence is complete; do NOT re-run any OPTIONS reconfirmation.
+
+STEP 6 — LEARNING
+- [LEARN] NO_DELTA — inventory + KB unchanged since 2026-09-13 22:01:59 UTC; zero live probes this cycle (standing directive respected); all passive lines closed; hypotheses stable with zero counter-evidence; sole state change is filing-latency growth (~172h).
+- [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~172h post-triage-VALID / ~10.4d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no probe advances it.
+
+STEP 7 — RISK
+- [RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~172h post-triage-VALID / ~10.4d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay (~25h+ since the recorded "filing NOW" action with no submission yet); only the bugs.olivermaicher.eu submission reduces it.
