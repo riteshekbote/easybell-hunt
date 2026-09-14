@@ -1,4 +1,11 @@
-## 2026-09-14 05:02:08 UTC [target] (model bigpickle)
+## 2026-09-14 10:44:14 UTC [target] (model bigpickle)
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: 3rd triage cycle (09-13 19:19:58) re-affirms VALID + file-now; finding still exploitable + unfiled at ~170h post-triage-VALID / ~10d post-discovery; filing latency is the only risk producer — no probe advances it.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary); unchanged, AUTH_HELPED.
+[LEARN] ACCEPTED (triage) INVALID @ order-form.easybell.de, my.easybell.com, connectme-app.easybell.de: order-form anonymous API surface, k8s hostname leak, and OIDC double-slash confirmed dispensable — consistent with prior REJECTED entries; no counter-evidence to the three live hypotheses.
+[LEARN] NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
+[PRIO] voip-management.easybell.de/api,95,attack_surface:7+business_value:9+tech_exposure:8+gate_ease:2+cloud_surface:1+freshness:10
+[PRIO] my.easybell.com,78,attack_surface:5+business_value:8+tech_exposure:5+gate_ease:2+cloud_surface:1+freshness:5
+[PRIO] my.easybell.com/api,60,attack_surface:4+business_value:6+tech_exposure:4+gate_ease:3+cloud_surface:1+freshness:4
 [HYP] voip-cors-cred-read-write
 class: MISCONFIG
 asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
@@ -26,3 +33,8 @@ evidence_needed: portal JS capture showing Bearer voipSession accepted by the 3 
 verify_steps: HUMAN — authenticated network trace of portal proxy calls.
 impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
 testability: AUTH_HELPED
+[FINAL] voip-cors-cred-read-write (conf 95, HUMAN_ONLY) — flagship, file-now
+[FINAL] my-portal-bola-proxied-voip (conf 78, AUTH_HELPED) — secondary, pending login
+[FINAL] my-portal-api-proxy-wildcard (conf 60, AUTH_HELPED) — HOLD/chain-amplifier only
+[NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-13 19:19:58, 7 independent captures, ~170h unfiled) at bugs.olivermaicher.eu NOW — include the proxy-wildcard finding as the explicit chain amplifier in the same report; evidence is complete; do NOT re-run any OPTIONS reconfirmation.
+[RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~170h post-triage-VALID / ~10d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay (~25h+ since the recorded "filing NOW" action with no submission yet); only the bugs.olivermaicher.eu submission reduces it.
