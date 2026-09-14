@@ -350,3 +350,12 @@ reasoning: |
 impact: none
 verify_steps: |
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
+## REPOSCAN 2026-09-14 01:39:36 UTC
+[HYP] No In-Scope Source Code Available
+class: OTHER
+asset: github.com/easybell-gmbh (17 public repos)
+confidence: 100
+reasoning: |
+impact: None — no source code in scope for this audit channel
+verify_steps: N/A
+TARGET_ORG not configured for easybell; skipping public-org deep scan.
