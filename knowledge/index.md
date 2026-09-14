@@ -196,3 +196,7 @@
 - 2026-09-14 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
 - 2026-09-14 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: 3rd triage cycle (09-13 19:19:58) re-affirms VALID + file-now; finding still exploitable + unfiled at ~170h post-triage-VALID / ~10d post-discovery; filing latency is the only risk producer — no probe advances it.
 - 2026-09-14 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~170h+ post-triage-VALID / ~10.3d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it.
+- 2026-09-14 REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or credential-stuffing hypotheses.
+- 2026-09-14 ACCEPTED MISCONFIG @ dev.easybell.de: Dev/staging environments commonly misconfigured; high priority for initial probe.
+- 2026-09-14 ACCEPTED IDOR @ portal.easybell.de: Customer portals are prime IDOR targets; retain pending auth context.
+- 2026-09-14 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~193h+ post-triage-VALID / ~10.4d post-discovery; 7 captures + reachable tracker satisfy every evidence gate; filing latency remains the only risk producer — no probe advances it, no probe run this cycle.

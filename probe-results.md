@@ -348,3 +348,16 @@ https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'in
 
 ## 2026-09-14 16:47:31 UTC
 https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-14 20:47:23 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+https://dev.easybell.de/ -> ERR <urlopen error timed out>
+https://dev.easybell.de/api/ -> ERR <urlopen error timed out>
+https://dev.easybell.de/admin/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/api/ -> ERR <urlopen error timed out>
+https://portal.easybell.de/account -> ERR <urlopen error timed out>
+https://auth.easybell.de/.well-known/openid-configuration -> HTTP 404
+https://auth.easybell.de/.well-known/oauth-authorization-server -> HTTP 404
+https://auth.easybell.de/jwks -> HTTP 404
+https://auth.easybell.de/ -> HTTP 404
