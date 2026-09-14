@@ -15711,3 +15711,73 @@ STEP 7 — RISK
 ```
 [RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~193h post-triage-VALID / ~10.4d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + live tracker satisfy every evidence gate; no submission artifact exists in repo as of 20:42 UTC. Risk is a pure function of filing delay (~50h+ since the first recorded "filing NOW" action); only the bugs.olivermaicher.eu submission reduces it.
 ```
+===== ANALYST bigpickle 2026-09-14 23:41:49 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mgetent ahosts dev.easybell.de; echo "--- resolve done ---"; curl -sS -m 15 -D - -o /dev/null https://dev.easybell.de/ 2>&1 | head -30; echo "--- https done ---"; curl -sS -m 15 -D - -o /dev/null http://dev.easybell.de/ 2>&1 | head -30; echo "--- http done ---"
+62.27.68.24     STREAM dev.easybell.de
+62.27.68.24     DGRAM  
+62.27.68.24     RAW    
+--- resolve done ---
+curl: (28) Connection timed out after 15001 milliseconds
+--- https done ---
+curl: (28) Connection timed out after 15001 milliseconds
+--- http done ---
+[0m
+Single read-only probe run (not voip ingress — no WAF noise): `GET` https+http `dev.easybell.de` both time out at L4 (15s, curl 28) on 80/443; DNS resolves to **62.27.68.24** (off-ingress IP). This resolves the 20:45:56 `[55] dev-staging` hypothesis.
+
+STEP 1 — DELTA
+- [NEW] dev.easybell.de resolves `62.27.68.24` but TCP connect times out on both :80 and :443 (curl 28, 15s) — host alive in DNS, dead at L4; **not** the voip WAF (different IP), no HTTP service reachable.
+- [CHANGED] `dev-staging-misconfiguration` ([55], seed 09-03 "high priority for initial probe") RESOLVED: dead at network layer, consistent with the 09-03 "non-routable" verdict; nothing to misconfigure against.
+- [CHANGED] Everything else NO_DELTA — flagship still exploitable + unfiled at ~193h+ post-triage-VALID / ~10.4d post-discovery; standing do-not-reprobe on voip ingress respected (this GET was to a distinct host).
+
+STEP 2 — PRIORITIZE
+- [PRIO] voip-management.easybell.de/api,8.9,attack_surface:8+business_value:9+tech_exposure:8+gate_ease:10+cloud_surface:8+freshness:10 (flagship, evidence-complete, only filing pending)
+- [PRIO] my.easybell.com,7.6,attack_surface:8+business_value:9+tech_exposure:8+gate_ease:4+cloud_surface:8+freshness:8 (BOLA + proxy-wildcard chain, auth-gated)
+- [DROPPED] dev.easybell.de: L4-dead (weighted ~1.3×) — removed from prio queue.
+
+STEP 3 — HYPOTHESES
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: 7 independent OPTIONS captures 09-04→09-11; arbitrary Origin reflected + ACAO+ACAC:true; Allow-Methods echoes POST/PUT; Allow-Headers authorization,content-type; 3× triage-VALID; ~193h+ unfiled; zero counter-evidence.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu ONLY — all capture gates satisfied.
+verify_steps: HUMAN — submit ready-to-file body; do NOT re-run OPTIONS.
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding) → HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management /api via axios + Bearer voipSession)
+confidence: 78
+reasoning: customerId in Matomo; auth-gated object endpoints; BOLA class confirmed but credential-gated — unchanged since 09-04 21:34.
+evidence_needed: authenticated cross-customer object access on proxied /api/{accounts,subscribers,numbers}/{id}
+verify_steps: HUMAN — login, capture voipSession, enumerate neighbor IDs.
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true, preflight accepts POST+Authorization; triage HOLD — chain amplifier only, post-Bearer-theft.
+evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy endpoints.
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+
+STEP 4 — SELF-CRITIQUE
+- DROPPED dev-staging-misconfiguration: confidence 55→0 on L4-dead host (15s timeouts, curl 28).
+- [PARKED] my-portal-bola-proxied-voip: cred-gated, no passive vector — awaiting HUMAN login.
+- [PARKED] my-portal-api-proxy-wildcard: HOLD/chain-amplifier only.
+- [FINAL] voip-cors-cred-read-write (95, HUMAN_ONLY) — flagship, evidence-complete, file-only.
+
+STEP 5 — NEXT ACTION
+- [NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-13 19:19:58, 7 captures, ~193h unfiled) at bugs.olivermaicher.eu NOW — embed `my-portal-api-proxy-wildcard` as the explicit chain amplifier in the same report; no further probes (valueless, WAF).
+
+STEP 6 — LEARNING
+- [LEARN] REJECTED MISCONFIG @ dev.easybell.de: resolves 62.27.68.24 but L4-unreachable on :80/:443 (15s timeout, curl 28) — no HTTP service; "high priority initial probe" hypothesis resolved as dead host, consistent with 09-03 non-routable verdict; line closed after one probe.
+- [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~193h+ post-triage-VALID / ~10.4d post-discovery; 7 captures satisfy every evidence gate; filing latency is the only risk producer; no probe advances it.
+
+STEP 7 — RISK
+- [RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~193h+ post-triage-VALID / ~10.4d post-discovery, re-VALID by 3 triage cycles; 7 captures + reachable tracker meet every evidence gate; no submission artifact in repo as of 20:45 UTC 09-14. Risk is a pure function of filing delay; only the bugs.olivermaicher.eu submission reduces it.

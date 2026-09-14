@@ -200,3 +200,5 @@
 - 2026-09-14 ACCEPTED MISCONFIG @ dev.easybell.de: Dev/staging environments commonly misconfigured; high priority for initial probe.
 - 2026-09-14 ACCEPTED IDOR @ portal.easybell.de: Customer portals are prime IDOR targets; retain pending auth context.
 - 2026-09-14 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~193h+ post-triage-VALID / ~10.4d post-discovery; 7 captures + reachable tracker satisfy every evidence gate; filing latency remains the only risk producer — no probe advances it, no probe run this cycle.
+- 2026-09-14 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~193h+ post-triage-VALID / ~10.4d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it
+- 2026-09-14 ACCEPTED MISCONFIG @ dev.easybell.de: Dev/staging host resolves (62.27.68.24) but no external HTTP service — likely internal/firewalled; passive surface closed

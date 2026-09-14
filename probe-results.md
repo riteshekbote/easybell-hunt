@@ -361,3 +361,6 @@ https://auth.easybell.de/.well-known/openid-configuration -> HTTP 404
 https://auth.easybell.de/.well-known/oauth-authorization-server -> HTTP 404
 https://auth.easybell.de/jwks -> HTTP 404
 https://auth.easybell.de/ -> HTTP 404
+
+## 2026-09-14 23:41:51 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
