@@ -15007,3 +15007,208 @@ STEP 6 — LEARNING
 
 STEP 7 — RISK
 - [RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~172h post-triage-VALID / ~10.4d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay (~25h+ since the recorded "filing NOW" action with no submission yet); only the bugs.olivermaicher.eu submission reduces it.
+===== ANALYST bigpickle 2026-09-14 05:08:38 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mls -la && ls -la art/ 2>/dev/null | head -50
+total 296
+drwxr-xr-x 12 runner runner   4096 Sep 14 05:01 .
+drwxr-xr-x  3 runner runner   4096 Sep 14 05:01 ..
+drwxr-xr-x  7 runner runner   4096 Sep 14 05:01 .git
+drwxr-xr-x  3 runner runner   4096 Sep 14 05:01 .github
+-rw-r--r--  1 runner runner   1756 Sep 14 05:01 README.md
+-rw-r--r--  1 runner runner     32 Sep 14 05:01 analyst-out.txt
+-rw-r--r--  1 runner runner 101092 Sep 14 05:01 analyst-prompt.txt
+-rw-r--r--  1 runner runner  97285 Sep 14 05:01 ctx.txt
+drwxr-xr-x  2 runner runner   4096 Sep 14 05:01 inventory
+drwxr-xr-x  2 runner runner   4096 Sep 14 05:01 knowledge
+drwxr-xr-x  2 runner runner   4096 Sep 14 05:01 leads
+-rw-r--r--  1 runner runner  16368 Sep 14 05:01 probe-results.md
+drwxr-xr-x  2 runner runner   4096 Sep 14 05:01 recon-notes
+drwxr-xr-x  2 runner runner   4096 Sep 14 05:01 reports
+drwxr-xr-x  2 runner runner   4096 Sep 14 05:01 reposcan-raw
+-rw-r--r--  1 runner runner   3220 Sep 14 05:01 scope.yml
+drwxr-xr-x  2 runner runner   4096 Sep 14 05:01 scripts
+-rw-r--r--  1 runner runner     33 Sep 14 05:01 state_bigpickle.json
+-rw-r--r--  1 runner runner     33 Sep 14 05:01 state_laguna.json
+-rw-r--r--  1 runner runner     33 Sep 14 05:01 state_ling3.json
+-rw-r--r--  1 runner runner     33 Sep 14 05:01 state_longcat.json
+-rw-r--r--  1 runner runner     33 Sep 14 05:01 state_mimo.json
+-rw-r--r--  1 runner runner     33 Sep 14 05:01 state_nemotron3.json
+drwxr-xr-x  2 runner runner   4096 Sep 14 05:01 triage
+[0m
+[0m✱ [0mGlob "**/*{report,file,bugs,olivermaicher,submit}*"[90m 1 match[0m
+[0m
+[0m$ [0mls -la reports/ leads/ triage/ 2>/dev/null
+leads/:
+total 956
+drwxr-xr-x  2 runner runner   4096 Sep 14 05:01 .
+drwxr-xr-x 12 runner runner   4096 Sep 14 05:01 ..
+-rw-r--r--  1 runner runner 378938 Sep 14 05:01 lead-bigpickle.md
+-rw-r--r--  1 runner runner   3927 Sep 14 05:01 lead-laguna.md
+-rw-r--r--  1 runner runner   3850 Sep 14 05:01 lead-ling3.md
+-rw-r--r--  1 runner runner   4004 Sep 14 05:01 lead-longcat.md
+-rw-r--r--  1 runner runner     18 Sep 14 05:01 lead-mimo.md
+-rw-r--r--  1 runner runner 552369 Sep 14 05:01 lead-nemotron3.md
+-rw-r--r--  1 runner runner  19089 Sep 14 05:01 reposcan-easybell.md
+
+reports/:
+total 2164
+drwxr-xr-x  2 runner runner    4096 Sep 14 05:01 .
+drwxr-xr-x 12 runner runner    4096 Sep 14 05:01 ..
+-rw-r--r--  1 runner runner 1215515 Sep 14 05:01 analyst-bigpickle.log
+-rw-r--r--  1 runner runner   16709 Sep 14 05:01 analyst-laguna.log
+-rw-r--r--  1 runner runner   16632 Sep 14 05:01 analyst-ling3.log
+-rw-r--r--  1 runner runner   16786 Sep 14 05:01 analyst-longcat.log
+-rw-r--r--  1 runner runner  789133 Sep 14 05:01 analyst-nemotron3.log
+-rw-r--r--  1 runner runner   11114 Sep 14 05:01 hypotheses-bigpickle.txt
+-rw-r--r--  1 runner runner      51 Sep 14 05:01 hypotheses-laguna.txt
+-rw-r--r--  1 runner runner      50 Sep 14 05:01 hypotheses-ling3.txt
+-rw-r--r--  1 runner runner      52 Sep 14 05:01 hypotheses-longcat.txt
+-rw-r--r--  1 runner runner    6331 Sep 14 05:01 hypotheses-nemotron3.txt
+-rw-r--r--  1 runner runner  132094 Sep 14 05:01 hypotheses.md
+-rw-r--r--  1 runner runner    1811 Sep 14 05:01 valid-bugs.md
+
+triage/:
+total 352
+drwxr-xr-x  2 runner runner  4096 Sep 14 05:01 .
+drwxr-xr-x 12 runner runner  4096 Sep 14 05:01 ..
+-rw-r--r--  1 runner runner     0 Sep 14 05:01 .gitkeep
+-rw-r--r--  1 runner runner   851 Sep 14 05:01 run-2026-09-02-21-59.md
+-rw-r--r--  1 runner runner   184 Sep 14 05:01 run-2026-09-03-00-06.md
+-rw-r--r--  1 runner runner   290 Sep 14 05:01 run-2026-09-03-04-45.md
+-rw-r--r--  1 runner runner   538 Sep 14 05:01 run-2026-09-03-09-37.md
+-rw-r--r--  1 runner runner  1027 Sep 14 05:01 run-2026-09-03-13-56.md
+-rw-r--r--  1 runner runner  1473 Sep 14 05:01 run-2026-09-03-17-47.md
+-rw-r--r--  1 runner runner   173 Sep 14 05:01 run-2026-09-03-20-54.md
+-rw-r--r--  1 runner runner   250 Sep 14 05:01 run-2026-09-03-23-11.md
+-rw-r--r--  1 runner runner   263 Sep 14 05:01 run-2026-09-04-01-05.md
+-rw-r--r--  1 runner runner   157 Sep 14 05:01 run-2026-09-04-06-02.md
+-rw-r--r--  1 runner runner   153 Sep 14 05:01 run-2026-09-04-11-29.md
+-rw-r--r--  1 runner runner   208 Sep 14 05:01 run-2026-09-04-15-06.md
+-rw-r--r--  1 runner runner   319 Sep 14 05:01 run-2026-09-04-18-29.md
+-rw-r--r--  1 runner runner   195 Sep 14 05:01 run-2026-09-04-21-03.md
+-rw-r--r--  1 runner runner   478 Sep 14 05:01 run-2026-09-04-23-05.md
+-rw-r--r--  1 runner runner   168 Sep 14 05:01 run-2026-09-05-01-06.md
+-rw-r--r--  1 runner runner 11550 Sep 14 05:01 run-2026-09-05-05-54.md
+-rw-r--r--  1 runner runner   225 Sep 14 05:01 run-2026-09-05-10-27.md
+-rw-r--r--  1 runner runner   143 Sep 14 05:01 run-2026-09-05-13-32.md
+-rw-r--r--  1 runner runner   273 Sep 14 05:01 run-2026-09-05-16-16.md
+-rw-r--r--  1 runner runner   154 Sep 14 05:01 run-2026-09-05-18-25.md
+-rw-r--r--  1 runner runner   157 Sep 14 05:01 run-2026-09-05-20-44.md
+-rw-r--r--  1 runner runner   189 Sep 14 05:01 run-2026-09-05-22-46.md
+-rw-r--r--  1 runner runner   280 Sep 14 05:01 run-2026-09-06-00-48.md
+-rw-r--r--  1 runner runner   263 Sep 14 05:01 run-2026-09-06-05-45.md
+-rw-r--r--  1 runner runner   200 Sep 14 05:01 run-2026-09-06-10-46.md
+-rw-r--r--  1 runner runner   237 Sep 14 05:01 run-2026-09-06-14-05.md
+-rw-r--r--  1 runner runner  7735 Sep 14 05:01 run-2026-09-06-17-09.md
+-rw-r--r--  1 runner runner  1818 Sep 14 05:01 run-2026-09-06-19-19.md
+-rw-r--r--  1 runner runner   426 Sep 14 05:01 run-2026-09-06-21-30.md
+-rw-r--r--  1 runner runner   177 Sep 14 05:01 run-2026-09-06-23-09.md
+-rw-r--r--  1 runner runner   141 Sep 14 05:01 run-2026-09-07-01-07.md
+-rw-r--r--  1 runner runner   184 Sep 14 05:01 run-2026-09-07-06-12.md
+-rw-r--r--  1 runner runner   186 Sep 14 05:01 run-2026-09-07-12-47.md
+-rw-r--r--  1 runner runner   193 Sep 14 05:01 run-2026-09-07-18-12.md
+-rw-r--r--  1 runner runner   151 Sep 14 05:01 run-2026-09-07-21-36.md
+-rw-r--r--  1 runner runner   186 Sep 14 05:01 run-2026-09-07-23-47.md
+-rw-r--r--  1 runner runner   282 Sep 14 05:01 run-2026-09-08-04-19.md
+-rw-r--r--  1 runner runner   975 Sep 14 05:01 run-2026-09-08-08-57.md
+-rw-r--r--  1 runner runner   143 Sep 14 05:01 run-2026-09-08-13-30.md
+-rw-r--r--  1 runner runner   210 Sep 14 05:01 run-2026-09-08-17-32.md
+-rw-r--r--  1 runner runner   268 Sep 14 05:01 run-2026-09-08-20-19.md
+-rw-r--r--  1 runner runner   178 Sep 14 05:01 run-2026-09-08-22-47.md
+-rw-r--r--  1 runner runner   208 Sep 14 05:01 run-2026-09-09-01-10.md
+-rw-r--r--  1 runner runner   290 Sep 14 05:01 run-2026-09-09-06-06.md
+-rw-r--r--  1 runner runner  1191 Sep 14 05:01 run-2026-09-09-11-37.md
+-rw-r--r--  1 runner runner   450 Sep 14 05:01 run-2026-09-09-15-19.md
+-rw-r--r--  1 runner runner   152 Sep 14 05:01 run-2026-09-09-18-45.md
+-rw-r--r--  1 runner runner   191 Sep 14 05:01 run-2026-09-09-21-37.md
+-rw-r--r--  1 runner runner   217 Sep 14 05:01 run-2026-09-09-23-34.md
+-rw-r--r--  1 runner runner   141 Sep 14 05:01 run-2026-09-10-01-29.md
+-rw-r--r--  1 runner runner   148 Sep 14 05:01 run-2026-09-10-06-41.md
+-rw-r--r--  1 runner runner   147 Sep 14 05:01 run-2026-09-10-11-51.md
+-rw-r--r--  1 runner runner   230 Sep 14 05:01 run-2026-09-10-16-17.md
+-rw-r--r--  1 runner runner   159 Sep 14 05:01 run-2026-09-10-19-11.md
+-rw-r--r--  1 runner runner   183 Sep 14 05:01 run-2026-09-10-21-42.md
+-rw-r--r--  1 runner runner   179 Sep 14 05:01 run-2026-09-10-23-57.md
+-rw-r--r--  1 runner runner   265 Sep 14 05:01 run-2026-09-11-04-27.md
+-rw-r--r--  1 runner runner   906 Sep 14 05:01 run-2026-09-11-09-14.md
+-rw-r--r--  1 runner runner  1529 Sep 14 05:01 run-2026-09-11-13-40.md
+-rw-r--r--  1 runner runner   199 Sep 14 05:01 run-2026-09-11-17-17.md
+-rw-r--r--  1 runner runner 10498 Sep 14 05:01 run-2026-09-11-19-54.md
+-rw-r--r--  1 runner runner   161 Sep 14 05:01 run-2026-09-11-22-26.md
+-rw-r--r--  1 runner runner   279 Sep 14 05:01 run-2026-09-12-00-39.md
+-rw-r--r--  1 runner runner   161 Sep 14 05:01 run-2026-09-12-05-07.md
+-rw-r--r--  1 runner runner   168 Sep 14 05:01 run-2026-09-12-09-28.md
+-rw-r--r--  1 runner runner   212 Sep 14 05:01 run-2026-09-12-13-09.md
+-rw-r--r--  1 runner runner   218 Sep 14 05:01 run-2026-09-12-16-25.md
+-rw-r--r--  1 runner runner   153 Sep 14 05:01 run-2026-09-12-18-47.md
+-rw-r--r--  1 runner runner   150 Sep 14 05:01 run-2026-09-12-21-21.md
+-rw-r--r--  1 runner runner   152 Sep 14 05:01 run-2026-09-12-23-22.md
+-rw-r--r--  1 runner runner   212 Sep 14 05:01 run-2026-09-13-01-26.md
+-rw-r--r--  1 runner runner  8109 Sep 14 05:01 run-2026-09-13-06-49.md
+-rw-r--r--  1 runner runner   238 Sep 14 05:01 run-2026-09-13-12-40.md
+-rw-r--r--  1 runner runner   216 Sep 14 05:01 run-2026-09-13-16-55.md
+-rw-r--r--  1 runner runner  7833 Sep 14 05:01 run-2026-09-13-19-19.md
+-rw-r--r--  1 runner runner   143 Sep 14 05:01 run-2026-09-13-21-30.md
+-rw-r--r--  1 runner runner   184 Sep 14 05:01 run-2026-09-13-23-31.md
+-rw-r--r--  1 runner runner   743 Sep 14 05:01 run-2026-09-14-01-41.md
+[0m
+[0m→ [0mRead reports/valid-bugs.md
+[0m→ [0mRead triage/run-2026-09-14-01-41.md
+STEP 1 — DELTA
+- NO_DELTA — zero live probes since 2026-09-10 09:48:02 UTC (standing do-not-reprobe directive respected); inventory + KB unchanged.
+- CHANGED triage run-2026-09-14-01-41 was a no-op (lead request, no submission); `reports/valid-bugs.md` still shows flagship VALID++ with zero filing record — filing latency the only delta.
+
+STEP 2 — PRIORITIZE
+- [PRIO] voip-management.easybell.de/api, 6.6, (a8/b9/t7/g2/c3/f7) — credentialed CORS read+write, evidence-complete, filing-blocked
+- [PRIO] my.easybell.com, 5.95, (a7/b9/t7/g2/c3/f3) — portal + 8 proxied Sipwise routes + 3 wildcard-CORS proxies, AUTH_HELPED
+- [PRIO] order-form.easybell.de, 3.1, (a6/b6/t5/g9/c3/f1) — anonymous GET surface capped at public catalog; mutating money-flow off-limits; line closed
+
+STEP 3 — HYPOTHESES
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: 7 independent OPTIONS captures 09-04→09-11; arbitrary Origin reflected with ACAO+ACAC:true; Allow-Methods echoes POST/PUT; Allow-Headers authorization,content-type on all 7 Spring routes; Basic realm sipwisebroker + Bearer voipSession; 3x triage-VALID (09-06/09-11/09-13, CVSS 6.1/8.1); exploitable ~172h post-triage-VALID / ~11d post-discovery; zero counter-evidence; NOT filed.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu ONLY — all capture gates satisfied.
+verify_steps: HUMAN — submit ready-to-file body at bugs.olivermaicher.eu; do NOT re-run OPTIONS reconfirmation (valueless, WAF, standing directive).
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding, voicemail) from any authenticated admin page → HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management /api via axios + Bearer voipSession)
+confidence: 78
+reasoning: customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — unchanged since 09-04 21:34.
+evidence_needed: authenticated cross-customer object access on proxied /api/accounts/{id}, /api/subscribers/{id}, /api/numbers/{id}
+verify_steps: HUMAN — login, capture voipSession, enumerate neighbor IDs on proxied plural routes.
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true on 3 proxy endpoints (reconfirmed 09-11 20:07:30); triage verdict HOLD — chain amplifier only; exploitable only after voip Bearer theft (unproven + credential-gated).
+evidence_needed: portal JS capture showing Bearer voipSession accepted by the 3 proxy endpoints
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+
+STEP 4 — SELF-CRITIQUE
+- [PARKED] my-portal-bola-proxied-voip (78): AUTH_HELPED barrier — no credential-less vector; unverified until authenticated neighbor-ID enumeration.
+- [PARKED] my-portal-api-proxy-wildcard (60): triage HOLD; informational standalone, token-gated chain only; not independently fileable.
+- [FINAL] voip-cors-cred-read-write (95) — evidence complete, 3x triage-VALID, only filing pending; unchanged.
+- [FINAL] my-portal-bola-proxied-voip (78) — retained, gated on human creds.
+- [FINAL] my-portal-api-proxy-wildcard (60) — retained as chain-amplifier for the #1 report; not standalone.
+
+STEP 5 — NEXT ACTION
+- [NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, 3x triage-VALID 09-06/09-11/09-13, 7 independent captures, ~172h unfiled) at bugs.olivermaicher.eu NOW, including the `/api/{crm,ebit,strapi}` wildcard-CORS finding as the explicit chain amplifier in the same report; evidence is complete; do NOT run any probe.
+
+STEP 6 — LEARNING
+- [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~172h post-triage-VALID / ~11d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no probe advances it.
+- [LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary); unchanged, AUTH_HELPED.
+- [LEARN] NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
+
+STEP 7 — RISK
+- [RISK] easybell: 94 — sole unique HIGH/CRITICAL unchanged at ~172h post-triage-VALID / ~11d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + live tracker satisfy every evidence gate. Risk is a pure function of filing delay; only the bugs.olivermaicher.eu submission reduces it.

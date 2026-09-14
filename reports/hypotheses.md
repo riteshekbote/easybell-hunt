@@ -977,3 +977,10 @@
 - LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~170h post-triage-VALID / ~10d post-discovery; 7 captures + reachab
 - LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary);
 - LEARN: NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
+
+## RANKED HYPOTHESES 2026-09-14 05:08:38 UTC
+- [95] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-13 19:19:58, 7 independent captures, ~170h unfiled) at bugs.olivermaich
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~170h post-triage-VALID / ~10d post-discovery; 7 captures + reachab
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary);
+- LEARN: NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
