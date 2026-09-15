@@ -211,3 +211,7 @@
 - 2026-09-15 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~170h+ post-triage-VALID / ~10.3d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it
 - 2026-09-15 REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or credential-stuffing hypotheses.
 - 2026-09-15 REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+- 2026-09-15 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: 3rd triage cycle (09-13 19:19:58) re-affirms VALID + file-now; finding still exploitable + unfiled at ~168h post-triage-VALID / ~9.9d post-discovery; filing latency is the only risk producer — no probe advances it.
+- 2026-09-15 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary); unchanged, AUTH_HELPED.
+- 2026-09-15 ACCEPTED (triage) INVALID @ order-form.easybell.de, my.easybell.com, connectme-app.easybell.de: order-form anonymous API surface, k8s hostname leak, and OIDC double-slash confirmed dispensable — consistent with prior REJECTED entries; no counter-evidence to the three live hypotheses.
+- 2026-09-15 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
