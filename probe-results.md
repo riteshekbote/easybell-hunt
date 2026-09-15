@@ -364,3 +364,6 @@ https://auth.easybell.de/ -> HTTP 404
 
 ## 2026-09-14 23:41:51 UTC
 https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-15 01:57:57 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
