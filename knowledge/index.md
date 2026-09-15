@@ -207,3 +207,7 @@
 - 2026-09-15 ACCEPTED MISCONFIG @ dev.easybell.de: Dev/staging host resolves (62.27.68.24) but no external HTTP service — likely internal/firewalled; passive surface closed
 - 2026-09-15 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
 - 2026-09-15 NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
+- 2026-09-15 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~170h post-triage-VALID / ~10d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it
+- 2026-09-15 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~170h+ post-triage-VALID / ~10.3d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it
+- 2026-09-15 REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or credential-stuffing hypotheses.
+- 2026-09-15 REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.

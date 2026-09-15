@@ -1,6 +1,6 @@
-## 2026-09-15 07:03:50 UTC [target] (model bigpickle)
+## 2026-09-15 12:43:21 UTC [target] (model bigpickle)
 [LEARN] NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
-[RISK] easybell: 95 — sole unique HIGH/CRITICAL unchanged at ~200h+ post-triage-VALID / ~10.7d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + live tracker satisfy every evidence gate; no submission artifact exists in repo; only bugs.olivermaicher.eu filing reduces it.
+[RISK] easybell: 95 — sole unique HIGH/CRITICAL unchanged at ~200h+ post-triage-VALID / ~10.7d post-discovery, re-VALID by 3 independent triage cycles; 7 captures + reachable tracker satisfy every evidence gate; no submission artifact exists in repo as of this cycle (~72h+ since first recorded "filing NOW" action). Risk is a pure function of filing delay; only the bugs.olivermaicher.eu submission reduces it.
 [PRIO] voip-management.easybell.de/api,95,attack_surface:7,business_value:10,tech_exposure:8,gate_ease:0,cloud_surface:0,freshness:0
 [PRIO] my.easybell.com/api/{crm,ebit,strapi},60,attack_surface:5,business_value:7,tech_exposure:6,gate_ease:0,cloud_surface:0,freshness:0
 [PRIO] my.easybell.com,78,attack_surface:6,business_value:9,tech_exposure:7,gate_ease:0,cloud_surface:0,freshness:0
@@ -34,4 +34,4 @@ testability: AUTH_HELPED
 [PARKED] my-portal-bola-proxied-voip: credential-gated, no passive vector.
 [PARKED] my-portal-api-proxy-wildcard: credential-gated, chain amplifier only.
 [FINAL] voip-cors-cred-read-write [95] → sole actionable, all gates met.
-[NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-11/09-13, 7 independent captures, ~200h unfiled) at bugs.olivermaicher.eu NOW — embed `my-portal-api-proxy-wildcard` (ACAO:* no-ACAC on /api/{crm,ebit,strapi}) as the explicit chain amplifier in the same report; evidence is complete; do NOT run any further probes.
+[NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-11/09-13, 7 independent captures, ~200h unfiled) at bugs.olivermaicher.eu NOW — embed `my-portal-api-proxy-wildcard` (ACAO:* no-ACAC on /api/{crm,ebit,strapi}) as the explicit chain amplifier in the same report; evidence is complete; do NOT run any further probes (zero analytical value, WAF noise).
