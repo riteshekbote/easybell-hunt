@@ -1,11 +1,11 @@
-## 2026-09-15 20:26:05 UTC [target] (model bigpickle)
+## 2026-09-15 23:10:02 UTC [target] (model bigpickle)
 [HYP] voip-cors-cred-read-write
 class: MISCONFIG
 asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
 confidence: 95
-reasoning: 7 independent OPTIONS captures 09-04→09-11; arbitrary Origin reflected + ACAO+ACAC:true; Allow-Methods echoes POST/PUT; Allow-Headers authorization,content-type; 3× triage-VALID (09-06/09-11/09-13); ~215h unfiled; zero counter-evidence.
+reasoning: 7 independent OPTIONS captures 09-04→09-11; arbitrary Origin reflected + ACAO+ACAC:true; Allow-Methods echoes POST/PUT; Allow-Headers authorization,content-type; 3× triage-VALID (09-06 19:19 / 09-11 19:54 / 09-13 19:19); ~220h unfiled; zero counter-evidence.
 evidence_needed: filed-report acceptance at bugs.olivermaicher.eu ONLY — all capture gates satisfied.
-verify_steps: HUMAN — submit ready-to-file body; do NOT re-run OPTIONS (valueless, WAF, standing directive).
+verify_steps: HUMAN — submit ready-to-file body; do NOT re-run OPTIONS (valueless, WAF noise, standing do-not-reprobe directive).
 impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding, voicemail) from any authenticated admin page → HIGH/CRITICAL
 testability: HUMAN_ONLY
 [HYP] my-portal-bola-proxied-voip
