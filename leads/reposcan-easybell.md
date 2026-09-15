@@ -387,3 +387,26 @@ TARGET_ORG not configured for easybell; skipping public-org deep scan.
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
 ## REPOSCAN 2026-09-15 11:54:32 UTC
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
+## REPOSCAN 2026-09-15 16:52:52 UTC
+[HYP] Hardcoded SIP Infrastructure Details in Test Code
+class: MISCONFIG
+asset: easybell-gmbh/php-sip/tests/PhpSipTest.php
+confidence: 45
+reasoning: php-sip is the only original (non-fork) repo authored by thomas.busch@easybell.de. The test file contains what appear to be real easybell SIP infrastructure details in mock SIP responses: internal IPs (192.168.144.2, 192.168.251.44), a public IP (79.140.179.49), the SIP domain (sip.easybell.de), a SIP phone number (00493050931632), and the infrastructure vendor/version (Sipwise NGCP Proxy 7.X). The password is a test placeholder ('secret'). While these are in mock/test code that never connects to real servers, the use of what appears to be real infrastructure data in tests suggests these values may reflect actual deployment details.
+impact: Low - reveals internal network topology and SIP infrastructure vendor/version to attackers; could aid targeted attacks against their SIP platform
+verify_steps: 1) Resolve sip.easybell.de to confirm it's active; 2) Check if 79.140.179.49 responds on SIP ports (5060/UDP); 3) Verify if 00493050931632 is a valid SIP account via passive enumeration; 4) Check if Sipwise NGCP version 7.X has known CVEs
+[HYP] SIP Digest Auth Using MD5
+class: OTHER
+asset: easybell-gmbh/php-sip/src/PhpSip.php:475-482
+confidence: 15
+reasoning: The calculateResponse() method uses MD5 for SIP digest authentication. While MD5 is cryptographically broken, this is the standard algorithm mandated by SIP RFC 2617. This is an inherent protocol limitation, not an easybell-specific vulnerability.
+impact: Informational - standard SIP practice, not actionable
+verify_steps: N/A - protocol-level issue
+[HYP] Committed .env File with APP_KEY
+class: SECRET
+asset: easybell-gmbh/collision/tests/LaravelApp/.env:17
+confidence: 5
+reasoning: The collision fork contains a committed .env file with APP_KEY=base64:IquyT8ji6DMPqygLc19MXORzrU7SkS5+tLZxyY5Fh1Y=. However, this file was added by upstream (Nuno Maduro, commit 795a1cf), not by easybell. It's in a test fixture directory with default/empty values. Not an easybell-specific issue.
+impact: Negligible - upstream test fixture, not deployed
+verify_steps: Confirm this key is not used in any easybell production deployment
+TARGET_ORG not configured for easybell; skipping public-org deep scan.
