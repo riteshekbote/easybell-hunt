@@ -418,3 +418,6 @@ TARGET_ORG not configured for easybell; skipping public-org deep scan.
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
 ## REPOSCAN 2026-09-16 06:10:07 UTC
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
+## REPOSCAN 2026-09-16 11:49:46 UTC
+[HYP] <none> — no candidates to evaluate
+TARGET_ORG not configured for easybell; skipping public-org deep scan.
