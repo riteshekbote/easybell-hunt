@@ -1,4 +1,5 @@
-## 2026-09-16 06:41:10 UTC [target] (model bigpickle)
+## 2026-09-16 12:22:24 UTC [target] (model bigpickle)
+[PRIO] voip-management.easybell.de/api,9.5,attack_surface=10,business_value=10,tech_exposure=8,gate_ease=2,cloud_surface=6,freshness=10
 [HYP] voip-cors-cred-read-write
 class: MISCONFIG
 asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
@@ -26,7 +27,10 @@ evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy en
 verify_steps: HUMAN — authenticated network trace of portal proxy calls.
 impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
 testability: AUTH_HELPED
-[NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, 5+ triage-VALID verdicts 09-05→09-14, CVSS 6.1–8.1, 7 captures, valid-bugs.md count still 0, ~240h unfiled/~12d post-discovery) at bugs.olivermaicher.eu — file now; this is the only action that reduces program risk.
-[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding exploitable + unfiled at ~240h post-triage-VALID / ~12d post-discovery; valid-bugs.md running count 0 re-verified on disk; all evidence/triage gates satisfied; filing latency is the only risk producer — no probe advances it.
+[PARKED] my-portal-bola-proxied-voip: credential-gated since 09-04, no passive vector; no analyst probe can advance.
+[PARKED] my-portal-api-proxy-wildcard: triage HOLD, chain requires unproven Bearer theft.
+[FINAL] voip-cors-cred-read-write (95) — sole actionable, evidence-complete, blocked only on HUMAN filing.
+[NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 re-VALID 09-11/09-13, 7 independent captures, ~240h unfiled) at bugs.olivermaicher.eu — valid-bugs.md count is still 0; this is the only action that reduces risk.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding exploitable + unfiled at ~240h post-triage-VALID / ~12d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; valid-bugs.md "running count 0" confirms no submission artifact; filing latency is the only risk producer — no probe advances it.
 [LEARN] NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
-[RISK] easybell: 95 — sole unique HIGH/CRITICAL unchanged, still 0 submissions at ~240h post-triage-VALID / ~12d; risk is a pure function of filing delay; only the bugs.olivermaicher.eu submission reduces it.
+[RISK] easybell: 95 — sole unique HIGH/CRITICAL unchanged, still 0 submissions at ~240h post-triage-VALID; risk is a pure function of filing delay; only the bugs.olivermaicher.eu submission reduces it.
