@@ -3629,3 +3629,38 @@ evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy en
 verify_steps: HUMAN — authenticated network trace of portal proxy calls.
 impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
 testability: AUTH_HELPED
+## 2026-09-16 01:28:30 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: 7 independent OPTIONS captures 09-04→09-11; arbitrary Origin reflected + ACAO+ACAC:true; Allow-Methods echoes POST/PUT; Allow-Headers authorization,content-type; 3× triage-VALID (09-06/09-11/09-13); ~235h unfiled, valid-bugs.md count still 0; zero counter-evidence.
+evidence_needed: filed-report acceptance at bugs.olivermaicher.eu ONLY — all capture gates satisfied.
+verify_steps: HUMAN — submit ready-to-file body; do NOT re-run OPTIONS (valueless, WAF noise, standing do-not-reprobe directive).
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding, voicemail) from any authenticated admin page → HIGH/CRITICAL
+testability: HUMAN_ONLY
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (proxies 8 plural Sipwise routes to voip-management /api via axios + Bearer voipSession)
+confidence: 78
+reasoning: customerId leaked in Matomo; Laravel/Vue Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — unchanged since 09-04 21:34.
+evidence_needed: authenticated cross-customer object access on proxied /api/{accounts,subscribers,numbers}/{id}
+verify_steps: HUMAN — login, capture voipSession, enumerate neighbor IDs on proxied plural routes.
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true; preflight accepts POST+Authorization; triage HOLD — chain amplifier only, post-Bearer-theft (unproven + credential-gated).
+evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy endpoints.
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+[PARKED] my-portal-bola-proxied-voip: credential-gated since 09-04, no passive vector; no analyst probe can advance.
+[PARKED] my-portal-api-proxy-wildcard: triage HOLD, chain requires unproven Bearer theft.
+[FINAL] voip-cors-cred-read-write (95) — sole actionable, evidence-complete, blocked only on HUMAN filing.
+[NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 re-VALID 09-11/09-13, 7 independent captures, ~235h unfiled) at bugs.olivermaicher.eu — valid-bugs.md count is still 0; this is the only action that reduces risk.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding exploitable + unfiled at ~235h post-triage-VALID / ~11.9d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; valid-bugs.md "running count 0" confirms no submission artifact; filing latency is the only risk producer — no new probe advances it.
+[LEARN] NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
+[RISK] easybell: 95 — sole unique HIGH/CRITICAL unchanged, still 0 submissions at ~235h post-triage-VALID; risk is a pure function of filing delay; only the bugs.olivermaicher.eu submission reduces it.

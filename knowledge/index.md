@@ -215,3 +215,11 @@
 - 2026-09-15 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary); unchanged, AUTH_HELPED.
 - 2026-09-15 ACCEPTED (triage) INVALID @ order-form.easybell.de, my.easybell.com, connectme-app.easybell.de: order-form anonymous API surface, k8s hostname leak, and OIDC double-slash confirmed dispensable — consistent with prior REJECTED entries; no counter-evidence to the three live hypotheses.
 - 2026-09-15 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
+- 2026-09-16 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding exploitable + unfiled at ~235h post-triage-VALID / ~11.9d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; valid-bugs.md "running count 0" confirms no submission artifact; filing latency is the only risk producer — no new probe advances it.
+- 2026-09-16 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
+- 2026-09-16 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~193h+ post-triage-VALID / ~10.4d post-discovery; 7 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it
+- 2026-09-16 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary); unchanged, AUTH_HELPED
+- 2026-09-16 ACCEPTED MISCONFIG @ dev.easybell.de: Dev/staging host resolves (62.27.68.24) but no external HTTP service — likely internal/firewalled; passive surface closed
+- 2026-09-16 REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or credential-stuffing hypotheses.
+- 2026-09-16 REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+- 2026-09-16 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
