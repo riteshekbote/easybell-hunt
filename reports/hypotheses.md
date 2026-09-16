@@ -1169,3 +1169,12 @@
 - LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or cred
 - LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
 - LEARN: NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
+
+## RANKED HYPOTHESES 2026-09-16 20:14:50 UTC
+- [60] my.easybell.com/api/{crm,ebit,strapi}: my-portal-api-proxy-wildcard (from art/lead_bigpickle.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: submit `voip-cors-cred-read-write` (conf 95, 5+ triage-VALID verdicts 09-05→09-14, CVSS 6.1–8.1, 7 independent captures, ~238h unfiled/~12d, valid-bugs.m
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding exploitable + unfiled at ~238h post-triage-VALID / ~12d post-discovery; 7 captures + reachable tra
+- LEARN: NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding exploitable + unfiled at ~241h post-triage-VALID / ~12.3d post-discovery; 7 captures + reachable t
+- LEARN: REJECTED MISCONFIG @ www.easybell.de: passive HTTP server-header disclosure triaged INVALID (informational, universally rejected class) — consistent with progra
+- LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-16 17:18:58 UTC; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this 

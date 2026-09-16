@@ -4287,3 +4287,4 @@ testability: AUTH_HELPED
 [LEARN] NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
 [RISK] easybell: 86
 reasoning: Flagship CORS finding (95) reconfirmed live at 20:03:43 UTC 09-11 (7th capture) — credentialed cross-origin WRITE (preflight-approved POST/PUT, arbitrary Origin, ACAC:true) on 7 Spring routes backed by Sipwise NGCP; ~240h+ filing latency since triage-VALID is sole program risk. my-portal-proxy-wildcard (78) and my-portal-bola-proxied-voip (78) remain AUTH_HELPED. All other surfaces closed. Carried: 95/78 mostly HUMAN-gated; voip WAF throttle unchanged (≥6s/60-120s); auth/lockout excluded; PBX/SIP parked. Mitigation: read-only GET/OPTIONS only, ≥6s spacing, no POST bodies to live API, no customer data captured, sha256 discipline, report only via bugs.olivermaicher.eu.
+## 2026-09-16 20:13:02 UTC [target] (model nemotron3)
