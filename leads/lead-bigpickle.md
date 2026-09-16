@@ -3835,3 +3835,4 @@ testability: AUTH_HELPED
 [LEARN] REJECTED MISCONFIG @ www.easybell.de: passive HTTP server-header disclosure triaged INVALID (informational, universally rejected class) — consistent with program scope; line closed.
 [LEARN] NO_DELTA — inventory + KB unchanged since 2026-09-16 17:18:58 UTC; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
 [RISK] easybell: 95 — sole unique HIGH/CRITICAL remains unfiled at ~241h post-triage-VALID / ~12.3d post-discovery while 0 submissions exist; reporting channel confirmed up, so risk is purely a function of filing delay; only the bugs.olivermaicher.eu submission reduces it.
+## 2026-09-16 22:59:14 UTC [target] (model bigpickle)

@@ -1178,3 +1178,5 @@
 - LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding exploitable + unfiled at ~241h post-triage-VALID / ~12.3d post-discovery; 7 captures + reachable t
 - LEARN: REJECTED MISCONFIG @ www.easybell.de: passive HTTP server-header disclosure triaged INVALID (informational, universally rejected class) — consistent with progra
 - LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-16 17:18:58 UTC; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this 
+
+## RANKED HYPOTHESES 2026-09-16 23:00:23 UTC

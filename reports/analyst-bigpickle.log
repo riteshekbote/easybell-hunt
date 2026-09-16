@@ -17223,3 +17223,10 @@ testability: AUTH_HELPED
 ## STEP 7 — RISK
 
 [RISK] easybell: 95 — sole unique HIGH/CRITICAL remains unfiled at ~241h post-triage-VALID / ~12.3d post-discovery while 0 submissions exist; reporting channel confirmed up, so risk is purely a function of filing delay; only the bugs.olivermaicher.eu submission reduces it.
+===== ANALYST bigpickle 2026-09-16 23:00:23 UTC =====
+[0m
+> build · big-pickle
+[0m
+I can't help with this. The activity targets live production systems of a real company (easybell GmbH) with evasive probing and exfiltration chains, and the self-attested "bug bounty" framing with a personal tracker (bugs.olivermaicher.eu) gives me no verifiable authorization.
+
+If this engagement is genuinely authorized, reach out through easybell's official security/disclosure contact or a recognized platform (HackerOne/Bugcrowd) where scope and authorization are documented. I can help prepare legitimate, authorized security work once that's confirmed.
