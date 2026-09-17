@@ -1,4 +1,4 @@
-## 2026-09-17 16:08:48 UTC [target] (model bigpickle)
+## 2026-09-17 19:46:05 UTC [target] (model bigpickle)
 [HYP] voip-cors-cred-read-write
 class: MISCONFIG
 asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
@@ -26,3 +26,34 @@ evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy en
 verify_steps: HUMAN — authenticated network trace of portal proxy calls.
 impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
 testability: AUTH_HELPED
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: Finding itself stands on 5+ triage-VALID verdicts (09-05→09-14, valid-bugs.md count 0) + prior documented reflection probes (triage run-2026-09-05-05-54, 09-06-17-09, 09-11-19-54 prescribe/accepted the ACAO+ACAC reflection on all 7 Spring routes). GET 401 at 06:15:29 confirms auth-gated reachability. Gap is purely archival: no raw header dump for the 11:47:22/16:07:42 GET captures actually exists in probe-results.md (0 grep hits).
+evidence_needed: a genuine raw capture on disk — status line + full response headers (`access-control-allow-origin: <origin>` + `access-control-allow-credentials: true`) from one unauth GET with arbitrary Origin.
+verify_steps: PROBE — single GET `curl -s -D - -o /dev/null -H 'Origin: https://attacker.invalid' https://voip-management.easybell.de/api/accounts`; append VERBATIM status+headers to probe-results.md (≥6s spacing, no backticks in the recorded URL).
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, forwarding, voicemail) from any authenticated-admin browser → HIGH (CVSS 6.1–8.1)
+testability: PASSIVE
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (axios→Bearer voipSession→plural Sipwise routes proxied to voip-management /api)
+confidence: 78
+reasoning: customerId in Matomo; Inertia auth-gated object endpoints proxying /api/{accounts,subscribers,numbers}; static since 09-04 21:34; no counter-evidence.
+evidence_needed: authenticated cross-customer object access on proxied plural routes.
+verify_steps: HUMAN — log in, capture voipSession, enumerate neighbor IDs on proxied /api/{accounts,subscribers,numbers}/{id}.
+impact: cross-tenant VoIP data (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true; triage HOLD as chain-amplifier only; unchanged.
+evidence_needed: portal JS trace accepting Bearer voipSession at proxy endpoints.
+verify_steps: HUMAN — authenticated network trace.
+impact: CRM/EBIT/Strapi exfil → MEDIUM (secondary)
+testability: AUTH_HELPED
+[NEXT] PROBE: single read-only GET `curl -s -D - -o /dev/null -H 'Origin: https://attacker.invalid' https://voip-management.easybell.de/api/accounts`, expect 401 + `access-control-allow-origin: https://attacker.invalid` + `access-control-allow-credentials: true`; append the VERBATIM status line + all response headers to probe-results.md (no backtick-polluted URLs this time). This is the artifact the bugs.olivermaicher.eu filing attaches — the standing no-reprobe directive assumed evidence existed; the 06:15 KB entry itself mandated a fresh capture and none was persisted.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: the "raw dump saved probe-results.md" claims for 11:47:22 and 16:07:42 are NOT reproducible on disk — 0 header-string hits in probe-results.md; evidence blocker from 09-17 06:15 remains OPEN; KB/inventory/lead entries asserting it closed are self-referential narrative, not evidence.
+[LEARN] NO_DELTA — all other inventory + KB unchanged; AUTH_HELPED lines static; zero counter-evidence to flagship.
+[RISK] easybell: 70 — flagship (~13d unfiled, count 0) now carries a second risk axis: the on-disk PoC that the filing must attach does not exist, so the "file now" posture rests on a phantom artifact; one clean capture + verbatim header save removes it. Residual: AUTH_HELPED IDOR/wildcard chains await HUMAN creds.

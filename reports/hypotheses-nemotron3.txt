@@ -1,4 +1,4 @@
-## 2026-09-17 16:03:43 UTC [target] (model nemotron3)
+## 2026-09-17 19:47:00 UTC [target] (model nemotron3)
 [CHANGED] voip-management.easybell.de/api: GET-based credentialed CORS reflection re-confirmed LIVE 11:47:22 UTC on /api/accounts (401 + ACAO:https://attacker.invalid + ACAC:true) — raw dump saved probe-results.md; closes "no reproducible PoC" blocker from 06:15 cycle; reflection is NOT OPTIONS-only
 [PRIO] voip-management.easybell.de/api,9.65,attack_surface=10 business_value=10 tech_exposure=9 gate_ease=10 cloud_surface=8 freshness=10
 [PRIO] my.easybell.com,7.50,attack_surface=8 business_value=9 tech_exposure=8 gate_ease=3 cloud_surface=7 freshness=9

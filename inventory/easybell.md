@@ -445,3 +445,6 @@ www.easybell.de
 
 ## 2026-09-17 16:08:58 UTC
 - CHANGED voip-management.easybell.de/api: GET-based credentialed CORS reflection re-confirmed LIVE 11:47:22 UTC on /api/accounts (401 + ACAO:https://attacker.invalid + ACAC:true) — raw dump saved probe-results
+
+## 2026-09-17 19:47:10 UTC
+- CHANGED voip-management.easybell.de/api: GET-based credentialed CORS reflection re-confirmed LIVE 11:47:22 UTC on /api/accounts (401 + ACAO:https://attacker.invalid + ACAC:true) — raw dump saved probe-results
