@@ -4048,3 +4048,33 @@ testability: AUTH_HELPED
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: the "raw dump saved probe-results.md" claims for 11:47:22 and 16:07:42 are NOT reproducible on disk — 0 header-string hits in probe-results.md; evidence blocker from 09-17 06:15 remains OPEN; KB/inventory/lead entries asserting it closed are self-referential narrative, not evidence.
 [LEARN] NO_DELTA — all other inventory + KB unchanged; AUTH_HELPED lines static; zero counter-evidence to flagship.
 [RISK] easybell: 70 — flagship (~13d unfiled, count 0) now carries a second risk axis: the on-disk PoC that the filing must attach does not exist, so the "file now" posture rests on a phantom artifact; one clean capture + verbatim header save removes it. Residual: AUTH_HELPED IDOR/wildcard chains await HUMAN creds.
+## 2026-09-17 22:36:03 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api/accounts (7 Spring Sipwise routes: account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: 22:35:41 UTC GET /api/accounts with Origin:https://attacker.invalid (no auth) → HTTP/2 401 echoing ACAO:attacker.invalid + ACAC:true; WWW-Authenticate Basic realm=sipwisebroker.easybell.de,voip-management = auth-gated Sipwise broker. GET-based → scope.yml OPTIONS/TRACE exclusion inapplicable. Raw capture on disk (probe-results.md:429-430). 5+ triage-VALID verdicts 09-05→09-14, valid-bugs.md count 0.
+evidence_needed: on-disk PoC — now genuine; only acceptance/receipt remains.
+verify_steps: HUMAN — file at bugs.olivermaicher.eu attaching probe-results.md 22:35:41 raw headers; zero further probes.
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding, voicemail) from any authenticated-admin browser → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (axios→Bearer voipSession→plural Sipwise routes proxied to voip-management /api)
+confidence: 78
+reasoning: customerId leaked in Matomo; Inertia auth-gated endpoints proxying /api/{accounts,subscribers,numbers}; static since 09-04 21:34; zero counter-evidence.
+evidence_needed: authenticated cross-customer object access on proxied plural routes.
+verify_steps: HUMAN — log in, capture voipSession, enumerate neighbor IDs on proxied /api/{accounts,subscribers,numbers}/{id}.
+impact: cross-tenant VoIP data (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true; triage HOLD as chain-amplifier post-Bearer-theft (unproven + credential-gated); unchanged.
+evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy endpoints.
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+[NEXT] HUMAN: file `voip-cors-cred-read-write` at bugs.olivermaicher.eu attaching probe-results.md 2026-09-17 22:35:41 raw capture (GET /api/accounts → HTTP/2 401 + ACAO https://attacker.invalid + ACAC:true). Evidence gate satisfied; GET → not an OPTIONS/TRACE finding. No further probes.
+[RISK] easybell: 60 (down from 70) — flagship's phantom-artifact risk removed; sole remaining risk producer is filing latency (~245h post-triage-VALID / ~12.5d post-discovery). Residual: AUTH_HELPED IDOR/wildcard chains await HUMAN creds.
