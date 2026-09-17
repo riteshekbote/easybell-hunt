@@ -1180,3 +1180,7 @@
 - LEARN: NO_DELTA — inventory + KB unchanged since 2026-09-16 17:18:58 UTC; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this 
 
 ## RANKED HYPOTHESES 2026-09-16 23:00:23 UTC
+
+## RANKED HYPOTHESES 2026-09-17 01:13:37 UTC
+- [95] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_bigpickle.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: submit `voip-cors-cred-read-write` (conf 95; 5+ triage-VALID verdicts 09-05→09-14; CVSS 6.1–8.1; 7 independent captures; tracker HTTP 200 re-verified 09-
