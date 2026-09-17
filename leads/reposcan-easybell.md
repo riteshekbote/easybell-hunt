@@ -429,3 +429,26 @@ TARGET_ORG not configured for easybell; skipping public-org deep scan.
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
 ## REPOSCAN 2026-09-17 01:13:55 UTC
 TARGET_ORG not configured for easybell; skipping public-org deep scan.
+## REPOSCAN 2026-09-17 06:17:21 UTC
+[HYP] pipe-to-bash installer in CI workflows
+class: OTHER
+asset: .github/workflows/hunt.yml:46, reposcan.yml:35, triage.yml:35
+confidence: 30
+reasoning: >
+impact: low — supply-chain risk on CI tooling only; does not touch in-scope assets
+verify_steps: >
+[HYP] Overly broad GitHub Actions permissions
+class: MISCONFIG
+asset: .github/workflows/hunt.yml:9-10
+confidence: 60
+reasoning: >
+impact: low — CI pipeline hardening concern, not an in-scope finding
+verify_steps: >
+[HYP] REDACTED: No hardcoded secrets detected
+class: N/A
+asset: all files
+confidence: 100
+reasoning: >
+impact: none
+verify_steps: N/A — clean scan
+TARGET_ORG not configured for easybell; skipping public-org deep scan.
