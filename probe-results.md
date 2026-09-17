@@ -408,3 +408,6 @@ https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'in
 https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
 https://voip-management.easybell.de/api/accounts -> HTTP 401
 https://voip-management.easybell.de/api/accounts` -> HTTP 404
+
+## 2026-09-17 11:51:14 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404

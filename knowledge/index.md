@@ -239,3 +239,6 @@
 - 2026-09-17 REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or credential-stuffing hypotheses.
 - 2026-09-17 REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
 - 2026-09-17 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
+- 2026-09-17 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: GET-based credentialed CORS reflection re-confirmed LIVE 11:47:22 UTC — access-control-allow-origin: https://attacker.invalid + access-control-allow-credentials: true on /api/accounts 401; raw dump saved probe-results.md ("7 captures" narrative gap closed); reflection is NOT OPTIONS-only.
+- 2026-09-17 NO_DELTA — inventory + KB otherwise unchanged; my-portal leads static (AUTH_HELPED); zero counter-evidence to flagship.
+- 2026-09-17 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS reflection re-confirmed on GET (11:47:22 UTC) — ACAO echoes arbitrary Origin + ACAC:true on 401; raw dump on disk; closes the "no reproducible PoC" blocker from 06:15 cycle; reflection is NOT OPTIONS-only.
