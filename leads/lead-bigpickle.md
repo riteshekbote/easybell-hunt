@@ -3961,3 +3961,31 @@ testability: AUTH_HELPED
 [NEXT] HUMAN: submit `voip-cors-cred-read-write` at bugs.olivermaicher.eu with probe-results.md 2026-09-17 11:47:22 raw capture (GET /api/accounts → 401 + ACAO:https://attacker.invalid + ACAC:true). Evidence + triage gates satisfied; only the filing reduces program risk.
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: credentialed CORS reflection re-confirmed on GET (11:47:22 UTC) — ACAO echoes arbitrary Origin + ACAC:true on 401; raw dump on disk; closes the "no reproducible PoC" blocker from 06:15 cycle; reflection is NOT OPTIONS-only.
 [RISK] easybell: 68 — flagship conf 95 now has a non-excluded GET-based PoC on disk; ~262h unfiled / ~13d is pure filing latency; only the bugs.olivermaicher.eu submission reduces it. Residual risk is HUMAN-gated (creds) for the IDOR/wildcard chains.
+## 2026-09-17 16:08:48 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: 16:07:42 UTC GET /api/accounts with Origin:https://attacker.invalid (no auth) → HTTP 401 echoing access-control-allow-origin + access-control-allow-credentials:true; raw dump in probe-results.md. 401 confirms auth-gated (Bearer/Basic); credentialed reflection lets cross-origin JS read responses for an authenticated admin session across 7 Spring Sipwise routes. GET-based → scope.yml OPTIONS/TRACE exclusion (scope.yml:14) inapplicable. 5+ triage-VALID verdicts 09-05→09-14, count-0 novelty.
+evidence_needed: on-disk PoC now genuine (16:07:42); only acceptance/receipt remains.
+verify_steps: HUMAN — file at bugs.olivermaicher.eu attaching probe-results.md 16:07:42 raw headers; no further probes.
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding, voicemail) from any authenticated-admin browser → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (axios→Bearer voipSession→plural Sipwise routes proxied to voip-management /api)
+confidence: 78
+reasoning: customerId leaked in Matomo; Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — static since 09-04 21:34; zero counter-evidence.
+evidence_needed: authenticated cross-customer object access on proxied /api/{accounts,subscribers,numbers}/{id}.
+verify_steps: HUMAN — log in, capture voipSession, enumerate neighbor IDs on proxied plural routes.
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true; triage HOLD as chain-amplifier only, post-Bearer-theft (unproven + credential-gated); unchanged.
+evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy endpoints.
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
