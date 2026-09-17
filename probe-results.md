@@ -403,3 +403,8 @@ https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'in
 
 ## 2026-09-17 01:13:37 UTC
 
+
+## 2026-09-17 06:15:29 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+https://voip-management.easybell.de/api/accounts -> HTTP 401
+https://voip-management.easybell.de/api/accounts` -> HTTP 404

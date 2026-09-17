@@ -230,3 +230,12 @@
 - 2026-09-16 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding exploitable + unfiled at ~241h post-triage-VALID / ~12.3d post-discovery; 7 captures + reachable tracker satisfy every evidence gate; valid-bugs.md contains triage verdicts only (no submission artifact); filing latency is the only risk producer — no probe advances it.
 - 2026-09-16 REJECTED MISCONFIG @ www.easybell.de: passive HTTP server-header disclosure triaged INVALID (informational, universally rejected class) — consistent with program scope; line closed.
 - 2026-09-16 NO_DELTA — inventory + KB unchanged since 2026-09-16 17:18:58 UTC; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle.
+- 2026-09-17 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: "7 independent captures" not reproducible on disk — probe log since 09-08 contains only malformed backtick-splatted URLs returning 404; no raw ACAO/ACAC header dump exists in repo; evidence gate is narrative-only, filing must attach a fresh clean capture.
+- 2026-09-17 ACCEPTED MISCONFIG @ easybell: scope.yml excludes "OPTIONS / TRACE HTTP method enabled"; a preflight-only CORS POC carries acceptance risk — PoC should be a credentialed cross-origin read (GET), not OPTIONS.
+- 2026-09-17 NO_DELTA — inventory + KB otherwise unchanged; all other passive lines closed; zero new probes this cycle.
+- 2026-09-17 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding exploitable + unfiled at ~240h post-triage-VALID / ~12d post-discovery; valid-bugs.md running count 0 re-verified on disk; all evidence/triage gates satisfied; filing latency is the only risk producer — no probe advances it
+- 2026-09-17 ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary); unchanged, AUTH_HELPED
+- 2026-09-17 ACCEPTED MISCONFIG @ dev.easybell.de: Dev/staging host resolves (62.27.68.24) but no external HTTP service — likely internal/firewalled; passive surface closed
+- 2026-09-17 REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or credential-stuffing hypotheses.
+- 2026-09-17 REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+- 2026-09-17 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle

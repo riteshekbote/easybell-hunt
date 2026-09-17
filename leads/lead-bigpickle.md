@@ -3866,3 +3866,36 @@ impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
 testability: AUTH_HELPED
 [NEXT] HUMAN: submit `voip-cors-cred-read-write` (conf 95; 5+ triage-VALID verdicts 09-05→09-14; CVSS 6.1–8.1; 7 independent captures; tracker HTTP 200 re-verified 09-16 17:17; ~262h unfiled/~13d) at bugs.olivermaicher.eu. No further probe or analysis advances this — filing is the only action that reduces program risk.
 [RISK] easybell: 95 — sole unique HIGH/CRITICAL remains unfiled at ~262h post-triage-VALID / ~13d post-discovery while valid-bugs.md running count is 0; reporting channel confirmed up, so risk is purely a function of filing delay; only the bugs.olivermaicher.eu submission reduces it.
+## 2026-09-17 06:15:11 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 70
+reasoning: Live auth-gated plural routes + Spring JSON v2 rewrite verified in probe log (09-04 401s). CORS credentialed reflection claimed 09-05→09-11 in KB narrative and re-VALID by 5+ on-disk triage verdicts — but NO raw capture file exists in repo; all on-disk post-09-08 "probes" are malformed-URL 404s. scope.yml explicitly excludes OPTIONS/TRACE; poc_required=scope.yml:39,47.
+evidence_needed: one saved raw HTTP response showing `Access-Control-Allow-Origin: <attacker-origin>` + `Access-Control-Allow-Credentials: true` on a real request — either 401-auth-gated GET or victim-browser credentialed GET.
+verify_steps: GET https://voip-management.easybell.de/api/accounts with `Origin: https://attacker.invalid` and NO Authorization; record status + `access-control-allow-origin` + `access-control-allow-credentials`; single request, ≥6s since any prior probe.
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding, voicemail) from an authenticated admin page → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (axios→Bearer voipSession→8 plural Sipwise routes proxied to voip-management /api)
+confidence: 78
+reasoning: customerId in Matomo; Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — static since 09-04 21:34; no new evidence this cycle.
+evidence_needed: authenticated cross-customer object access on proxied /api/{accounts,subscribers,numbers}/{id}.
+verify_steps: HUMAN — log in, capture voipSession, enumerate neighbor IDs on proxied plural routes.
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true; triage HOLD as chain-amplifier only, post-Bearer-theft (unproven + credential-gated); unchanged.
+evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy endpoints.
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+[NEXT] PROBE: single read-only request — `GET https://voip-management.easybell.de/api/accounts` with header `Origin: https://attacker.invalid` (no Authorization, no OPTIONS). Log status + `Access-Control-Allow-Origin` + `Access-Control-Allow-Credentials` verbatim into `probe-results.md`. If headers reflect on the 401 GET → on-disk PoC re-established via a non-excluded method; then HUMAN files. If absent → the finding rests solely on excluded OPTIONS behavior; do NOT file without a credentialed read demo. This one probe is the exception to the standing no-reprobe directive because it produces the missing PoC (`poc_required`), not noise.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: "7 independent captures" not reproducible on disk — probe log since 09-08 contains only malformed backtick-splatted URLs returning 404; no raw ACAO/ACAC header dump exists in repo; evidence gate is narrative-only, filing must attach a fresh clean capture.
+[LEARN] ACCEPTED MISCONFIG @ easybell: scope.yml excludes "OPTIONS / TRACE HTTP method enabled"; a preflight-only CORS POC carries acceptance risk — PoC should be a credentialed cross-origin read (GET), not OPTIONS.
+[LEARN] NO_DELTA — inventory + KB otherwise unchanged; all other passive lines closed; zero new probes this cycle.
+[RISK] easybell: 72 — exploitable-high finding unfiled ~13d (valid-bugs.md count 0 on disk) remains the core risk; prior "95/filing-latency-only" overstated it. Real enablers now: (1) no reproducible raw PoC in repo → blind filing would likely auto-reject (poc_required + OPTIONS exclusion), (2) no creds/victim for the read-demo. A single clean GET de-risks both; residual falls to dev-defined HUMAN filing.

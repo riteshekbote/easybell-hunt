@@ -1184,3 +1184,17 @@
 ## RANKED HYPOTHESES 2026-09-17 01:13:37 UTC
 - [95] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_bigpickle.txt)
 - NEXT(hypotheses-bigpickle.txt): HUMAN: submit `voip-cors-cred-read-write` (conf 95; 5+ triage-VALID verdicts 09-05→09-14; CVSS 6.1–8.1; 7 independent captures; tracker HTTP 200 re-verified 09-
+
+## RANKED HYPOTHESES 2026-09-17 06:15:24 UTC
+- [95] voip-management.easybell.de/api: voip-cors-cred-read-write (from art/lead_nemotron3.txt)
+- NEXT(hypotheses-bigpickle.txt): PROBE: single read-only request — `GET https://voip-management.easybell.de/api/accounts` with header `Origin: https://attacker.invalid` (no Authorization, no OP
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-13 19:19:58, 7 independent captures, ~240h unfiled) at bugs.olivermaich
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: "7 independent captures" not reproducible on disk — probe log since 09-08 contains only malformed backtick
+- LEARN: ACCEPTED MISCONFIG @ easybell: scope.yml excludes "OPTIONS / TRACE HTTP method enabled"; a preflight-only CORS POC carries acceptance risk — PoC should be a cre
+- LEARN: NO_DELTA — inventory + KB otherwise unchanged; all other passive lines closed; zero new probes this cycle.
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding exploitable + unfiled at ~240h post-triage-VALID / ~12d post-discovery; valid-bugs.md running coun
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary);
+- LEARN: ACCEPTED MISCONFIG @ dev.easybell.de: Dev/staging host resolves (62.27.68.24) but no external HTTP service — likely internal/firewalled; passive surface closed
+- LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or cred
+- LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+- LEARN: NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle

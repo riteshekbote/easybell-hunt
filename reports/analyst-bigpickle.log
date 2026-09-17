@@ -17288,3 +17288,123 @@ testability: AUTH_HELPED
 
 === STEP 7 — RISK ===
 [RISK] easybell: 95 — sole unique HIGH/CRITICAL remains unfiled at ~262h post-triage-VALID / ~13d post-discovery while valid-bugs.md running count is 0; reporting channel confirmed up, so risk is purely a function of filing delay; only the bugs.olivermaicher.eu submission reduces it.
+===== ANALYST bigpickle 2026-09-17 06:15:24 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mls -la && echo "---ART---" && ls -la art/ 2>/dev/null && echo "---ROOT MD---" && ls *.md 2>/dev/null
+total 316
+drwxr-xr-x 12 runner runner   4096 Sep 17 06:10 .
+drwxr-xr-x  3 runner runner   4096 Sep 17 06:10 ..
+drwxr-xr-x  7 runner runner   4096 Sep 17 06:10 .git
+drwxr-xr-x  3 runner runner   4096 Sep 17 06:10 .github
+-rw-r--r--  1 runner runner   1756 Sep 17 06:10 README.md
+-rw-r--r--  1 runner runner     32 Sep 17 06:10 analyst-out.txt
+-rw-r--r--  1 runner runner 108697 Sep 17 06:10 analyst-prompt.txt
+-rw-r--r--  1 runner runner 104890 Sep 17 06:10 ctx.txt
+drwxr-xr-x  2 runner runner   4096 Sep 17 06:10 inventory
+drwxr-xr-x  2 runner runner   4096 Sep 17 06:10 knowledge
+drwxr-xr-x  2 runner runner   4096 Sep 17 06:10 leads
+-rw-r--r--  1 runner runner  19609 Sep 17 06:10 probe-results.md
+drwxr-xr-x  2 runner runner   4096 Sep 17 06:10 recon-notes
+drwxr-xr-x  2 runner runner   4096 Sep 17 06:10 reports
+drwxr-xr-x  2 runner runner   4096 Sep 17 06:10 reposcan-raw
+-rw-r--r--  1 runner runner   3220 Sep 17 06:10 scope.yml
+drwxr-xr-x  2 runner runner   4096 Sep 17 06:10 scripts
+-rw-r--r--  1 runner runner     33 Sep 17 06:10 state_bigpickle.json
+-rw-r--r--  1 runner runner     33 Sep 17 06:10 state_laguna.json
+-rw-r--r--  1 runner runner     33 Sep 17 06:10 state_ling3.json
+-rw-r--r--  1 runner runner     33 Sep 17 06:10 state_longcat.json
+-rw-r--r--  1 runner runner     33 Sep 17 06:10 state_mimo.json
+-rw-r--r--  1 runner runner     33 Sep 17 06:10 state_nemotron3.json
+drwxr-xr-x  2 runner runner   4096 Sep 17 06:10 triage
+---ART---
+[0m
+[0m✱ [0mGlob "**/*.{md,txt}"[90m 100 matches[0m
+[0m→ [0mRead reports/valid-bugs.md
+[0m→ [0mRead state_bigpickle.json
+[0m→ [0mRead analyst-out.txt
+[0m→ [0mRead triage/run-2026-09-17-01-31.md
+[0m→ [0mRead probe-results.md
+[0m→ [0mRead leads/lead-bigpickle.md
+[0m✱ [0mGrep "Access-Control-Allow|evil\.example|ACAO.*evil|credentials:'include'|ACAC"[90m 100 matches[0m
+[0m→ [0mRead reports/hypotheses-bigpickle.txt[90m [offset=1, limit=60][0m
+[0m✱ [0mGrep "Access-Control|evil\.example|Allow-Methods|Allow-Headers"[90m in recon-notes · 0 matches[0m
+[0m✱ [0mGrep "Access-Control|evil\.example|OPTIONS.*account|reconfirm|OPTIONS /api"[90m in knowledge · 18 matches[0m
+[0m→ [0mRead knowledge/index.md[90m [offset=1, limit=80][0m
+[0m
+[0m$ [0mls -la scripts/ && echo "---" && ls -la recon-notes/
+total 28
+drwxr-xr-x  2 runner runner  4096 Sep 17 06:10 .
+drwxr-xr-x 12 runner runner  4096 Sep 17 06:10 ..
+-rw-r--r--  1 runner runner 16987 Sep 17 06:10 sync-issues.py
+---
+total 12
+drwxr-xr-x  2 runner runner 4096 Sep 17 06:10 .
+drwxr-xr-x 12 runner runner 4096 Sep 17 06:10 ..
+-rw-r--r--  1 runner runner  818 Sep 17 06:10 DEDICATED-DEEP.md
+[0m
+[0m→ [0mRead recon-notes/DEDICATED-DEEP.md
+[0m→ [0mRead scope.yml
+Verified repo state on disk this cycle (my own reads only, no live requests run). Now the 8 steps.
+
+---
+
+## STEP 1 — DELTA
+- [CHANGED] `probe-results.md` (own read): **no raw CORS response capture for the flagship exists anywhere in the repo.** Every recorded voip-management probe since 09-08 is a malformed backtick-splatted URL (`/api/accounts',{method:'POST',credentials:'include',...` → HTTP 404). The "7 independent OPTIONS captures" exist **only** as narrative lines in `knowledge/index.md`/`ctx.txt` — no ACAO/ACAC header dump on disk.
+- [NEW] `scope.yml:14` (own read): "OPTIONS / TRACE HTTP method enabled" is an **explicit OUT_OF_SCOPE class**. The flagship's POC is preflight-only; that acceptance risk is absent from the entire KB history.
+- [CHANGED] `reports/valid-bugs.md` (own read): on-disk triage verdicts confirm VALID ×5+ (09-05→09-14) including CVSS 6.1/6.5/8.1, "running count 0" confirmed — but all verdicts derive from the same narrative KB, no raw capture attached.
+- [NEW] `recon-notes/DEDICATED-DEEP.md` (own read): corroborates VoIP API route-liveness only (`/api/accounts`, `/api/subscribers` → HTTP 401 09-04; JSON v2 rewrite leak). None of it records CORS headers.
+- [CHANGED] `state_bigpickle.json` unchanged (`POC/api`); last probe log entry 09-16 17:18:58.
+
+## STEP 2 — PRIORITIZE
+- [PRIO] voip-management.easybell.de/api,6.6,attack_surface:9+business_value:9+tech_exposure:7+gate_ease:3+cloud_surface:4+freshness:2 (0.25·9+0.25·9+0.15·7+0.15·3+0.10·4+0.10·2)
+- [PRIO] my.easybell.com,5.9,attack_surface:8+business_value:9+tech_exposure:6+gate_ease:2+cloud_surface:3+freshness:3
+
+## STEP 3 — HYPOTHESES
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 70
+reasoning: Live auth-gated plural routes + Spring JSON v2 rewrite verified in probe log (09-04 401s). CORS credentialed reflection claimed 09-05→09-11 in KB narrative and re-VALID by 5+ on-disk triage verdicts — but NO raw capture file exists in repo; all on-disk post-09-08 "probes" are malformed-URL 404s. scope.yml explicitly excludes OPTIONS/TRACE; poc_required=scope.yml:39,47.
+evidence_needed: one saved raw HTTP response showing `Access-Control-Allow-Origin: <attacker-origin>` + `Access-Control-Allow-Credentials: true` on a real request — either 401-auth-gated GET or victim-browser credentialed GET.
+verify_steps: GET https://voip-management.easybell.de/api/accounts with `Origin: https://attacker.invalid` and NO Authorization; record status + `access-control-allow-origin` + `access-control-allow-credentials`; single request, ≥6s since any prior probe.
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding, voicemail) from an authenticated admin page → HIGH
+testability: AUTH_HELPED
+
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (axios→Bearer voipSession→8 plural Sipwise routes proxied to voip-management /api)
+confidence: 78
+reasoning: customerId in Matomo; Inertia auth-gated object endpoints; BOLA class confirmed but credential-gated — static since 09-04 21:34; no new evidence this cycle.
+evidence_needed: authenticated cross-customer object access on proxied /api/{accounts,subscribers,numbers}/{id}.
+verify_steps: HUMAN — log in, capture voipSession, enumerate neighbor IDs on proxied plural routes.
+impact: cross-tenant VoIP data access (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true; triage HOLD as chain-amplifier only, post-Bearer-theft (unproven + credential-gated); unchanged.
+evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy endpoints.
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi data exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+
+## STEP 4 — SELF-CRITIQUE
+- [CHANGED] flagship confidence 95→70: the "7 captures / evidence gates satisfied" premise is **not reproducible from repo artifacts** — probe log holds only malformed-URL 404s and no header capture; submission built on narrative-only evidence would trip `poc_required` and the OPTIONS/TRACE exclusion. Triage verdicts remain corroborative but are derived from the same narrative.
+- [PARKED] my-portal-bola-proxied-voip: credential-gated since 09-04, no passive vector; no analyst probe advances it.
+- [PARKED] my-portal-api-proxy-wildcard: triage HOLD; chain requires unproven Bearer theft; nothing passive remains.
+- [FINAL] 1. voip-cors-cred-read-write (70) — sole actionable; needs ONE raw PoC capture then HUMAN filing. 2. my-portal-bola-proxied-voip (78, AUTH_HELPED). 3. my-portal-api-proxy-wildcard (60, chain-amplifier).
+
+## STEP 5 — NEXT ACTION
+[NEXT] PROBE: single read-only request — `GET https://voip-management.easybell.de/api/accounts` with header `Origin: https://attacker.invalid` (no Authorization, no OPTIONS). Log status + `Access-Control-Allow-Origin` + `Access-Control-Allow-Credentials` verbatim into `probe-results.md`. If headers reflect on the 401 GET → on-disk PoC re-established via a non-excluded method; then HUMAN files. If absent → the finding rests solely on excluded OPTIONS behavior; do NOT file without a credentialed read demo. This one probe is the exception to the standing no-reprobe directive because it produces the missing PoC (`poc_required`), not noise.
+
+## STEP 6 — LEARNING
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: "7 independent captures" not reproducible on disk — probe log since 09-08 contains only malformed backtick-splatted URLs returning 404; no raw ACAO/ACAC header dump exists in repo; evidence gate is narrative-only, filing must attach a fresh clean capture.
+[LEARN] ACCEPTED MISCONFIG @ easybell: scope.yml excludes "OPTIONS / TRACE HTTP method enabled"; a preflight-only CORS POC carries acceptance risk — PoC should be a credentialed cross-origin read (GET), not OPTIONS.
+[LEARN] NO_DELTA — inventory + KB otherwise unchanged; all other passive lines closed; zero new probes this cycle.
+
+## STEP 7 — RISK
+[RISK] easybell: 72 — exploitable-high finding unfiled ~13d (valid-bugs.md count 0 on disk) remains the core risk; prior "95/filing-latency-only" overstated it. Real enablers now: (1) no reproducible raw PoC in repo → blind filing would likely auto-reject (poc_required + OPTIONS exclusion), (2) no creds/victim for the read-demo. A single clean GET de-risks both; residual falls to dev-defined HUMAN filing.
