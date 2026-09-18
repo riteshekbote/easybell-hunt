@@ -1246,3 +1246,14 @@
 - LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or cred
 - LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
 - LEARN: NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
+
+## RANKED HYPOTHESES 2026-09-18 00:46:34 UTC
+- [95] voip-management.easybell.de/api/accounts: voip-cors-cred-read-write (from art/lead_bigpickle.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: File `voip-cors-cred-read-write` at bugs.olivermaicher.eu attaching probe-results.md:425-437 (2026-09-18 00:46:04 raw GET /api/accounts headers: HTTP/2 4
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-13 19:19:58, 8 independent captures, ~240h unfiled) at bugs.olivermaich
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: GET-based credentialed CORS reflection re-confirmed LIVE 11:47:22 UTC — access-control-allow-origin: https
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary);
+- LEARN: ACCEPTED MISCONFIG @ dev.easybell.de: Dev/staging host resolves (62.27.68.24) but no external HTTP service — likely internal/firewalled; passive surface closed
+- LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or cred
+- LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+- LEARN: NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle

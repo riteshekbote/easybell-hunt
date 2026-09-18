@@ -1,30 +1,30 @@
-## 2026-09-17 22:36:03 UTC [target] (model bigpickle)
+## 2026-09-18 00:46:25 UTC [target] (model bigpickle)
 [HYP] voip-cors-cred-read-write
 class: MISCONFIG
-asset: voip-management.easybell.de/api/accounts (7 Spring Sipwise routes: account|accounts|subscriber|subscribers|number|numbers|session)
+asset: voip-management.easybell.de/api/accounts (7 Spring routes: account|accounts|subscriber|subscribers|number|numbers|session)
 confidence: 95
-reasoning: 22:35:41 UTC GET /api/accounts with Origin:https://attacker.invalid (no auth) → HTTP/2 401 echoing ACAO:attacker.invalid + ACAC:true; WWW-Authenticate Basic realm=sipwisebroker.easybell.de,voip-management = auth-gated Sipwise broker. GET-based → scope.yml OPTIONS/TRACE exclusion inapplicable. Raw capture on disk (probe-results.md:429-430). 5+ triage-VALID verdicts 09-05→09-14, valid-bugs.md count 0.
-evidence_needed: on-disk PoC — now genuine; only acceptance/receipt remains.
-verify_steps: HUMAN — file at bugs.olivermaicher.eu attaching probe-results.md 22:35:41 raw headers; zero further probes.
-impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding, voicemail) from any authenticated-admin browser → HIGH
-testability: AUTH_HELPED
+reasoning: Live GET 00:46:04 UTC echoes Origin https://attacker.invalid in ACAO + ACAC:true on 401; GET-based so scope.yml OPTIONS/TRACE exclusion inapplicable; WWW-Authenticate Basic realm confirms Sipwise broker auth gate; 5+ triage-VALID verdicts 09-05→09-14; valid-bugs.md running count 0.
+evidence_needed: none — genuine on-disk dump exists (probe-results.md:432-433).
+verify_steps: HUMAN — file at bugs.olivermaicher.eu attaching probe-results.md:425-437; zero further probes.
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, forwarding) from any authenticated-admin browser → HIGH (CVSS 6.1–8.1)
+testability: PASSIVE
 [HYP] my-portal-bola-proxied-voip
 class: IDOR
 asset: my.easybell.com (axios→Bearer voipSession→plural Sipwise routes proxied to voip-management /api)
 confidence: 78
-reasoning: customerId leaked in Matomo; Inertia auth-gated endpoints proxying /api/{accounts,subscribers,numbers}; static since 09-04 21:34; zero counter-evidence.
+reasoning: customerId in Matomo; Inertia endpoints proxy /api/{accounts,subscribers,numbers}; static since 09-04 21:34; zero counter-evidence.
 evidence_needed: authenticated cross-customer object access on proxied plural routes.
-verify_steps: HUMAN — log in, capture voipSession, enumerate neighbor IDs on proxied /api/{accounts,subscribers,numbers}/{id}.
+verify_steps: HUMAN — log in, capture voipSession, enumerate neighbor IDs on /api/{accounts,subscribers,numbers}/{id}.
 impact: cross-tenant VoIP data (PII, call logs, config) → HIGH
 testability: AUTH_HELPED
 [HYP] my-portal-api-proxy-wildcard
 class: MISCONFIG
 asset: my.easybell.com/api/{crm,ebit,strapi}
 confidence: 60
-reasoning: ACAO:* without ACAC:true; triage HOLD as chain-amplifier post-Bearer-theft (unproven + credential-gated); unchanged.
-evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy endpoints.
-verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+reasoning: ACAO:* without ACAC:true; HOLD as chain-amplifier only; unchanged.
+evidence_needed: portal JS trace accepting Bearer voipSession at proxy endpoints.
+verify_steps: HUMAN — authenticated network trace.
 impact: CRM/EBIT/Strapi exfil → MEDIUM (secondary chain)
 testability: AUTH_HELPED
-[NEXT] HUMAN: file `voip-cors-cred-read-write` at bugs.olivermaicher.eu attaching probe-results.md 2026-09-17 22:35:41 raw capture (GET /api/accounts → HTTP/2 401 + ACAO https://attacker.invalid + ACAC:true). Evidence gate satisfied; GET → not an OPTIONS/TRACE finding. No further probes.
-[RISK] easybell: 60 (down from 70) — flagship's phantom-artifact risk removed; sole remaining risk producer is filing latency (~245h post-triage-VALID / ~12.5d post-discovery). Residual: AUTH_HELPED IDOR/wildcard chains await HUMAN creds.
+[NEXT] HUMAN: File `voip-cors-cred-read-write` at bugs.olivermaicher.eu attaching probe-results.md:425-437 (2026-09-18 00:46:04 raw GET /api/accounts headers: HTTP/2 401, ACAO https://attacker.invalid, ACAC true, WWW-Authenticate Basic realm sipwisebroker.easybell.de,voip-management). GET-based credentialed reflection — outside the OPTIONS/TRACE exclusion. No further probes.
+[RISK] easybell: 55 — flagship (~12.6d unfiled / ~13d post-discovery) now has real on-disk evidence (phantom-artifact risk removed); sole remaining producer is filing latency; residual AUTH_HELPED chains await HUMAN creds. Remaining work is a filing graft, not probing.
