@@ -36,3 +36,7 @@
 - 2 lead(s) marked VALID at 2026-09-17 23:06:59 UTC
   - | 1 | `voip-cors-cred-read-write` (7 Spring routes, ACAO:attacker + ACAC:true) | **Already VALID** | 8.1 | 14+ independent captures through 2026-09-17; report **not yet filed** at bugs.olivermaicher.e
   - | 2 | `my-portal-api-proxy-wildcard` (ACAO:* on /api/crm,ebit,strapi) | **HOLD** | — | Standalone informational; only valid as chain amplifier with #1 |
+
+- 2 lead(s) marked VALID at 2026-09-18 01:21:58 UTC
+  - **Verdict: VALID**
+  - | voip-cors-cred-exfil | **VALID** | Report-ready. 7 endpoints confirmed vulnerable. CVSS 6.5. |
