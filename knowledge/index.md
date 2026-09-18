@@ -251,3 +251,6 @@
 - 2026-09-18 REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or credential-stuffing hypotheses.
 - 2026-09-18 REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
 - 2026-09-18 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
+- 2026-09-18 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: first genuine on-disk raw capture persisted 05:28:43 UTC — GET /api/accounts → HTTP/2 401, ACAO echoes attacker.invalid, ACAC:true, Basic realm=sipwisebroker; the 09-17 06:15 evidence blocker is closed by artifact, not by a claim.
+- 2026-09-18 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: all prior "raw dump saved probe-results.md" entries (09-17/09-18) were narrative-only until this cycle — verified 0 header-string hits before 05:28:43; only verbatim-persisted captures count as evidence; self-referential line refs (:429-437) never existed.
+- 2026-09-18 REJECTED MISCONFIG @ probe-results.md: "probe-results.md:432-433 / :425-437 / :429-430" line refs in 09-17/09-18 leads referenced lines that do not exist in the 426-line file — path/line refs must point to actual persisted bytes.
