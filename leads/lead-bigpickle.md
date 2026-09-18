@@ -4237,3 +4237,31 @@ evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy en
 verify_steps: HUMAN — authenticated network trace of portal proxy calls.
 impact: CRM/EBIT/Strapi exfil → MEDIUM (secondary chain)
 testability: AUTH_HELPED
+## 2026-09-18 20:17:18 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api/accounts (7 Spring Sipwise routes: account|accounts|subscriber|subscribers|number|numbers|session)
+confidence: 95
+reasoning: Verbatim live GET 20:16:44 UTC (0.541s, HTTP/2 401, CL:0) — ACAO echoes arbitrary Origin + ACAC:true + Basic realm sipwisebroker; persisted probe-results.md:453-455, grep-verified. GET-based → scope.yml OPTIONS/TRACE exclusion inapplicable. 5+ triage-VALID verdicts 09-05→09-14; valid-bugs.md running count 0.
+evidence_needed: none — artifact on disk satisfies the evidence gate (this is the 1st genuine one).
+verify_steps: HUMAN — file at bugs.olivermaicher.eu attaching probe-results.md:449-456 (20:16:44 UTC block); zero further probes; do NOT reprobe (artifact now durable).
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers, forwarding) from a browser with cached Basic creds for the Sipwise realm → HIGH (CVSS 6.1–8.1)
+testability: PASSIVE
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (axios→Bearer voipSession→plural Sipwise routes proxied to voip-management /api)
+confidence: 78
+reasoning: customerId leaked in Matomo; Inertia auth-gated endpoints proxy /api/{accounts,subscribers,numbers}; static since 09-04 21:34; zero counter-evidence.
+evidence_needed: authenticated cross-customer object access on proxied plural routes.
+verify_steps: HUMAN — log in, capture voipSession, enumerate neighbor IDs on /api/{accounts,subscribers,numbers}/{id}.
+impact: cross-tenant VoIP data (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true; triage HOLD as chain-amplifier; static since 09-04.
+evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy endpoints.
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED

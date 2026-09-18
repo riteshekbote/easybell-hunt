@@ -1309,3 +1309,15 @@
 - LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or cred
 - LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
 - LEARN: NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
+
+## RANKED HYPOTHESES 2026-09-18 20:17:58 UTC
+- [95] voip-management.easybell.de/api/accounts: voip-cors-cred-read-write (from art/lead_bigpickle.txt)
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-13 19:19:58, 8 independent captures, ~240h+ unfiled) at bugs.olivermaic
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: first genuine on-disk raw capture persisted 2026-09-18 05:28:43 UTC — GET /api/accounts → HTTP/2 401, ACAO
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: all prior "raw dump saved probe-results.md" entries (09-17/09-18) were narrative-only until this cycle — v
+- LEARN: REJECTED MISCONFIG @ probe-results.md: "probe-results.md:432-433 / :425-437 / :429-430" line refs in 09-17/09-18 leads referenced lines that do not exist in the
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary);
+- LEARN: ACCEPTED MISCONFIG @ dev.easybell.de: Dev/staging host resolves (62.27.68.24) but no external HTTP service — likely internal/firewalled; passive surface closed
+- LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or cred
+- LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+- LEARN: NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
