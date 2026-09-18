@@ -40,3 +40,6 @@
 - 2 lead(s) marked VALID at 2026-09-18 01:21:58 UTC
   - **Verdict: VALID**
   - | voip-cors-cred-exfil | **VALID** | Report-ready. 7 endpoints confirmed vulnerable. CVSS 6.5. |
+
+- 1 lead(s) marked VALID at 2026-09-18 23:24:48 UTC
+  - | `voip-cors-cred-read-write` (7 Spring routes, ACAO:attacker + ACAC:true) | **VALID** (92 confidence, 14+ independent captures) | **NOT FILED** at bugs.olivermaicher.eu |
