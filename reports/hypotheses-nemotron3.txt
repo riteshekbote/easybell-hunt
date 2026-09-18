@@ -1,4 +1,4 @@
-## 2026-09-18 14:35:25 UTC [target] (model nemotron3)
+## 2026-09-18 17:54:44 UTC [target] (model nemotron3)
 [PRIO] voip-management.easybell.de/api,9.65,attack_surface=10 business_value=10 tech_exposure=9 gate_ease=10 cloud_surface=8 freshness=10
 [PRIO] my.easybell.com,7.50,attack_surface=8 business_value=9 tech_exposure=8 gate_ease=3 cloud_surface=7 freshness=9
 [PRIO] my.easybell.com/api/{crm,ebit,strapi},7.00,attack_surface=7 business_value=7 tech_exposure=6 gate_ease=8 cloud_surface=6 freshness=8
@@ -7,7 +7,7 @@
 class: MISCONFIG
 asset: voip-management.easybell.de/api (account|accounts|subscriber|subscribers|number|numbers|session)
 confidence: 95
-reasoning: 8 independent captures (7 OPTIONS 09-04→09-11 + 1 GET 09-18 05:28:43) confirm ACAO:<attacker-origin> + ACAC:true + Allow-Methods:POST,PUT + Allow-Headers:authorization,content-type on all 7 Spring routes; HTTP Basic realm "sipwisebroker" + Bearer voipSession auto-sent with credentials:'include'; shared ingress 62.27.117.123 with my.easybell.com (host-header-only split)
+reasoning: 8 independent captures (7 OPTIONS 09-04→09-11 + 1 GET 2026-09-18 05:28:43) confirm ACAO:<attacker-origin> + ACAC:true + Allow-Methods:POST,PUT + Allow-Headers:authorization,content-type on all 7 Spring routes; HTTP Basic realm "sipwisebroker" + Bearer voipSession auto-sent with credentials:'include'; shared ingress 62.27.117.123 with my.easybell.com (host-header-only split)
 evidence_needed: HUMAN victim-browser PoC demonstrating cross-origin PUT/POST execution with cached Basic creds or Bearer voipSession token
 verify_steps: PASSIVE done (preflight-only, empty 200 OK, no mutation); full chain = HUMAN browser with cached creds
 impact: Full VoIP config takeover (numbers, subscribers, call-forwarding, voicemail, trusted-IPs) → CRITICAL
