@@ -457,3 +457,5 @@ www.easybell.de
 - NEW probe-results.md 426→434: first GENUINE raw GET capture persisted (2026-09-18 05:28:43 UTC) — HTTP/2 401, ACAO:https://attacker.invalid, ACAC:true, WWW-Authenticate Basic realm="sipwisebroker.easybell
 - CHANGED Verified on disk: ALL prior "raw dump saved probe-results.md" claims (09-17 11:47 / 16:07 / 22:35, 09-18 00:46) were self-referential — 0 ACAO/ACAC header-string hits existed in probe-results.md befor
 - CHANGED My own 00:46 lead's "genuine on-disk dump (probe-results.md:432-433)" was FALSE until this cycle; corrected by persisting a real capture.
+
+## 2026-09-18 10:03:21 UTC
