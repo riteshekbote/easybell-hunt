@@ -1362,3 +1362,19 @@
 - LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or cred
 - LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
 - LEARN: NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
+
+## RANKED HYPOTHESES 2026-09-19 09:22:00 UTC
+- [95] voip-management.easybell.de/api/{account,accounts,subscriber,subscribers,number,numbers,session}: voip-cors-cred-read-write (from art/lead_bigpickle.txt)
+- NEXT(hypotheses-bigpickle.txt): HUMAN: File `voip-cors-cred-read-write` at bugs.olivermaicher.eu NOW — attach verbatim blocks reports/analyst-bigpickle.log:2316-2321, :2347-2353, :20127-20135 
+- NEXT(hypotheses-nemotron3.txt): HUMAN: File `voip-cors-cred-read-write` (conf 95, triage-VALID 09-06 19:19 + re-VALID 09-13 19:19:58, 8 independent captures, ~240h+ unfiled) at bugs.olivermaic
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: filed evidence = reports/analyst-bigpickle.log:2316-2321 + :2347-2353 + :20127-20135 + reports/analyst-nem
+- LEARN: REJECTED MISCONFIG @ probe-results.md: file grew 450→453 with a 09-19 05:04:28 self-appended backtick-polluted POST-fetch fragment (404); still 0 header-string 
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api + voip-management: both AUTH_HELPED leads static, zero counter-evidence; no active probe run this cycle (standing do-no
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: first genuine on-disk raw capture persisted 2026-09-18 05:28:43 UTC — GET /api/accounts → HTTP/2 401, ACAO
+- LEARN: ACCEPTED MISCONFIG @ voip-management.easybell.de/api: all prior "raw dump saved probe-results.md" entries (09-17/09-18) were narrative-only until this cycle — v
+- LEARN: REJECTED MISCONFIG @ probe-results.md: "probe-results.md:432-433 / :425-437 / :429-430" line refs in 09-17/09-18 leads referenced lines that do not exist in the
+- LEARN: ACCEPTED MISCONFIG @ my.easybell.com/api: /api/{crm,ebit,strapi} wildcard ACAO:* without ACAC:true formally scoped as HOLD/chain-amplifier (CVSS 4.3 secondary);
+- LEARN: ACCEPTED MISCONFIG @ dev.easybell.de: Dev/staging host resolves (62.27.68.24) but no external HTTP service — likely internal/firewalled; passive surface closed
+- LEARN: REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or cred
+- LEARN: REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
+- LEARN: NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle

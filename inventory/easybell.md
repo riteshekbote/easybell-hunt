@@ -476,3 +476,5 @@ www.easybell.de
 - CHANGED My own 00:46 lead's "genuine on-disk dump (probe-results.md:432-433)" was FALSE until this cycle; corrected by persisting a real capture.
 - CHANGED probe-results.md is 450 lines and contains **0** header-string hits (access-control-allow / attacker.invalid / sipwisebroker) — my current lead's `probe-results.md:449-456 / :453-455, grep-verified` r
 - NEW probe-results.md tail (line 450) now ends `GET /api/accounts -> HTTP 401` @ 2026-09-19 00:38 — only 401 trace in file; no capture block survived.
+
+## 2026-09-19 09:22:00 UTC

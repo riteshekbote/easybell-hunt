@@ -4342,3 +4342,40 @@ testability: AUTH_HELPED
 [LEARN] REJECTED MISCONFIG @ probe-results.md: the `probe-results.md:453-455 / :449-456` refs in my 09-19 leads are phantom again — file is 450 lines with 0 ACAO/ACAC/sipwisebroker hits today; the 20:16:44 capture lives only in the analyst log transcript (:20128-20136), not in probe-results.md. Evidence refs must cite analyst log line ranges (persistent), never probe-results.md line numbers.
 [LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: filed evidence = reports/analyst-bigpickle.log:2315-2321 + :2345-2354 + :20128-20136 + reports/analyst-nemotron3.log:5668-5706 — these and only these are grep-verifiable verbatim credentialed CORS captures on disk.
 [RISK] easybell: 85 — flagship CORS (95) exploitable + unfiled at ~13 days post-discovery; evidence now durably pinned to analyst-log ranges (corrected this cycle, phantom refs purged); valid-bugs.md count 0; filing latency is sole risk producer. AUTH_HELPED chains unchanged; no new probes to advance (WAF noise, standing directive). Mitigation unchanged: file-only, ≥6s spacing if ever probed, GET/HEAD/OPTIONS only, no customer data.
+## 2026-09-19 09:21:07 UTC [target] (model bigpickle)
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api/{account,accounts,subscriber,subscribers,number,numbers,session}
+confidence: 95
+reasoning: On-disk verbatim captures re-verified this cycle at exact ranges — reports/analyst-bigpickle.log:20127-20135 (GET /api/accounts, Origin https://attacker.invalid → HTTP/2 401, ACAO echoes origin, ACAC:true, WWW-Authenticate Basic realm="sipwisebroker.easybell.de,voip-management", HSTS), :2347-2353 (OPTIONS+GET 037qmd.example.com → 200/401 same headers), :2316-2321 (evil.example.com/attacker.com OPTIONS→200); reports/analyst-nemotron3.log:5668-5706 (OPTIONS on 7 routes, Allow-Methods PUT/POST echoed, Allow-Headers authorization,content-type, ACAC:true). GET-based reflection → OPTIONS/TRACE scope exclusion inapplicable. Triage re-VALID 09-19 01:37:24 (valid-bugs.md:47-54); running count 0; nothing filed.
+evidence_needed: none — all evidence gates satisfied by the pinned log ranges above.
+verify_steps: HUMAN — file at bugs.olivermaicher.eu attaching verbatim blocks from reports/analyst-bigpickle.log:2316-2321, :2347-2353, :20127-20135 and reports/analyst-nemotron3.log:5668-5706. Do NOT cite probe-results.md (verified 0 header hits; pollution at :451-453). Zero further probes.
+impact: cross-origin credentialed read+write of VoIP config (SIP creds, numbers, subscribers, forwarding, voicemail) from a browser holding cached Basic creds for the sipwisebroker realm or portal bearer → HIGH (CVSS 8.1)
+testability: PASSIVE
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (Bearer voipSession → proxied plural Sipwise routes)
+confidence: 78
+reasoning: customerId leaked in Matomo; Inertia auth-gated endpoints proxy /api/{accounts,subscribers,numbers}; static since 09-04, zero counter-evidence.
+evidence_needed: authenticated cross-customer object access on proxied plural routes.
+verify_steps: HUMAN — log in, capture voipSession, enumerate neighbor IDs on /api/{accounts,subscribers,numbers}/{id}.
+impact: cross-tenant VoIP data (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true; triage HOLD chain-amplifier only; static since 09-04.
+evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy endpoints.
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+[PARKED] my-portal-api-proxy-wildcard: no ACAC:true → browser cannot attach creds to ACAO:*; HOLD/chain-amplifier only (CVSS 4.3); no advance since 09-04.
+[PARKED] my-portal-bola-proxied-voip: credential-gated; no passive path; AUTH_HELPED survivor only.
+[FINAL] voip-cors-cred-read-write (95) — sole filing-ready HIGH; evidence re-verified on disk at correct log offsets; no phantom refs.
+[FINAL] my-portal-bola-proxied-voip (78) — AUTH_HELPED, unchanged.
+[NEXT] HUMAN: File `voip-cors-cred-read-write` at bugs.olivermaicher.eu NOW — attach verbatim blocks reports/analyst-bigpickle.log:2316-2321, :2347-2353, :20127-20135 and reports/analyst-nemotron3.log:5668-5706 (GET+OPTIONS, ACAO arbitrary-origin + ACAC:true + Allow-Methods PUT/POST echo + sipwisebroker realm); title "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes)"; do NOT cite probe-results.md line numbers (verified phantom/polluted); zero further probes until filed.
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: filed evidence = reports/analyst-bigpickle.log:2316-2321 + :2347-2353 + :20127-20135 + reports/analyst-nemotron3.log:5668-5706 — re-grep-verified verbatim this cycle at exact offsets; these and only these are citable credential-CORS captures on disk.
+[LEARN] REJECTED MISCONFIG @ probe-results.md: file grew 450→453 with a 09-19 05:04:28 self-appended backtick-polluted POST-fetch fragment (404); still 0 header-string hits — experimental-evidence file remains unreliable; evidence refs must cite analyst log ranges, never probe-results.md.
+[LEARN] ACCEPTED MISCONFIG @ my.easybell.com/api + voip-management: both AUTH_HELPED leads static, zero counter-evidence; no active probe run this cycle (standing do-not-reprobe directive respected).
+[RISK] easybell: 85 — flagship CORS (95) exploitable + unfiled at ~302h post-triage-VALID / ~13.9d post-discovery; evidence durably pinned and re-verified on disk; valid-bugs.md count still 0; triage re-affirms VALID. Filing latency is the sole risk producer; continued inaction increases duplicate/exploitation risk. Mitigation unchanged: file-only this cycle, GET/HEAD/OPTIONS only if ever probed, ≥6s spacing, no customer data.
