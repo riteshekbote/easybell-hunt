@@ -266,3 +266,5 @@
 - 2026-09-19 REJECTED brute-force/lockout @ auth.easybell.de: Program explicitly excludes brute-force/rate-limit/lockout policy testing. Do not propose auth-stuffing or credential-stuffing hypotheses.
 - 2026-09-19 REJECTED brute-force/lockout @ mail.easybell.de: Do not test Roundcube login/auth attempts.
 - 2026-09-19 NO_DELTA — inventory + KB unchanged; all passive lines closed; hypotheses stable with zero counter-evidence; zero probes run this cycle
+- 2026-09-19 REJECTED MISCONFIG @ probe-results.md: the `probe-results.md:453-455 / :449-456` refs in my 09-19 leads are phantom again — file is 450 lines with 0 ACAO/ACAC/sipwisebroker hits today; the 20:16:44 capture lives only in the analyst log transcript (:20128-20136), not in probe-results.md. Evidence refs must cite analyst log line ranges (persistent), never probe-results.md line numbers.
+- 2026-09-19 ACCEPTED MISCONFIG @ voip-management.easybell.de/api: filed evidence = reports/analyst-bigpickle.log:2315-2321 + :2345-2354 + :20128-20136 + reports/analyst-nemotron3.log:5668-5706 — these and only these are grep-verifiable verbatim credentialed CORS captures on disk.

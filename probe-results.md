@@ -448,3 +448,6 @@ https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'in
 
 ## 2026-09-19 00:38:06 UTC
 https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-19 05:04:28 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
