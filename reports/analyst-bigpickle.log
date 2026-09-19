@@ -22127,3 +22127,31 @@ STEP 6 — LEARNING
 
 STEP 7 — RISK
 - [RISK] easybell: 85 — flagship CORS (95) exploitable + unfiled ~13.4d post-discovery / ~310h post-triage-VALID; evidence durable on disk, triage continuously VALID, valid-bugs.md count 0. Filing latency is the only risk producer; continued inaction raises duplicate/exploitation risk. Mitigation unchanged: file-only, no further probes, ≥6s spacing if ever probed, GET/HEAD/OPTIONS only, no customer data.
+===== ANALYST bigpickle 2026-09-19 16:37:13 UTC =====
+[0m
+> build · big-pickle
+[0m
+STEP 1 — DELTA
+- NO_DELTA: knowledge base + inventory + last leads unchanged since 2026-09-19 13:16:45 UTC; flagship `voip-cors-cred-read-write` still exploitable + unfiled (~302h post-triage-VALID / ~13.9d post-discovery); valid-bugs.md running count 0; no new probes run (standing do-not-reprobe directive respected).
+
+STEP 2 — PRIORITIZE
+- [PRIO] voip-management.easybell.de/api,9,cors-cred-read-write — unchanged sole filing-ready HIGH; all evidence gates satisfied by pinned log ranges (re-grep-verified six+ times, zero deltas); attack_surface 9, business_value 9, tech_exposure 7, gate_ease 4 (credential-gated explication but evidence complete), cloud_surface 2, freshness 8.
+
+STEP 3 — HYPOTHESES
+- All three hypotheses (`voip-cors-cred-read-write` 95, `my-portal-bola-proxied-voip` 78, `my-portal-api-proxy-wildcard` 60) unchanged in fact-content from 13:16:45 UTC; no new surface observed; re-emitting identical schemas adds zero information. Zero new hypotheses — no basis.
+
+STEP 4 — SELF-CRITIQUE
+- [PARKED] my-portal-bola-proxied-voip: credential-gated, no passive vector, AUTH_HELPED survivor only.
+- [PARKED] my-portal-api-proxy-wildcard: ACAO:* without ACAC:true → browser cannot attach creds; HOLD/chain-amplifier (CVSS 4.3) only.
+- [FINAL] voip-cors-cred-read-write (95) — sole filing-ready HIGH; evidence pinned at reports/analyst-bigpickle.log:2316-2321, :2347-2353, :20127-20135 + reports/analyst-nemotron3.log:5668-5706; GET-based reflection confirmed, OPTIONS/TRACE scope exclusion inapplicable; probe-results.md refs forbidden (0 header hits, tail polluted).
+- [FINAL] my-portal-bola-proxied-voip (78) — AUTH_HELPED, unchanged.
+- No confidence<40 or REJECTED-class items survive.
+
+STEP 5 — NEXT ACTION
+- [NEXT] HUMAN: File `voip-cors-cred-read-write` at bugs.olivermaicher.eu NOW — attach verbatim blocks reports/analyst-bigpickle.log:2316-2321, :2347-2353, :20127-20135 and reports/analyst-nemotron3.log:5668-5706; title "Credentialed CORS read+write on voip-management.easybell.de/api (7 Spring routes)"; cite analyst-log ranges only, never probe-results.md; zero further live probes.
+
+STEP 6 — LEARNING
+- [LEARN] NO_DELTA — no new probes this cycle (standing directive respected); inventory + KB unchanged; flagship evidence re-verified on prior cycles with zero drift; filing latency solely drives state change.
+
+STEP 7 — RISK
+- [RISK] easybell: 86 — flagship CORS (95) exploitable + unfiled at ~305h post-triage-VALID / ~13.9d post-discovery; every evidence/triage gate satisfied; valid-bugs.md count still 0; each elapsed hour raises duplicate-report/independent-exploitation risk. Sole uncancelled risk producer is filing action — no probe, no analysis, no re-verification can advance it. Mitigation unchanged: file-only.
