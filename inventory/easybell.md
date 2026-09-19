@@ -478,3 +478,5 @@ www.easybell.de
 - NEW probe-results.md tail (line 450) now ends `GET /api/accounts -> HTTP 401` @ 2026-09-19 00:38 — only 401 trace in file; no capture block survived.
 
 ## 2026-09-19 09:22:00 UTC
+
+## 2026-09-19 13:16:45 UTC
