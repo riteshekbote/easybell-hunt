@@ -1,1 +1,32 @@
-## 2026-09-18 22:38:28 UTC [target] (model bigpickle)
+## 2026-09-19 00:37:54 UTC [target] (model bigpickle)
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~120h post-triage-VALID / ~9.8 days post-discovery; 6 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it
+[LEARN] NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk
+[RISK] easybell: 85
+reasoning: Flagship CORS finding (95) reconfirmed live at 09:48:02 UTC 09-10 (6th capture) — credentialed cross-origin WRITE (preflight-approved POST/PUT, arbitrary Origin, ACAC:true) on 7 Spring routes backed by Sipwise NGCP; ~120h filing latency since triage-VALID is sole program risk. my-portal-proxy-wildcard (78) and my-portal-bola-proxied-voip (78) remain AUTH_HELPED. All other surfaces closed. Carried: 95/78 mostly HUMAN-gated; voip WAF throttle unchanged (≥6s/60-120s); auth/lockout excluded; PBX/SIP parked. Mitigation: read-only GET/OPTIONS only, ≥6s spacing, no POST bodies to live API, no customer data captured, sha256 discipline, report only via bugs.olivermaicher.eu.
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api/{account,accounts,subscriber,subscribers,number,numbers,session}
+confidence: 95
+reasoning: Verbatim on-disk captures: analyst-bigpickle.log:2345-2352 (GET /api/accounts Origin 037qmd.example.com → HTTP/2 401, ACAO echoes origin, ACAC:true, WWW-Authenticate Basic realm) + :2315-2322; analyst-nemotron3.log:1742-1831 (HEAD 5 routes, 09-04) + :5668-5706 (OPTIONS 7 routes, 09-11). GET-based → scope.yml OPTIONS/TRACE exclusion inapplicable. 5+ triage-VALID 09-05→09-18; valid-bugs.md running count 0.
+evidence_needed: none — genuine log artifacts pinned above; probe-results.md refs are phantoms.
+verify_steps: HUMAN — file attaching reports/analyst-bigpickle.log:2345-2352 + reports/analyst-nemotron3.log:1742-1831 verbatim blocks; zero further probes.
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers) from a browser with cached Basic creds for the realm → HIGH (CVSS 6.1-8.1)
+testability: PASSIVE
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (Bearer voipSession → proxied plural Sipwise routes)
+confidence: 78
+reasoning: customerId leaked in Matomo; Inertia auth-gated endpoints proxy /api/{accounts,subscribers,numbers}; static 09-04→now; zero counter-evidence.
+evidence_needed: authenticated cross-customer object access on proxied plural routes.
+verify_steps: HUMAN — log in, capture voipSession, enumerate neighbor IDs on /api/{accounts,subscribers,numbers}/{id}.
+impact: cross-tenant VoIP data (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true; triage HOLD chain-amplifier only; static since 09-04.
+evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy endpoints.
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED

@@ -20624,3 +20624,559 @@ EXIT=0
 [93m[1m! [0mpermission requested: external_directory (/tmp/*); auto-rejecting
 [0m✗ [0mwc -c /tmp/cors-body.txt; echo "---"; cat /tmp/cors-body.txt failed
 [91m[1mError: [0mThe user rejected permission to use this specific tool call.
+===== ANALYST bigpickle 2026-09-19 00:38:05 UTC =====
+[0m
+> build · big-pickle
+[0m
+[0m$ [0mls -la && ls -la art/ 2>/dev/null; ls -la inventories/ 2>/dev/null
+total 336
+drwxr-xr-x 12 runner runner   4096 Sep 19 00:36 .
+drwxr-xr-x  3 runner runner   4096 Sep 19 00:36 ..
+drwxr-xr-x  7 runner runner   4096 Sep 19 00:36 .git
+drwxr-xr-x  3 runner runner   4096 Sep 19 00:36 .github
+-rw-r--r--  1 runner runner   1756 Sep 19 00:36 README.md
+-rw-r--r--  1 runner runner     32 Sep 19 00:36 analyst-out.txt
+-rw-r--r--  1 runner runner 116139 Sep 19 00:36 analyst-prompt.txt
+-rw-r--r--  1 runner runner 112332 Sep 19 00:36 ctx.txt
+drwxr-xr-x  2 runner runner   4096 Sep 19 00:36 inventory
+drwxr-xr-x  2 runner runner   4096 Sep 19 00:36 knowledge
+drwxr-xr-x  2 runner runner   4096 Sep 19 00:36 leads
+-rw-r--r--  1 runner runner  22017 Sep 19 00:36 probe-results.md
+drwxr-xr-x  2 runner runner   4096 Sep 19 00:36 recon-notes
+drwxr-xr-x  2 runner runner   4096 Sep 19 00:36 reports
+drwxr-xr-x  2 runner runner   4096 Sep 19 00:36 reposcan-raw
+-rw-r--r--  1 runner runner   3220 Sep 19 00:36 scope.yml
+drwxr-xr-x  2 runner runner   4096 Sep 19 00:36 scripts
+-rw-r--r--  1 runner runner     33 Sep 19 00:36 state_bigpickle.json
+-rw-r--r--  1 runner runner     33 Sep 19 00:36 state_laguna.json
+-rw-r--r--  1 runner runner     33 Sep 19 00:36 state_ling3.json
+-rw-r--r--  1 runner runner     33 Sep 19 00:36 state_longcat.json
+-rw-r--r--  1 runner runner     33 Sep 19 00:36 state_mimo.json
+-rw-r--r--  1 runner runner     33 Sep 19 00:36 state_nemotron3.json
+drwxr-xr-x  2 runner runner   4096 Sep 19 00:36 triage
+[0m
+[0m$ [0mls -la inventory knowledge leads triage reports 2>/dev/null; wc -l probe-results.md
+inventory:
+total 52
+drwxr-xr-x  2 runner runner  4096 Sep 19 00:36 .
+drwxr-xr-x 12 runner runner  4096 Sep 19 00:36 ..
+-rw-r--r--  1 runner runner 43756 Sep 19 00:36 easybell.md
+
+knowledge:
+total 68
+drwxr-xr-x  2 runner runner  4096 Sep 19 00:36 .
+drwxr-xr-x 12 runner runner  4096 Sep 19 00:36 ..
+-rw-r--r--  1 runner runner 57419 Sep 19 00:36 index.md
+
+leads:
+total 1300
+drwxr-xr-x  2 runner runner   4096 Sep 19 00:36 .
+drwxr-xr-x 12 runner runner   4096 Sep 19 00:36 ..
+-rw-r--r--  1 runner runner 487425 Sep 19 00:36 lead-bigpickle.md
+-rw-r--r--  1 runner runner   5457 Sep 19 00:36 lead-laguna.md
+-rw-r--r--  1 runner runner   5350 Sep 19 00:36 lead-ling3.md
+-rw-r--r--  1 runner runner   5564 Sep 19 00:36 lead-longcat.md
+-rw-r--r--  1 runner runner     18 Sep 19 00:36 lead-mimo.md
+-rw-r--r--  1 runner runner 770683 Sep 19 00:36 lead-nemotron3.md
+-rw-r--r--  1 runner runner  26129 Sep 19 00:36 reposcan-easybell.md
+
+reports:
+total 2848
+drwxr-xr-x  2 runner runner    4096 Sep 19 00:36 .
+drwxr-xr-x 12 runner runner    4096 Sep 19 00:36 ..
+-rw-r--r--  1 runner runner 1603347 Sep 19 00:36 analyst-bigpickle.log
+-rw-r--r--  1 runner runner   23219 Sep 19 00:36 analyst-laguna.log
+-rw-r--r--  1 runner runner   23112 Sep 19 00:36 analyst-ling3.log
+-rw-r--r--  1 runner runner   23326 Sep 19 00:36 analyst-longcat.log
+-rw-r--r--  1 runner runner 1044782 Sep 19 00:36 analyst-nemotron3.log
+-rw-r--r--  1 runner runner      54 Sep 19 00:36 hypotheses-bigpickle.txt
+-rw-r--r--  1 runner runner      51 Sep 19 00:36 hypotheses-laguna.txt
+-rw-r--r--  1 runner runner      50 Sep 19 00:36 hypotheses-ling3.txt
+-rw-r--r--  1 runner runner      52 Sep 19 00:36 hypotheses-longcat.txt
+-rw-r--r--  1 runner runner    7709 Sep 19 00:36 hypotheses-nemotron3.txt
+-rw-r--r--  1 runner runner  180370 Sep 19 00:36 hypotheses.md
+-rw-r--r--  1 runner runner    2865 Sep 19 00:36 valid-bugs.md
+
+triage:
+total 484
+drwxr-xr-x  2 runner runner  4096 Sep 19 00:36 .
+drwxr-xr-x 12 runner runner  4096 Sep 19 00:36 ..
+-rw-r--r--  1 runner runner     0 Sep 19 00:36 .gitkeep
+-rw-r--r--  1 runner runner   851 Sep 19 00:36 run-2026-09-02-21-59.md
+-rw-r--r--  1 runner runner   184 Sep 19 00:36 run-2026-09-03-00-06.md
+-rw-r--r--  1 runner runner   290 Sep 19 00:36 run-2026-09-03-04-45.md
+-rw-r--r--  1 runner runner   538 Sep 19 00:36 run-2026-09-03-09-37.md
+-rw-r--r--  1 runner runner  1027 Sep 19 00:36 run-2026-09-03-13-56.md
+-rw-r--r--  1 runner runner  1473 Sep 19 00:36 run-2026-09-03-17-47.md
+-rw-r--r--  1 runner runner   173 Sep 19 00:36 run-2026-09-03-20-54.md
+-rw-r--r--  1 runner runner   250 Sep 19 00:36 run-2026-09-03-23-11.md
+-rw-r--r--  1 runner runner   263 Sep 19 00:36 run-2026-09-04-01-05.md
+-rw-r--r--  1 runner runner   157 Sep 19 00:36 run-2026-09-04-06-02.md
+-rw-r--r--  1 runner runner   153 Sep 19 00:36 run-2026-09-04-11-29.md
+-rw-r--r--  1 runner runner   208 Sep 19 00:36 run-2026-09-04-15-06.md
+-rw-r--r--  1 runner runner   319 Sep 19 00:36 run-2026-09-04-18-29.md
+-rw-r--r--  1 runner runner   195 Sep 19 00:36 run-2026-09-04-21-03.md
+-rw-r--r--  1 runner runner   478 Sep 19 00:36 run-2026-09-04-23-05.md
+-rw-r--r--  1 runner runner   168 Sep 19 00:36 run-2026-09-05-01-06.md
+-rw-r--r--  1 runner runner 11550 Sep 19 00:36 run-2026-09-05-05-54.md
+-rw-r--r--  1 runner runner   225 Sep 19 00:36 run-2026-09-05-10-27.md
+-rw-r--r--  1 runner runner   143 Sep 19 00:36 run-2026-09-05-13-32.md
+-rw-r--r--  1 runner runner   273 Sep 19 00:36 run-2026-09-05-16-16.md
+-rw-r--r--  1 runner runner   154 Sep 19 00:36 run-2026-09-05-18-25.md
+-rw-r--r--  1 runner runner   157 Sep 19 00:36 run-2026-09-05-20-44.md
+-rw-r--r--  1 runner runner   189 Sep 19 00:36 run-2026-09-05-22-46.md
+-rw-r--r--  1 runner runner   280 Sep 19 00:36 run-2026-09-06-00-48.md
+-rw-r--r--  1 runner runner   263 Sep 19 00:36 run-2026-09-06-05-45.md
+-rw-r--r--  1 runner runner   200 Sep 19 00:36 run-2026-09-06-10-46.md
+-rw-r--r--  1 runner runner   237 Sep 19 00:36 run-2026-09-06-14-05.md
+-rw-r--r--  1 runner runner  7735 Sep 19 00:36 run-2026-09-06-17-09.md
+-rw-r--r--  1 runner runner  1818 Sep 19 00:36 run-2026-09-06-19-19.md
+-rw-r--r--  1 runner runner   426 Sep 19 00:36 run-2026-09-06-21-30.md
+-rw-r--r--  1 runner runner   177 Sep 19 00:36 run-2026-09-06-23-09.md
+-rw-r--r--  1 runner runner   141 Sep 19 00:36 run-2026-09-07-01-07.md
+-rw-r--r--  1 runner runner   184 Sep 19 00:36 run-2026-09-07-06-12.md
+-rw-r--r--  1 runner runner   186 Sep 19 00:36 run-2026-09-07-12-47.md
+-rw-r--r--  1 runner runner   193 Sep 19 00:36 run-2026-09-07-18-12.md
+-rw-r--r--  1 runner runner   151 Sep 19 00:36 run-2026-09-07-21-36.md
+-rw-r--r--  1 runner runner   186 Sep 19 00:36 run-2026-09-07-23-47.md
+-rw-r--r--  1 runner runner   282 Sep 19 00:36 run-2026-09-08-04-19.md
+-rw-r--r--  1 runner runner   975 Sep 19 00:36 run-2026-09-08-08-57.md
+-rw-r--r--  1 runner runner   143 Sep 19 00:36 run-2026-09-08-13-30.md
+-rw-r--r--  1 runner runner   210 Sep 19 00:36 run-2026-09-08-17-32.md
+-rw-r--r--  1 runner runner   268 Sep 19 00:36 run-2026-09-08-20-19.md
+-rw-r--r--  1 runner runner   178 Sep 19 00:36 run-2026-09-08-22-47.md
+-rw-r--r--  1 runner runner   208 Sep 19 00:36 run-2026-09-09-01-10.md
+-rw-r--r--  1 runner runner   290 Sep 19 00:36 run-2026-09-09-06-06.md
+-rw-r--r--  1 runner runner  1191 Sep 19 00:36 run-2026-09-09-11-37.md
+-rw-r--r--  1 runner runner   450 Sep 19 00:36 run-2026-09-09-15-19.md
+-rw-r--r--  1 runner runner   152 Sep 19 00:36 run-2026-09-09-18-45.md
+-rw-r--r--  1 runner runner   191 Sep 19 00:36 run-2026-09-09-21-37.md
+-rw-r--r--  1 runner runner   217 Sep 19 00:36 run-2026-09-09-23-34.md
+-rw-r--r--  1 runner runner   141 Sep 19 00:36 run-2026-09-10-01-29.md
+-rw-r--r--  1 runner runner   148 Sep 19 00:36 run-2026-09-10-06-41.md
+-rw-r--r--  1 runner runner   147 Sep 19 00:36 run-2026-09-10-11-51.md
+-rw-r--r--  1 runner runner   230 Sep 19 00:36 run-2026-09-10-16-17.md
+-rw-r--r--  1 runner runner   159 Sep 19 00:36 run-2026-09-10-19-11.md
+-rw-r--r--  1 runner runner   183 Sep 19 00:36 run-2026-09-10-21-42.md
+-rw-r--r--  1 runner runner   179 Sep 19 00:36 run-2026-09-10-23-57.md
+-rw-r--r--  1 runner runner   265 Sep 19 00:36 run-2026-09-11-04-27.md
+-rw-r--r--  1 runner runner   906 Sep 19 00:36 run-2026-09-11-09-14.md
+-rw-r--r--  1 runner runner  1529 Sep 19 00:36 run-2026-09-11-13-40.md
+-rw-r--r--  1 runner runner   199 Sep 19 00:36 run-2026-09-11-17-17.md
+-rw-r--r--  1 runner runner 10498 Sep 19 00:36 run-2026-09-11-19-54.md
+-rw-r--r--  1 runner runner   161 Sep 19 00:36 run-2026-09-11-22-26.md
+-rw-r--r--  1 runner runner   279 Sep 19 00:36 run-2026-09-12-00-39.md
+-rw-r--r--  1 runner runner   161 Sep 19 00:36 run-2026-09-12-05-07.md
+-rw-r--r--  1 runner runner   168 Sep 19 00:36 run-2026-09-12-09-28.md
+-rw-r--r--  1 runner runner   212 Sep 19 00:36 run-2026-09-12-13-09.md
+-rw-r--r--  1 runner runner   218 Sep 19 00:36 run-2026-09-12-16-25.md
+-rw-r--r--  1 runner runner   153 Sep 19 00:36 run-2026-09-12-18-47.md
+-rw-r--r--  1 runner runner   150 Sep 19 00:36 run-2026-09-12-21-21.md
+-rw-r--r--  1 runner runner   152 Sep 19 00:36 run-2026-09-12-23-22.md
+-rw-r--r--  1 runner runner   212 Sep 19 00:36 run-2026-09-13-01-26.md
+-rw-r--r--  1 runner runner  8109 Sep 19 00:36 run-2026-09-13-06-49.md
+-rw-r--r--  1 runner runner   238 Sep 19 00:36 run-2026-09-13-12-40.md
+-rw-r--r--  1 runner runner   216 Sep 19 00:36 run-2026-09-13-16-55.md
+-rw-r--r--  1 runner runner  7833 Sep 19 00:36 run-2026-09-13-19-19.md
+-rw-r--r--  1 runner runner   143 Sep 19 00:36 run-2026-09-13-21-30.md
+-rw-r--r--  1 runner runner   184 Sep 19 00:36 run-2026-09-13-23-31.md
+-rw-r--r--  1 runner runner   743 Sep 19 00:36 run-2026-09-14-01-41.md
+-rw-r--r--  1 runner runner  9573 Sep 19 00:36 run-2026-09-14-07-52.md
+-rw-r--r--  1 runner runner   232 Sep 19 00:36 run-2026-09-14-14-57.md
+-rw-r--r--  1 runner runner  1328 Sep 19 00:36 run-2026-09-14-19-49.md
+-rw-r--r--  1 runner runner   173 Sep 19 00:36 run-2026-09-14-23-03.md
+-rw-r--r--  1 runner runner   167 Sep 19 00:36 run-2026-09-15-01-34.md
+-rw-r--r--  1 runner runner   183 Sep 19 00:36 run-2026-09-15-06-42.md
+-rw-r--r--  1 runner runner   167 Sep 19 00:36 run-2026-09-15-12-36.md
+-rw-r--r--  1 runner runner   143 Sep 19 00:36 run-2026-09-15-17-17.md
+-rw-r--r--  1 runner runner   448 Sep 19 00:36 run-2026-09-15-20-18.md
+-rw-r--r--  1 runner runner   162 Sep 19 00:36 run-2026-09-15-22-59.md
+-rw-r--r--  1 runner runner   202 Sep 19 00:36 run-2026-09-16-01-21.md
+-rw-r--r--  1 runner runner   163 Sep 19 00:36 run-2026-09-16-06-46.md
+-rw-r--r--  1 runner runner   248 Sep 19 00:36 run-2026-09-16-12-32.md
+-rw-r--r--  1 runner runner  1453 Sep 19 00:36 run-2026-09-16-17-17.md
+-rw-r--r--  1 runner runner   239 Sep 19 00:36 run-2026-09-16-20-15.md
+-rw-r--r--  1 runner runner   653 Sep 19 00:36 run-2026-09-16-23-02.md
+-rw-r--r--  1 runner runner   234 Sep 19 00:36 run-2026-09-17-01-31.md
+-rw-r--r--  1 runner runner   285 Sep 19 00:36 run-2026-09-17-06-39.md
+-rw-r--r--  1 runner runner   218 Sep 19 00:36 run-2026-09-17-12-09.md
+-rw-r--r--  1 runner runner  1152 Sep 19 00:36 run-2026-09-17-17-10.md
+-rw-r--r--  1 runner runner   337 Sep 19 00:36 run-2026-09-17-20-23.md
+-rw-r--r--  1 runner runner  1924 Sep 19 00:36 run-2026-09-17-23-06.md
+-rw-r--r--  1 runner runner  9899 Sep 19 00:36 run-2026-09-18-01-21.md
+-rw-r--r--  1 runner runner   192 Sep 19 00:36 run-2026-09-18-06-10.md
+-rw-r--r--  1 runner runner   256 Sep 19 00:36 run-2026-09-18-11-30.md
+-rw-r--r--  1 runner runner   205 Sep 19 00:36 run-2026-09-18-15-09.md
+-rw-r--r--  1 runner runner   175 Sep 19 00:36 run-2026-09-18-18-36.md
+-rw-r--r--  1 runner runner   828 Sep 19 00:36 run-2026-09-18-21-17.md
+-rw-r--r--  1 runner runner  2208 Sep 19 00:36 run-2026-09-18-23-24.md
+447 probe-results.md
+[0m
+[0m$ [0mtail -45 probe-results.md
+## 2026-09-17 01:13:37 UTC
+
+
+## 2026-09-17 06:15:29 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+https://voip-management.easybell.de/api/accounts -> HTTP 401
+https://voip-management.easybell.de/api/accounts` -> HTTP 404
+
+## 2026-09-17 11:51:14 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-17 16:08:59 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-17 19:47:13 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+https://voip-management.easybell.de/api/accounts` -> HTTP 404
+
+## 2026-09-17 22:36:26 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-18 00:46:36 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-18 05:30:52 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+https://voip-management.easybell.de/api/accounts -> HTTP 401
+
+## 2026-09-18 10:03:22 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-18 14:37:53 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+https://voip-management.easybell.de/api/accounts -> HTTP 401
+
+## 2026-09-18 17:54:55 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+https://voip-management.easybell.de/api/accounts -> HTTP 401
+
+## 2026-09-18 20:18:00 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+
+## 2026-09-18 22:39:52 UTC
+https://voip-management.easybell.de/api/accounts',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json' -> HTTP 404
+[0m
+[0m$ [0mgrep -n "access-control-allow" probe-results.md | head -40; echo "---count---"; grep -c "access-control-allow" probe-results.md
+---count---
+0
+[0m
+[0m$ [0mcat reports/valid-bugs.md; echo "=== hypotheses-bigpickle ==="; cat reports/hypotheses-bigpickle.txt; echo "=== state ==="; cat state_bigpickle.json
+# Validated findings (running count 0)
+
+- 3 lead(s) marked VALID at 2026-09-05 05:54:14 UTC
+  - | Q5 | Novel/unreported? | Likely novel for this program (valid-bugs.md is empty, no prior report) |
+  - **Verdict: VALID**
+  - | 1 | voip-cors-cred-exfil-v3 | **VALID** | Report to bugs.olivermaicher.eu |
+
+- 3 lead(s) marked VALID at 2026-09-06 17:09:59 UTC
+  - ### Verdict: **VALID**
+  - | voip-cors-cred-exfil-v3 | **VALID** | Credentialed CORS + ACAC:true on 7 authenticated API routes — HIGH impact, provable via OPTIONS |
+  - | my-portal-api-proxy-wildcard | **HOLD** | Standalone wildcard CORS without ACAC:true is informational; only valid as chain amplifier |
+
+- 2 lead(s) marked VALID at 2026-09-06 19:19:02 UTC
+  - | voip-cors-cred-exfil-v3 | **VALID** | Credentialed CORS + ACAC:true on 7 authenticated API routes — HIGH impact, provable via OPTIONS |
+  - | my-portal-api-proxy-wildcard | **HOLD** | Standalone wildcard CORS without ACAC:true is informational; only valid as chain amplifier |
+
+- 2 lead(s) marked VALID at 2026-09-11 19:54:18 UTC
+  - **Verdict: VALID**
+  - | 1 | voip-management CORS (7 routes, read+write) | **VALID** | 8.1 | File at bugs.olivermaicher.eu |
+
+- 4 lead(s) marked VALID at 2026-09-13 06:49:16 UTC
+  - | Q5 | Novel/unreported? | **Yes** — valid-bugs.md shows no prior report filed; finding persists across 10+ days |
+  - **Verdict: VALID**
+  - | Q7 | Would reasonable triager accept? | **No as standalone** — wildcard CORS without ACAC:true on Bearer-only endpoints is informational; only valid as chain amplifier with Finding 1 |
+  - | 1 | voip-cors-cred-read-write | **VALID** | 8.1 | File at bugs.olivermaicher.eu |
+
+- 2 lead(s) marked VALID at 2026-09-13 19:19:58 UTC
+  - **Verdict: VALID**
+  - | 1 | CORS credentialed reflection (7 routes) | **VALID** | 6.1 |
+
+- 3 lead(s) marked VALID at 2026-09-14 07:52:29 UTC
+  - **Verdict: VALID**
+  - | Q3 Impact | No — 405 is a valid response indicating the endpoint exists but doesn't accept GET |
+  - | voip-cors-cred-exfil-v2 | **VALID** | 6.5 |
+
+- 2 lead(s) marked VALID at 2026-09-17 23:06:59 UTC
+  - | 1 | `voip-cors-cred-read-write` (7 Spring routes, ACAO:attacker + ACAC:true) | **Already VALID** | 8.1 | 14+ independent captures through 2026-09-17; report **not yet filed** at bugs.olivermaicher.e
+  - | 2 | `my-portal-api-proxy-wildcard` (ACAO:* on /api/crm,ebit,strapi) | **HOLD** | — | Standalone informational; only valid as chain amplifier with #1 |
+
+- 2 lead(s) marked VALID at 2026-09-18 01:21:58 UTC
+  - **Verdict: VALID**
+  - | voip-cors-cred-exfil | **VALID** | Report-ready. 7 endpoints confirmed vulnerable. CVSS 6.5. |
+
+- 1 lead(s) marked VALID at 2026-09-18 23:24:48 UTC
+  - | `voip-cors-cred-read-write` (7 Spring routes, ACAO:attacker + ACAC:true) | **VALID** (92 confidence, 14+ independent captures) | **NOT FILED** at bugs.olivermaicher.eu |
+=== hypotheses-bigpickle ===
+## 2026-09-18 22:38:28 UTC [target] (model bigpickle)
+=== state ===
+{"phase": "POC", "target": "api"}
+[0m
+[0m$ [0mgrep -n "attacker.invalid\|HTTP/2 401\|HTTP/1.1 401\|20:16:44\|20:17\|05:28:43" probe-results.md; echo "=== total lines ==="; wc -l probe-results.md; echo "=== any curl/raw blocks? ==="; grep -n "curl\|HTTP/2\|HTTP/1.1\|sipwisebroker" probe-results.md
+=== total lines ===
+447 probe-results.md
+=== any curl/raw blocks? ===
+[0m
+[0m$ [0mgrep -rn "access-control-allow-origin\|access-control-allow-credentials" reports/ triage/ leads/ recon-notes/ 2>/dev/null | grep -v readme | head -20; echo "=== counts per file ==="; grep -rlc "access-control-allow-origin" reports/ leads/ triage/ recon-notes/ inventory/ knowledge/ 2>/dev/null
+reports/analyst-nemotron3.log:355:access-control-allow-origin: *
+reports/analyst-nemotron3.log:366:access-control-allow-origin: *
+reports/analyst-nemotron3.log:645:access-control-allow-origin: *
+reports/analyst-nemotron3.log:1169:access-control-allow-credentials: true
+reports/analyst-nemotron3.log:1170:access-control-allow-origin: https://my.easybell.com
+reports/analyst-nemotron3.log:1748:access-control-allow-credentials: true
+reports/analyst-nemotron3.log:1749:access-control-allow-origin: https://evil.com
+reports/analyst-nemotron3.log:1756:access-control-allow-credentials: true
+reports/analyst-nemotron3.log:1757:access-control-allow-origin: https://evil.com
+reports/analyst-nemotron3.log:1764:access-control-allow-credentials: true
+reports/analyst-nemotron3.log:1765:access-control-allow-origin: https://evil.com
+reports/analyst-nemotron3.log:1775:access-control-allow-origin: *
+reports/analyst-nemotron3.log:1786:access-control-allow-origin: *
+reports/analyst-nemotron3.log:1797:access-control-allow-origin: *
+reports/analyst-nemotron3.log:1821:access-control-allow-credentials: true
+reports/analyst-nemotron3.log:1822:access-control-allow-origin: https://evil.com
+reports/analyst-nemotron3.log:1829:access-control-allow-credentials: true
+reports/analyst-nemotron3.log:1830:access-control-allow-origin: https://evil.com
+reports/analyst-nemotron3.log:5675:access-control-allow-credentials: true
+reports/analyst-nemotron3.log:5676:access-control-allow-origin: https://evil.example.at
+=== counts per file ===
+reports/analyst-nemotron3.log
+reports/analyst-bigpickle.log
+reports/hypotheses.md
+leads/lead-nemotron3.md
+leads/lead-bigpickle.md
+knowledge/index.md
+[0m
+[0m→ [0mRead reports/analyst-nemotron3.log[90m [offset=1735, limit=105][0m
+[0m
+[0m$ [0mgrep -n "access-control-allow-origin\|access-control-allow-credentials" reports/analyst-bigpickle.log | head -20; echo "=== nemotron3 5660-5700 ==="; sed -n '5655,5695p' reports/analyst-nemotron3.log
+grep: reports/analyst-bigpickle.log: binary file matches
+=== nemotron3 5660-5700 ===
+
+[LEARN] ACCEPTED MISCONFIG @ voip-management.easybell.de/api: finding still exploitable + unfiled at ~120h post-triage-VALID / ~9.8 days post-discovery; 6 captures + reachable tracker satisfy all evidence gates; filing latency is the only risk producer — no new probe advances it
+[LEARN] NO_DELTA — inventory + KB unchanged since 2026-09-10 09:48:02 UTC; all passive lines closed; filing latency is the only rising program risk
+
+[RISK] easybell: 85
+reasoning: Flagship CORS finding (95) reconfirmed live at 09:48:02 UTC 09-10 (6th capture) — credentialed cross-origin WRITE (preflight-approved POST/PUT, arbitrary Origin, ACAC:true) on 7 Spring routes backed by Sipwise NGCP; ~120h filing latency since triage-VALID is sole program risk. my-portal-proxy-wildcard (78) and my-portal-bola-proxied-voip (78) remain AUTH_HELPED. All other surfaces closed. Carried: 95/78 mostly HUMAN-gated; voip WAF throttle unchanged (≥6s/60-120s); auth/lockout excluded; PBX/SIP parked. Mitigation: read-only GET/OPTIONS only, ≥6s spacing, no POST bodies to live API, no customer data captured, sha256 discipline, report only via bugs.olivermaicher.eu.
+===== ANALYST nemotron3 2026-09-11 20:08:59 UTC =====
+[0m
+> build · nemotron-3-ultra-free
+[0m
+[0m$ [0mdate -u +"%Y-%m-%d %H:%M:%S UTC"
+2026-09-11 20:02:05 UTC
+[0m
+[0m$ [0mcurl -s -o /dev/null -w "%{http_code} %{content_type} %{size_download}\n" -X OPTIONS -H "Origin: https://evil.example.at" -H "Access-Control-Request-Method: PUT" -H "Access-Control-Request-Headers: authorization,content-type" "https://voip-management.easybell.de/api/account" --max-time 10
+200  0
+[0m
+[0m$ [0mcurl -s -D - -o /dev/null -X OPTIONS -H "Origin: https://evil.example.at" -H "Access-Control-Request-Method: PUT" -H "Access-Control-Request-Headers: authorization,content-type" "https://voip-management.easybell.de/api/account" --max-time 10
+HTTP/2 200 
+date: Fri, 11 Sep 2026 20:03:43 GMT
+content-length: 0
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.example.at
+access-control-allow-methods: PUT
+access-control-allow-headers: authorization,content-type
+strict-transport-security: max-age=31536000; includeSubDomains
+[0m
+[0m$ [0mfor path in accounts subscribers numbers subscriber number session; do echo "=== /api/$path ==="; curl -s -D - -o /dev/null -X OPTIONS -H "Origin: https://evil.example.at" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: authorization,content-type" "https://voip-management.easybell.de/api/$path" --max-time 10; sleep 6; done
+=== /api/accounts ===
+HTTP/2 200 
+date: Fri, 11 Sep 2026 20:04:29 GMT
+content-length: 0
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.example.at
+access-control-allow-methods: POST
+access-control-allow-headers: authorization,content-type
+strict-transport-security: max-age=31536000; includeSubDomains
+
+=== /api/subscribers ===
+HTTP/2 200 
+date: Fri, 11 Sep 2026 20:04:35 GMT
+content-length: 0
+[0m
+[0m$ [0mgrep -n "curl -s -D\|curl -s -i\|-o /dev/null -w" reports/analyst-nemotron3.log | grep -n "Origin" | head -20
+29:1742:[0m$ [0mcurl -s -o /dev/null -w "%{http_code} %{content_type}" -H "Origin: https://evil.com" "https://voip-management.easybell.de/api/accounts" --max-time 10 2>&1 || echo "FAILED"
+30:5668:[0m$ [0mcurl -s -o /dev/null -w "%{http_code} %{content_type} %{size_download}\n" -X OPTIONS -H "Origin: https://evil.example.at" -H "Access-Control-Request-Method: PUT" -H "Access-Control-Request-Headers: authorization,content-type" "https://voip-management.easybell.de/api/account" --max-time 10
+31:5671:[0m$ [0mcurl -s -D - -o /dev/null -X OPTIONS -H "Origin: https://evil.example.at" -H "Access-Control-Request-Method: PUT" -H "Access-Control-Request-Headers: authorization,content-type" "https://voip-management.easybell.de/api/account" --max-time 10
+32:5681:[0m$ [0mfor path in accounts subscribers numbers subscriber number session; do echo "=== /api/$path ==="; curl -s -D - -o /dev/null -X OPTIONS -H "Origin: https://evil.example.at" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: authorization,content-type" "https://voip-management.easybell.de/api/$path" --max-time 10; sleep 6; done
+33:5742:[0m$ [0mcurl -s -o /dev/null -w "%{http_code}\n" -X OPTIONS -H "Origin: https://evil.example.at" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: authorization,content-type" "https://my.easybell.com/api/crm" --max-time 10
+34:5745:[0m$ [0mfor path in crm ebit strapi; do echo "=== /api/$path ==="; curl -s -D - -o /dev/null -X OPTIONS -H "Origin: https://evil.example.at" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: authorization,content-type" "https://my.easybell.com/api/$path" --max-time 10; sleep 3; done
+[0m
+[0m$ [0mgrep -an "access-control-allow-origin" reports/analyst-bigpickle.log | head; echo "=== DATE on those blocks ==="; grep -an "2026-09\|curl -s" reports/analyst-bigpickle.log | head -30
+1735:access-control-allow-origin: https://my.easybell.com
+2255:access-control-allow-origin: https://my.easybell.com
+2317:access-control-allow-origin: https://evil.example.com
+2321:access-control-allow-origin: https://attacker.com
+2342:Wait — earlier `/api/account` OPTIONS with `Origin: https://my.easybell.com` returned `access-control-allow-origin: https://my.easybell.com`. Now `/api/accounts` with `Origin: evil.example.com` returns `evil.example.com` and `/api/account` with `attacker.com` returns `attacker.com`. So it reflects arbitrary origin on BOTH. Let me re-verify there was no state confusion — earlier the `account` preflight only sent one origin. Now I tested two different origins and both reflected. This confirms **unrestricted origin reflection with credentials**.
+2348:access-control-allow-origin: https://037qmd.example.com
+2352:access-control-allow-origin: https://037qmd.example.com
+2835:access-control-allow-origin: *
+2847:access-control-allow-origin: *
+2859:access-control-allow-origin: *
+=== DATE on those blocks ===
+1:===== ANALYST bigpickle 2026-09-03 16:49:23 UTC =====
+83:===== ANALYST bigpickle 2026-09-03 19:45:37 UTC =====
+119:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://auth.easybell.de/" 2>/dev/null | head -30
+140:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://login.easybell.de/" 2>/dev/null | head -30
+164:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://easybell.de/" 2>/dev/null | head -30
+182:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://mail.easybell.de/" 2>/dev/null | head -30
+200:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://www.easybell.de/" 2>/dev/null | head -50
+207:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://login.easybell.de/login" 2>/dev/null | head -100
+230:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://mail.easybell.de/rcm/" 2>/dev/null | head -60
+303:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://my.easybell.com/" 2>/dev/null | head -30
+327:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://my.easybell.com/login" 2>/dev/null | head -100
+412:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://voip-management.easybell.de/" 2>/dev/null | head -30
+433:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" "https://my.easybell.com/robots.txt" 2>/dev/null
+437:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" "https://login.easybell.de/robots.txt" 2>/dev/null
+441:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://shared-libs.easybell.de/" 2>/dev/null | head -20
+463:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" "https://mail.easybell.de/rcm/?_task=login" 2>/dev/null | head -60
+526:  resp=$(curl -s -o /dev/null -w '%{http_code}|%{size_download}' --max-time 8 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" "https://voip-management.easybell.de${path}" 2>/dev/null)
+546:[0m$ [0mcurl -s --max-time 15 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" "https://my.easybell.com/build/assets/main-CKc5KWDf.js" 2>/dev/null | grep -oP 'https?://[a-zA-Z0-9._/-]+' | sort -u | head -30
+549:[0m$ [0mcurl -s --max-time 15 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" "https://my.easybell.com/build/assets/main-CKc5KWDf.js" 2>/dev/null | grep -oP '"/[a-zA-Z0-9._/-]+"' | sort -u | head -40
+552:[0m$ [0mcurl -s --max-time 15 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" "https://my.easybell.com/build/assets/components-BsWcUPQd.js" 2>/dev/null | grep -oP '"[^"]*api[^"]*"' | sort -u | head -30
+561:[0m$ [0mcurl -s --max-time 15 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" "https://my.easybell.com/build/assets/dist-BnNTvl_D.js" 2>/dev/null | grep -oP '"[^"]*api[^"]*"' | sort -u | head -30
+564:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://voip-management.easybell.de/api/account" 2>/dev/null
+576:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://voip-management.easybell.de/api/docs" 2>/dev/null
+591:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://voip-management.easybell.de/api/v1" 2>/dev/null
+612:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" "https://voip-management.easybell.de/api/v2/openapi.json" 2>/dev/null | head -60
+628:[0m$ [0mcurl -s --max-time 10 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" -D - "https://voip-management.easybell.de/api/v2/account" 2>/dev/null
+650:  resp=$(curl -s --max-time 8 -w '|%{http_code}' -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" "https://voip-management.easybell.de${path}" 2>/dev/null)
+825:[0m$ [0mcd /tmp/opencode && curl -s --max-time 20 -H "User-Agent: Mozilla/5.0" "https://my.easybell.com/build/assets/components-BsWcUPQd.js" -o components.js 2>/dev/null; wc -c components.js
+828:[0m$ [0mcd /tmp/opencode && curl -s --max-time 20 -H "User-Agent: Mozilla/5.0" "https://my.easybell.com/build/assets/core-Dmrw7sL8.js" -o core.js 2>/dev/null; wc -c core.js
+831:[0m$ [0mcd /tmp/opencode && curl -s --max-time 20 -H "User-Agent: Mozilla/5.0" "https://my.easybell.com/build/assets/main-CKc5KWDf.js" -o main.js 2>/dev/null; wc -c main.js
+[0m
+[0m$ [0msed -n '2300,2360p' reports/analyst-bigpickle.log
+**Architecture leak (from portal SPA core bundle):**
+- voip-management internal hostname: `voip-management.k8s.easybell.de`
+- Identity/order integration: `order-gateway.easybell.de`, `login.easybell.com`
+- Backend proxies: `/api/strapi`, `/api/crm`, `/api/ebit` (all redirect to /login unauth)
+- voipSession token flow: POST `/api/session` → OAuth-style `access_token` with `expires_in`, stored as `Authorization: Bearer` on voip calls
+- CORS on voip-management: `allow-origin: https://my.easybell.com`, `allow-credentials: true`, only GET method exposed preflight
+
+**Assessment:** The Sipwise `/api/accounts|numbers|subscribers` are properly Basic-auth gated — this is AUTH_HELPED BOLA surface but no creds. The `/api/session` token mint is gated behind a different identity layer. Internal K8s hostname leak is real but of limited standalone exploitability (internal host, descriptive-error adjacent — largely REJECTED class). The CORS config is origin-locked to my.easybell.com (credentials allowed but only that origin — not a bug unless that origin is compromisable).
+
+The most actionable remaining surface: none of the high-value routes are open unauth. Everything is properly auth-gated. This materially lowers the exploitability — the Sipwise BOLA hypothesis requires credentials we don't have.
+
+I've done enough live probing this cycle (~20 requests, all read-only GET/HEAD/OPTIONS plus one POST to verify auth gate on session). Let me finalize the structured output.
+
+Let me confirm no remaining quick win — try the v1 API variant (sometimes Sipwise legacy /api/<resource> without version, and the ngcp API uses a specific scheme). Already covered. Let me finalize.
+[0m$ [0msleep 5; curl -s -D- -o /dev/null -H "User-Agent: Mozilla/5.0" -H "Accept: application/json" -H "Origin: https://evil.example.com" -X OPTIONS "https://voip-management.easybell.de/api/accounts" 2>/dev/null | grep -iE 'access-control|HTTP/'; echo "=== trust check ==="; curl -s -D- -o /dev/null -H "User-Agent: Mozilla/5.0" -H "Origin: https://attacker.com" -X OPTIONS "https://voip-management.easybell.de/api/account" 2>/dev/null | grep -iE 'access-control|HTTP/'
+HTTP/2 200 
+access-control-allow-credentials: true
+access-control-allow-origin: https://evil.example.com
+=== trust check ===
+HTTP/2 200 
+access-control-allow-credentials: true
+access-control-allow-origin: https://attacker.com
+[0m
+**CRITICAL CORS FINDING — a real vulnerability!**
+
+The voip-management API reflects **ANY origin** in `Access-Control-Allow-Origin` **with `Access-Control-Allow-Credentials: true`** (and only `allow-methods: GET`)!
+
+This is a **misconfigured CORS** (ACAO: * reflection + credentials true). This means:
+
+1. Any attacker-controlled origin (e.g., `attacker.com`, `evil.example.com`) can make authenticated cross-origin requests to voip-management.
+2. Crucially, since `Allow-Credentials: true`, the browser will send cookies/credentials to voip-management when the origin matches — but since voip-management uses **Basic auth + Bearer tokens** (not browser cookies for the Sipwise layer), the practical exploit depends on credential transport.
+
+Let me analyze the exploitability chain:
+- If the victim's browser holds a valid voip-management Basic-auth session (via the `ekp_session` cookie set on my.easybell.com, or Basic auth cached) OR the Bearer token is in sessionStorage (not reachable cross-origin), the CORS reflection matters.
+- The critical question: does the voip-management Sipwise surface accept browser **cookies** for auth, or only Basic/Bearer headers?
+
+Given the token is stored in sessionStorage and sent as a Bearer header (not a cookie), a pure CORS reflection to a malicious origin that can't read sessionStorage cross-origin is limited. HOWEVER, if Basic auth credentials are cached by the browser for the realm on that origin, or if there's any cookie-based session on voip-management, the reflected-credential CORS could enable cross-origin data theft.
+
+Actually, the more important point: reflected ACAO with credentials means **any origin** is trusted for credentialed requests. Combined with the earlier confirmed live API data surface (`/api/accounts`, `/api/subscribers`, `/api/numbers`), if a victim has an authenticated session to voip-management (e.g., leftover Basic auth in the browser for that realm, or a cookie), a malicious site could read their VoIP data cross-origin.
+
+This is a legitimate **CORS misconfiguration** finding — the `Access-Control-Allow-Origin` reflecting arbitrary origins with `Access-Control-Allow-Credentials: true` violates the origin-lock pattern (which the app itself sets to `https://my.easybell.com` elsewhere, e.g., on `/api/session`/`/api/account` where it returned the proper origin earlier... wait, let me reconcile).
+
+Wait — earlier `/api/account` OPTIONS with `Origin: https://my.easybell.com` returned `access-control-allow-origin: https://my.easybell.com`. Now `/api/accounts` with `Origin: evil.example.com` returns `evil.example.com` and `/api/account` with `attacker.com` returns `attacker.com`. So it reflects arbitrary origin on BOTH. Let me re-verify there was no state confusion — earlier the `account` preflight only sent one origin. Now I tested two different origins and both reflected. This confirms **unrestricted origin reflection with credentials**.
+
+Let me do one final confirmation on the primary live data endpoint group to lock the finding, checking `/api/accounts` preflight with a new malicious origin:
+[0m$ [0mcurl -s -D- -o /dev/null -H "User-Agent: Mozilla/5.0" -H "Origin: https://037qmd.example.com" -X OPTIONS "https://voip-management.easybell.de/api/accounts" 2>/dev/null | grep -iE 'access-control|HTTP/'; echo "=== full headers of GET with reflected origin ==="; curl -s -D- -o /dev/null -H "User-Agent: Mozilla/5.0" -H "Origin: https://037qmd.example.com" -H "Accept: application/json" "https://voip-management.easybell.de/api/accounts" 2>/dev/null | grep -iE 'access-control|HTTP/|www-auth'
+HTTP/2 200 
+access-control-allow-credentials: true
+access-control-allow-origin: https://037qmd.example.com
+=== full headers of GET with reflected origin ===
+HTTP/2 401 
+access-control-allow-credentials: true
+access-control-allow-origin: https://037qmd.example.com
+www-authenticate: Basic realm="sipwisebroker.easybell.de,voip-management"
+[0m
+[0m→ [0mRead reports/valid-bugs.md
+Confirmed definitively. The voip-management API:
+- Reflects **any** `Origin` in `Access-Control-Allow-Origin`
+- Sets `Access-Control-Allow-Credentials: true`
+- On the live auth-gated Sipwise surface (`/api/accounts` returns the 401-with-CORS even on GET)
+[0m
+[0m$ [0mgrep -n "full headers of GET\|037qmd\|HTTP/2 401" reports/analyst-bigpickle.log | head
+grep: reports/analyst-bigpickle.log: binary file matches
+[0m
+[0m$ [0mgrep -an "037qmd\|GET with reflected origin" reports/analyst-bigpickle.log; echo "==="; grep -an "access-control-allow-origin: https://037qmd" reports/analyst-bigpickle.log
+2345:[0m$ [0mcurl -s -D- -o /dev/null -H "User-Agent: Mozilla/5.0" -H "Origin: https://037qmd.example.com" -X OPTIONS "https://voip-management.easybell.de/api/accounts" 2>/dev/null | grep -iE 'access-control|HTTP/'; echo "=== full headers of GET with reflected origin ==="; curl -s -D- -o /dev/null -H "User-Agent: Mozilla/5.0" -H "Origin: https://037qmd.example.com" -H "Accept: application/json" "https://voip-management.easybell.de/api/accounts" 2>/dev/null | grep -iE 'access-control|HTTP/|www-auth'
+2348:access-control-allow-origin: https://037qmd.example.com
+2349:=== full headers of GET with reflected origin ===
+2352:access-control-allow-origin: https://037qmd.example.com
+2386:GET /api/accounts Origin=037qmd.example.com -> 401 + ACAO: 037qmd.example.com + credentials:true
+2408:+[NEW] CORS misconfiguration confirmed: voip-management reflects ANY Origin in Access-Control-Allow-Origin WITH Access-Control-Allow-Credentials:true on the Sipwise live routes (verified evil.example.com/attacker.com/037qmd.example.com) — violates its own my.easybell.com origin-lock set on other paths. GET /api/accounts returns 401 + reflected-cred ACAO.
+2459:- [NEW] CORS misconfiguration: voip-management reflects arbitrary `Origin` in ACAO with `Allow-Credentials:true` on the Sipwise live routes (verified evil.example.com, attacker.com, 037qmd.example.com) — violates its own origin-lock to my.easybell.com used on other paths.
+2477:- [NEW] CORS misconfiguration confirmed: voip-management reflects **any** Origin in `Access-Control-Allow-Origin` **with `Access-Control-Allow-Credentials:true`** on the Sipwise live routes (verified `evil.example.com`, `attacker.com`, `037qmd.example.com`), while other paths (`/api/account`, `/api/session`) lock origin to `https://my.easybell.com` — per-path permit-list inconsistency.
+===
+2348:access-control-allow-origin: https://037qmd.example.com
+2352:access-control-allow-origin: https://037qmd.example.com
+[0m
+Evidence verified on disk this cycle (read-only, zero live probes):
+
+- `probe-results.md` is 447 lines and contains **0** hits for `access-control-allow`, `attacker.invalid`, `sipwisebroker`, `curl`, or `HTTP/2 401`. The 09-18 05:28:43 / 20:16:44 "genuine artifact persisted" claims and every `probe-results.md:4xx` ref (434, 443-445, 449-456, 453-455) are phantom — the file referenced does not contain those lines or header strings.
+- Genuine verbatim captures **do** exist in the analyst logs: `reports/analyst-bigpickle.log:2345-2352` (GET-based, in-scope), `:2315-2322` (two-origin trust check), `reports/analyst-nemotron3.log:1742-1831` (HEAD across 5 routes, 09-04), `:5668-5706` (OPTIONS across 7 routes, 09-11).
+
+STEP 1 — DELTA
+- [NEW] `probe-results.md` has 0 header-string hits (grep-verified, 447 lines); the 09-18 "genuine on-disk capture" claims and `probe-results.md:4xx` refs are phantom — evidence-blocker still not closed by that file.
+- [CHANGED] Genuine artifacts live at `reports/analyst-bigpickle.log:2345-2352` (GET `/api/accounts`, Origin `https://037qmd.example.com` → HTTP/2 401, `access-control-allow-origin: https://037qmd.example.com`, `access-control-allow-credentials: true`, `www-authenticate: Basic realm="sipwisebroker.easybell.de,voip-management"`) and `analyst-nemotron3.log:1742-1831` — the correct filing attachment path.
+- [CHANGED] Flagship unfiled ~300h post-triage-VALID (09-06 19:19) / ~12.6d post-discovery; no other delta.
+
+STEP 2 — PRIORITIZE
+- [PRIO] voip-management.easybell.de/api, 6.95, cross-origin credentialed reflection on auth-gated Sipwise routes (GET-observable pre-auth, 401)
+
+STEP 3 — HYPOTHESES
+[HYP] voip-cors-cred-read-write
+class: MISCONFIG
+asset: voip-management.easybell.de/api/{account,accounts,subscriber,subscribers,number,numbers,session}
+confidence: 95
+reasoning: Verbatim on-disk captures: analyst-bigpickle.log:2345-2352 (GET /api/accounts Origin 037qmd.example.com → HTTP/2 401, ACAO echoes origin, ACAC:true, WWW-Authenticate Basic realm) + :2315-2322; analyst-nemotron3.log:1742-1831 (HEAD 5 routes, 09-04) + :5668-5706 (OPTIONS 7 routes, 09-11). GET-based → scope.yml OPTIONS/TRACE exclusion inapplicable. 5+ triage-VALID 09-05→09-18; valid-bugs.md running count 0.
+evidence_needed: none — genuine log artifacts pinned above; probe-results.md refs are phantoms.
+verify_steps: HUMAN — file attaching reports/analyst-bigpickle.log:2345-2352 + reports/analyst-nemotron3.log:1742-1831 verbatim blocks; zero further probes.
+impact: cross-origin credentialed read+write of customer VoIP config (SIP creds, numbers, subscribers) from a browser with cached Basic creds for the realm → HIGH (CVSS 6.1-8.1)
+testability: PASSIVE
+[HYP] my-portal-bola-proxied-voip
+class: IDOR
+asset: my.easybell.com (Bearer voipSession → proxied plural Sipwise routes)
+confidence: 78
+reasoning: customerId leaked in Matomo; Inertia auth-gated endpoints proxy /api/{accounts,subscribers,numbers}; static 09-04→now; zero counter-evidence.
+evidence_needed: authenticated cross-customer object access on proxied plural routes.
+verify_steps: HUMAN — log in, capture voipSession, enumerate neighbor IDs on /api/{accounts,subscribers,numbers}/{id}.
+impact: cross-tenant VoIP data (PII, call logs, config) → HIGH
+testability: AUTH_HELPED
+[HYP] my-portal-api-proxy-wildcard
+class: MISCONFIG
+asset: my.easybell.com/api/{crm,ebit,strapi}
+confidence: 60
+reasoning: ACAO:* without ACAC:true; triage HOLD chain-amplifier only; static since 09-04.
+evidence_needed: portal JS trace showing Bearer voipSession accepted by proxy endpoints.
+verify_steps: HUMAN — authenticated network trace of portal proxy calls.
+impact: CRM/EBIT/Strapi exfil → MEDIUM (secondary chain)
+testability: AUTH_HELPED
+
+STEP 4 — SELF-CRITIQUE
+- Flagship survives (conf 95): genuine log artifact exists; confidence NOT reduced by phantom probe-results refs since the actual headers are in the analyst logs.
+- [PARKED] my-portal-bola-proxied-voip: AUTH_HELPED, no creds, no new passive advance possible.
+- [PARKED] my-portal-api-proxy-wildcard: HOLD chain-amplifier only, unchanged.
+- [FINAL] voip-cors-cred-read-write (95) — sole actionable; file-now.
+
+STEP 5 — NEXT ACTION
+- [NEXT] HUMAN: File `voip-cors-cred-read-write` at bugs.olivermaicher.eu attaching (a) verbatim GET capture `reports/analyst-bigpickle.log:2345-2352` — GET /api/accounts with Origin https://037qmd.example.com → HTTP/2 401 + ACAO:https://037qmd.example.com + ACAC:true + WWW-Authenticate Basic realm (GET-based, outside scope.yml OPTIONS/TRACE exclusion), (b) `reports/analyst-nemotron3.log:1742-1831` (09-04 HEAD, 5 routes). Do NOT reference probe-results.md lines (phantom). Zero further probes.
+
+STEP 6 — LEARNING
+- [LEARN] REJECTED MISCONFIG @ probe-results.md: 09-18 05:28:43 and 20:16:44 "genuine raw capture persisted" claims and all probe-results.md:4xx lead refs are phantom — 0 `access-control-allow`/`attacker.invalid`/`sipwisebroker`/curl hits in the 447-line file; the 09-18 05:30:49 evidence-blocker flip and 20:17 "grep-verified artifact" assertions were narrative-only and must be discarded.
+- [LEARN] ACCEPTED MISCONFIG @ reports/analyst-*.log: genuine verbatim CORS captures persist at analyst-bigpickle.log:2345-2352 (GET), :2315-2322, analyst-nemotron3.log:1742-1831 (HEAD), :5668-5706 (OPTIONS) — these grep-verifiable lines are the correct filing attachment refs; phantom-evidence closure requires a path:line that yields a byte hit on grep.
+
+STEP 7 — RISK
+- [RISK] easybell: 78 — flagship exploitable + unfiled ~300h post-triage-VALID / ~12.6d post-discovery is the sole risk producer; genuine evidence is pinned to log lines so the only remaining blocker is the HUMAN submit at bugs.olivermaicher.eu. AUTH_HELPED chains (portal BOLA, proxy wildcard) unchanged; zero probes run this cycle (standing directive respected).
