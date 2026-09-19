@@ -43,3 +43,12 @@
 
 - 1 lead(s) marked VALID at 2026-09-18 23:24:48 UTC
   - | `voip-cors-cred-read-write` (7 Spring routes, ACAO:attacker + ACAC:true) | **VALID** (92 confidence, 14+ independent captures) | **NOT FILED** at bugs.olivermaicher.eu |
+
+- 7 lead(s) marked VALID at 2026-09-19 01:37:24 UTC
+  - | Q5 | Novel/unreported? | **YES** — valid-bugs.md running count 0; no prior report filed despite 14+ independent captures since 2026-09-04 |
+  - **Verdict: VALID**
+  - | Q7 | Would reasonable triager accept? | **NO as standalone** — Wildcard CORS without ACAC:true on endpoints that accept Bearer tokens (not cookies) is informational. Only valid as chain amplifier wi
+  - | Q2 | Attacker reachable? | **PARTIAL** — Portal login page is public; authenticated endpoints require valid credentials |
+  - | Q4 | Provable non-invasively? | **NO** — Requires authenticated session with valid customer credentials to test. No creds available. All probes return 302→/login |
+  - | Q4 | Provable non-invasively? | **NO** — 22+ resource names probed, all return nginx HTML 404 or rate-limited. No live v2 resource discovered. All plural routes return 401 (auth-gated). Cannot prove
+  - | 1 | `voip-cors-cred-read-write` (7 routes, ACAC:true) | **VALID** | 6.5–8.1 | **File at bugs.olivermaicher.eu** |
